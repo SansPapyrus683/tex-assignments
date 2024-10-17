@@ -1,2 +1,3 @@
 # tex-assignments
-i will *always* pronounce it "latecks"
+
+various assignments i've done in latex for school
