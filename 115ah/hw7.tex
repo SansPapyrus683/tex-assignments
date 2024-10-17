@@ -1,0 +1,407 @@
+\documentclass[12pt]{article}
+
+\input{../kz}
+
+\allowdisplaybreaks
+
+\begin{document}
+\begin{enumerate}
+      \item \begin{enumerate}
+                  \item If $x=y$ and $z=0$, then $(x,y,z)$ must be some multiple of $(1,1,0)$.
+                        Also, any multiple of $(1, 1, 0)$ satisfies the conditions specified by $L$.
+                        Thus, $(1, 1, 0)$ spans $L$.
+
+                        To check that the other two vectors are orthogonal to the first, we compute the dot product:
+                        \begin{gather*}
+                              \braket{1, -1, 0} \cdot \braket{1, 1, 0} = 1-1+0=0 \\
+                              \braket{0, 0, 1} \cdot \braket{1, 1, 0} = 0 \\
+                        \end{gather*}
+                  \item We compute the effects of $T$ on each element of the basis and express them in terms of the basis as well.
+                        \begin{gather*}
+                              T((1, 1, 0)) = (1, 1, 0) = \beta_1 \\
+                              T((1, -1, 0)) = (-1, 1, 0) = -\beta_2 \\
+                              T((0, 0, 1)) = (0, 0, -1) = -\beta_3 \\
+                              [T]_\beta=\begin{bmatrix}
+                                    1 & 0  & 0  \\
+                                    0 & -1 & 0  \\
+                                    0 & 0  & -1
+                              \end{bmatrix}
+                        \end{gather*}
+                  \item \[Q^{-1}=[I_{\mathbb{R}^3}]^S_\beta=\begin{bmatrix}
+                                    1 & 1  & 0 \\
+                                    1 & -1 & 0 \\
+                                    0 & 0  & 1
+                              \end{bmatrix}\]
+                  \item By inspection, we can calculate that
+                        \[Q=\begin{bmatrix}
+                                    \frac{1}{2} & \frac{1}{2}  & 0 \\
+                                    \frac{1}{2} & -\frac{1}{2} & 0 \\
+                                    0           & 0            & 1
+                              \end{bmatrix}\]
+                  \item \[Q^{-1}[T]_\beta Q=\begin{bmatrix}
+                                    0 & 1 & 0  \\
+                                    1 & 0 & 0  \\
+                                    0 & 0 & -1
+                              \end{bmatrix}\]
+            \end{enumerate}
+      \item \begin{enumerate}
+                  \item Let's start with just a $2 \times 2$ matrix.
+                        \[\det \begin{bmatrix}
+                                    \lambda-a & b         \\
+                                    0         & \lambda-d
+                              \end{bmatrix}=(\lambda-a)(\lambda-d)-b \cdot 0=(\lambda-a)(\lambda-d)\]
+                        From this, we propose that the characteristic polynomial of
+                        an upper triangular $n \times n$ matrix $A$ is
+                        \[\prod_{i=1}^{n} (\lambda-A_{ii})\]
+                        and prove it by induction.
+
+                        Suppose we have an $n+1 \times n+1$ matrix $A'$.
+                        Subtracting it from $\lambda I_{n+1}$ and evaluating the determinant along the first column gives us
+                        \[\sum_{i=1}^{n+1} (-1)^{i+1} (\lambda-A'_{i1}) \det \overline{(\lambda I_{n+1}-A')_{i1}}\]
+                        However, if $i > 1$, then $A'_{i1}=0$.
+                        Thus, the above expression simplifies to
+                        \[(\lambda-A'_{11}) \det \overline{(\lambda I_{n+1}-A')_{11}}\]
+                        Then, notice that $\overline{(\lambda I_{n+1}-A')_{11}}=\lambda I_{n}-A$,
+                        which is equal to our formula given above by our inductive hypothesis.
+                        Thus, the characteristic polynomial of $A'$ is
+                        \[(\lambda-A'_{11}) \cdot \prod_{i=1}^{n} (\lambda-A_{ii})=\prod_{i=1}^{n+1} (\lambda-A'_{ii})\quad\square\]
+
+                  \item The determinant of the transpose of a matrix is the same as the determinant of the matrix itself.
+                        The transpose of a lower triangular matrix is an upper triangular matrix.
+                        Thus, the characteristic polynomial of a lower triangular matrix is given by the expression
+                        we just derived above.
+                  \item \begin{enumerate}
+                              \item It has previously been established that the determinant of an upper triangular matrix is the product of the elements along its diagonal.
+                                    Evaluating the determinant with this gives us
+                                    \[f_T(t)=\prod_{i=1}^{n} (\lambda-([T]_\beta)_{ii})\]
+                                    All the possible roots of this polynomial are also elements in $[T]_\beta$ and by extension $F$.
+                                    Thus, the characteristic polynomial splits. $\square$
+                              \item We propose that if $A$ is an upper triangular matrix, then the characteristic polynomial for $A$ splits.
+
+                                    This can be proven by establishing a linear transformation $L_A: F^n \rightarrow F^n$
+                                    and applying the result that we just proved, since $[L_A]_S=A$.
+                        \end{enumerate}
+            \end{enumerate}
+      \item \begin{enumerate}
+                  \item \begin{gather*}
+                              A=Q^{-1}BQ \\
+                              \begin{aligned}
+                                    \det A & = \det Q^{-1}BQ             \\
+                                           & = \det Q^{-1} \det B \det Q \\
+                                           & = \det Q^{-1}Q \det B       \\
+                                           & = \det I_n \det B           \\
+                                           & = \det B\quad\square
+                              \end{aligned}
+                        \end{gather*} \label{list:3a}
+                  \item No, because $\det A=0$ and $\det B=2 \cdot 4 \cdot 1=8$.
+                  \item The proof goes much the same way as in \ref{list:3a}.
+                        \begin{align*}
+                              \det (tI_n-A) & = \det \left(tI_n - Q^{-1}BQ\right)       \\
+                                            & = \det \left(tQ^{-1}Q-Q^{-1}BQ\right)     \\
+                                            & = \det \left(Q^{-1}(tQ-BQ)\right)         \\
+                                            & = \det \left(Q^{-1}(tI_n-B)Q\right)       \\
+                                            & = \det \left(Q^{-1}Q\right) \det (tI_n-B) \\
+                                            & = \det (tI_n-B)\quad\square
+                        \end{align*} \label{list:3c}
+                  \item $[T]_\beta\sim[T]_\gamma$, as $[T]_\beta=[\mathrm{1}_V]^\beta_\gamma[T]_\gamma[\mathrm{1}_V]^\gamma_\beta$.
+                        Thus, $\det (tI_n - [T]_\beta)=\det (tI_n - [T]_\gamma)$ and by extension
+                        $f_{[T]_\beta}(t)=f_{[T]_\gamma}(t)$ as proven in \ref{list:3c}. $\square$
+            \end{enumerate}
+      \item \begin{enumerate}
+                  \item[(a)] \begin{gather*}
+                              \begin{aligned}
+                                    T\begin{pmatrix}1 \\ 0\end{pmatrix}=\begin{pmatrix}2 \\ 5\end{pmatrix} &  &
+                                    T\begin{pmatrix}0 \\ 1\end{pmatrix}=\begin{pmatrix}-1 \\ 3\end{pmatrix}
+                              \end{aligned} \\
+                              [T]_S=\begin{bmatrix}
+                                    2 & -1 \\
+                                    5 & 3
+                              \end{bmatrix} \\
+                              \begin{aligned}
+                                    \det \left(tI_n-[T]_S\right) & =(t-2)(t-3)+5       \\
+                                                                 & = \boxed{t^2-5t+11}
+                              \end{aligned}
+                        \end{gather*}
+                  \item[(c)] \begin{gather*}
+                              \begin{aligned}
+                                    T(1)=1-x+x^2             &  & T(x)=x+x^2              \\
+                                    T\left(x^2\right)=-1-x^3 &  & T\left(x^3\right)=x-x^2
+                              \end{aligned} \\
+                              [T]_S=\begin{bmatrix}
+                                    1  & 0 & -1 & 0  \\
+                                    -1 & 1 & 0  & 1  \\
+                                    1  & 1 & 0  & -1 \\
+                                    0  & 0 & -1 & 0
+                              \end{bmatrix} \\
+                              \begin{aligned}
+                                    \det \left(tI_n-[T]_S\right) & = \det \begin{bmatrix}
+                                                                                t-1 & 0   & -1 & 0  \\
+                                                                                -1  & t-1 & 0  & 1  \\
+                                                                                1   & 1   & t  & -1 \\
+                                                                                0   & 0   & -1 & t
+                                                                          \end{bmatrix} \\
+                                                                 & = \boxed{x^4-2x^3+x^2+x}
+                              \end{aligned}
+                        \end{gather*}
+            \end{enumerate}
+      \item \begin{enumerate}
+                  \item[(a)] \begin{gather*}
+                              T\begin{pmatrix}1 \\ 2\end{pmatrix}=\begin{pmatrix}-2 \\ -3\end{pmatrix}=-\beta_2 \\
+                              T\begin{pmatrix}2 \\ 3\end{pmatrix}=\begin{pmatrix}2 \\ 4\end{pmatrix}=2\beta_1 \\
+                              [T]_\beta=\begin{bmatrix}
+                                    0  & 2 \\
+                                    -1 & 0
+                              \end{bmatrix}
+                        \end{gather*}
+                        $\beta$ is \textit{not} an eigenbasis.
+                        The elements are on the wrong diagonal.
+                  \item[(f)] \begin{gather*}
+                              \begin{aligned}
+                                     & T\begin{pmatrix}
+                                              1 & 0 \\
+                                              1 & 0
+                                        \end{pmatrix}=\begin{pmatrix}
+                                                            -3 & 0 \\
+                                                            -3 & 0
+                                                      \end{pmatrix}=-3\beta_1 &  &
+                                    T\begin{pmatrix}
+                                           -1 & 2 \\
+                                           0  & 0
+                                     \end{pmatrix}=\begin{pmatrix}
+                                                         -1 & 2 \\
+                                                         0  & 0
+                                                   \end{pmatrix}=\beta_2           \\
+                                     & T\begin{pmatrix}
+                                              1 & 0 \\
+                                              2 & 0
+                                        \end{pmatrix}=\begin{pmatrix}
+                                                            1 & 0 \\
+                                                            2 & 0
+                                                      \end{pmatrix}=\beta_3 &  &
+                                    T\begin{pmatrix}
+                                           -1 & 0 \\
+                                           0  & 2
+                                     \end{pmatrix}=\begin{pmatrix}
+                                                         -1 & 0 \\
+                                                         0  & 2
+                                                   \end{pmatrix}=\beta_4
+                              \end{aligned} \\
+                              [T]_\beta=\begin{bmatrix}
+                                    -3 & 0 & 0 & 0 \\
+                                    0  & 1 & 0 & 0 \\
+                                    0  & 0 & 1 & 0 \\
+                                    0  & 0 & 0 & 1
+                              \end{bmatrix}
+                        \end{gather*}
+                        $\beta$ is an eigenbasis as indicated by the above calculations.
+            \end{enumerate}
+      \item \begin{enumerate}
+                  \item[(a)] Let's define $T(f(x))$ a bit more concretely first.
+                        \begin{align*}
+                              T\left(a+bx+cx^2+dx^3\right) & = \left(b+2cx+3dx^2\right)+\left(2c+6dx\right) \\
+                                                           & = (b+2c)+(2c+6d)x+3dx^2
+                        \end{align*}
+                        Now we can calculate the eigenvalues with $[T]_S$:
+                        \begin{gather*}
+                              \begin{aligned}
+                                     & T(1)=\vec{0}           &  & T(x)=1                    \\
+                                     & T\left(x^2\right)=2+2x &  & T\left(x^3\right)=6x+3x^2
+                              \end{aligned} \\
+                              [T]_S=\begin{bmatrix}
+                                    0 & 1 & 2 & 0 \\
+                                    0 & 0 & 2 & 6 \\
+                                    0 & 0 & 0 & 3 \\
+                                    0 & 0 & 0 & 0
+                              \end{bmatrix} \\
+                              \det (tI_4-[T]_S)=(\lambda - 0)^4 \rightarrow \lambda=0 \\
+                              E_0=\text{Ker}(T)=\text{span}(\{1\})
+                        \end{gather*}
+                        The only eigenspace $E_0$ does not span $P_3(R)$, so $T$ isn't diagonalizable.
+                  \item[(b)] \begin{gather*}
+                              \begin{aligned}
+                                     & T(1)=x^2 &  & T(x)=x &  & T(x^2)=1
+                              \end{aligned} \\
+                              [T]_S=\begin{bmatrix}
+                                    0 & 0 & 1 \\
+                                    0 & 1 & 0 \\
+                                    1 & 0 & 0
+                              \end{bmatrix} \\
+                              \det (tI_3-[T]_S)=(\lambda - 1) \cdot \det \begin{bmatrix}
+                                    t     & t - 1 \\
+                                    t - 1 & t
+                              \end{bmatrix}=(t-1)\left(t^2-1\right) \\
+                              E_1=\text{span}\left(\left\{1+x^2, x\right\}\right) \\
+                              E_{-1}=\text{span}\left(\left\{-1+x^2\right\}\right)
+                        \end{gather*}
+                        Since the union of $E_1$ and $E_{-1}$ make a linearly independent spanning set,
+                        $E_1 \oplus E_{-1}=V$ and that $T$ is diagonalizable.
+                        The eigenbasis for it is then $\beta=\left\{1+x^2, x, -1+x^2\right\}$
+                  \item[(f)] \begin{gather*}
+                              \begin{aligned}
+                                    T(E_{11})=E_{11} &  & T(E_{12})=E_{21} \\
+                                    T(E_{21})=E_{12} &  & T(E_{22})=E_{22}
+                              \end{aligned} \\
+                              [T]_S=\begin{bmatrix}
+                                    1 & 0 & 0 & 0 \\
+                                    0 & 0 & 1 & 0 \\
+                                    0 & 1 & 0 & 0 \\
+                                    0 & 0 & 0 & 1
+                              \end{bmatrix} \\
+                              \det (tI_4-[T]_S)=(\lambda-1)^2(\lambda^2-1) \\
+                              E_1=\text{span}(\{E_{11}, E_{22}, E_{12}+E_{21}\}) \\
+                              E_{-1}=\text{span}(\{E_{12}-E_{21}\})
+                        \end{gather*}
+                        With the same logic as in the previous problem, we can deduce that $T$ is diagonalizable
+                        with eigenbasis $\beta=\{E_{11}, E_{22}, E_{12}+E_{21}, E_{12}-E_{21}\}$.
+            \end{enumerate}
+      \item Since $\lambda_2$ is an eigenvalue, $\dim E_{\lambda_2} > 0$ and must have some eigenvector $v$.
+            We propose that given a basis $\beta$ for $E_{\lambda_1}$, $\beta \cup \{v\}$ is LI.
+            To do this, assume that we could write $\{v\}$ in terms of a linear combination of the elements from $\beta$.
+            Then,
+            \begin{gather*}
+                  v=\sum_{i=1}^{n-1} a_i\beta_i \\
+                  Av=A\sum_{i=1}^{n-1} a_i\beta_i \\
+                  \lambda_2 v=\sum_{i=1}^{n-1} \lambda_1 a_i\beta_i \\
+                  v=\sum_{i=1}^{n-1} \frac{\lambda_1}{\lambda_2} a_i\beta_i=\sum_{i=1}^{n-1} a_i\beta_i
+            \end{gather*}
+            $\lambda_1 \ne \lambda_2$, so we would have two distinct ways of writing $v$ as a linear combo of $\beta$.
+            But then this would mean that $\beta$ is LD.
+            Contradiction.
+
+            Thus, we have an LI set made from one eigenvector from $E_{\lambda_2}$ and $n-1$ other eigenvectors from the basis of $E_{\lambda_1}$.
+            This gives us $n$ elements, so by the replacement theorem and that all of them are eigenvectors,
+            they form an eigenbasis, meaning that $A$ is diagonalizable. $\square$
+
+      \item \begin{enumerate}
+                  \item Suppose we have $a, b \in V: [a]=[b]$.
+                        Then, $T(a)-T(b)=T(a-b)=\lambda_1(a-b) \in E_{\lambda_1}$, so $[T(a)]=[T(b)]$ and $S$ is well-defined.
+
+                        It remains to prove that $S$ is linear.
+                        \begin{align*}
+                              S([a]+\lambda[b]) & = S([a+\lambda b])                  \\
+                                                & =[T(a+\lambda b)]                   \\
+                                                & =[T(a)+\lambda T(b)]                \\
+                                                & =[T(a)]+\lambda[T(b)]               \\
+                                                & = S([a])+\lambda S([b])\quad\square
+                        \end{align*}
+                  \item It suffices to prove that $\lambda_2$ is an eigenvalue, since their ordering is arbitrary.
+                        $\exists v \in V: T(v)=\lambda_2 v$, so $S([v])=[T(v)]=[\lambda_2 v]=\lambda_2 [v]$. $\square$
+            \end{enumerate}
+      \item We'll proceed by induction.
+
+            \textbf{Base case:} \\
+            We'll prove that $v_1$ and $v_2$ are LI by contradiction.
+            \begin{gather*}
+                  v_1=c v_2 \\
+                  Av_1=c Av_2 \\
+                  \lambda_1 v_1=c \lambda_2 v_2 \\
+                  v_1=c \frac{\lambda_2}{\lambda_1} v_2=c v_2
+            \end{gather*}
+            Since $c$ and $v_2$ are both nonzero and $\lambda_1 \ne \lambda_2$, we have a contradiction.
+            We now assume that for $1 \le k < n$, $v_1$ through $v_k$ are LI.
+
+            \textbf{Inductive step:} \\
+            Again, suppose $\{v_1, v_2, \cdots,  v_{k+1}\}$ wasn't LI for sake of contradiction.
+            This means that we can write one of the vectors in the set as a linear combo of the others.
+            WLOG assume that it's $v_{k+1}$.
+            \begin{gather*}
+                  v_{k+1}=\sum_{i=1}^{k} a_i v_i \\
+                  Av_{k+1}=A \sum_{i=1}^{k} a_i v_i \\
+                  \lambda_{k+1}v_{k+1} = \sum_{i=1}^{k} a_i \lambda_i v_i \\
+                  v_{k+1} = \sum_{i=1}^{k} a_i \frac{\lambda_i}{\lambda_1} v_i=\sum_{i=1}^{k} a_i v_i \\
+                  \sum_{i=1}^{k} a_i\left(1-\frac{\lambda_i}{\lambda_1}\right)v_i=\vec{0}
+            \end{gather*}
+            All $\lambda_i$ are pairwise distinct, so $1-\frac{\lambda_i}{\lambda_1} \ne 0$.
+            However, this means that $v_1$ through $v_k$ are LD, since we have formed a nontrivial linear combo that sums to $\vec{0}$.
+            Contradiction.
+            Thus, all the vectors $v_1$ through $v_n$ must be LI. $\square$ \label{list:9}
+      \item \begin{enumerate}
+                  \item \textbf{Base case:} \\
+                        The characteristic polynomial of a $2 \times 2$ matrix is
+                        \[\det (tI_2 - A)= \det \begin{bmatrix}
+                                    t-a & b   \\
+                                    c   & t-d
+                              \end{bmatrix}=(t-a)(t-d)-bc\]
+                        By inspection, it's evident that $\deg f_A=2$.
+                        We now assume that $\deg f_A=n$ for all $n \times n$ matrices.
+
+                        \textbf{Inductive step:} \\
+                        For an $n+1 \times n+1$ matrix $A$,
+                        \[\det (tI_{n+1}-A)=(t-A_{11}) \det \overline{(tI_{n+1}-A)_{11}}\]
+                        By our inductive hypothesis, $\deg (\det \overline{(tI_{n+1}-A)_{11}})=n$.
+                        A polynomial of degree $n$ times a polynomial of degree $1$ gives us a polynomial of degree $n+1$,
+                        so $\deg f_A=n+1$ and the inductive step is complete. $\square$
+                  \item Since $\dim V=n$, $|\beta|=n$ for any basis $\beta$ and $[T]_\beta$ is an $n \times n$ matrix.
+                        $f_T=f_{L_A}$ where $A=[T]_\beta$, so $\deg f_T=n$ by the result in the previous part. $\square$
+            \end{enumerate}
+      \item \begin{enumerate}
+                  \item \textbf{Existing $\rightarrow$ New Definition:} \\
+                        Suppose $W_1$ and $W_2$ had the bases $\beta_1$ and $\beta_2$ respectively.
+                        Since $W_1 \cap W_2=\{\vec{0}\}$, $\beta_1 \cup \beta_2$ is LI.
+                        Let's define a combined basis $\beta=\beta_1 \cup \beta_2$, which happens to form the basis for $W_1+W_2$.
+
+                        Now say $u_1+u_2=u_1'+u_2'$ where $u_1, u_1' \in W_1$ and $u_2, u_2' \in W_2$.
+                        All the vectors can be represented uniquely in terms of their subspace's basis,
+                        while this sum can be represented in terms of $\beta$.
+                        Now we have
+                        \[\sum_{i=1}^{\dim W_1} a_i (\beta_{1})_i+\sum_{i=1}^{\dim W_2} b_i (\beta_{2})_i=\sum_{i=1}^{\dim W_1} c_i (\beta_{1})_i+\sum_{i=1}^{\dim W_2} d_i (\beta_{2})_i\]
+                        These two sides are then equal to
+                        \[\sum_{i=1}^{\dim V} e_i \beta_i=\sum_{i=1}^{\dim W_1} e_i \beta_i + \sum_{i=\dim W_1+1}^{\dim V} e_i \beta_i\]
+                        Since the coefficient set $e_i$ is unique in representing this sum, we can deduce that $a_i=e_i$ in the first part and $b_i=e_i$ in the second part.
+                        By symmetry, the same is true for $c$ and $d$.
+
+                        Thus, $a_i=c_i$ and $b_i=d_i$, and by extenion $u_1=u_1'$ and $u_2=u_2'$.
+
+                        \textbf{New Definition $\rightarrow$ Existing:} \\
+                        Since $W_1$ and $W_2$ are subspaces, $\vec{0}$ is in both of them.
+
+                        To prove that \textit{only} $\vec{0}$ is in both of them, suppose $\exists v \in V: v \ne \vec{0}\land v \in W_1, W_2$.
+                        Then, summing $v \in W_1$ and $\vec{0} \in W_2$ would yield the same result as summing $\vec{0} \in W_1$ and $v \in W_2$,
+                        which contradicts that the representation of all elements in $W_1+W_2$ has to be unique.
+
+                        Thus, the only element that can be in $W_1 \cap W_2$ is $\vec{0}$. $\square$
+                  \item The pairwise intersections of all these subspaces are all equivalent to $\{\vec{0}\}$.
+                        However, when we sum all three of these subspaces, we get that
+                        \begin{gather*}
+                              (1,1)=(1,0)+(0,1)+(0,0) \\
+                              (1,1)=(0,0)+(0,0)+(1,1)
+                        \end{gather*}
+                        We can represent $(1, 1)$ in two different ways, so
+                        this violate the definition just stated $W_1+W_2+W_3$ is not a direct sum.
+                  \item \begin{align*}
+                              T(a+\lambda b) & = T((a_1, \cdots, a_r)+\lambda(b_1, \cdots, b_r)) \\
+                                             & = T((a_1+\lambda b_1, \cdots, a_r+\lambda b_r))   \\
+                                             & = \sum_{i=1}^{r} a_i + \lambda b_i                \\
+                                             & = \sum_{i=1}^{r} a_i + \lambda \sum_{i=1}^{r} b_i \\
+                                             & = T(a)+\lambda T(b)\quad\square
+                        \end{align*}
+                  \item \textbf{Isomorphism $\rightarrow$ Direct Sum:} \\
+                        Since $T$ is an isomorphism and thus bijective, any $v \in W_1 + \cdots + W_r$ must have only one corresponding
+                        element in $W_1 \times \cdots \times W_r$ that maps to it.
+                        That is, there is one and only one $r$-tuple $(v_1, \cdots, v_r)$ that sums to $v$.
+
+                        This corresponds exactly with the new definition given for an internal direct sum.
+
+                        \textbf{Direct Sum $\rightarrow$ Isomorphism:} \\
+                        The logic for this argument goes is basically the same as the previous one except in reverse.
+
+                        Any $v \in W_1 + \cdots + W_r$ must be uniquely represented by an $r$-tuple $(v_1, \cdots, v_r)$.
+                        This means that $T$ is injective by the uniqueness condition just stated,
+                        and that $T$ is surjective since all vectors must have preimages.
+
+                        Thus, $T$ is bijective and by extension an isomorphism. $\square$
+                  \item Let's form a basis for $W_1 \times \cdots \times W_r$.
+
+                        To do this, we take a basis for each subspace $\beta_i$ and transform each element in the basis into elements in the vector space
+                        by turning them into an $r$-tuple with all elements $\vec{0}$ except for the $i$th element, which is $(\beta_i)_j$.
+
+                        By inspection, this set is LI, and it also spans since we can create any element in $W_1 \times \cdots \times W_r$
+                        by creating the individual elements with their respective bases and adding them together.
+
+                        This basis has $\sum_{i=1}^{r} \dim W_i$ elements, so it's also equal to $\dim (W_1 \times \cdots \times W_r)$. $\square$
+
+                        If $W_1 + \cdots + W_r$ is a direct sum, then $T$ is an isomorphism and $\dim (W_1 \times \cdots \times W_r)=\dim (W_1 + \cdots + W_r)$,
+                        which we just established was equal to $\sum_{i=1}^{r} \dim W_i$.
+            \end{enumerate}
+\end{enumerate}
+\end{document}

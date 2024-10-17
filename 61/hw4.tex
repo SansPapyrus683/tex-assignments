@@ -1,0 +1,79 @@
+\documentclass[12pt]{article}
+
+\input{../kz}
+
+\begin{document}
+\section{Textbook}\label{sec:textbook}
+
+\subsection*{6.2}\label{sec:6.2}
+
+\begin{enumerate}
+    \item[12] We can think of the substrings $DB$ and $AE$ as just their own letters,
+        Our units become $DB$, $AE$, and $C$, which gives us $3! = \boxed{6}$ possible strings.
+    \item[14] Notice that in half the permutations, $A$ comes before $D$, and in the other half the opposite is true.
+        Thus, our answer is $\frac{5!}{2}=\boxed{60}$ possible strings.
+    \item[35] Let's use complementary counting.
+        There's $\binom{6}{4}=15$ possible committees that consist of only men, and $\binom{13}{4}=715$ possible committees in total.
+        Subtracting the former from the latter gives $\boxed{700}$ possible committees that have at least one woman.
+    \item[37] Take the answer from the previous question and also subtract the $\binom{7}{4}=35$ that consist of only women
+        to get $\boxed{665}$ committees that have both a man and woman.
+\end{enumerate}
+
+\subsection*{6.3}\label{sec:6.3}
+
+\begin{enumerate}
+    \item[6] $\frac{7!}{3! \cdot 2!}=\boxed{420}$
+    \item[8] Let's start by choosing the nubmer of positions for the $S$s.
+        There's $8$ possible dividers, $3$ of which must be used to separate the $S$s.
+        Thus, we have $\binom{5+4}{4}=126$ ways to place the $S$s.
+
+        After placing the $S$s, there's $\frac{8!}{2!}=20160$ ways to arrange the other letters,
+        giving us a total of $126 \cdot 20160 = \boxed{2540160}$ arrangements.
+
+    \item[34] We have six digits, each of which can go from $0$ to $9$, and thus
+        this problem reduces to finding the number of possible solutions to the equation
+        \[\sum_{i=1}^6 d_i=15 \quad 0 \le d_i \le 9\]
+        Without the upper bound on $d_i$, there's $\binom{15+6-1}{15}$ solutions to the equation.
+
+        Taking into account the upper bound, notice that the only way it can be violated
+        is if \textit{exactly one} $d_i > 9$.
+        Our equation then becomes $\sum_{i=1}^6 d_i=5$, which has $\binom{5+6-1}{5}$ solutions.
+
+        Since there's $6$ different $d_i$s, our final answer is $\boxed{\binom{20}{15}-6 \cdot \binom{10}{5}}$.
+        \label{list:count-digits}
+\end{enumerate}
+
+\pagebreak
+
+\section{Handout}\label{sec:handout}
+\begin{itemize}
+    \item[A1] Notice that we can turn this into an equality by placing the "unused" amount into a separate nonnegative variable $x_8$.
+        This turns the equation into
+        \[\sum_{i=1}^8 x_i=47 \quad x_i \in \mathbb{Z}_{\ge 0}\]
+        Using stars and bars, our final answer is $\binom{47+8-1}{8-1}=\boxed{\binom{54}{7}}$
+    \item[A2] \begin{enumerate}[label=\alph*]
+            \item We must count the number of solutions to
+                  \[\sum_{i=1}^3 d_i=12 \quad 1 \le d_i \le 6\]
+                  Notice that this is equivalent to if $0 \le d_i \le 5$ and they had to sum to $9$.
+
+                  Like in \ref*{list:count-digits}, only one $d_i$ can violate the constraints.
+                  With a violated constraint, we have $\sum_{i=1}^{3} d_i=3$ with $\binom{3+3-1}{3}$ solutions.
+
+                  Thus, the answer to this part is $\boxed{\binom{11}{9}-3 \cdot \binom{5}{3}}$.
+            \item Let's say all dice started at $6$, and want to count the number of ways to subtract values from them such that their sum was $15$.
+            Notice that this becomes the number of solutions to
+            \[\sum_{i=1}^3 d_i=3 \quad 0 \le d_i \le 5\]
+            which is much easier to handle because the upper bound never comes into effect.
+            Using stars and bars, we get $\boxed{\binom{5}{3}}$.
+        \end{enumerate}
+    \item[A3] First, notice that there's $7$ possible values for $4x_1+4x_2$.
+        We first solve this part of the equation, noticing that there's $x+1$ solutions to $4x_1+4x_2=4x$.
+
+        After this, we have $x_3+x_4=24-x$, which has $24-4x+1$ solutions.
+
+        Summing over all values of $x$ gives us
+        \[\sum_{x=0}^6 (x+1)(24-4x+1)=\boxed{252}\]
+    \item[A4] This is basic stars and bars.
+        \[\binom{5+4-1}{4-1} \cdot \binom{3+4-1}{4-1}=\boxed{1120}\]
+\end{itemize}
+\end{document}

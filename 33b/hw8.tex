@@ -1,0 +1,93 @@
+\documentclass[12pt]{article}
+
+\input{../kz}
+
+\begin{document}
+\begin{enumerate}
+    \item \begin{enumerate}
+              \item The system has its equilibrium points when $y=0$ and $-\cos x-\frac{y}{2}=0$.
+                    Solving this system gives us our set of equilibrium points
+                    $\{\left(\frac{\pi}{2}+n\pi, 0\right): n \in \mathbb{Z}\}$.
+              \item The Jacobian is
+                    \[\begin{bmatrix}
+                            0      & 1    \\
+                            \sin x & -0.5
+                        \end{bmatrix}\]
+                    Notice that when $n$ is even, $\sin \left(\frac{\pi}{2}+n\pi\right)=1$,
+                    and when $n$ is odd, the expression evaluates to $-1$ instead.
+                    Thus, all our equilibrium points fall into one of two cases.
+
+                    \textbf{$n$ even:} \\
+                    When $n$ is even, the trace of the matrix is $0=0.5=-0.5$
+                    and the determinant is $0 \cdot -0.5 - 1 \cdot 1=-1$.
+                    From this, we can see that the equilibrium point is
+                    an unstable saddle when $n$ is even.
+
+                    \textbf{$n$ odd:} \\
+                    OTOH, when $n$ is odd, the while the trace is still $-0.5$,
+                    the determinant now becomes $0 \cdot -0.5 - 1 \cdot -1=0.5$.
+                    Plotting this on the trace-determinant plane,
+                    we see that the equilibrium point is
+                    a stable spiral sink when $n$ is odd.
+          \end{enumerate}
+    \item First we solve the system
+          \begin{gather*}
+              x+y=0 \\
+              y(1-x^2)=0
+          \end{gather*}
+          The second equation is true if and only if one of the coefficients
+          is $0$, which means that either $y=0$, or $x=\pm 1$.
+          Plugging these three cases back into the first equation gives us
+          the equilibrium points $(0, 0)$, $(1, -1)$, and $(-1, 1)$.
+
+          The Jacobian of this system $J(\vec{x})$ is
+          \[\begin{bmatrix}
+                  1    & 1     \\
+                  -2xy & 1-x^2
+              \end{bmatrix}\]
+
+          We then plug in each equilibrium point and see what type they are.
+          \begin{itemize}
+              \item $(0, 0)$: $\det J((0, 0)) = 1$, while $\text{tr} J((0, 0))=2$.
+                    Since the discriminant is zero and the trace is positive, this point is an unstable improper node.
+              \item $(1, -1)$: $\det J((1, -1))=-2$ and $\text{tr} J((1, -1)) = 1$.
+                    Since the determinant is negative, this point is an unstable saddle.
+              \item $(-1, 1)$: Since the resulting Jacobian is the same as the previous point,
+                    this point is an unstable saddle as well.
+          \end{itemize}
+    \item \begin{enumerate}
+              \item Adding all three derivatives together, we see that
+                    \[S'(t)+I'(t)+R'(t)=-\frac{\beta S(t)I(t)}{N}+\frac{\beta S(t)I(t)}{N}-\alpha I(t)+\alpha I(t)=0\]
+                    Since the derivative is always $0$, we can infer that the value of $S(t)+I(t)+R(t)$ stays constant.
+              \item To do this, we solve the system
+                    \begin{gather*}
+                        -\frac{\beta S(t) I(t)}{ N} = 0 \\
+                        \frac{\beta S(t) I(t)}{ N} - \alpha I(t) = 0
+                    \end{gather*}
+                    Adding the first to the second, we get that $\alpha I(t)=0$ and by extension $I(t)=0$.
+                    This alone satisfies both equalities, so $S \in [0, N]$.
+
+                    Thus, our equilibrium points are where $I(t)=0$ and $0 \le S(t) \le N$.
+              \item The Jacobian is
+                    \begin{align*}
+                        \begin{bmatrix}
+                            \frac{\partial S'}{\partial S} & \frac{\partial S'}{\partial I} \\
+                            \frac{\partial I'}{\partial S} & \frac{\partial I'}{\partial I}
+                        \end{bmatrix}
+                         & =\begin{bmatrix}
+                                -\frac{\beta I(t)}{N} & -\frac{\beta S(t)}{N}       \\
+                                \frac{\beta I(t)}{N}  & \frac{\beta S(t)}{N}-\alpha
+                            \end{bmatrix} \\
+                         & =\begin{bmatrix}
+                                0 & -\frac{\beta S(t)}{N}       \\
+                                0 & \frac{\beta S(t)}{N}-\alpha
+                            \end{bmatrix}
+                    \end{align*}
+                    For there to be a positive eigenvalue, $\frac{\beta S(t)}{N}-\alpha > 0$.
+                    Isolating $S(t)$, this inequality goes to $\boxed{S > \frac{N\alpha}{\beta}}$.
+              \item The lowest $S$ can be while having the entire system
+                    tend toward the equilibrium point is $\frac{N\alpha}{\beta}$.
+                    Thus, \[\lim_{t \to \infty} \frac{R(t)}{N}=1-\lim_{t \to \infty} \frac{S(t)}{N}=\boxed{\frac{\alpha}{\beta}}\]
+          \end{enumerate}
+\end{enumerate}
+\end{document}

@@ -1,0 +1,76 @@
+\documentclass[12pt]{article}
+
+\input{../kz}
+
+\begin{document}
+    \begin{enumerate}
+        \item \begin{enumerate}
+                  \item \begin{enumerate}
+                            \item Since equivalence relations are reflexive, we know that $a \sim b$ and thus $a \in [a]$.
+                            \item We have to prove this statement in both directions. \\
+                            \textbf{If $a \sim b$, then $[a]=[b]$:}
+                            To prove $[a] \subseteq [b]$, notice that for every element $c$ in $[a]$, $c \sim a$ and by the transitive property $c \sim b$ as well. Thus, $c \in [a] \rightarrow c \in [b]$.
+                            By symmetry, $[b] \subseteq [a]$ as well. \\
+                            \textbf{Vice versa:} Assume $[a] = [b]$ and $a \nsim b$ for sake of contradiction.
+                            By the reflexivity property, we know that $a \in [a]$, and by extension $a \in [b]$.
+                            Since $a \in [b] \rightarrow a \sim b$, we have a contradiction. $\square$
+                  \end{enumerate}
+                  \item \begin{enumerate}
+                            \item We just have to show that $[a] \in P(S)\,\forall\,a \in S$. \\
+                            By definition, $[a] \subseteq S \rightarrow [a] \in P(S)$. $\square$
+                            \item $S/R$ pertains to 1(a)(ii) above in that duplicate equivalence classes aren't included in the set.
+                            \item We have to show that each $r$ between $0$ and $n-1$ is in its own equivalence class.
+                            Take two instances of $r$ and call them $i$ and $j$ respectively.
+                            WLOG assume $i<j$.
+                            Since $0 \le i < j < n$, we know that $-n < i-j < 0 \therefore n \nmid i-j$, and by extension $i$ and $j$ are not related.
+                            Because they aren't related, $i$ and $j$ must also be in separate equivalence classes.
+
+                            An equivalence class in $\mathbb{Z}/n\mathbb{Z}$ can't have zero values of $r$.
+                            This is because for any $x \in \mathbb{Z}$, there is some $0 \le y < n$ s.t. $n | x-y$.
+                            We can always find such a $y$ by reducing $x \mod n$.
+
+                            Thus, any equivalence class in this quotient can't have zero or more than two values of $r$, so each must have their own distinct value of $r$. $\square$
+                  \end{enumerate}
+        \end{enumerate}
+
+        \item \begin{enumerate}
+                  \item \begin{enumerate}
+                            \item Multiplication in $\mathbb{Z}/3\mathbb{Z}$ \\
+                            \begin{tabular}{llll}
+                                & {[}0{]} & {[}1{]} & {[}2{]} \\
+                                {[}0{]} & 0       & 0       & 0       \\
+                                {[}1{]} & 0       & 1       & 2       \\
+                                {[}2{]} & 0       & 2       & 1
+                            \end{tabular}
+                            \item Addition in $\mathbb{Z}/3\mathbb{Z}$ \\
+                            \begin{tabular}{llll}
+                                & {[}0{]} & {[}1{]} & {[}2{]} \\
+                                {[}0{]} & 0       & 1       & 2      \\
+                                {[}1{]} & 1       & 2       & 0       \\
+                                {[}2{]} & 2       & 0       & 1
+                            \end{tabular}
+                            \item Multiplication in $\mathbb{Z}/4\mathbb{Z}$ \\
+                            \begin{tabular}{lllll}
+                                & {[}0{]} & {[}1{]} & {[}2{]} & {[}3{]} \\
+                                {[}0{]} & 0       & 0       & 0    & 0  \\
+                                {[}1{]} & 0       & 1       & 2    & 3   \\
+                                {[}2{]} & 0       & 2       & 0    & 2   \\
+                                {[}3{]} & 0       & 3       & 2    & 1   \\
+                            \end{tabular}
+                  \end{enumerate}
+
+                  \pagebreak
+
+                  \item \begin{enumerate}
+                            \item $3$ is prime because its only divisors are $1$ and itself.
+                            $4=2 \cdot 2$, so it's composite.
+                            \item The table is symmetric along its diagonal, so commutativity seems to hold. \\
+                            $0_F$ and $1_F$ are $[0]$ and $[1]$ respectively. \\
+                            Upon inspection, the opposite of each number $x$ is $n-x$, while the inverse is $x^{-1} \mod n$.
+                            \item $\mathbb{Z}/4\mathbb{Z}$ isn't a field because $2$ doesn't have an inverse.
+                            Since $x^{-1} \mod n$ only exists if $x$ and $n$ are coprime, composite modulo are bound to have some numbers less than them without inverses.
+                  \end{enumerate}
+        \end{enumerate}
+    \end{enumerate}
+
+\end{document}

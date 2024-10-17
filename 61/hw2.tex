@@ -1,0 +1,89 @@
+\documentclass[12pt]{article}
+
+\input{../kz}
+
+\begin{document}
+\section{Textbook}\label{sec:textbook}
+\begin{itemize}
+      \item[3.4.27] If an equivalence relation $R \subseteq S \times S$ has only one equivalence class, then $R=S \times S$.
+            This is because only one class implies that all elements are related to each other.
+      \item[3.4.41] \begin{itemize}
+                  \item \textbf{Symmetry:}
+                        If $x \sim y$, then $f(x)=f(y) \therefore f(y)=f(x)$ and $y \sim x$.
+                  \item \textbf{Reflexivity:}
+                        $f(x)=f(x) \therefore x \sim x$
+                  \item \textbf{Transitivity:} If $x \sim y$ and $y \sim z$, then $f(x)=f(y)=f(z) \therefore f(x)=f(z) \therefore x \sim z$.
+            \end{itemize}
+            With all three properties proven, we know that $R$ is an equivalence relation on $X$.
+      \item[3.4.43] Let's first show that all elments in $X$ are in at least one set of $\mathcal{S}$.
+
+            Suppose for the sake of contradiction that $\exists x \in X$ s.t. it isn't in any of the sets specified.
+            Letting $f(x)=y \in Y$, we know that $x \in f^{-1}(y)$ by the definition of the inverse,
+            which means that $x$ must be in one of the sets somewhere.
+            Contradiction.
+
+            We also know that $x \in X$ can't be in more than two elements of $\mathcal{S}$
+            because that would mean we would have
+            \[y_1, y_2 \in Y: y_1 \ne y_2 \land x \in f^{-1}(y_1) \land x \in f^{-1}(y_2)\]
+            We know this can't be true by the definition of a function.
+
+            Since every element of $X$ is in exactly one set in $\mathcal{S}$, the specified set is a partition. $\square$
+      \item[3.4.44] $f(x)=f(y)$ when $[x]=[y]$.
+            In other words, the two are equal when $x \sim y$.
+\end{itemize}
+
+\section{Handout}\label{sec:handout}
+\begin{itemize}
+      \item[A1] \begin{enumerate}[label=\alph*]
+                  \item We can prove this by showing $\bigcup_{y \in Y} f^{-1}(y)=X$.
+
+
+                        Thus, $\bigcup_{y \in Y} f^{-1}(y)=X$ and by extension $\sum_{y \in Y} |f^{-1}(y)|=|X|$. $\square$
+                  \item Since $f$ is injective, we know $x \ne y \rightarrow f(x) \ne f(y)$.
+                        Because of this, we know that $|X|=|\text{Im}(X)|$
+                        Since $\text{Im}(x) \subseteq Y$, we have $|X|=|\text{Im}(x)|\le |Y|$. $\square$
+                  \item Since $f$ is surjective, we know $\forall y \in Y\ \exists x \in x: f(x)=y$
+                        We've proven that $\sum_{y \in Y} |f^{-1}(y)|=|X|$, and since $|f^{-1}(y)| \ge 1\ \forall y \in Y$,
+                        we have \[|Y| \le \sum_{y \in Y} |f^{-1}(y)|=|X|\quad\square\]
+                  \item This follows naturally from the previous two statements, as
+                        \[|X| \le |Y| \land |X| \ge |Y| \rightarrow |X|=|Y|\]
+            \end{enumerate}
+      \item[A2] \begin{enumerate}[label=\alph*]
+                  \item For each ordered tuple $(c_1, c_2, \cdots , c_n)$, where $c_i \in X$,
+                        we can form a string by simply listing all the characters specified in the tuple in order.
+
+                        \textbf{Injectivity:}
+                        If $(a_1, a_2, \cdots , a_n) \ne (b_1, b_2, \cdots , b_n)$, then there is
+                        some position $i$ s.t. $a_i \ne b_i$.
+                        By extension, the strings $a$ and $b$ would also differ at that position $i$.
+                        Thus, $f$ is injective.
+
+                        \textbf{Surjectivity:}
+                        For any string $s$ of length $n$, we can decompose it into an $n$-tuple
+                        that consists of the characters of $s$ in their respective order.
+                        For example, $abc$ would decompose into the $3$-tuple $(a,b,c)$.
+                        Thus, $f$ is surjective.
+                  \item Let us define our bijection function as $g$.
+                        For a function $f \in \text{Fun}(\{1, \cdots , n\}, X)$,
+                        $g(f)$ is an $n$-tuple $(a_1, a_2, \cdots , a_n)$ such that $a_i=f(i)$.
+
+                        \textbf{Injectivity:}
+                        Say we have two different functions $f_1$ and $f_2$.
+                        Since they're different, $\exists i \in \{1, \cdots , n\}: f_1(i) \ne f_2(i)$.
+                        If we have $g(f_1)=(a_1, a_2, \cdots , a_n)$ and $~{g(f_2)=(b_1, b_2, \cdots , b_n)}$,
+                        we can deduce $a_i=f_1(i) \ne f_2(i)=b_i$.
+                        Thus, $g$ produces distinct outputs for distinct inputs and is injective by definition.
+
+                        \textbf{Surjectivity:}
+                        For any $n$-tuple $(a_1, a_2, \cdots , a_n)$,
+                        we have a function $f$ that can be defined as $f(i)=a_i$.
+                        Plugging this back into $g$ does yield the desired tuple, so $g$ is also surjective.
+            \end{enumerate}
+      \item[A3] $n=2$: $f$ is injective and surjective since $f(0)=0$ and $f(1)=1$
+
+            $n=5$: $f$ is neither injective nor surjective since $f(i)=0\ \forall r \in \mathbb{Z}/5\mathbb{Z}$.
+
+            $n=7$: Since $5$ and $7$ are coprime, $f$ is both injective and surjective.
+            This can also be verified by going through all values of $r$.
+\end{itemize}
+\end{document}

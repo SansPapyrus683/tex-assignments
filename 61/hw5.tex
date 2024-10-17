@@ -1,0 +1,103 @@
+\documentclass[12pt]{article}
+
+\input{../kz}
+
+\begin{document}
+\section{Textbook}\label{sec:textbook}
+
+\begin{enumerate}
+    \item[6.7.16] We choose $1$ and $-1$ as our values for $a$ and $b$.
+        \begin{align*}
+            (1+(-1))^n & =\sum_{k=0}^{n} \binom{n}{k}(1)^{n-k}(-1)^k      \\
+                       & = \sum_{k=0}^{n} (-1)^k \binom{n}{k}\quad\square
+        \end{align*}
+    \item[6.8.9] It is possible for a month to cover $5$ Fridays.
+        In some month, the professor must be paid on the first of these Fridays.
+        Then, they must also be paid on the third and fifth as well.
+        Thus, there does exist a month in which Prof. Euclid is paid thrice. $\square$
+    \item[6.8.11] Let's assign each available item a number corresponding to its slot in the inventory.
+        It suffices to prove that when we take the set $\{i_1, i_2, \cdots i_{60}\}$ and add $4$ to each of them,
+        there must be some number in the new set that must be in the old set as well.
+
+        Consider the set $\{i_1, i_2, \cdots i_{60}\} \cup \{i_1+4, i_2, \cdots i_{60}\}$.
+        Values in this set can take on the values from $1$ to $119$.
+        However, since the sum of the sizes of the two sets is $60+60=120$,
+        there must be some element that occurs in both sets. $\square$
+    \item[7.1.19] \label{list:7.1.19} For some base cases, let $S_0=1$ and $S_1=2$.
+        From then on, for $S_n$, there's two ways we can build a binary string of length $n$ from previous cases:
+        \begin{enumerate}[label=\arabic*]
+            \item Add a $\texttt{1}$ to the strings of $S_{n-1}$.
+            \item Add a $\texttt{10}$ to the strings of $S_{n-2}$.
+                  Notice that this won't overlap with the previous case because
+                  all of these ended with $1$, while these end with $0$.
+        \end{enumerate}
+        Thus, our recurrence relation is $S_n=S_{n-1}+S_{n-2}$.
+    \item[7.1.21] Let us use a combinatorial argument.
+        It has been established that $f_{n+2}=S_n$,
+        where $S_n$ is the number of $n$-bit strings without the pattern $\texttt{00}$ in them.
+
+        Let us define another way to count the number of these strings by
+        placing fixed amounts of $\texttt{0}$s around the string and setting the rest to $\texttt{1}$.
+
+        By the Pigeonhole Principle, we can place at most $\left\lfloor\frac{n+1}{2}\right\rfloor$ $\texttt{0}$s
+        around the string before two must be adjacent.
+        Now, given that we are to place $i$ $\texttt{0}$s on the string, there's $\binom{n-(i-1)}{i}$
+        possible strings such that no two $\texttt{0}$s are adjacent by stars and bars.
+
+        Summing over all possible values of $i$, we have that there are
+        \[\sum_{i=0}^{\left\lfloor\frac{n+1}{2}\right\rfloor} \binom{n-(i-1)}{i}\]
+        strings with no two adjacent $\texttt{0}$s.
+        This counts the same thing as $f_{n+2}$ does, so we've proved equality. $\square$
+    \item[7.1.57] Our base case is $R_1=2$.
+        After that, each additional line must cross paths with all previous lines, creating an additional
+        region with an extra one for each line crossed.
+
+        Given this, we can derive our recurrence relation $R_n=R_{n-1}+n$.
+    \item[7.1.61] Our bases cases are $S_0=1$, $S_1=2$, and $S_2=4$.
+        As in the other problem, let's try to construct a string of length $n$ from previous ones
+        while meeting the constraints.
+        There's multiple ways of doing so, many of which are familiar:
+        \begin{enumerate}[label=\arabic*]
+            \item Add a $\texttt{1}$ to the strings of $S_{n-1}$.
+            \item Add a $\texttt{10}$ to the strings of $S_{n-2}$.
+            \item Add a $\texttt{100}$ to the strings of $S_{n-3}$.
+        \end{enumerate}
+        This gives us our recurrence relation $S_n=S_{n-1}+S_{n-2}+S_{n-3}$.
+    \item[7.2.2] $a_n=2a_{n-2}-a_{n-1}$ is not linear and homogeneous, as $a_{n-2}$ has a coefficient of $n$.
+\end{enumerate}
+
+\pagebreak
+
+\section{Handout}\label{sec:handout}
+\begin{itemize}
+    \item[A1] Consider a group of $n$ people that wants to choose a committee of size $k$.
+        A way we can count the number of possible committees is $\binom{n}{k}$.
+
+        However, let us consider another way.
+        We can split this group into a group of size $n-1$ and one lone person.
+        When choosing a committee, we can either choose $k$ from the larger group,
+        or we can choose $k-1$ from the larger group and include the lone person as well.
+        Combining these two gives us a total of $\binom{n}{k-1}+\binom{n-1}{k-1}$.
+
+        These both are valid ways of counting the number of possible committees. $\square$
+    \item[A2] This time, consider a group of $n+1$ people $\{p_1, p_2, \cdots p_{n+1}\}$
+        that wants to choose a committee of size $k+1$.
+        The most straightforward way to do this is to use a binomial
+        to see that there are $\binom{n+1}{k+1}$ possible committees.
+
+        Another way to do this is to set a person with the maximum number and select the remaining $k$ people.
+        For example, if $k=4$, we'd choose $p_5$ as the person with the maximum number and proceed
+        to choose $k-1=3$ people among the set $\{p_1, p_2, p_3, p_4\}$.
+
+        We start at $p_{k+1}$, as before that there aren't enough people with smaller numbers
+        that are able to fill the committee.
+        From then on, everyone until $p_{n+1}$ can be a maximum person.
+        Thus, we would have a total of
+        \[\sum_{i=k+1}^{n+1} \binom{i-1}{k}=\binom{k}{k}+\binom{k+1}{k}+\binom{k+2}{k} \cdots + \binom{n}{k}\]
+        possible committees.
+
+        Again, we see that these are both valid ways of counting the same thing. $\square$
+
+        (or just look up "hockey stick binomial" and call it a day haha)
+\end{itemize}
+\end{document}

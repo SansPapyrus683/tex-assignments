@@ -1,0 +1,107 @@
+\documentclass[12pt]{article}
+
+\input{../kz}
+
+\begin{document}
+\begin{enumerate}
+      \item \begin{enumerate}
+                  \item Since $\beta$ is a basis, we can write vectors $a, b \in V$ in the following form:
+                        \begin{align*}
+                              a=\sum_{i=1}^{n} a_i \beta_i &  & b=\sum_{i=1}^{n} b_i \beta_i
+                        \end{align*}
+                        Given this, we know that $a+\lambda b$ can be expressed as follows:
+                        \[a+\lambda b=\sum_{i=1}^{n} (a_i+\lambda b_i) \beta_i\]
+                        Then we proceed as normal with proving that $T$ is linear.
+                        \begin{align*}
+                              T(a+\lambda b) & =[a+\lambda b]_\beta            \\
+                                             & =\begin{bmatrix}
+                                                      a_1+\lambda b_1 \\
+                                                      \vdots          \\
+                                                      a_n+\lambda b_n
+                                                \end{bmatrix}                \\
+                                             & = \begin{bmatrix}
+                                                       a_1    \\
+                                                       \vdots \\
+                                                       a_n
+                                                 \end{bmatrix} +\lambda
+                              \begin{bmatrix}
+                                    b_1    \\
+                                    \vdots \\
+                                    b_n
+                              \end{bmatrix}                                   \\
+                                             & = [a]_\beta+\lambda [b]_\beta   \\
+                                             & = T(a)+\lambda T(b)\quad\square
+                        \end{align*}
+                  \item We know that if $a \ne b$, then their linear combinations in terms of a basis $\beta$ are also distinct.
+                        In particular, if $a =\sum_{i=1}^{n} a_i \beta_i$ and $b=\sum_{i=1}^{n} b_i \beta_i$, then $\exists i: a_i \ne b_i$.
+                        Since $f_\beta$ just takes these coefficients, we know that it is injective.
+
+                        For surjectivity, we can construct any $v \in V$ with a column vector like so:
+                        \[f^{-1}_\beta\left(\begin{bmatrix}
+                                          v_1    \\
+                                          \vdots \\
+                                          v_n
+                                    \end{bmatrix}\right)=\sum_{i=1}^{n} v_i \beta_i \in V\]
+                        Plugging this linear combiantion back into $f_\beta$ gives us the same column vector, so $f_\beta$ is surjective as well. $\square$
+                  \item Because $f_\beta$ is a bijection, we can convert any coordinate in $F^n$ back to a vector in $v$ by applying its inverse.
+                        It's important that this function is linear because then we can add vectors in $F^n$ as we please and get the same
+                        value when converting back when compared to if we had done the operations to the vectors in $V$ initially.
+            \end{enumerate}
+            \pagebreak
+      \item \begin{enumerate}
+                  \item We know the $j$th column of $[T]^\gamma_\beta$ is equivalent to $[T(v_j)]_\gamma$.
+                        Looking at the summation in $Q$, it's clear that it performs a summation over all elements in the $j$th column as well.
+                        
+                        Also, $[T(v_j)]_\gamma$ is equivalent to the coefficients of the elements in $\gamma$
+                        s.t. they make a linear combination that sums to $T(v_j)$ when combined with $\gamma$.
+                        
+                        This is precisely what the elements of the column vector are doing in the summation, so
+                        the proposition is true.
+
+                  \item \begin{enumerate}
+                              \item $T(0,1)=(0,0)=\vec{0}$ \\
+                                    $T(1,0)=(1,0)=1 \cdot (1, 0)$ \\
+                                    Combining these two results, we get
+                                    \[[T]^\beta_\beta=\begin{bmatrix}
+                                                0 & 0 \\
+                                                0 & 1
+                                          \end{bmatrix}\]
+                              \item $T(0,1)=(0,0)=\vec{0}$ (again) \\
+                                    $T(1,0)=(1,0)=1 \cdot (1, 1) - 1 \cdot (0, 1)$ \\
+                                    With these two, we get that
+                                    \[[T]^\gamma_\beta=\begin{bmatrix}
+                                                0 & 1  \\
+                                                0 & -1
+                                          \end{bmatrix}\]
+                        \end{enumerate}
+                  \item \begin{enumerate}
+                              \item Applying $T$ to each of the elements in $\beta$, we get
+                                    \begin{align*}
+                                          T(E_{11})=E_{11} &  & T(E_{12})=E_{21} \\
+                                          T(E_{21})=E_{12} &  & T(E_{22})=E_{22}
+                                    \end{align*}
+                                    The result of each is simply another element in the basis, so
+                                    we compute how the result has been shuffled and obtain
+                                    \[[T]^\beta_\beta=\begin{bmatrix}
+                                                1 & 0 & 0 & 0 \\
+                                                0 & 0 & 1 & 0 \\
+                                                0 & 1 & 0 & 0 \\
+                                                0 & 0 & 0 & 1
+                                          \end{bmatrix}\]
+                              \item Now we have to express the results from the linear transformations in terms of a new basis, $\gamma$.
+                                    This isn't too hard, since $\gamma$ only slightly differs from $\beta$.
+                                    \begin{align*}
+                                          E_{11} & =(E_{11}+E_{12})-E_{12} &  & E_{21}=E_{21} \\
+                                          E_{12} & =E_{12}                 &  & E_{22}=E_{22}
+                                    \end{align*}
+                                    With this, we get
+                                    \[[T]^\gamma_\beta=\begin{bmatrix}
+                                                1  & 0 & 0 & 0 \\
+                                                -1 & 0 & 1 & 0 \\
+                                                0  & 1 & 0 & 0 \\
+                                                0  & 0 & 0 & 1
+                                          \end{bmatrix}\]
+                        \end{enumerate}
+            \end{enumerate}
+\end{enumerate}
+\end{document}

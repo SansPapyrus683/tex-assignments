@@ -1,0 +1,104 @@
+\documentclass[12pt]{article}
+
+\input{../kz}
+
+\allowdisplaybreaks
+
+\begin{document}
+\section{Textbook}\label{sec:textbook}
+
+\subsection*{8.1}\label{sec:8.1}
+
+\begin{enumerate}
+    \item[25] Each of the $m$ vertices on one side has to be connected to all $n$ on the other side.
+          Thus, $|E|=\boxed{mn}$.
+    \item[30] A plausible model would represent all mathematicians (including Erdos himself) as nodes.
+          An edge is drawn between two mathematicians if they ever published a paper together.
+          The Erdos number of a mathematicians would then be the smallest distance between
+          Erdos's node and the node of the aformentioned mathematician.
+\end{enumerate}
+
+\subsection*{8.2}\label{sec:8.2}
+
+\begin{enumerate}
+    \item[41] If teams are nodes and games are edges,
+          then this proposal would result in a graph with $11$ nodes, each of degree $9$.
+          It is impossible to have an odd-number of odd-degree nodes,
+          so this proposal is nonsense. $\square$
+    \item[49] Removing a single edge from any tree disconnects it.
+    \item[64] For a path of length exactly $k \ge 1$, there are $\binom{n}{k+1}$ sets of nodes we can visit.
+          Each of these sets of nodes can then be visited in $(k+1)!$ ways.
+          Thus, our final answer is
+          \[\sum_{k=1}^{n-1} \binom{n}{k+1}(k+1)! = \sum_{k=1}^{n-1} \perm{n}{k+1}\]
+    \item[67] Paths from $v$ to $w$ can range from length $k=1$ to $k=n-1$.
+          For a path of length $k$, we can choose $\binom{n-2}{k-1}$ intermediate nodes between $v$ and $w$
+          and then order them in $(k-1)!$ ways.
+          Notice that this differs from the result in the previous question because unlike in that one,
+          the position of the start and end are already defined.
+
+          Thus, the number of simple paths from $v$ to $w$ is
+          \begin{align*}
+              \sum_{k=1}^{n-1} \binom{n-2}{k-1}(k-1)! & = \sum_{k=0}^{n-2} \binom{n-2}{k}k!               \\
+                                                      & = \sum_{k=0}^{n-2} \frac{(n-2)!}{k!(n-k-2)!}k!    \\
+                                                      & = (n-2)!\sum_{k=0}^{n-2} \frac{1}{(n-k-2)!}       \\
+                                                      & = (n-2)!\sum_{k=0}^{n-2} \frac{1}{k!}\quad\square
+          \end{align*}
+    \item[78] Notice that choosing an independent set on a graph that's just $n$ vertices in a single line
+          is equivalent to counting the number of binary strings such that no two $\texttt{1}$s are adjacent.
+
+          It was proven in a previous homework that the result of the latter is equivalent to the Fibonacci
+          sequence, so this one must be too. $\square$
+\end{enumerate}
+
+\subsection*{8.3}\label{sec:8.3}
+
+\begin{enumerate}
+    \item[10] A graph that's $n$ nodes in a loop has a Euler cycle that's also a Hamiltonian cycle.
+    \item[14] Let us proceed by induction.
+
+          \textbf{Base case $n=3$:}
+          $K_3$ is a triangle.
+          By inspection, this graph has a cycle that goes from $v_1$ to $v_2$, then to $v_3$, and back to $v_1$.
+          We now assume $K_n$ with $n \ge 3$ has a Hamiltonian cycle.
+
+          \textbf{Inductive step:}
+          Take $K_n$ and its Hamiltonian cycle $v_1, v_2, \cdots, v_n, v_1$.
+          To construct $K_{n+1}$ from $K_n$, we can add an additional vertex $v_{n+1}$ along
+          with edges to it from every other preexisting vertex.
+
+          Notice that inserting $v_{n+1}$ between $v_n$ and $v_1$ will create another cycle.
+          No edges are repeated, since $K_n$ can't have already had any edges that go to or from $v_{n+1}$.
+          The new sequence of edges starts and ends at the same place and consists of $n+1$ distinct vertices.
+
+          Thus, we have constructed a Hamiltonian cycle for $K_{n+1}$, and the inductive hypothesis is complete.
+    \item[15] $K_{m,n}$ contains a Hamiltonian cycle when $m,n > 1$ and $m=n$.
+    \item[20] All edges in $G$ either go from a vertex in $V_1$ to a vertex in $V_2$ or vice versa.
+    Thus, a Hamiltonian cycle must alternate between vertices in $V_1$ and those in $V_2$.
+
+    This cycle must also have $|V_1|+|V_2|$ vertices.
+    If it starts at a vertex in $V_1$, then the final vertex visited must be in $V_2$
+    so that the cycle can be completed with an edge back to that vertex in $V_1$.
+    
+    As we can see, these conditions force $|V_1|=|V_2|$ as otherwise
+    we would either have two adjacent vertices from the same set or a cycle that isn't complete. $\square$
+\end{enumerate}
+
+\pagebreak
+
+\section{Handout}\label{sec:handout}
+
+\begin{itemize}
+    \item[A1] Values for the degree of a vertex can range from $0$ to $n-1$ inclusive.
+          Since there's $n$ vertices, and $n$ possible values, it may seem like there's no contradiction here.
+
+          However, notice that we cannot have a vertex of degree $n-1$ and another of degree $0$ at the same time.
+          This is because the vertex of degree $n-1$ must be connected to every other node in the graph,
+          \textit{including the vertex of degree $0$}.
+          This would contradict that the vertex of degree $0$, is, well, of degree $0$.
+
+          Thus, there can only really be $n-1$ possible values to spread among $n$ vertices,
+          since two of those values cannot coexist in the same graph.
+          By the pigeonhole principle, two vertices must then share the same degree. $\square$
+\end{itemize}
+
+\end{document}

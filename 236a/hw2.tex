@@ -1,0 +1,216 @@
+\documentclass[12pt]{article}
+
+\input{../kz}
+
+\rhead{ECE 236A}
+
+\newcommand*{\vertbar}{\rule[-1ex]{0.5pt}{2.5ex}}
+\newcommand*{\horzbar}{\rule[.5ex]{2.5ex}{0.5pt}}
+
+\begin{document}
+
+% some of the tex here might be a little weird bc i lost a lot of it for some reason
+% so i had to put the pdf that i sent rayaan into an ocr lmao
+\begin{enumerate}
+      \item Let's define our line as $\mathcal{L} = \{x \in \mathbb{R}^n\,|\, x=\theta a + (1-\theta) b\}$,
+            where $a$ and $b$ are arbitrary vectors in $\mathbb{R}^n$.
+
+            \textbf{Forward Direction}:
+            Suppose $x$ and $y$ that are both in $\mathbb{C}$ and $\mathcal{L}$,
+            as well as a $z$ that represents any convex combination of these two vectors.
+            $\mathbb{C}$ is convex, so $z \in \mathbb{C}$.
+            All lines are convex sets as well, so $z \in \mathcal{L}$ too.
+
+            Thus, $\mathbb{C}$ is convex implies that its intersection
+            with any line is a convex set as well.
+
+            \textbf{Reverse Direction}:
+            We'll prove the contrapositive of the statement.
+            That is, we want to show that if $\exists \mathcal{L}$
+            s.t. its intersection with $\mathbb{C}$ isn't convex,
+            then $\mathbb{C}$ itself isn't convex either.
+
+            Again, suppose the same $x$, $y$, and $z$ as we did in the forward direction.
+            By the premise, we'll pick a $z$ that isn't in $\mathcal{L} \cap \mathbb{C}$.
+            All lines are convex sets, so $z \in \mathcal{L} \therefore z \notin \mathbb{C}$.
+            We've found a convex combination of $x$ and $y$ that isn't in $\mathbb{C}$,
+            so $\mathbb{C}$ must not be convex. $\square$
+      \item \begin{enumerate}
+                  \item We can turn the $l_2$ norm into something more desirable as follows:
+                        \begin{gather*}
+                              ||x-x_0||_2 \le ||x-x_i||_2 \\
+                              \sum_{j=1}^{n} (x_j - (x_0)_j)^2 \le \sum_{j=1}^{n} (x_j - (x_i)_j)^2 \\
+                              \sum_{j=1}^{n} x_j^2 + (x_0)_j^2 - 2x_j(x_0)_j \le \sum_{j=1}^{n} x_j^2 + (x_i)_j^2 - 2x_j(x_i)_j \\
+                              \sum_{j=1}^{n} (x_0)_j^2 - 2x_j(x_0)_j \le \sum_{j=1}^{n} (x_i)_j^2 - 2x_j(x_i)_j \\
+                              \sum_{j=1}^{n} 2x_j((x_i)_j - (x_0)_j) \le \sum_{j=1}^{n} (x_i)_j^2 - (x_0)_j^2 \\
+                              (2(x_i - x_0))^T x_j \le x_i^T x_i - x_0^T x_0
+                        \end{gather*}
+                        To express this polyhedron in the form of $\{x\,|\,Ax \le b\}$, we set $A$ and $b$ to the following:
+                        \begin{align*}
+                              A=\begin{bmatrix}
+                                      \horzbar & 2(x_1 - x_0)^T & \horzbar \\
+                                               & \vdots         &          \\
+                                      \horzbar & 2(x_k - x_0)^T & \horzbar
+                                \end{bmatrix}
+                               &  & b=\begin{bmatrix}
+                                            x_1^T x_1 - x_0^T x_0 \\
+                                            \vdots                \\
+                                            x_K^T x_K - x_0^T x_0
+                                      \end{bmatrix}
+                        \end{align*}
+                  \item Below, $\mathbf{0} \in \mathbb{R}^n$, $I \in \mathbb{R}^{n \times n}$,
+                        and $\odot$ indicates elementwise multiplication.
+                        \begin{align*}
+                              A = \begin{bmatrix}
+                                                 & -I             &          \\
+                                        \horzbar & \mathbf{1}^T   & \horzbar \\
+                                        \horzbar & -\mathbf{1}^T  & \horzbar \\
+                                        \horzbar & a^T            & \horzbar \\
+                                        \horzbar & -a^T           & \horzbar \\
+                                        \horzbar & (a \odot a)^T  & \horzbar \\
+                                        \horzbar & -(a \odot a)^T & \horzbar
+                                  \end{bmatrix}
+                               &  &
+                              b = \begin{bmatrix}
+                                        \mathbf{0} \\
+                                        1          \\
+                                        -1         \\
+                                        b_1        \\
+                                        -b_1       \\
+                                        b_2        \\
+                                        -b_2
+                                  \end{bmatrix}
+                        \end{align*}
+                  \item By the Triangle Inequality, Manhattan Distance is an upper bound
+                        on Euclidean distance, so we can basically not consider the first constraint.
+                        Also, if $\mathbf{1}^T |x| \le 2$ and $x \ge \mathbf{0}$, then $||x||_\infty$ is implied as well.
+
+                        With those two inequalities out of the question, we can write
+                        our polyhedron as all vectors $x$ s.t.:
+                        \begin{gather*}
+                              -m \leq x \leq m \\
+                              \mathbf{1}^{T} m \leq 2 \\
+                              x \geq 0
+                        \end{gather*}
+
+                        For a feasible point to be a vertex, it must have at least $n-1$ $0$s
+                        as only then will $A_{J(x)}$ have enough rows for a rank of $n$.
+
+                        This means that we have $\boxed{n+1}$ vertex points.
+                        $n$ of them are vectors with $n-1$ $0$s and one $2$,
+                        and the last one is the zero vector.
+            \end{enumerate}
+      \item \begin{enumerate}
+                  \item Let $y_{1}$ and $y_{2}$ be in $\mathcal{C}_{1}$.
+                        We want to show that
+                        $\theta_{1} y_{1}+\theta_{2} y_{2} \in \mathcal{C}_{1}\ \forall \theta_{1}, \theta_{2} \geq 0$.
+                        \begin{gather*}
+                              y_{1}^{T}\left(x-x_{0}\right) \leq 0 \\
+                              y_{2}^{T}\left(x-x_{0}\right) \leq 0 \\
+                              \theta_{1} y_{1}^{T}\left(x-x_{0}\right) \leq 0 \\
+                              \theta_{2} y_{2}^{T}\left(x-x_{0}\right) \leq 0 \\
+                              \theta_{1} y_{1}^{T}\left(x-x_{0}\right)+\theta_{2} y_{2}^{T}\left(x-x_{0}\right) \leq 0 \\
+                              \left(\theta_{1} y_{1}+\theta_{2} y_{2}\right)^{T}\left(x-x_{0}\right) \leq 0 \\
+                              \theta_{1} y_{1}+\theta_{2} y_{2} \in \mathcal{C}_{1}
+                        \end{gather*}
+                  \item I'll argue that $\mathcal{C}_{2} \subset \mathcal{C}_{1}$.
+
+                        To do this, I'll first show that all $a_{i}$
+                        where $i \in J\left(x_{0}\right)$ are in $\mathcal{C}_{1}$ as well.
+                        \begin{gather*}
+                              a_{i} x_{0}=b_{i} \\
+                              a_{i} x \leq b_{i} \forall x \in \mathcal{P} \\
+                              a_{i} x \leq a_{i} x_{0} \\
+                              a_{i}\left(x-x_{0}\right) \leq 0 \therefore a_{i} \in \mathcal{C}_{1}
+                        \end{gather*}
+                        We've already proved that $\mathcal{C}_{1}$ is a convex cone.
+                        All elements in $\mathcal{C}_{2}$ are convex combinations of $a_{i}$,
+                        so they must be in $\mathcal{C}_{1}$ as well since all $a_{i}$ are in $\mathcal{C}_{1}$.
+
+                        However, there $\exists y \in \mathcal{C}_1: y \notin \mathcal{C}_2$.
+                        Since $\mathcal{C}_2$ has only convex combinations, it can't
+                        have elements like $2a_i$ that are present only in $\mathcal{C}_1$
+                        since the latter is a cone.
+            \end{enumerate}
+      \item $\tilde{x}$ meets the first four constraints with equality.
+            Taking the constraints of these rows,
+            we find that the rank of $A_{J(\tilde{x})}$ is
+            \[\text{rank}\left(\left[\begin{array}{cccc}
+                              -1 & -6  & 1   & 3  \\
+                              -1 & -2  & 7   & 1  \\
+                              0  & 3   & -10 & -1 \\
+                              -6 & -11 & -2  & 12
+                        \end{array}\right]\right)=4\]
+
+            and that $\tilde{x}$ is indeed a vertex point.
+
+            To find the optimization problem for which $\tilde{x}$ is the optimal solution,
+            we sum up the rows of $A_{J(\tilde{x})}$ and take the negative elementwise, which is
+            \[c^{T}=\left[\begin{array}{llll}
+                              8 & 16 & 4 & -15
+                        \end{array}\right]\]
+            \label{list:find-c}
+      \item \begin{itemize}
+                  \item \textbf{In $\mathcal{P}$}:
+                        \begin{gather*}
+                              A \hat{x}=\left[\begin{array}{l}
+                                          -1-1-3-4 \\
+                                          -4-2-2-9 \\
+                                          -8-2+0-5 \\
+                                          0-6-7-4
+                                    \end{array}\right]=\left[\begin{array}{c}
+                                          -9  \\
+                                          -17 \\
+                                          -15 \\
+                                          -17
+                                    \end{array}\right] \leq b \\
+                              C \hat{x}=13+11+12+12=48=d
+                        \end{gather*}
+
+                        From this, we can see that $\hat{x} \in \mathcal{P}$.
+                  \item \textbf{$A_{J(\hat{x})}$ Rank Check}:
+                        \[\text{rank}\left(\left[\begin{array}{cccc}
+                                          -4 & -2 & -2 & -9 \\
+                                          -8 & -2 & 0  & -5 \\
+                                          0  & -6 & -7 & -4 \\
+                                          13 & 11 & 12 & 12
+                                    \end{array}\right]\right)=4\]
+
+                        We see that $\hat{x}$ is indeed a vertex of $\mathcal{P}$.
+                        Since this matrix has a subset of the rows of $\left[\begin{array}{l}A \\ C\end{array}\right]$
+                        it implies that $\mathcal{L}=\{0\}$ and $\mathcal{P}$ is a pointed polyhedron. $\square$
+            \end{itemize}
+      \item \begin{itemize}
+                  \item $A \hat{x}=b$, actually.
+                        Besides the matrix inequalities, $\hat{x}_{1}$ and $\hat{x}_{5}$
+                        meet the inequalities given in the set notation with equality.
+                        Evaluating the rank, we get
+                        \[\operatorname{rank}\left(\left[\begin{array}{ccccc}
+                                          1 & 0  & 0 & 0  & 0  \\
+                                          0 & 0  & 0 & 0  & 1  \\
+                                          0 & 1  & 1 & 1  & -2 \\
+                                          0 & -1 & 1 & -1 & 0  \\
+                                          2 & 0  & 1 & 0  & 1
+                                    \end{array}\right]\right)=4\]
+
+                        $4<5$, so this $\hat{x}$ isn't a vertex.
+                  \item Just like in the previous item, $A \hat{x}=b$.
+                        This time, though, it's $\hat{x}_{2}, \hat{x}_{3}$,
+                        and $\hat{4}$ that meet the inequalities with equality.
+                        \[\operatorname{rank}\left(\left[\begin{array}{ccccc}
+                              0 & 1  & 0 & 0  & 0  \\
+                              0 & 0  & 1 & 0  & 0  \\
+                              0 & 0  & 0 & 1  & 0  \\
+                              0 & 1  & 1 & 1  & -2 \\
+                              0 & -1 & 1 & -1 & 0  \\
+                              2 & 0  & 1 & 0  & 1
+                        \end{array}\right]\right)=5\]
+                        We can see that this $\hat{x}$ is a vertex.
+
+                        To get $c$, like in \ref{list:find-c}, we sum up the rows and take the elementwise negative.
+                        \[c^{T}=\left[\begin{array}{lllll}
+                              -2 & -1 & -4 & -1 & 1
+                        \end{array}\right]\]
+            \end{itemize}
+\end{enumerate}
+\end{document}

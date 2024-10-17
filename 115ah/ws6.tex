@@ -1,0 +1,61 @@
+\documentclass[12pt]{article}
+
+\input{../kz}
+
+\begin{document}
+\begin{enumerate}
+      \item \begin{enumerate}
+                  \item We're proving two matrices are equal.
+                        To do this, we have to show that all the elements of the matrices are equal.
+                  \item $S \circ T$ is a function from $U$ to $W$, and thus it has $l$ columns, each of length $n$.
+                        Following the same logic, $[S]^\delta_\gamma$ is an $n \times m$ matrix and $[T]^\gamma_\beta$ is a $m \times l$ matrix.
+                        Multiplying an $n \times m$ matrix by an $m \times l$ one results in an $n \times l$ matrix, which matches up.
+                  \item Two column vectors are equal iff all of their elements are equal.
+                        If the column vectors of two matrices are equal, this means that their elements are equal as well.
+                  \item We start with the RHS and use the formulas to work our way towards the RHS.
+                        \begin{align*}
+                              \left([S]^\delta_\gamma \cdot [T]^\gamma_\beta\right)[u]_\beta & = [S]^\delta_\gamma\left([T]^\gamma_\beta[u]_\beta\right) \\
+                                                                                             & = [S]^\delta_\gamma [T(u)]_\gamma                         \\
+                                                                                             & = [S(T(u))]_\delta                                        \\
+                                                                                             & = [(S \circ T)(u)]_\delta                                 \\
+                                                                                             & = [S \circ T]^\delta_\beta [u]_\beta \quad\square
+                        \end{align*}
+                  \item The dimensions of $Ae_y$ are $n \times 1$, which matches up with the dimensions for a column.
+                        Let the result of the multiplication be $c$. Then
+                        \[c_{ij}=\sum_{x=1}^l A_{ix}(e_y)_{xj}\]
+                        Notice that $j=1$ always and thus $(e_y)_{xj}$ is $1$ if $x=y$ and $0$ otherwise.
+
+                        We can simplify this equation to $c_{ij}=A_{iy}$,
+                        which by inspection is the same as taking the $y$th column of $A$. $\square$
+                  \item The linear combination for $u_i$ is $\sum_{j=1}^{l} a_j u_j$, where $a_j$ is $0$ if $j=i$ and $0$ otherwise.
+                        When we turn this tuple of $a_j$s into a column vector, $e_i$ is exactly what we get.
+                  \item Take any $u_i \in \beta$. We know that $[u_i]_\beta=e_i$, which when plugged into our previously derived equation gives us
+                        \[[S \circ T]^\delta_\beta e_i = \left([S]^\delta_\gamma \cdot [T]^\gamma_\beta\right)e_i\]
+                        Multiplying any matrix by $e_i$ gives us the $i$th column, so from this equality
+                        we can deduce that the $i$th columns of the LHS matrix and RHS matrix are the same.
+                        This equality is true for any $i$, so all the columns and by extension the matrices themselves must be equal.
+                        From this, we finally have that
+                        \[[S \circ T]^\delta_\beta = [S]^\delta_\gamma \cdot [T]^\gamma_\beta\quad\square\]
+            \end{enumerate}
+            \pagebreak
+      \item \begin{enumerate}
+                  \item \textbf{Linear:} \begin{align*}
+                              1_V(a+\lambda b) & =a+\lambda b           \\
+                                               & =1_V(a)+\lambda 1_V(b)
+                        \end{align*}
+
+                        \textbf{Invertible:} \\
+                        The inverse of $1_V$ is itself, as $1_V(1_V(a))=a$.
+                  \item $1_V(v_i)=v_i$.
+                        To write this uniquely as a linear combination of $\beta$, we can do this:
+                        \[v_i=\sum_{j=1}^{n} \mathrm{1}_{j=i}v_j\]
+                        Where $\mathrm{1}_{j=i}$ is an indicator function that returns $1$ if $j=i$ and $0$ otherwise.
+
+                        Concatenating the coefficients of these linear combos into a matrix, we get $I_n$.
+                  \item $T$ being invertible means that there's a $T^{-1}$ s.t. $T \circ T^{-1}=1_V$ and $T^{-1} \circ T=1_W$.
+                  By extension, we can say that
+                  \[L_{[T]^\gamma_\beta} \circ L_{[T^{-1}]^\beta_\gamma}=1_V=L_{I_n}\]
+                  Since $L_a \circ L_b=L_{ab}$, $[T]^\gamma_\beta \cdot [T^{-1}]^\beta_\gamma=I_n$ and thus $[T]^\gamma_\beta$ is invertible.
+            \end{enumerate}
+\end{enumerate}
+\end{document}

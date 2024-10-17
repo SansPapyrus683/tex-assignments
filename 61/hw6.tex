@@ -1,0 +1,76 @@
+\documentclass[12pt]{article}
+
+\input{../kz}
+
+\begin{document}
+\section{Handout}\label{sec:handout}
+\begin{enumerate}
+    \item \begin{enumerate}
+              \item $\Omega=\{R, B\}^3$.
+                    The corresponding probabilities are as follows:
+                    \begin{align*}
+                        P((R, R, R)) = \frac{2^3}{3^3} &  & P((R, R, B)) = \frac{2^2}{3^3} \\
+                        P((R, B, R)) = \frac{2^2}{3^3} &  & P((R, B, B)) = \frac{2}{3^3}   \\
+                        P((B, R, R)) = \frac{2^2}{3^3} &  & P((B, R, B)) = \frac{2}{3^3}   \\
+                        P((B, B, R)) = \frac{2}{3^3}   &  & P((B, B, B)) = \frac{1}{3^3}
+                    \end{align*} \label{list:1a}
+              \item $\Omega=\{(a, b, c) \in \{R, B\}^3\ |\ \text{Only one is B}\}$. \\
+                    Probabilities:
+                    \[P((R, R, B))=P((R, B, R))=P((B, R, R))=\frac{1}{3}\]
+              \item The $\Omega$ and probability function are exactly the same as in \ref{list:1a}.
+                    Just replace the letters $R$ and $B$ with $T$ and $H$ respectively and you're done.
+          \end{enumerate}
+    \item Let's order the robberies from $1$ to $6$.
+          The chance that robbery $i$ didn't happen in a city that was already "taken" by a previous robbery is $\frac{6-i+1}{6}$.
+          Thus, the chance of all robberies occurring in different cities is
+          \[\prod_{i=1}^{6} \frac{6-i+1}{6}=\frac{6!}{6^6}=\frac{5}{324}\]
+
+          To get our actual answer, we take the complement of this, that is, $\boxed{\frac{319}{324}}$. \label{list:2}
+    \item This problem is equivalent to \ref{list:2}. \label{list:3}
+    \item Let's do this by counting the sequences of valid dice rolls.
+          We can form a sequence of nondecreasing dice rolls by having die $i$ be represented by a value $\delta_i$,
+          which indicates how much greater their value is than the previous one.
+
+          Each $\delta_i$ must be nonnegative, and their sum must be no greater than $5$.
+          The number of possible values of $\delta_i$ is found to be $\binom{6+5-1}{5}$ using stars and bars.
+          Putting this over the total number of possible dice rolls, we get $\boxed{\frac{\binom{10}{5}}{6^6}}$.
+    \item We can solve this by forming a recurrence relation, where $P_i$ indicates the number of length-$i$ coin tosses that don't have two heads in a row.
+          The base cases are $P_0=1$ and $P_1=2$, and our recurrence is $P_i=P_{i-1}+P_{i-2}$
+          by a result in HW5.
+
+          $P_5=13$, and there's a total of $2^5=32$ outcomes from $5$ tosses, so our answer is $\boxed{\frac{13}{32}}$.
+    \item To count the number of injective functions, we first note that there are $\binom{n}{m}$
+          possible subsets that $X$ can map to if each input is to have a distinct output.
+          Then, there's $m!$ possible ways that each subset can be mapped to the values of $X$, since order matters.
+
+          We also have $n^m$ total possible functions that are possible, since
+          each of the $m$ inputs can be mapped to $n$ possible outputs.
+
+          Thus, our final answer is $\boxed{\frac{\binom{n}{m}m!}{n^m}}$.
+          \ref{list:2} and \ref{list:3} relate to this in that they're a special case when $n=m$.
+    \item \begin{enumerate}
+              \item \boxed{\frac{r}{r+b}}
+              \item \boxed{\frac{r}{r+b}} (yes, it's the same answer)
+          \end{enumerate}
+    \item Elmer should choose the father-champion-father set, since he has a higher chance of beating his father.
+    \item \begin{enumerate}
+              \item Not independent.
+                    \begin{enumerate}
+                        \item If I know I got exactly 3 heads, then I know I got exactly 4 tails as well.
+                        \item $P(E_1)=\frac{\binom{7}{3}}{2^7}$ and $P(E_2)=\frac{\binom{7}{4}}{2^7}$, while $P(E_1 \cap E_2)=P(E_1)=P(E_2)$.
+                              Given this, it's clear that $P(E_1 \cap E_2) \ne P(E_1)P(E_2)$.
+                    \end{enumerate}
+              \item Independent.
+                    \begin{enumerate}
+                        \item If we know that $f(1)=1$, then we know that $2$ isn't taken by $f(1)$ which makes
+                              it ever so slightly more likely that $f(2)=2$.
+                        \item $P(E_1)=\frac{1}{5}$ since it's $f(1)$ is equally likely to be assigned any number,
+                              and $P(E_2)=\frac{1}{5}$ by the same logic.
+                              \[P(E_1 \cap E_2)=\frac{3!}{5!}=\frac{1}{20} \ne \frac{1}{5} \cdot \frac{1}{5}\]
+                    \end{enumerate}
+          \end{enumerate}
+    \item If we set $P_i$ as the number of toss sequences with an even number of heads,
+          we'll find that $P_i=P_{i-1}+(2^{i-1}-P_{i-1})=2^{i-1}$.
+          Then, $\frac{2^{i-1}}{2^i}=\boxed{\frac{1}{2}}$.
+\end{enumerate}
+\end{document}

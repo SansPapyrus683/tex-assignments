@@ -1,0 +1,198 @@
+\documentclass[12pt]{article}
+
+\input{../kz}
+
+\begin{document}
+\begin{enumerate}
+      \item \begin{enumerate}
+                  \item These polynomials correspond to the vectors $[1,2,1]$, $[3,0,2]$, and $[0,1,1]$.
+                        \begin{align*}
+                              \begin{bmatrix}
+                                    1 & 3 & 0 & 0 \\
+                                    2 & 0 & 1 & 0 \\
+                                    1 & 2 & 1 & 0
+                              \end{bmatrix}
+                               & \rightarrow \begin{bmatrix}
+                                                   2 & 0 & 1 & 0 \\
+                                                   1 & 3 & 0 & 0 \\
+                                                   1 & 2 & 1 & 0
+                                             \end{bmatrix}           \\
+                               & \rightarrow \begin{bmatrix}
+                                                   2 & 0 & 1           & 0 \\
+                                                   1 & 3 & 0           & 0 \\
+                                                   0 & 0 & \frac{5}{6} & 0
+                                             \end{bmatrix}  \\
+                               & \rightarrow \begin{bmatrix}
+                                                   2 & 0 & 1            & 0 \\
+                                                   0 & 3 & -\frac{1}{2} & 0 \\
+                                                   0 & 0 & \frac{5}{6}  & 0
+                                             \end{bmatrix}
+                        \end{align*}
+                        As the resulting matrix has $3$ pivots, these polynomials are linearly independent.
+                  \item $F^2$:
+                        \begin{enumerate}
+                              \item $(0, 1)$ and $(1, 0)$
+                              \item $(1, 2)$ and $(2, 1)$
+                              \item $(0, 7)$ and $(1, 5)$
+                        \end{enumerate}
+                        $M_{2 \times 2}(F)$:
+                        \begin{enumerate}
+                              \item $\begin{bmatrix}1 & 0 \\ 0 & 0\end{bmatrix}$,
+                                    $\begin{bmatrix}0 & 1 \\ 0 & 0\end{bmatrix}$,
+                                    $\begin{bmatrix}0 & 0 \\ 1 & 0\end{bmatrix}$, and
+                                    $\begin{bmatrix}0 & 0 \\ 0 & 1\end{bmatrix}$
+                              \item $\begin{bmatrix}1 & 1 \\ 0 & 0\end{bmatrix}$,
+                                    $\begin{bmatrix}1 & 0 \\ 1 & 0\end{bmatrix}$,
+                                    $\begin{bmatrix}1 & 0 \\ 0 & 1\end{bmatrix}$, and
+                                    $\begin{bmatrix}1 & 0 \\ 0 & 0\end{bmatrix}$
+                              \item $\begin{bmatrix}1 & 1 \\ 1 & 0\end{bmatrix}$,
+                                    $\begin{bmatrix}1 & 1 \\ 0 & 1\end{bmatrix}$,
+                                    $\begin{bmatrix}1 & 0 \\ 1 & 1\end{bmatrix}$, and
+                                    $\begin{bmatrix}0 & 1 \\ 1 & 1\end{bmatrix}$
+                        \end{enumerate}
+                  \item One basis for all upper triangular matrices is the set of all matrices
+                        such that they have exactly one nonzero element, and the element's position $ij$ satisfies $i \le j$.
+            \end{enumerate}
+      \item Let $u_2'=u_2-\lambda u_1$ for convenience.
+            \begin{enumerate}
+                  \item It suffices to prove a bijection between the solutions of
+                        $\sum_{i=1}^n a_i u_i=\vec{0}$ and the solutions of that equation but with $S'$.
+                        For any solution to the equation in the old set, we can transform it into a solution for the new
+                        set by replacing $a_1$ with $a_1+a_2\lambda$.
+
+                        This works because \[a_1u_1+a_2u_2=(a_1+a_2\lambda)u_1+a_2u_2'\]
+
+                        It's clear that this transformation is injective, so we just have to prove surjectivity.
+                        Notice that we can transform any solution to the equation for $S'$ back to a solution for $S$
+                        as well by replacing $a_1$ with $a_1-a_2\lambda$, which results in a similar equality:
+                        \[a_1u_1+a_2u_2'=(a_1-a_2\lambda)u_1+a_2u_2\]
+
+                        If $S$ is linearly independent, the only set of solutions to the equation is $a_i=0$.
+                        Transforming this set of solutions also yields $a_i=0$.
+                        Thus, the only set of solutions to $\sum_{i=1}^n a_i u_i$ for $S'$ is $a_i=0$ as well. $\square$
+                  \item Say we have a linear combination of $S$ as $\sum_{i=1}^n a_i u_i$. \\
+                        % TODO: prove inclusion on both sides
+                        Notice that $a_2u_2=a_2u_2'+a_1\lambda u_1$, so any linear combo of $S$ can be expressed in terms of $S'$.
+                        Thus, the two sets have the same span. $\square$
+            \end{enumerate}
+      \item If the set is linearly independent, then we know that it forms a basis for $F^n$ since it has $n$ elements.
+
+            Notice that this set, when put in a matrix, becomes a matrix with just $1$s along the diagonal.
+            This matrix is already in reduced row echelon form and has $n$ pivots, meaning that the set
+            is linearly independent and by extension forms a basis for $F^n$. $\square$
+      \item \begin{enumerate}
+                  \item First we have to establish that $U_1 \cap U_2=\{\vec{0}\}$.
+                        This can be done through noticing that any element in the intersection has to meet the condition $a_1=a_2=a_3=0$,
+                        and the only element that fulfills this condition is $\vec{0}$.
+
+                        Next we must demonstrate that any $(x,y,z) \in F^3$ can be expressed as a sum of an element in $U_1$ and another in $U_2$.
+                        This can be done by considering $(x,0,0) \in U_1$ and $(0,y,z) \in U_2$, as they meet the requirements. $\square$
+                  \item $A \rightarrow B$: \\
+                        We're given that every vector in $V$ can be written uniquely as a sum of a vector from $U_1$ and $U_2$.
+                        Thus, we know that $V=U_1+U_2$.
+                        It remains to prove that $U_1 \cap U_2=\{\vec{0}\}$. \\
+                        To prove this, suppose that their intersection had something other than $\vec{0}$.
+                        Call this vector $x$.
+                        Then, we can express $x \in V$ with $u_1=\vec{0}, u_2=x$ and $u_1=x, u_2=\vec{0}$.
+                        This contradicts the uniqueness condition.
+                        Thus, $V=U_1 \oplus U_2$.
+
+                        $B \rightarrow A$: \\
+                        If $V=U_1 \oplus U_2$, we know that every $v \in V$ has at least one pair of vectors in $u_1$ and $u_2$ that sum to it.
+                        What we have to prove is that this pair is always unique. \\
+                        Say we have $u_1, u_1' \in U_1$ and $u_2, u_2' \in U_2$ s.t. $u_1+u_2=u_1'+u_2'=v$.
+                        We then get that $u_1-u_1'=u_2-u_2'$.
+                        Since vector spaces are closed under addition, we get that
+                        whatever $u_1-u_1'$ and $u_2-u_2'$ are equal to has to be in both $U_1$ and $U_2$.
+                        However, the only element that's in both sets is $\vec{0}$, and so $u_1=u_1'$
+                        and $u_2=u_2'$. $\square$
+            \end{enumerate}
+      \item \begin{enumerate}
+                  \item First, let's prove that any $T(v)$ can be expressed as a linear combination of $T(s)$ for the elements in $S$.
+                        We know that $\text{span}(S)=V$, so any $v$ is expressable in terms of the formula $\sum_{i=1}^n a_i s_i$.
+
+                        Thus, \[T(v)=T\left(\sum_{i=1}^n a_i s_i\right)=\sum_{i=1}^n T(a_i s_i)=\sum_{i=1}^n a_i T(s_i)\]
+
+                        We also have to prove that any linear combination of $T(s)$ can be expressed as $T(v)$.
+                        The proof for this goes much the same way:
+                        \[\sum_{i=1}^n a_i T(s_i)=\sum_{i=1}^n T(a_i s_i)=T\left(\sum_{i=1}^n a_i s_i\right)\]
+                        We end up right back where we started. $\square$
+                  \item We know that the span of any subset is automatically a subspace, and we just proved that $\text{Im}(T)$ is equivalent to a span.
+                        Thus, $\text{Im}(T)$ is a subspace of $W$.
+            \end{enumerate}
+      \item \begin{enumerate}
+                  \item \textbf{Base case $n=1$:} \[\sum_{j=1}^1 j^3=1\]
+                        Given this, our inductive hypothesis is \[\sum_{j=1}^n=\frac{n^2(n+1)^2}{4}\]
+                        and we have to prove that \[\sum_{j=1}^{n+1}=\frac{(n+1)^2(n+2)^2}{4}\]
+
+                        Adding $(n+1)^3$ to both sides, we have \begin{gather*}
+                              \sum_{j=1}^n j^3+(n+1)^3 =\frac{n^2(n+1)^2}{4}+(n+1)^3 \\
+                              \sum_{j=1}^{n+1} j^3=(n+1)^2\left(\frac{n^2}{4}+(n+1)\right) \\
+                              \sum_{j=1}^{n+1} j^3=(n+1)^2 \cdot \frac{n^2+4n+4}{4} \\
+                              \text{''}=(n+1)^2 \cdot \frac{(n+2)^2}{4}\quad\square
+                        \end{gather*}
+                  \item \[\left(\sum_{j=1}^n j\right)^2=\left(\frac{n(n+1)}{2}\right)^2=\sum_{j=1}^{n} j^3\]
+            \end{enumerate}
+      \item \begin{enumerate}
+                  \item Since $\dim V=n$, we know that all bases for $V$ have $n$ elements.
+                        Also, since these bases are all linearly independent, by the replacement theorem
+                        any spanning set must have at least $n$ elements. $\square$
+                  \item Suppose for a contradiction that $S$ wasn't a basis.
+                        This implies that $S$ is LD, which furthermore implies that there is some element $v \in S$
+                        that can be expressed as a linear combination of the other elements in $S$.
+
+                        Then, we know that $S \\ \{v\}$ spans $V$.
+                        However, the size of this set is $n-1$, which contradicts that $\dim V=n$.
+                        Thus, $S$ must be a basis. $\square$ \label{list:n-elem}
+                  \item Let us show that we can construct a basis from any spanning subset $G$.
+
+                        First off, we know that any set with greater than $n$ elements has to be LD
+                        by the previous problem.
+                        When we add another vector to an $n$-element set, either the set is already LD
+                        or the set is LI and we can write this vector in terms of a linear combination of elements from the set,
+                        which makes the new set LD.
+
+                        Thus, while $G$ has greater than $n$ elements, we know that it must be linearly dependent in some manner.
+                        This means that the equation $\sum_{i=1}^n a_i v_i=\vec{0}$ must have some non-trivial set of solutions,
+                        which also implies that one of the vectors in $G$ can be expressed with a linear combination of the other elements.
+
+                        We can then remove this vector without impacting the span of $G$ in any way.
+                        We do this until $G$ has $n$ elements, which makes it a basis by the previous problem.
+                        \label{list:construct}
+            \end{enumerate}
+      \item This follows naturally from the replacement theorem, since we know
+            that all spanning sets are at least as large as any linearly independent subset.
+            As long as one infinitely large LI subset exists, every spanning subset must be infinitely large as well.
+      \item \begin{enumerate}
+                  \item If the basis for $U$ was hypothetically larger than that of $V$,
+                        then we would have an LI set of vectors of at least size $\dim V +1$ that are in $U$ and by extension $V$.
+                        However, no set of size greater than $\dim V$ can be LI (see \ref{list:construct}).
+                        Contradiction. Thus, $\dim U \le \dim V$. \label{list:dim}
+                  \item A basis for $U$ has $\dim U=\dim V$ elements.
+                        Since all elements in this basis are also in $V$, and these vectors are LI,
+                        then by the result in \ref{list:n-elem} we know that this must also form a basis for $V$.
+
+                        Now we know that any basis $B$ of $U$ is a basis for $V$ if $\dim U=\dim V$.
+                        We know that $U$ is a subset of $V$, so now it remains to prove that $V$ is a subset of $U$ for equality.
+                        Any vector $v \in V$ can be expressed by a combination of elements in $B$,
+                        and since $U=\text{span}(B)$, this means $v \in U$ as well. $\square$
+            \end{enumerate}
+      \item \begin{enumerate}
+                  \item $W_1 \cap W_2$ is a subspace of $W_2$, and since $\dim W_2=n$, by the result in problem \ref{list:dim} we know that $\dim(W_1 \cap W_2) \le n$. $\square$
+                  \item Take any vector $v=w_1+w_2$, where $w_1 \in W_1$ and $w_2 \in W_2$.
+                        Any $w_1$ can be expressed as the linear combination of no more than $m$ elements from $W_1$
+                        and any $w_2$ can be expressed as the combo of no more than $n$ elements from $W_2$.
+
+                        Having this, we know that any vector $v \in W_1+W_2$ can be expressed as the combo
+                        of no more than $n+m$ elements from $W_1+W_2$ (this is because $W_1, W_2 \subseteq W_1+W_2$).
+                        By extension, any basis for $W_1+W_2$ cannot have more than $n+m$ elements, so $\dim(W_1+W_2) \le m+n$. $\square$
+            \end{enumerate}
+      \item All elements in $\beta_1$ have to be in $W_1$, and the same holds for $\beta_2$.
+            Since $W_1 \cap W_2=\{\vec{0}\}$ and no basis can have the zero vector, $\beta_1 \cap \beta_2=\varnothing$.
+
+            % TODO: you forgot to show that shit's LI
+            Since $V=W_1 \oplus W_2$, any $v \in V$ can be written as $w_1+w_2$,
+            which can then be expressed as the sum of two linear combinations of the elements of $\beta_1$ and $\beta_2$ respectively.
+            Addition of two linear combinations makes another combo, so we know that $\beta_1 \cup \beta_2$ makes a basis for $V$.
+\end{enumerate}
+\end{document}

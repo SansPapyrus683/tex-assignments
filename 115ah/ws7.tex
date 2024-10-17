@@ -1,0 +1,124 @@
+\documentclass[12pt]{article}
+
+\input{../kz}
+
+\begin{document}
+\begin{enumerate}
+      \item For all of these problems, we'll let $\beta$ be the standard basis for simplicity.
+            \begin{enumerate}
+                  \item \[[T]_\beta=\begin{bmatrix}
+                                    T((1, 0)) & T((0, 1))
+                              \end{bmatrix}=\begin{bmatrix}
+                                    1 & 0 \\
+                                    1 & 0
+                              \end{bmatrix}\]
+                        and we get our characteristic polynomial from
+                        \begin{align*}
+                              \det \left(\begin{bmatrix}
+                                               t & 0 \\
+                                               0 & t
+                                         \end{bmatrix}-\begin{bmatrix}
+                                                             1 & 0 \\
+                                                             1 & 0
+                                                       \end{bmatrix}\right)
+                               & = \det \begin{bmatrix}
+                                              t-1 & 0 \\
+                                              -1  & t
+                                        \end{bmatrix} \\
+                               & = t^2-t               \\
+                               & = t(t-1)
+                        \end{align*}
+                        The roots of this polynomial are $t=1$ and $t=0$, so those are our eigenvalues.
+
+                        The result when we multiply the matrix by an arbitrary vector is
+                        \[\begin{bmatrix}
+                                    t-1 & 0 \\
+                                    -1  & t
+                              \end{bmatrix} \cdot \begin{bmatrix}
+                                    x \\ y
+                              \end{bmatrix}=\begin{bmatrix}
+                                    x(t-1) \\ -x+ty
+                              \end{bmatrix}\]
+
+                        From this, we can calculate that
+                        $E_0=\text{span}(\{(0, 1)\})$ and $E_1=\text{span}(\{(1,1)\})$.
+                        Furthermore, the algebraic and geometric multiplicities
+                        of both these eigenvalues are all $1$ by coincidence. \label{list:1a}
+                  \item The steps are basically the same as in \ref{list:1a}.
+                        \begin{gather*}
+                              [T]_\beta=\begin{bmatrix}
+                                    T((1, 0)) & T((0, 1))
+                              \end{bmatrix}=\begin{bmatrix}
+                                    0 & 1 \\
+                                    2 & 0
+                              \end{bmatrix} \\
+                              \begin{aligned}
+                                    \det \left(\begin{bmatrix}
+                                                     t & 0 \\
+                                                     0 & t
+                                               \end{bmatrix}-\begin{bmatrix}
+                                                                   0 & 1 \\
+                                                                   2 & 0
+                                                             \end{bmatrix}\right)
+                                     & = \det \begin{bmatrix}
+                                                    t  & -1 \\
+                                                    -2 & t
+                                              \end{bmatrix} \\
+                                     & = t^2-2
+                              \end{aligned}
+                        \end{gather*}
+                        Although this polynomial does become $0$ when $t=\sqrt{2}$,
+                        it isn't in the field we defined.
+                        Thus, this setup has no eigenvalues or corresponding eigenspaces.
+                  \item The setup is the exact same except now we can take $t=\pm\sqrt{2}$ as an eigenvalue.
+                        The characteristic polynomial then becomes
+                        \[t^2-2=(t-\sqrt{2})(t+\sqrt{2})\]
+                        Plugging $t=\pm \sqrt{2}$ back into the linear transformation, we get
+                        \begin{gather*}
+                              E_{\sqrt{2}}=\text{span}(\{(1, \sqrt{2})\}) \\
+                              E_{-\sqrt{2}}=\text{span}(\{(1, -\sqrt{2})\})
+                        \end{gather*}
+                        As in \ref{list:1a}, all multiplicities are $1$.
+            \end{enumerate}
+
+            \pagebreak
+
+      \item \begin{enumerate}
+                  \item Since $\lambda_1$ is a root of the characteristic polynomial,
+                        $\det\left(\lambda_1 I_n - [T]_\beta\right)=0$ and the matrix is non-invertible.
+                        This also means that the linear transformation $\lambda_1 \mathbf{1}_V - T$ is non-invertible.
+
+                        If a transformation isn't invertible, it isn't bijective either.
+                        Since the domain and codomain of this transformation are the same,
+                        by the dimension theorem the nullity of this transformation must be nonzero.
+
+                        With that,  $\lambda_1 \mathbf{1}_V - T$ must have nonzero nullity
+                        and there must be at least one element in its kernel.
+                        Thus, $\dim E_{\lambda_1} \ge 1$. $\square$
+                  \item Since all vectors from $v_1$ through $v_k$ are eigenvectors,
+                        $T(v_i)=\lambda_1 v_i$ for these vectors.
+                        Thus, the first $k$ columns of $[T]_\beta$ are the first $k$
+                        columns of $\lambda_1 \cdot I_n$.
+                  \item \begin{enumerate}
+                              \item We've already proved that the first $k$ columns of $[T]_\beta$
+                                    are equal to the first $k$ columns of $\lambda_1 I_n$.
+                                    If we take only the first $k$ rows as well, we get $\lambda_1 I_k$,
+                                    which is exactly what we wanted.
+                              \item \begin{align*}
+                                          f_T(t) & = \det (tI_n-[T]_\beta)                  \\
+                                                 & = \det \left[\begin{array}{c|c}
+                                                                            tI_n - \lambda_1 I_k & B    \\
+                                                                            \midrule
+                                                                            0                    & D(t) \\
+                                                                      \end{array}\right] \\
+                                                 & = \det (tI_n - \lambda_1 I_k) \det D(t)  \\
+                                                 & = (t-\lambda_1)^k \det D(t)\quad\square
+                                    \end{align*}
+                        \end{enumerate}
+            \end{enumerate}
+
+      \item From the premise, the largest power that $t-\lambda_1$ can be raised to is $n_1$.
+            Thus, the largest $k$ can be is $n_1$ as a contradiction would arise if it were any larger.
+            As we have defined $k$ to be equal to $\dim E_{\lambda_1}$, this means that $E_{\lambda_1} \le n_1$.
+\end{enumerate}
+\end{document}

@@ -1,0 +1,64 @@
+\documentclass[12pt]{article}
+
+\input{../kz}
+
+\begin{document}
+\begin{enumerate}
+    \item \begin{enumerate}
+              \item It means that there's exactly one set of values $a_i$ can take on s.t. $\sum_{i=1}^n a_i v_i=s$.
+              \item By the definition of the span, we know that there is
+                    \textit{at least one} set of values for $a_i$ s.t. the given equation is satisfied.
+                    It remains to prove that this solution is unique.
+
+                    Suppose for the sake of contradiction we have another two sets of values $a_i$ and $a_i'$
+                    that differ for at least one $i$, and that both give a linear combination that results in $s$.
+                    If this is the case, we can write
+                    \[\sum_{i=1}^n a_i v_i=\sum_{i=1}^n a_i' v_i\]
+                    With some algebraic manipulation, we can then turn this into
+                    \[\sum_{i=1}^n a_i v_i-\sum_{i=1}^n a_i' v_i=\sum_{i=1}^n (a_i-a_i')v_i=0\]
+                    Since we know $\exists i: a_i' \ne a_i$, there is at least one nonzero scalar in that summation.
+                    However, by the definition of linear independence, we know that the only solution
+                    to $\sum_{i=1}^n a_i v_i=0$ is $a_i=0$. Contradiction.
+
+                    Thus, there must be \textit{exactly one} solution to $s=\sum_{i=1}^n a_i v_i$. $\square$
+              \item Let's make our mapping from $F^n$ to $\text{span}(S)$ as the following:
+              \[\begin{bmatrix}
+                a_1 \\ a_2 \\ \vdots \\ a_n
+              \end{bmatrix} \rightarrow \sum_{i=1}^n a_i v_i\]
+              This function is clearly surjective, since we can collect all the coefficients
+              of any summation on the RHS and collect them into a vector to get the inverse mapping.
+
+              It's also injective, because we know that any $v \in V$ has only one way to be
+              expressed in terms a linear combination of the vectors in $S$.
+              Thus, if we change any $a_i$ then $\sum_{i=1}^n a_i v_i$ would also change.
+          \end{enumerate}
+    \item \begin{enumerate}
+              \item \textbf{Base case $n=1$}: \[\sum_{k=1}^1 (2k-1)=1=1^2\]
+                    Our inductive hypothesis and the statement we wish to prove are the following:
+                    \[\sum_{k=1}^n (2k-1)=n^2 \rightarrow \sum_{k=1}^{n+1} (2k-1)=(n+1)^2\]
+                    \textbf{Inductive step:}
+                    We can prove the inductive step by adding $2(n+1)-1$ to both sides of the hypothesis:
+                    \begin{gather*}
+                        \sum_{k=1}^n (2k-1)+2(n+1)-1=n^2+2(n+1)-1 \\
+                        \sum_{k=1}^{n+1} (2k-1)=n^2+2n+1 \\
+                        \sum_{k=1}^{n+1} (2k-1)=(n+1)^2\quad\square
+                    \end{gather*}
+              \item \textbf{Base case $n=1$:} \\
+              If there's only one set the formula reduces to a trivial equality:
+              \[T \cap S_1=T \cap S_1\]
+              Our inductive hypothesis is then that
+              \[T \cap \left(\bigcup_{i=1}^n S_i\right)=\bigcup_{i=1}^n (T \cap S_i)\]
+              and we wish to prove
+              \[T \cap \left(\bigcup_{i=1}^{n+1} S_i\right)=\bigcup_{i=1}^{n+1} (T \cap S_i)\]
+
+              \textbf{Inductive step:} \\
+              Let's expand the sides of the formula to make the $n+1$th set explicit:
+              \[T \cap \left(S_{n+1} \cup \bigcup_{i=1}^n S_i\right)=(T \cap S_{n+1}) \cup \bigcup_{i=1}^n (T \cap S_i)\]
+              To prove this, we'll have to use that for any three sets $A,B$, and $C$,
+              \[A \cap (B \cup C)=(A \cap B) \cup (A \cap C)\]
+              Thus, the LHS of the expanded form can be transformed like so:
+              \[(T \cap S_{n+1}) \cup \left(T \cap \bigcup_{i=1}^n S_i\right)=(T \cap S_{n+1}) \cup \bigcup_{i=1}^n (T \cap S_i)\]
+              The first terms are equal by inspection, and the second terms are equal by our inductive hypothesis. $\square$
+          \end{enumerate}
+\end{enumerate}
+\end{document}

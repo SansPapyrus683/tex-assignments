@@ -1,0 +1,243 @@
+\documentclass[12pt]{article}
+
+\input{../kz}
+
+\allowdisplaybreaks
+
+\begin{document}
+\begin{enumerate}
+      \item We do the same thing as always when proving a linear transformation.
+            \begin{align*}
+                  g(\lambda a + b) & = \braket{T(\lambda a + b), y}              \\
+                                   & = \braket{\lambda T(a)+T(b), y}             \\
+                                   & = \braket{\lambda T(a), y}+\braket{T(b), y} \\
+                                   & = \lambda \braket{T(a), y}+\braket{T(b), y} \\
+                                   & = \lambda g(a)+g(b)\quad\square
+            \end{align*}
+      \item \begin{enumerate}
+                  \item Consider $y=(1, -2, 4)$. \label{list:2a}
+                        Then
+                        \begin{align*}
+                              g((a_1, a_2, a_3)) & = \braket{(a_1, a_2, a_3), (1, -2, 4)} \\
+                                                 & = a_1 - 2a_2+4a_3
+                        \end{align*}
+                  \item By the same logic as in \ref{list:2a}, $y=(1, -2)$.
+                  \item If our polynomial is $f(x)=ax^2+bx+c$, then
+                        \[f(0)+f'(x)=(a+b+c)+(2a+b)=3a+2b+c\]
+                        Integrating, we see
+                        \[\int_{-1}^{1} (ax^2+bx+c)(dx^2+ex+f)\,dx = \frac{2}{5}ad+\frac{2}{3}(af+be+cd)+2cf\]
+                        By inspection, we get the following equations:
+                        \begin{gather*}
+                              \frac{2}{5}d+\frac{2}{3}f=3 \\
+                              \frac{2}{3}e=2 \\
+                              2f+\frac{2}{3}d=1
+                        \end{gather*}
+                        Solving, we get our polynomial $\boxed{15x^2+3x-\frac{9}{2}}$.
+            \end{enumerate}
+      \item \begin{enumerate}
+                  \item \label{list:3a} It STP that $\braket{T(x), T(x)}=\braket{T^*(x), T^*(x)}$.
+                        \begin{align*}
+                              \braket{T(x), T(x)} & = \braket{x, T^*(T(x))}               \\
+                                                  & = \braket{x, T(T^*(x))}               \\
+                                                  & = \braket{T^*(x), T^*(x)}\quad\square
+                        \end{align*}
+                  \item We'll prove that the adjoint of $\lambda T$ is $\overline{\lambda} T^*$ first.
+                        \begin{gather*}
+                              \braket{(\lambda T)(x), y} = \braket{x, (\overline{\lambda} T^*)(y)} \\
+                              \lambda \braket{T(x), y}= \lambda \braket{x, T^*(y)} \\
+                              \braket{T(x), y}= \braket{x, T^*(y)}
+                        \end{gather*}
+                        which we know to be true by our initial definitions of $T$ and $T^*$.
+
+                        Now notice that
+                        \begin{align*}
+                              (\lambda T^*)((\overline{\lambda} T)(x)) & = \lambda\overline{\lambda} T^*(T(x))      \\
+                                                                       & = \lambda\overline{\lambda} T(T^*(x))      \\
+                                                                       & = (\lambda T)((\overline{\lambda} T^*)(x))
+                        \end{align*}
+                        so $\lambda T$ is normal as well. $\square$
+                  \item \label{list:3c} For convenience, let $g=T-c\mathrm{1}_V$.
+                        $g^*=T^*-\overline{c}\mathrm{1}_V$ because
+                        \begin{align*}
+                              \braket{T(x)-cx, y} & = \braket{T(x), y}-c\braket{x, y}              \\
+                                                  & = \braket{x, T^*(y)}-\braket{x, \overline{c}y} \\
+                                                  & = \braket{x, T^*(y)-\overline{c}y}
+                        \end{align*}
+
+                        $g$ is also normal because
+                        \begin{align*}
+                              g^*(g(x)) & = g^*(T(x)-cx)                                      \\
+                                        & = T^*(T(x))-cT^*(x)-\overline{c}T(x)+c\overline{c}x \\
+                                        & = T(T^*(x))-cT^*(x)-\overline{c}T(x)+c\overline{c}x \\
+                                        & = g(T^*(x))-\overline{c}g(x)                        \\
+                                        & = g(g^*(x))\quad\square
+                        \end{align*}
+                  \item Since $v$ is an eigenvector with eigenvalue $\lambda$,
+                        $T(v)=\lambda v \therefore (T-\lambda \mathrm{1}_V)(v)=\vec{0}$.
+                        We proved in \ref{list:3a} that the norm of any linear transformation
+                        is the same as its adjoint, and we also showed in \ref{list:3c} that
+                        the adjoint of $T-\lambda \mathrm{1}_V$ is $T^*-\overline{\lambda} \mathrm{1}_V$.
+
+                        Thus, we have that
+                        $||T^*-\overline{\lambda} \mathrm{1}_V||=||T-\lambda\mathrm{1}_V||=0 \therefore (T^*-\overline{\lambda} \mathrm{1}_V)(v)=0$,
+                        implying that $v$ is also an eigenvector for $T^*$ with eigenvalue $\overline{\lambda}$. $\square$
+            \end{enumerate}
+      \item \begin{gather*}
+                  \begin{aligned}
+                        U_1^* & = (T+T^*)^*       \\
+                              & = T^*+(T^*)^*     \\
+                              & = T^*+T           \\
+                              & = U_1\quad\square
+                  \end{aligned} \\
+                  \begin{aligned}
+                        U_2^* & = (T \cdot T^*)^*   \\
+                              & = T^* \cdot (T^*)^* \\
+                              & = T^* \cdot T       \\
+                              & = U_2\quad\square
+                  \end{aligned}
+            \end{gather*}
+      \item Since $T^{-1}$ is a linear transformation, it has an adjoint as well.
+            This gives us two equalities for all $x, y \in V$:
+            \begin{gather*}
+                  \braket{T(x), y}=\braket{x, T^*(y)} \\
+                  \braket{T^{-1}(x), y}=\braket{x, (T^{-1})^*(y)}
+            \end{gather*}
+            Replacing $x$ with $T^{-1}(x)$ in the first equality, we get that
+            \begin{align*}
+                  \braket{T(T^{-1}(x)), y}=\braket{T^{-1}(x), T^*(y)} & \therefore \braket{x, y}=\braket{T^{-1}(x), T^*(y)}     \\
+                                                                      & \therefore \braket{x, y}=\braket{x, (T^{-1})^*(T^*(y))}
+            \end{align*}
+            From this, we can deduce that $(T^{-1})^* \circ T^* = \mathrm{1}_V$.
+
+            Similarly, we can replace $x$ with $T(x)$ in the second equality to get
+            \begin{align*}
+                  \braket{T^{-1}(T(x)), y}=\braket{T(x), (T^{-1})^*(y)} & \therefore \braket{x, y}=\braket{T(x), (T^{-1})^*(y)}   \\
+                                                                        & \therefore \braket{x, y}=\braket{x, T^*((T^{-1})^*(y))}
+            \end{align*}
+            With similar reasoning as before, we get that $T^* \circ (T^{-1})^*=\mathrm{1}_V$.
+
+            Thus, by the definition of the invertibility, we have shown that $T^*$ is invertible
+            and its inverse is $(T^{-1})^*$. $\square$
+
+      \item Let $\beta$ be an orthonormal basis for $W$.
+            \begin{gather*}
+                  \braket{P_W(x), y} = \braket{x, P_W(y)} \\
+                  \braket{P_W(x), y} = \overline{\braket{P_W(y), x}} \\
+                  \Braket{\sum_{i=1}^{n} \braket{x, \beta_i}\beta_i, y} = \overline{\Braket{\sum_{i=1}^{n} \braket{y, \beta_i}\beta_i, x}} \\
+                  \sum_{i=1}^{n} \braket{x, \beta_i}\braket{\beta_i, y} = \overline{\sum_{i=1}^{n} \braket{y, \beta_i}\braket{\beta_i, x}} \\
+                  \sum_{i=1}^{n} \braket{x, \beta_i}\braket{\beta_i, y} = \sum_{i=1}^{n} \braket{x, \beta_i}\braket{\beta_i, y}
+            \end{gather*}
+            This equality is trivially true, so we see that $P_W(x)$ is its own adjoint. $\square$
+      \item \begin{enumerate}
+                  \item $\braket{x, T^*(y)}=0\ \forall y \in V \therefore \braket{T(x), y}=0 \therefore T(x)=0\quad\square$
+                  \item $\text{Im}(T^*)^\perp = \text{Ker}(T) \therefore (\text{Im}(T^*)^\perp)^\perp = \text{Ker}(T)^\perp \therefore \text{Im}(T^*) = \text{Ker}(T)^\perp\quad\square$
+            \end{enumerate}
+      \item \begin{enumerate}
+                  \setcounter{enumii}{2}
+                  \item We first calculate $T^*$:
+                        \begin{align*}
+                              \braket{T((a, b)), (c, d)} & = \braket{(2a+ib, a+2b), (c, d)}           \\
+                                                         & = \bar{c}(2a+ib)+\bar{d}(a+2b)             \\
+                                                         & = a(2\bar{c}+\bar{d})+b(i\bar{c}+2\bar{d})
+                        \end{align*}
+                        By inspection, $T^*((a, b))=(2a+b, ia+2b)$, so it isn't self-adjoint.
+                        $T^*(T((a, b))) \ne T(T^*(a, b))$, so it isn't normal either.
+
+                        \setcounter{enumii}{4}
+                  \item The inner product of two matrices in the real numbers is symmetric.
+                        Thus, $T=T^*$ and the transformation is self-adjoint and by extension normal.
+            \end{enumerate}
+      \item \begin{enumerate}
+                  \item \label{list:9a} I presume $UT$ means $U \circ T$.
+                        \begin{align*}
+                              \braket{(U\circ T)(x), y}=\braket{x, (U \circ T)^*(y)}
+                               & \therefore \braket{T(x), U^*(y)}=\braket{x, (U \circ T)^*(y)}   \\
+                               & \therefore \braket{x, T^*(U^*(y))}=\braket{x, (U \circ T)^*(y)} \\
+                               & \therefore T^* \circ U^* = (U \circ T)^*\quad\square
+                        \end{align*}
+                  \item These equalities go both ways, so we only have to prove things once:
+                        \begin{align*}
+                              (T \circ U)^* = T \circ U
+                               & \leftrightarrow U^* \circ T^* = T \circ U \\
+                               & \leftrightarrow U \circ T = T \circ U
+                        \end{align*}
+            \end{enumerate}
+      \item $||T(v)||=0\ \forall v \in \text{Ker}(T)$.
+            Since $T$ is normal, $||T^*(v)||=||T(v)||=0$, so $v \in \text{Ker}(T^*)$.
+            We can use a symmetric argument to prove that all elements in $\text{Ker}(T^*)$
+            are in $\text{Ker}(T)$.
+
+            Now, I assume we can use the results of previous exercises in the book without proof,
+            so here's the proof for the image:
+            \begin{align*}
+                   & \mathrel{\phantom{\therefore}} \text{Im}(T^*)^\perp = \text{Ker}(T),
+                  \text{Im}((T^*)^*)^\perp = \text{Ker}(T^*)                              \\
+                   & \therefore \text{Im}(T)^\perp = \text{Ker}(T^*)                      \\
+                   & \therefore \text{Im}(T)^\perp = \text{Im}(T^*)^\perp                 \\
+                   & \therefore \text{Im}(T) = \text{Im}(T^*) \quad\square
+            \end{align*}
+      \item \begin{enumerate}
+                  \item Let's first figure out what $T^2$ is.
+                        \begin{align*}
+                              T(T(v)) & = T\left(\sum_{i=1}^{r} \lambda_i T_i(v)\right) \\
+                                      & = \sum_{i=1}^{r} \lambda_i T(T_i(v))            \\
+                                      & = \sum_{i=1}^{r} \lambda_i^2 T_i
+                        \end{align*}
+                        By engineer's induction, we assume that $T^n$ is something similar.
+
+                        Now, using this, we can evaluate $g(T)$:
+                        \begin{align*}
+                              g(T) & = \sum_{i=0}^{n} g_i T^i                            \\
+                                   & = \sum_{i=1}^{n} g_i \sum_{j=1}^{r} \lambda_j^i T_j \\
+                                   & = \sum_{j=1}^{r} \sum_{i=1}^{n} g_i \lambda_j^i T_j \\
+                                   & = \sum_{j=1}^{r} T_j \sum_{i=1}^{n} g_i \lambda_j^i \\
+                                   & = \sum_{j=1}^{r} g(\lambda_j)T_j\quad\square
+                        \end{align*}
+                  \item If $\exists n: T^n(v)=0\ \forall v \in V$, then by definition
+                        \[\sum_{i=1}^{r} \lambda_i^n w_i=0\]
+                        Since all $w_i$ are LI, the only solution to this is $\lambda_i=0$.
+                        Thus, $T(v)=0\ \forall v$. $\square$
+                        \setcounter{enumii}{4}
+                  \item Let's first decompose a $v \in V$ into $v=\sum_{i=1}^{r} w_i$, where $w_i \in W_i$.
+                        By the spectral decomposition, $T(v)=\sum_{i=1}^{r} \lambda_i w_i$.
+                        We claim that \[T^{-1}(v)=\sum_{i=1}^{r} \frac{1}{\lambda_i} T_i(v)\]
+                        We can verify this by compositing it with $T$ and evaluating it:
+                        \begin{align*}
+                              T(T^{-1}(v)) & = \sum_{i=1}^{r} \lambda_i T_i\left(\sum_{j=1}^{r} \frac{1}{\lambda_j} T_j(v)\right) \\
+                                           & = \sum_{i=1}^{r} \lambda_i \sum_{j=1}^{r} \frac{1}{\lambda_j} T_i(T_j(v))            \\
+                                           & = \sum_{i=1}^{r} \lambda_i \cdot \frac{1}{\lambda_i} T_i(v)                          \\
+                                           & = \sum_{i=1}^{r} T_i(v)                                                              \\
+                                           & = v
+                        \end{align*}
+                        The chain of equalities for $T^{-1}(T(v))$ goes much the same way and also results in $v$.
+                        To go from the second expression to the third, we used that $i \ne j \rightarrow T_j(T_i(v))=0$.
+
+                        If there's a $\lambda_i$ with value $0$, then $\frac{1}{\lambda_i}$ is undefined
+                        and thus the proposed inverse does not exist.
+                        Since inverses are unique, this is also the only possible function that makes
+                        $T \circ T^{-1}=T^{-1} \circ T=\mathrm{1}_V$. $\square$
+                  \item We'll use the fact that a projection results in another projection if and only if
+                        it's multiplied by $0$ or $1$.
+                        Any other scalar multiple will turn it into something else.
+
+                        \textbf{Forward Direction:} \\
+                        We'll prove the contrapositive of this statement.
+                        If there's an eigenvalue $\lambda$ that's neither $0$ nor $1$,
+                        then $T$ involves a bad scalar multiple of a projection onto $E_{\lambda}$
+                        and thus is not a projection itself.
+
+                        \textbf{Backward Direction:} \\
+                        There's three cases to consider.
+                        \begin{enumerate}
+                              \item Only $0$ is an eigenvalue.
+                                    In this case, $T=T_0$ and is a projection onto $\text{span}(\varnothing)$.
+                              \item Only $1$ is an eigenvalue.
+                                    Then, $T=\mathrm{1}_V$ and is a projection onto $V$ itself.
+                              \item $0$ and $1$ are both eigenvalues.
+                                    In this case, $T=0 \cdot p_{W_0}(v)+1 \cdot p_{W_1}(v)=p_{W_1}(v)$,
+                                    so by definition $T$ is a projection as well.
+                        \end{enumerate}
+                        As we can see, all three cases result in $T$ being a projection. $\square$
+            \end{enumerate}
+\end{enumerate}
+\end{document}

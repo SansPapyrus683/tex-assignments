@@ -1,0 +1,65 @@
+\documentclass[12pt]{article}
+
+\input{../kz}
+
+\begin{document}
+\section{Textbook}\label{sec:textbook}
+
+All problems are from section 6.1 of the textbook.
+
+\begin{enumerate}
+      \item[5] There's $2^{2 \cdot 3}-1=\boxed{63}$ distinct Braille characters.
+      \item[9] If repetitions are allowed, we have $26^3 \cdot 10^2=\boxed{1757600}$ possible license plates.
+            If we can't repeat a character, then this number decreases to
+            $(26 \cdot 25 \cdot 24) \cdot (10 \cdot 9)=\boxed{1404000}$.
+      \item[28] 6 outcomes give $7$, while 2 outcomes give $11$.
+      \item[39] There's a total of $2^8$ eight-bit strings, $2^6$ of which
+            have both the second and the fourth bit set to $0$.
+            Excluding those, our final answer is $\boxed{2^8-2^6}$.
+      \item[45] Excluding B and F, we have four remaining people to choose three positions four.
+            Thus, our answer is $4 \cdot 3 \cdot 2=\boxed{24}$.
+      \item[46] There's $3 \cdot 2=6$ ways to choose positions for B and F, and $4$ people that can fill
+            whatever the remaining position is.
+            This gives us our final answer of $6 \cdot 4 = \boxed{24}$.
+      \item[78] Since all the terms in each polynomial are distinct, we can just multiply
+            the lengths of all the terms together to get
+            \[2 \cdot 3 \cdot 3 \cdot 2=\boxed{36}\]
+\end{enumerate}
+
+\pagebreak
+
+\section{Handout}\label{sec:handout}
+\begin{itemize}
+      \item[A1] Each function has to map all $m$ elements to one of $n$ possible outputs,
+            which means that there's $\boxed{n^m}$ possible functions from $X$ to $Y$.
+      \item[A2] Say we line up the elements of $X$ and $Y$.
+            Notice that we can form any bijection by drawing lines from
+            an element in $X$ to the one in $Y$ right across from it.
+
+            Keeping the positions of the elements in $X$ constant, we have $n!$ ways to arrange
+            the elements of $Y$.
+            Since there is a bijection between all these arrangements of $Y$
+            and the possible bijections one can form between $X$ and $Y$ (bijection-ception?),
+            we know that there's $n!$ bijections between $X$ and $Y$.
+      \item[A3] For the first value of $X$, there's $n$ possible values of $Y$ we can map it to.
+            As for the second, there's $n-1$ possible values.
+            Extending this all the way to the $k$-th element, we get that there's
+            a total of $\prod_{i=1}^k n-i+1=\frac{n!}{(n-k)!}$ injective functions. $\square$
+      \item[A4] \textbf{Edge case $k=0$:} \\
+            There's only one subset of size 0, and that's $\varnothing$.
+            Plugging $k=0$ into the formula also yields $\frac{n!}{0!(n-0)!}=1$, so this proposition holds for $k=0$.
+
+            \textbf{General $k>0$:} \\
+            Define $[k]=\{i \in \mathbb{Z}: 1 \le i \le k\}$.
+            By the result in A3 we know that there's $\frac{n!}{(n-k)!}$ ways to map each
+            number in $[k]$ injectively to elements in $X$.
+            However, we also know that there's $k!$ ways to form a bijection between $[k]$
+            and any certain subset of size $k$ in $X$.
+            Thus, we have to divide the former by the latter, giving us our result of $\frac{n!}{k!(n-k)!}$. $\square$
+
+      \item[A5] We know that $\binom{n}{k}$ is equivalent to the number of all subsets of size $k$.
+            We also know that $2^n$ is the total number of subsets without regard to size.
+
+            Thus, summing up all the subsets of every size is clearly equal to the ultimate number of subsets. $\square$
+\end{itemize}
+\end{document}

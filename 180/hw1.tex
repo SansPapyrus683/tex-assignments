@@ -1,0 +1,265 @@
+\documentclass[12pt]{article}
+
+\input{../kz}
+
+\rhead{CS 180}
+
+\begin{document}
+
+\section{Proof Techniques}
+
+\subsection*{Part A}
+
+We start with the trivial base case $n=1$.
+\[1=\frac{1 \cdot (3 - 1)}{2}\]
+We now assume $\sum_{i=1}^{n} (3i-2)=\frac{n(3n-1)}{2}$ and try to prove
+\[\sum_{i=1}^{n+1} (3i-2) = \frac{(n+1)(3n+2)}{2}\]
+which can be done by plugging in our inducitve hypothesis like so:
+\begin{align*}
+    \sum_{i=1}^{n+1} (3i-2) & = (3n+1) + \sum_{i=1}^{n} (3i-2)    \\
+                            & = 3n+1+\frac{n(3n-1)}{2}            \\
+                            & = \frac{3n^2-n+6n+2}{2}             \\
+                            & = \frac{(n+1)(3n+2)}{2}\quad\square
+\end{align*}
+
+\subsection*{Part B}
+
+BWOC let $x$ and $y$ both be integers.
+Since $x^2-y^2=1$, $(x+y)(x-y)=1$.
+There's two ways for this to be true.
+
+The first is if $x+y=x-y=1$.
+This necessitates that $x=1$ and $y=0$, which contradicts that $y>0$.
+
+The second is if $x+y>1$ and $0<x-y<1$.
+The latter inequality implies $y<x<y+1$.
+Since $y$ is in an integer, $x$ has to be a noninteger since it's between
+two consecutive integers, contradicting our initial assumption. $\square$
+
+\section{Order Notation}
+
+\begin{table}[H]
+    \centering
+    \begin{tabular}{|c|c|c|c|c|c|c|}
+        \hline
+        $A$              & $B$             & $A \in o(B)$ & $A \in O(B)$ & $A \in \Theta(B)$ & $A \in \Omega(B)$ & $A \in \omega(B)$ \\
+        \hline
+        $\log_2 n$       & $\log_5 n$      & no           & yes          & yes               & yes               & no                \\
+        \hline
+        $\log \log n$    & $\sqrt{\log n}$ & yes          & yes          & no                & no                & no                \\
+        \hline
+        $n^{4/3} \log n$ & $n^{\log n}$    & yes          & yes          & no                & no                & no                \\
+        \hline
+        $2^{\log_6 n}$   & $n^6$           & yes          & yes          & no                & no                & no                \\
+        \hline
+        $n^3 2^n$        & $3^n$           & yes          & yes          & no                & no                & no                \\
+        \hline
+    \end{tabular}
+\end{table}
+
+\textcolor{red}{you stupid bitch, it was $2^{\log^6 n}$, not $2^{\log_6 n}$}
+
+\section{Runtime Analysis}
+
+\subsection*{Part A}
+
+The first loop runs in proportion to $n$, and the second one is the same.
+Despite incrementing $j$ until it reaches $i$, $i$ goes all the way from $1$ to $n$.
+Thus, the runtime complexity is $\Theta(n^2)$
+
+\subsection*{Part B}
+
+If we double $i$ each time until it reaches $n$, then it would take $\log n$ iterations.
+However, here we're \textit{squaring} $i$.
+After $x$ iterations of the loop, $i$ becomes $2^{2^{x+1}}$.
+Setting that equal to $n$ and isolating $x$, we see that the runtime
+complexity is $\Theta(\log \log n)$.
+
+\section{Smallest Element with Min Frequency}
+
+Let $\texttt{freq}$ be a hashmap that represents the frequency of each element.
+It starts with $0$ for each value.
+
+\begin{algorithmic}[1]
+    \State $\texttt{freq} \gets \{\}$
+    \ForAll{$i \in \{1, \cdots , n\}$}
+    \State $\texttt{freq}_{A_i} \gets \texttt{freq}_{A_i} + 1$
+    \EndFor
+
+    \State $\texttt{minFreq} \gets \infty$
+    \State $\texttt{bestNum} \gets -1$
+    \ForAll{\texttt{value}, \texttt{frequency} $\in$ \texttt{freq}}
+    \If{$\texttt{frequency} < \texttt{minFreq}$}
+    \State $\texttt{minFreq} \gets \texttt{frequency}$
+    \ElsIf{$\texttt{frequency} = \texttt{minFreq}$}
+    \State $\texttt{bestNum} \gets \min(\texttt{bestNum}, \texttt{value})$
+    \EndIf
+    \EndFor
+
+    \State \Return $\texttt{bestNum}$
+\end{algorithmic}
+
+This algorithm first iterates through the entire array of size $n$.
+It then iterates through $\texttt{freq}$, which is equivalent to going through
+every distinct value in the array.
+Since an array of size $n$ has at most $n$ distinct values,
+the complexity of this algorithm is $O(N)$.
+
+\section{Stable Matching Variation}
+
+\subsection*{Algorithm Proposition}
+
+Let's suppose an array $S$ where $S_i$ is the number of slots for med students
+the $i$th hospital has.
+The algorithm for this problem is rather similar to the GS algorithm discussed in class:
+\begin{algorithmic}[1]
+    \State $\texttt{matchings} \gets \{\}$
+    \Comment{Set of ordered pairs of hospitals and students.}
+    \State $\texttt{matchNum} \gets \sum_{i=1}^{m} S_i$
+    \Comment{$m$ is the number of hospitals.}
+    \While{$|\texttt{matchings}| < \texttt{matchNum}$}
+    \State Find a hospital $h$ where $|\{(a, b) \in \texttt{matchings}\,|\,a = h\}| < S_h$
+    \State $s \gets$ the highest student on $h$'s preference list that hasn't been proposed to
+    \item[]
+    \If{$\exists (h', s') \in \texttt{matchings}$ s.t. $s'=s$}
+    \If{$s$ prefers $h$ to $h'$}
+    \State $\texttt{matchings} \gets (\texttt{matchings} \setminus (h', s)) \cup (h, s)$
+    \EndIf
+    \Else
+    \State $\texttt{matchings} \gets \texttt{matchings} \cup (h, s)$
+    \EndIf
+    \item[]
+    \State Mark that $h$ has now proposed to $s$
+    \EndWhile
+\end{algorithmic}
+
+\subsection*{Correctness}
+
+We'll go through both types of instabilities and show why they can't exist
+in the output of our algorithm.
+
+\textbf{Type 1}:
+Suppose that there do exist students $s$ and $s'$ and a hospital $h$
+that meet the conditions described in the instability.
+Since $h$ prefers $s'$ to $s$, it must have proposed to $s'$ at some point
+during the algorithm since all hospitals propose in order of their preference list.
+However, the fact that $s'$ is matchless implies that no hospital
+ever proposed to it in the first place.
+Contradiction- no instabilities of the first type can exist.
+
+\textbf{Type 2}:
+There can't be instabilities of this type for the same reason
+the GS algorithm can't have instabilities of this type.
+I believe the proof of this was already gone over in class.
+
+\subsection*{Complexity}
+
+Suppose there are $n$ students and $m$ hospitals.
+During each iteration of the while loop, at least one student is proposed to
+by a hospital, and by design this algorithm never has that hospital propose
+to the student ever again.
+Thus, the while loop runs at most $nm$ times and the final complexity
+of this algorithm is $O(mn)$ with appropriate data structures.
+
+\section{Peripatetic Shipping Lines}
+
+This problem reduces to the stable matching problem.
+Have each ship's "preference list" be the ports they visit in the order of their schedule,
+with ports they visit earlier being higher priority.
+On the other hand, each port's "preference list" consists of the ships that visit,
+which ships that visit them \textit{later} being of higher precedence.
+
+It remains to show that the GS algorithm will output a valid matching of
+ships to ports.
+To do this, we'll show that any unstable pairing with the above preference
+lists will result in two ships being in the same port on the same day.
+
+Say our current set of matchings from ships to ports is $M$.
+An instability occurs when $\exists (s, p), (s', p') \in M$ s.t.:
+\begin{itemize}
+    \item $p'$ is higher on $s$'s preference list than $p$.
+    \item $s$ is higher on $p'$'s preference list than $s'$.
+\end{itemize}
+The meaning of the first condition is that $s$ comes to stop at $p'$
+before their schedule is truncated at their assigned $p$.
+The second condition means that $s$ comes to port $p'$ after $s'$
+has already stopped at $p'$ for repairs.
+These two conditions combined imply that $s$ and $s'$ will meet at $p'$.
+
+With this and the knowledge that the GS algorithm will always output a matching
+with no instabilities, we have shown that a set of truncations can always be found.
+The algorithm is basically just the same GS algorithm we always use,
+except with a bit of custom preference list creation.
+
+\pagebreak
+
+\section{Truthfulness in Stable Matching}
+
+Yes, a woman is able to better her outcome if she swaps two men in her preference list.
+
+Consider the following preference lists with $N=3$.
+The men are letters, and the women are numbers:
+
+\begin{table}[H]
+    \parbox{.45\linewidth}{
+        \centering
+        \begin{tabular}{|c|c|c|c|}
+            \hline
+            A & 0 & 1 & 2 \\
+            \hline
+            B & 0 & 2 & 1 \\
+            \hline
+            C & 1 & 0 & 2 \\
+            \hline
+        \end{tabular}
+        \caption{Men Preferences}
+    }
+    \hfill
+    \parbox{.45\linewidth}{
+        \centering
+        \begin{tabular}{|c|c|c|c|}
+            \hline
+            0 & C & A & B \\
+            \hline
+            1 & A & B & C \\
+            \hline
+            2 & A & C & B \\
+            \hline
+        \end{tabular}
+        \caption{Women Preferences}
+    }
+\end{table}
+
+If we run the GS algorithm on this table as is, a stable matching is as follows:
+
+\begin{table}[H]
+    \centering
+    \begin{tabular}{|c|c|c|c|}
+        \hline
+        Men & A & B & C \\
+        \hline
+        Women & 0 & 2 & 1 \\
+        \hline
+
+    \end{tabular}
+\end{table}
+
+However, if woman 0 decides to lie and swap the positions of men A and B on her list,
+the algorithm outputs the following matching:
+
+\begin{table}[H]
+    \centering
+    \begin{tabular}{|c|c|c|c|}
+        \hline
+        Men & A & B & C \\
+        \hline
+        Women & 1 & 2 & 0 \\
+        \hline
+    \end{tabular}
+\end{table}
+
+Woman 0 is now paired with man C, her first choice.
+This inadvertently makes it so that woman 1 is now paired with man A,
+\textit{her} first choice as well.
+
+\end{document}

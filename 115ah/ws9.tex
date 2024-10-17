@@ -1,0 +1,76 @@
+\documentclass[12pt]{article}
+
+\input{../kz}
+
+\begin{document}
+\begin{enumerate}
+      \item For all these parts, let $v=a+bi$.
+            \begin{enumerate}
+                  \item \begin{align*}
+                              ||cv|| & = \braket{cv, cv}^{1/2}                                   \\
+                                     & = \left(c(a+bi) \cdot \overline{c(a+bi)}\right)^{1/2}     \\
+                                     & = \left|(ca+cbi)(ca-cbi)\right|^{1/2}                     \\
+                                     & = \left(c^2a^2+c^2b^2\right)^{1/2}                        \\
+                                     & = \left(a^2+b^2\right)^{1/2} \cdot \left(c^2\right)^{1/2} \\
+                                     & = ||v|| \cdot |c|
+                        \end{align*}
+                  \item \textbf{Forward Direction:} \\
+                        If $||v||=0$, then $\braket{v, v}^{1/2}=0$ and by extension $\braket{v, v}=v\overline{v}=0$ as well.
+                        Then, $v\overline{v}=a^2+b^2$, and the only way this can be true is if $a=b=0$.
+                        Thus, $v=\vec{0}$.
+
+                        \textbf{Backward Direction:} \\
+                        If $v=\vec{0}$, then $\braket{v, v}=(0+0i)(0+0i)=0$ and $||v||=0$.
+                  \item $||v||=\sqrt{a^2+b^2}$.
+                        This gives us that $\frac{v}{||v||}=\frac{a+bi}{\sqrt{a^2+b^2}}$.
+                        \begin{align*}
+                              \left|\left|\frac{v}{||v||}\right|\right| & = \left(\frac{a+bi}{\sqrt{a^2+b^2}} \cdot \frac{a-bi}{\sqrt{a^2+b^2}}\right)^{1/2} \\
+                                                                        & = \left(\frac{a^2+b^2}{a^2+b^2}\right)^{1/2}                                       \\
+                                                                        & = 1^{1/2}                                                                          \\
+                                                                        & = 1
+                        \end{align*}
+                        Since its norm is $1$, $\frac{v}{||v||}$ is a normal vector.
+            \end{enumerate}
+
+            \pagebreak
+
+      \item \begin{enumerate}
+                  \item BWOC let $u$ and $v$ be LD vectors.
+                        This means that $\exists c: u=cv$.
+                        Taking their product, we have
+                        \[\braket{u, v} = u\overline{v} = cv\overline{v}\]
+                        In WS8, we proved that this is zero iff $v=\vec{0}$.
+                        However, $v \ne \vec{0}$ by the premise of the proof.
+                        Contradiction.
+                        Thus, $\{u, v\}$ must be an LI set of vectors.
+                  \item \textbf{Lemma:} If $\braket{x, a_1}=\braket{x, a_2}=\cdots =\braket{x, a_n}=0$,
+                        Then $\braket{x, \sum_{i=1}^{c_i a_i}}=0$ for all possible coefficients.
+                        This follows from the following properties of inner products:
+                        \begin{gather*}
+                              \braket{x, y}+\braket{x, z}=\braket{x,y+z} \\
+                              \braket{x, cy}=\overline{c}\braket{x, y}
+                        \end{gather*}
+
+                        \textbf{Actual Proof}: \\
+                        We prove this by induction on the number of vectors in the set.
+                        The base case for two vectors was already proved, and so we assume
+                        that if $\{v_1, \cdots, v_n\}$ is an orthogonal set of vectors, then they must be LI as well.
+
+                        It remains to prove this implies the same proposition
+                        for $\{v_1, \cdots, v_n, v_{n+1}\}$ as well.
+
+                        Taking away $v_{n+1}$ from the set, we have a set of $n$ orthogonal vectors
+                        that by the hypothesis we know are LI.
+                        Now, BWOC suppose that the set was LD.
+                        This would mean that there exists coefficients $c_1, \cdots, c_n$ s.t.
+                        \[\sum_{i=1}^{n} c_i v_i = v_{n+1}\]
+                        Since this is an orthogonal set of vectors, we also have by the lemma that
+                        \[\braket{\sum_{i=1}^{n} c_i v_i, v_{n+1}}=0 \rightarrow \braket{v_{n+1}, v_{n+1}}=0\]
+                        Once again, by the result in WS8, this forces $v_{n+1}$ to be $\vec{0}$,
+                        which we already established wasn't possible.
+
+                        Thus, $\{v_1, \cdots, v_n, v_{n+1}\}$ has to be an LI set of vectors as well,
+                        and the inductive step is complete. $\square$
+            \end{enumerate}
+\end{enumerate}
+\end{document}

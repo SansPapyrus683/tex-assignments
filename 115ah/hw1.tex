@@ -1,0 +1,173 @@
+\documentclass[12pt]{article}
+
+\input{../kz}
+
+\rhead{Math 115AH}
+
+\begin{document}
+\begin{enumerate}
+    \item \begin{enumerate}
+              \item Let $n$ and $n'$ be odd integers.
+                    By definition, $n=2m+1$ and $n'=2m'+1$ for some other integers $m$ and $m'$.
+                    Thus, \[n+n'=2m+2m'+2=2(m+m'+1)\]
+                    Since $m+m'+1 \in \mathbb{Z}$, there is some integer $k=m+m'+1$ s.t. $n+n'=2k$. $\square$
+              \item Let $n$ be the even integer and $m$ be the odd integer.
+                    Given this, $n=2n'$ and $m=2m'+1$ for some integers $n'$ and $m'$.
+                    Therefore, \[n+m=2n'+2m'+1=2(n'+m')+1\]
+                    Since $n'+m' \in \mathbb{Z}$, there is some integer $k=n'+m'$ s.t. $n+m=2k+1$. $\square$
+          \end{enumerate}
+    \item \begin{enumerate}
+              \item The union of all even integers and all odd integers is $\boxed{\mathbb{Z}}$.
+              \item The intersection of these two sets is $\boxed{\varnothing}$.
+              \item Since the empty set is a subset of any set, yes.
+          \end{enumerate}
+    \item For all elements $a$ in $A \cap B$, we know that $a \in A \land a \in B$.
+          Thus, we know that all these $a$ are also in $A$, and thus $A \cap B \subset A$. $\square$
+    \item \begin{enumerate}
+              \item A function is one-to-one if $f(x)=f(x')$ implies that $x=x'$.
+                    The contrapositive of this is that if $x \ne x'$, then $f(x) \ne f(x')$.
+                    Thus, different elements in $S$ will be mapped onto different elements in $T$.
+              \item \begin{enumerate}
+                        \item $f(x)=\arctan(x)$ is one-to-one but not onto since it only outputs positive numbers.
+                        \item $f(x)=(x-1)(x-2)^2$ can output any real number, but both $1$ and $2$ make it output $0$.
+                              Thus, this function is not one-to-one.
+                        \item $(f \circ g)(x)=\sqrt{(x-1)(x-2)^2}$
+                    \end{enumerate}
+              \item \begin{enumerate}
+                        \item Since $g$ is onto, we know that $\forall y \in S\ \exists x \in R: g(x)=y$.
+                              Applying the same logic to $f$, we have $\forall z \in T\ \exists y \in S: f(y)=z$.
+                              Linking these two relations together, we have $\forall z \in T\ \exists x \in R: f(g(x))=z$,
+                              meaning that $f \circ g$ is onto. $\square$
+                        \item Since $g$ is one-to-one, we know that $x \ne y \rightarrow g(x) \ne g(y)$.
+                              Given that $f$ is also one-to-one, we can say that $g(x) \ne g(y) \rightarrow f(g(x)) \ne f(g(y))$,
+                              and thus $f \circ g$ is one-to-one. $\square$
+                        \item This follows naturally from the first two propositions, since being a one-to-one correspondence
+                              is equivalent to being both onto and one-to-one, and we've just proved that $f$ and $g$ having these properties
+                              means that $f \circ g$ also has them.
+                    \end{enumerate}
+
+          \end{enumerate}
+    \item We know that $a+b=0_f$ and $a+b'=0_f$.
+          Adding $b$ to both sides and taking advantage of the associative property, we have that
+          \begin{align*}
+              (a+b)
+              +b       & =b                \\
+              (a+b)+b' & =b                \\
+              0_F+b    & =0_F+b'           \\
+              b        & =b' \quad \square
+          \end{align*}
+    \item \textbf{Existence:} We know that $x \sim_R y \rightarrow [x]=[y]$.
+          $\bar{f}$ does have a well-defined domain and codomain, since $[x]\in S/R$ and $f(x) \in T$.
+          If $[x]=[x']$, then $f(x)=f(x')$ and thus $\hat{f}([x])=\hat{f}([x'])$.
+          Since identical inputs produce identical outputs, the formula part of the function is well-defined as well.
+
+          \textbf{Uniqueness:} Suppose the existence of another function $\bar{g}: S/R\rightarrow T$ s.t. $\bar{g}([x])=f(x)$.
+          We have to prove that $\bar{g}([x])=\bar{f}([x])\ \forall x$, since the domains and codomains are clearly equal.
+          If $\bar{f}([x])\ne\bar{g}([x])$ then $f(x) \ne f(x)$, and that clearly can't be true. $\square$
+
+    \item \begin{enumerate}
+              \item For a complex number $a+bi$, its additive identity is $0$ and its multiplicative identity is $1$.
+              \item The additive inverse of $2+i$ is $\boxed{-2-i}$.
+              \item The multiplicative inverse of $x=1+4i$ is:
+                    \begin{align*}
+                        \frac{1}{1+4i} & = \frac{1-4i}{(1+4i)(1-4i)}          \\
+                                       & = \frac{1-4i}{1-(4i)^2}              \\
+                                       & = \frac{1-4i}{17}                    \\
+                                       & = \boxed{\frac{1}{17}+\frac{4}{17}i}
+                    \end{align*}
+              \item The general formula for the multiplicative inverse of a number $a+bi$ is
+                    \[\frac{1}{a+bi}=\frac{a-bi}{(a+bi)(a-bi)}=\frac{a-bi}{a^2+b^2}\].
+              \item \begin{itemize}
+                        \item[(F1)] \begin{align*}
+                                (a+bi)
+                                +(c+di)       & =(a+c)+i(b+d) \\
+                                (c+di)+(a+bi) & =(c+a)+i(d+b)
+                            \end{align*}
+                            Since $a+c=c+a$ and likewise for $b+d$, commutativity for addition is satisfied.
+                            \begin{align*}
+                                (a+bi)
+                                \cdot (c+di)        & =(ac-bd)+i(ad+bc) \\
+                                (c+di) \cdot (a+bi) & =(ca-db)+i(da+cb)
+                            \end{align*}
+                            Multiplication on the real numbers is also commutative, so F1 is satisfied.
+                        \item[(F5)] Let our three numbers be $a+bi$, $c+di$, and $e+fi$ respectively.
+                            \fontsize{10}{8}\begin{align*}
+                                (a+bi)
+                                \cdot ((c+di)+(e+fi)) & = (a+bi) \cdot ((c+e)+i(d+f))               \\
+                                                      & = (ac+ae+bd+bf)+i(ad+af+bc+be)              \\
+                                                      & = (ac+bd)+i(ad+bc)+(ae+bf)+i(af+be)         \\
+                                                      & = (a+bi) \cdot (c+di) + (a+bi) \cdot (e+fi)
+                            \end{align*}
+                    \end{itemize}
+          \end{enumerate}
+    \item \begin{enumerate}
+              \item Since we know that $[x]=[y]$, we know that $x=y+kn\ \exists k \in \mathbb{Z}$.
+                    Similarly, $z=w+k'n\ \exists k' \in \mathbb{Z}$.
+                    \begin{enumerate}
+                        \item \[x+z=y+kn+w+k'n=y+w+n(k+k')\]
+                              Since $k+k'$ is an integer, we have that $x+z=y+w+pn$
+                              for some $p=k+k' \in \mathbb{Z}$ $x+z \sim y+w$ and thus $[x+z]=[y+w]$. $\square$
+                        \item The proof goes in much the same way as the previous one.
+                              \begin{align*}
+                                  x \cdot z & = (y+kn) \cdot (z+k'n) \\
+                                            & = yz+nkz+nk'y+n^2 k k' \\
+                                            & =yz+n(kz+k'y+kk')
+                              \end{align*}
+                              By the same reasoning as in part (i), $x \cdot z \sim y \cdot w$ and $[x \cdot z]=[y \cdot w]$. $\square$
+                    \end{enumerate}
+              \item \begin{itemize}
+                        \item[(F1)] \begin{gather*}
+                                [x]
+                                +[y]=[x+y]=[y+x]=[y]+[x]\\
+                                [x]\cdot[y]=[x \cdot y]=[y \cdot x]=[y] \cdot x
+                            \end{gather*}
+                        \item[(F2)] Addition:
+                            \begin{align*}
+                                [x]
+                                +([y]+[z]) & = [x]+[y+z]     \\
+                                           & = [x+y+z]       \\
+                                           & = [x+y]+[z]     \\
+                                           & = ([x]+[y])+[z]
+                            \end{align*}
+                            Multiplication:
+                            \begin{align*}
+                                [x]
+                                \cdot([y] \cdot [z]) & = [x]\cdot [y\cdot z]     \\
+                                                     & = [x\cdot y\cdot z]       \\
+                                                     & = [x\cdot y]\cdot[z]      \\
+                                                     & = ([x]\cdot [y])\cdot [z]
+                            \end{align*}
+                        \item[(F3)] The additive and multiplicative identity are $[0]$ and $[1]$ respectively.
+                            \begin{gather*}
+                                [x]
+                                + [0] = [x + 0] = [x]\\
+                                [x] \cdot [1] = [x \cdot 1] = [x]\\
+                            \end{gather*}
+                        \item[(F4)] The opposite of $[x]$ is just $[-x]$:
+                            \[[x]+[-x]=[x-x]=0\]
+                            To prove the existence of the inverse of $[x]$, notice that the inverse of $[x]$ has
+                            to satisfy the following equation:
+                            \[x \cdot x^{-1}=1+kn\ \exists k \in \mathbb{Z}\]
+                            Transforming this equation to $x \cdot x^{-1}-kn=1$ and applying the fact given in the
+                            question, the existence of the inverse is thus proven.
+                        \item[(F5)] \begin{align*}
+                                [z]
+                                \cdot ([x]+[y]) & = [z] \cdot [x+y]               \\
+                                                & = [zx+zy]                       \\
+                                                & = [zx]+[zy]                     \\
+                                                & = [z] \cdot [x] + [z] \cdot [y]
+                            \end{align*}
+                    \end{itemize}
+              \item If we look at the above verification of F3, we can notice that
+                    $[1]$ being the multiplicative identity does not depend on $n$ being composite.
+                    Thus, $[1]$ will always be the multiplicative identity for any $\mathbb{Z}/n\mathbb{Z}$.
+
+                    For $k$ to have an inverse, we need to find an integer $k^{-1}$ s.t.
+                    \[k \cdot k^{-1}=1+pn\ \exists p \in \mathbb{Z}\]
+                    Expanding $n=km$ and factoring, we get that
+                    \[k(k^{-1}-pm)=1\]
+                    Since $k>1$ and the other coefficient can only take integer values,
+                    this equation has no solution and thus $k$ has no inverse.
+          \end{enumerate}
+\end{enumerate}
+\end{document}

@@ -1,0 +1,242 @@
+\documentclass[12pt]{article}
+
+\input{../kz}
+
+\begin{document}
+\begin{enumerate}
+      \item To prove that any function $T$ is linear, we just have to prove that
+            $T(\lambda a+b)=\lambda T(a)+b$ for any matrices $a$ and $b$.
+            We know that $\lambda a+b=[\lambda a_{ij}+b_{ij}]$.
+            Thus, the $ij$-th element of $T(\lambda a+b)$ is defined by $\lambda a_{ji}+b_{ji}$.
+
+            As for the RHS, the $ij$-th element of $T(a)$ is equal to $a_{ji}$.
+            Performing the other operations gives us a result of $ca_{ji}+\lambda$,
+            which is equal to the LHS.
+            Thus, $T$ is a linear transformation.
+      \item \begin{enumerate}
+                  \item $\mathbb{Z}/p\mathbb{Z}$ has $p$ elements.
+                        $(\mathbb{Z}/p\mathbb{Z})^2$ has $p^2$ elements, and $(\mathbb{Z}/p\mathbb{Z})^3$ has $p^3$ elements.
+                  \item We can form any ordered tuple of $i+1$ elements by tacking on another element to the end of an $i$-tuple.
+                  \item \textbf{Claim:} $|(\mathbb{Z}/p\mathbb{Z})^n|=p^n$ \\
+                        The proof is by induction.
+
+                        \textbf{Base Case:} \\
+                        That $|\mathbb{Z}/p\mathbb{Z}|=p$ has already been established.
+                        We claim $P_i$, that is, $|(\mathbb{Z}/p\mathbb{Z})^i|=p^i$.
+
+                        \textbf{Inductive step:} \\
+                        It remains to prove that $P_i \rightarrow P_{i+1}$.
+                        This is simple as $(\mathbb{Z}/p\mathbb{Z})^{i+1}=(\mathbb{Z}/p\mathbb{Z})^i \times \mathbb{Z}/p\mathbb{Z}$,
+                        so the size of the LHS is the same as the product of the sizes of the RHS.
+                        This gives us $|(\mathbb{Z}/p\mathbb{Z})^{i+1}|=p^i \cdot p=p^{i+1}$,
+                        completing the inductive step. $\square$
+            \end{enumerate}
+      \item Let $V=W=\mathbb{R}^2$, $T(v)=5v$, and $U(v)=3v$.
+            While these have the same kernel (just $\vec{0}$) and image (all of $W$),
+            they clearly output different results for any non-zero input.
+      \item \begin{enumerate}
+                  \item Let's start with $(S+T)(\lambda a+b)$ and try to work our way towards $\lambda(S+T)(a)+(S+T)(b)$.
+                        \begin{align*}
+                              (S+T)(\lambda a+b) & = S(\lambda a+b)+T(\lambda a+b)        \\
+                                                 & = \lambda S(a)+S(b)+\lambda T(a)+T(b)  \\
+                                                 & =\lambda (S(a)+T(a))+S(b)+T(b)         \\
+                                                 & =\lambda (S+T)(a)+(S+T)(b)\quad\square
+                        \end{align*}
+                  \item \hfill$
+                              \begin{aligned}[t]
+                                    (\lambda T)(ca+b) & = \lambda \cdot T(ca+b)                     \\
+                                                      & = \lambda (cT(a)+T(b))                      \\
+                                                      & =c\lambda T(a)+\lambda T(b)                 \\
+                                                      & =c(\lambda T)(a)+(\lambda T)(b)\quad\square
+                              \end{aligned}$\hfill\null
+                  \item \hfill$
+                              \begin{aligned}[t]
+                                    \vec{0}(\lambda a+b) & = \vec{0}_W                                 \\
+                                                         & = \lambda \vec{0}_W+\vec{0}_W               \\
+                                                         & = \lambda \vec{0}(a)+\vec{0}(b)\quad\square
+                              \end{aligned}$\hfill\null
+                  \item \textbf{Commutativity}
+                        \begin{align*}
+                              (S+T)(x) & = S(x)+T(x) \\
+                                       & =T(x)+S(x)  \\
+                                       & =(T+S)(x)
+                        \end{align*}
+
+                        \textbf{Associativity}
+                        \begin{align*}
+                              ((S+T)+U)(x) & = (S(x)+T(x))+U(x) \\
+                                           & =S(x)+(T(x)+U(x))  \\
+                                           & =(S+(T+U))(x)
+                        \end{align*}
+
+                        \textbf{Additive Identity} \\
+                        Consider $I(x)=\vec{0}$.
+                        \begin{align*}
+                              (T+I)(x) & = T(x)+I(x)    \\
+                                       & = T(x)+\vec{0} \\
+                                       & = T(x)
+                        \end{align*}
+
+                        \textbf{Additive Inverse} \\
+                        For any linear transformation $T(x)$, consider $U(x)=-T(x)$.
+                        The negative operation is defined since the codomain of $T$ is a vector space and thus all element in there have additive inverses.
+                        \begin{align*}
+                              (T+U)(x) & =T(x)+U(x)    \\
+                                       & =T(x)+(-T(x)) \\
+                                       & =\vec{0}      \\
+                                       & = I(x)
+                        \end{align*}
+
+                        \textbf{Scalar Identity} \\
+                        Consider the element $1 \in F$.
+                        \begin{align*}
+                              (1 \cdot T)(x) & = 1 \cdot T(x) \\
+                                             & =T(x)
+                        \end{align*}
+
+                        \textbf{Associativity w.r.t. Scalar Multiplication}
+                        \begin{align*}
+                              ((ab) \cdot T)(x) & = (ab) \cdot T(x)        \\
+                                                & =a \cdot b \cdot T(x)    \\
+                                                & = a \cdot (b \cdot T(x)) \\
+                                                & =(a(b \cdot T))(x)
+                        \end{align*}
+
+                        \textbf{Distributivity P1}
+                        \begin{align*}
+                              (\lambda \cdot (T+U))(x) & = \lambda \cdot (T+U)(x)        \\
+                                                       & = \lambda (T(x)+U(x))           \\
+                                                       & = \lambda T(x)+\lambda U(x)     \\
+                                                       & = (\lambda T)(x)+(\lambda U)(x)
+                        \end{align*}
+
+                        \textbf{Distributivity P2}
+                        \begin{align*}
+                              ((a+b)T)(x) & = (a+b) \cdot T(x)              \\
+                                          & = a \cdot T(x)+b \cdot T(x)     \\
+                                          & = (a \cdot T)(x)+(b \cdot T)(x)
+                        \end{align*}
+
+                        All the axioms are satisfied. $\square$
+            \end{enumerate}
+      \item \textbf{Problem 2:} \\
+            The null space of $T$ is all ordered triples that have the form $(x,x,0)$.
+            Thus, a valid basis for it is $\{(1,1,0)\}$, and the nullity is $1$.
+
+            As for the image of $T$, notice that any ordered pair $(a,b)$ can be expressed as $T((a,0,b))$.
+            This means that the rank is the same as the dimension of the codomain, which is $2$.
+            Thus, the standard basis $\{(0, 1), (1, 0)\}$ works as basis for $\text{Im}(T)$.
+
+            $1+2=3=\dim \mathbb{R}^3$, so the dimension theorem holds true as it should.
+
+            Although $T$ is not one-to-one ($T((1,1,0))=T((2,2,0))$), it is onto,
+            as the basis of the image of $T$ is also a basis for its codomain.
+
+            \textbf{Problem 6:} \\
+            For matrix to have a trace of zero, the sum the elements must be the zero element.
+            The basis for this null space first consists of all elementary matrices that don't have their element along the diagonal.
+
+            It also has $n-1$ matrices that can be defined as follows:
+            \begin{center}
+                  The $i$th matrix in this list is all zeros except for a $1$ in $a_{ii}$ and a $-1$ in $a_{nn}$
+            \end{center}
+            Thus, the nullity of $T$ is $n^2-1$, since we have a matrix for every element except for the very last one in the bottom right corner.
+
+            The image of $T$ is a single element in $F$, so a basis for that is just $\{1\}$ and its rank is $1$.
+
+            $n^2-1+1=n^2$, which is the dimension of the set of all $n \times n$ matrices, so the dimension theorem holds.
+
+            The trace function is not one-to-one.
+            To prove this, consider these two matrices:
+            \[\begin{bmatrix} 1 & 0 \\ 0 & -1 \end{bmatrix},
+                  \begin{bmatrix} 0 & 0 \\ 0 & 0 \end{bmatrix}\]
+            Both of these matrices have a trace of $0$.
+            However, it is onto, as the rank matches the dimension of the codomain.
+      \item \begin{enumerate}
+                  \item We know that the nullity plus the rank of $T$ has to equal the dimensionality of $V$.
+                        For $T$ to be onto, its rank has to be equal to $\dim W$.
+                        However, this would imply that the nullity is $\dim V - \dim W < 0$, which can't be possible.
+                        Thus, $T$ cannot be onto if $\dim V < \dim W$. $\square$
+                  \item For $T$ to be one-to-one, its nullity must be $0$.
+                        Then this means $0+\text{rank } T=\dim V \rightarrow \text{rank } T=\dim V$.
+                        However, the rank of a transformation cannot be greater than the dimensionality
+                        of its codomain, so $T$ cannot be one-to-one. $\square$
+            \end{enumerate}
+      \item \begin{enumerate}
+                  \item We just have to prove that $T(\lambda a+b)=\lambda T(a)+T(b)$, and likewise for $U$.
+                        \begin{align*}
+                              T(\lambda a+b) & =T(\lambda \cdot (a_1, a_2, \cdots) + (b_1, b_2, \cdots)) \\
+                                             & =(\lambda a_2+b_2, \lambda a_3+b_3, \cdots)               \\
+                                             & =(\lambda a_2, \lambda a_3, \cdots)+(b_2, b_3, \cdots)    \\
+                                             & =\lambda (a_2, a_3, \cdots)+(b_2, b_3, \cdots)            \\
+                                             & =\lambda T(a)+T(b)
+                        \end{align*}
+                        \begin{align*}
+                              U(\lambda a+b) & =U(\lambda \cdot (0, a_1, a_2, \cdots) + (0, b_1, b_2, \cdots)) \\
+                                             & =(0, \lambda a_1+b_1, \lambda a_2+b_2, \cdots)                  \\
+                                             & =(0, \lambda a_1, \lambda a_2, \cdots)+(0, b_1, b_2, \cdots)    \\
+                                             & =\lambda (0, a_1, a_2, \cdots)+(0, b_1, b_2, \cdots)            \\
+                                             & =\lambda U(a)+U(b)
+                        \end{align*}
+                  \item $T$ is onto.
+                        We can create any sequence $(a_1, a_2, \cdots)$ by calling $T(0, a_1, a_2, \cdots)$.
+
+                        However, $T$ is not one-to-one.
+                        Consider the sequences $(2,1,1, \cdots)$ and \\ $(1,1,1, \cdots)$.
+                        When left-shifted, they both result in an infinite sequence of $1$s.
+
+                  \item $U$ is one-to-one.
+                        If two infinite sequences differ at some position $n$, then the right-shifted versions
+                        of them also differ at the position $n+1$.
+
+                        However, it's not onto.
+                        No sequence that starts with a nonzero number can come out of $U$,
+                        as its first element will always be $0$.
+            \end{enumerate}
+      \item We first have to prove that all elements $n$ in the kernel of $T$ satisfy $T(n+s)=b$.
+            This part is pretty straightfoward, as we have
+            \[T(s+n)=T(s)+T(n)=b+\vec{0}=b\]
+
+            Next, we have to prove that if $T(x)=b$, then $x=s+n$ for some $n \in \text{Ker}(T)$.
+            That means that $n=x-s \notin \text{Ker}(T)$.
+            This would mean that
+            \begin{gather*}
+                  T(x)=T(s+n) \\
+                  T(x)=T(s)+T(n)
+            \end{gather*}
+            However, since $T(n) \ne \vec{0}$, this would mean that $T(x) \ne T(s)$, which is a contradiction.
+
+            Thus, we know that $K=\{s\}+\text{Ker}(T)$. $\square$
+      \item \begin{enumerate}
+                  \item Since $\mathcal{B}$ is a basis, any vector $v \in V$ can be written as the following:
+                        \[v=\sum_{i=1}^n a_iv_i \rightarrow T(v)=\sum_{i=1}^n a_i T(v_i)\]
+                        \textbf{One-to-one} \\
+                        If two vectors are different, then they must come out of different linear combinations of $\mathcal{B}$.
+                        This means that among their coefficients $(a_1, a_2, \cdots a_n)$ and $(b_1, b_2, \cdots b_n)$,
+                        $\exists i: a_i \ne b_i$.
+
+                        When transformed, we have the two following linear combinations:
+                        \begin{align*}
+                               & \sum_{i=1}^n a_i w_i &  & \sum_{i=1}^{n} b_i w_i
+                        \end{align*}
+                        Since we didn't change the coefficient at all (just the vectors they're attached to),
+                        these two linear combinations are also different.
+                        Given that $\mathcal{G}$ is a basis, any $w \in W$ can be written \textit{uniquely}
+                        as a linear combination of elements in the basis.
+
+                        From this and that the two combinations have different coefficients, we can now safely
+                        say that two different vectors stay different after being transformed by $T$
+                        and by extension that $T$ is one-to-one.
+
+                        \textbf{Onto} \\
+                        Any vector in $W$ can be written using elements from $\mathcal{G}$,
+                        which can then be turned into elements from $\mathcal{B}$ using $T$:
+                        \[w=\sum_{i=1}^n a_iw_i =\sum_{i=1}^n a_i T(v_i)=T(v)\]
+
+                  \item \[T\left(a_3x^3+a_2x^2+a_1x+a_0\right)=\begin{bmatrix}
+                                    a_3 & a_2 \\
+                                    a_1 & a_0
+                              \end{bmatrix}\]
+            \end{enumerate}
+\end{enumerate}
+\end{document}

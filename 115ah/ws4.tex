@@ -1,0 +1,114 @@
+\documentclass[12pt]{article}
+
+\input{../kz}
+
+\begin{document}
+\begin{enumerate}
+    \item \begin{enumerate}
+              \item First, let's prove that any $T(v)$ can be expressed as a linear combination of $T(s)$ for the elements in $S$.
+                    We know that $\text{span}(S)=V$, so any $v$ is expressable in terms of the formula $\sum_{i=1}^n a_i s_i$.
+
+                    Thus, \[T(v)=T\left(\sum_{i=1}^n a_i s_i\right)=\sum_{i=1}^n T(a_i s_i)=\sum_{i=1}^n a_i T(s_i)\]
+
+                    We also have to prove that any linear combination of $T(s)$ can be expressed as $T(v)$.
+                    The proof for this goes much the same way:
+                    \[\sum_{i=1}^n a_i T(s_i)=\sum_{i=1}^n T(a_i s_i)=T\left(\sum_{i=1}^n a_i s_i\right)\]
+                    We end up right back where we started. $\square$
+              \item \begin{enumerate}
+                        \item The basis of $P_n(F)$ is $\{1, x, x^2, \cdots x^n\}$.
+                              Passing these through the transformation gives us a set of all $\vec{0}$ except for $1$ and $x^n$,
+                              so the image is $\boxed{\text{span}(\{1, x^n\})}$.
+
+                        \item Passing the standard basis into the transformation gives us the following four vectors:
+                              \[\begin{bmatrix}
+                                      1 \\ 4 \\ 3
+                                  \end{bmatrix}, \begin{bmatrix}
+                                      0 \\ 0 \\ 3
+                                  \end{bmatrix}, \begin{bmatrix}
+                                      1 \\ 0 \\ -1
+                                  \end{bmatrix}, \begin{bmatrix}
+                                      2 \\ 0 \\ 0
+                                  \end{bmatrix}\]
+                              By our previous result, the image is simply the span of these four columns.
+                              Notice that these four vectors happen to form the columns of the given matrix used to transform the tuple.
+
+                        \item Using the standard basis for all $2 \times 2$ matrices, we have
+                              \[\begin{bmatrix}
+                                      1 & 0 \\ 0 & 0
+                                  \end{bmatrix}, \begin{bmatrix}
+                                      0 & 0 \\ 0 & 1
+                                  \end{bmatrix}, \begin{bmatrix}
+                                      1 & 0 \\ 0 & 0
+                                  \end{bmatrix}, \begin{bmatrix}
+                                      0 & 0 \\ 0 & 1
+                                  \end{bmatrix}\]
+                              The image is the span of these four matrices, but since there's dupes,
+                              we can cut them out and just say that the image is
+                              \[\boxed{\text{span}\left(\begin{bmatrix}
+                                              1 & 0 \\ 0 & 0
+                                          \end{bmatrix}, \begin{bmatrix}
+                                              0 & 0 \\ 0 & 1
+                                          \end{bmatrix}\right)}\]
+
+                        \item The kernel for the polynomial transformation is $\{x^i: i \in \mathbb{Z}, 1<i<n\}$.
+
+                              As for the first matrix transformation, we first row reduce the matrix to
+                              \[\begin{bmatrix}
+                                      1 & 0 & 0  & 0 \\
+                                      0 & 3 & -1 & 0 \\
+                                      0 & 0 & 1  & 2
+                                  \end{bmatrix}\]
+                              From this, we can see that the kernel of this transformation is
+                              \[\text{span}\left(\begin{bmatrix}
+                                          0 \\ 1 \\ -\frac{1}{3} \\ \frac{1}{6}
+                                      \end{bmatrix}\right)\]
+
+                              Finally, the kernel of the second matrix transformation is
+                              \[\text{span}\left(\begin{bmatrix}
+                                          1  & 0 \\
+                                          -1 & 0
+                                      \end{bmatrix}, \begin{bmatrix}
+                                          0 & 1  \\
+                                          0 & -1
+                                      \end{bmatrix}\right)\]
+                    \end{enumerate}
+          \end{enumerate}
+    \item \begin{enumerate}
+              \item If $T$ is one-to-one, then there can only be one $v$ s.t.
+                    $T(v)=\vec{0} \therefore \text{Ker}(T)=\{\vec{0}\}$.
+
+                    The other direction is a bit tricker to prove.
+                    Assume for the sake of contradiction that $T$ wasn't one-to-one.
+                    Then, we have two different vectors $a$ and $b$ s.t. $T(a)=T(b)$.
+
+                    This means that $T(a)-T(b)=0$ and by extension $T(a-b)=0$.
+                    However, $a-b \ne \vec{0}$, which contradicts our premise that only $\vec{0}$ is in $\text{Ker}(T)$.
+                    Thus, $T$ must be one-to-one if its kernel only has $\vec{0}$. $\square$
+              \item If $\text{Im}(T)=W$, then $T$ is onto by definition.
+                    We can create any vector in $W$ by transforming a vector in $V$.
+
+                    As for the other direction, we have to prove that $\text{Im}(T) \subseteq W$ and vice versa.
+                    The first direction is true by how we defined $T$- it only maps to elements in $W$ and nothing more.
+                    As for the second direction, since $T$ is onto, we know that any $w \in W$ has a corresponding $v \in V$ s.t. $T(v) = w$.
+                    Thus, anything in $W$ must also be in $\text{Im}(T)$. $\square$
+              \item \begin{enumerate}
+                        \item For $T$ to be one-to-one, its nullity must be $0$.
+                              Then this means $0+\text{rank } T=\dim V \rightarrow \text{rank } T=\dim V$.
+
+                              However, the rank of a transformation cannot be greater than the dimensionality
+                              of its codomain, so $T$ cannot be one-to-one if $\dim V > \dim W$. $\square$
+                        \item We know that the nullity plus the rank of $T$ has to equal the dimensionality of $V$.
+                              For $T$ to be onto, its rank has to be equal to $\dim W$.
+
+                              However, this would imply that the nullity is $\dim V - \dim W < 0$, which can't be possible.
+                              Thus, $T$ cannot be onto if $\dim V < \dim W$. $\square$
+                        \item If $T$ is one-to-one, then its nullity is $0$.
+                              This means that its rank must be equal to the dimension of $W$, which then implies that $T$ is also onto.
+
+                              The proof for the other direction goes much the same way.
+                              $T$ being onto means that its rank is equal to its dimension,
+                              which means that its nullity is $0$ and that it's also one-to-one. $\square$
+                    \end{enumerate}
+          \end{enumerate}
+\end{enumerate}
+\end{document}

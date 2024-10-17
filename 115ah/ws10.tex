@@ -1,0 +1,52 @@
+\documentclass[12pt]{article}
+
+\input{../kz}
+
+\begin{document}
+\begin{enumerate}
+      \item \begin{enumerate}
+                  \item We'll prove that $T^*(\lambda a+b)=\lambda T^*(a)+b$.
+                        \begin{align*}
+                              \braket{c, T^*(\lambda a + b)}
+                               & = \braket{T(c), \lambda a+b}                                     \\
+                               & = \bar{\lambda}\braket{T(c), a}+\braket{T(c), b}                 \\
+                               & = \bar{\lambda}\braket{c, T^*(a)}+\braket{c, T^*(b)}             \\
+                               & = \braket{c, \lambda T^*(a)}+\braket{c, T^*(b)}                  \\
+                               & = \braket{c, \lambda T^*(a)+T^*(b)}\ \forall c \in V\quad\square
+                        \end{align*}
+                  \item Applying the conjugate to both sides of
+                        $\braket{T^*(x), y}=\braket{x, (T^*)^*(y)}$, we get
+                        \[\overline{\braket{y, T^*(x)}}=\overline{\braket{(T^*)^*(y), x}}
+                              \rightarrow \braket{y, T^*(x)}=\braket{(T^*)^*(y), x}\]
+                        Since $\braket{T(x), y}=\braket{x, T^*(y)}$,
+                        $\braket{T(x),y}=\braket{(T^*)^*(x), y}$ and thus $T=(T^*)^*$. $\square$
+                  \item $\braket{\mathrm{1}_V(x), y}=\braket{x, y}=\braket{x, \mathrm{1}_V(y)}\quad\square$
+                  \item I'm used to using $\lambda$ instead of $c$, so here we go.
+                        \begin{gather*}
+                              \braket{(\lambda T)(x), y} = \braket{x, (\overline{\lambda} T^*)(y)} \\
+                              \lambda \braket{T(x), y}= \lambda \braket{x, T^*(y)} \\
+                              \braket{T(x), y}= \braket{x, T^*(y)}
+                        \end{gather*}
+                        which we know to be true by our initial definitions of $T$ and $T^*$. $\square$
+                  \item I found it easier to start with $S^*+T^*$ and work my way towards $(S+T)^*$.
+                        \begin{align*}
+                              \braket{x, S^*(y)+T^*(y)} & = \braket{x, S^*(y)}+\braket{x, T^*(y)} \\
+                                                        & = \braket{S(x), y}+\braket{T(x), y}     \\
+                                                        & = \braket{(S+T)(x), y}                  \\
+                                                        & = \braket{x, (S+T)^*(y)}\quad\square
+                        \end{align*}
+            \end{enumerate}
+
+      \item \begin{enumerate}
+                  \item By a previous result, $T^*(v_i)=\bar{\lambda} v_i$.
+                  \item If $(T^* \circ T)(v_i)=(T \circ T^*)(v_i)\ \forall 1 \le i \le n$,
+                        then $T^* \circ T=T \circ T^*$ due to $\{v_1, \cdots, v_n\}$ being a basis for $V$.
+                  \item \begin{align*}
+                              (T^* \circ T)(v_i) & = T^*(T(v_i))                    \\
+                                                 & = \bar{\lambda}\lambda v_i       \\
+                                                 & = T(T^*(v_i))                    \\
+                                                 & = (T \circ T^*)(v_i)\quad\square
+                        \end{align*}
+            \end{enumerate}
+\end{enumerate}
+\end{document}

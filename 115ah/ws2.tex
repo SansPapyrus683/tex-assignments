@@ -1,0 +1,85 @@
+\documentclass[12pt]{article}
+
+\input{../kz}
+
+\begin{document}
+\begin{enumerate}
+    \item \begin{enumerate}
+              \item Since $z \in V$, we know that there is an additive inverse $-z$ s.t. $z+(-z)=0$.
+                    Given this, we can add $-z$ to both sides like so:
+                    \begin{align*}
+                        x+z+(-z)  & =y+z+(-z)      \\
+                        x+\vec{0} & =y+\vec{0}     \\
+                        x         & =y\quad\square
+                    \end{align*}
+              \item \begin{itemize}
+                        \item Say we have a $\vec{0}$ and $\vec{0}'$ s.t. $x+\vec{0}=x$ and $x+\vec{0}'=x$.
+                              Then $x+\vec{0}=x+\vec{0}'$ and by the cancellation law for vector addition $\vec{0}=\vec{0}'$. $\square$
+                        \item Assume for sake of contradiction that $0 \cdot v \ne \vec{0}$.
+                              Then $(0+c)v$ would evaluate to either $cv$ or $0v+cv$, depending on if we evaluated the addition
+                              or multiplication operation first, which is a contradiction.
+                              Thus, $0 \cdot v = \vec{0}$. $\square$
+                        \item \hfill$\begin{gathered}[t]
+                                      (1-1)v=0\cdot v=\vec{0} \\
+                                      1 \cdot v + (-1) \cdot v = (1-1) \cdot v=\vec{0}
+                                  \end{gathered}$\hfill\null \\
+                              By the definition of the additive inverse, $-v=(-1) \cdot v$. $\square$
+                    \end{itemize}
+          \end{enumerate}
+    \item \begin{enumerate}
+              \item \hfill$\begin{gathered}[t]
+                            [v]=\{x \in V\ |\ x-v \in U\} \\
+                            V/U=\{\{b \in V\ |\ a-b \in U\}\ |\ a \in V\}
+                        \end{gathered}$\hfill\null
+              \item For any $(x,y)$ we know that $(x,0) \sim (x,y)$ since their difference $(0,0) \in U$.
+
+                    To prove uniqueness, suppose there's an $a$ and $a'$ s.t.
+                    $(x,y) \sim_R (a,0)$ and $~{(xy) \sim_R (a',0)}$.
+                    Then, by the transitive property, $(a,0) \sim_R (a',0)$.
+                    For this to be true, $a-a'=0 \therefore a=a'$. $\square$
+              \item \begin{enumerate}[label=\arabic*]
+                        \item \textbf{Commutativity}
+                              \begin{align*}
+                                  [a]+[b] & =[a +_V b] \\
+                                          & =[b +_V a] \\
+                                          & =[b]+[a]
+                              \end{align*}
+                        \item \textbf{Associativity}
+                              \begin{align*}
+                                  ([a]+[b])+[c] & =([a +_V b])+[c]     \\
+                                                & =([(a +_V b) +_V c]) \\
+                                                & =([a +_V (b +_V c)]) \\
+                                                & =[a]+([b +_V c])     \\
+                                                & =[a]+([b]+[c])
+                              \end{align*}
+                        \item \textbf{Additive Identity}
+                              \[[a]+[\vec{0}] = [a +_V \vec{0}] = [a]\]
+                        \item \textbf{Additive Inverse} \\
+                              For any $a \in V$, let $-a$ denote the additive inverse of $a$ in $V$.
+                              \[[a]+[-a] = [a +_V (-a)]=[\vec{0}]\]
+                        \item \textbf{Scalar Identity}
+                              \[1 \cdot [b] = [1 \cdot_V b] = [b]\]
+                        \item \textbf{Associativity w.r.t. Scalar Multiplication}
+                              \begin{align*}
+                                  (xy)[a] & = [(xy) \cdot_V a]     \\
+                                          & =[x(y \cdot_V a)]      \\
+                                          & =x \cdot [y \cdot_V a] \\
+                                          & =x(y[a])
+                              \end{align*}
+                        \item \textbf{Distributivity P1}
+                              \begin{align*}
+                                  x([a]+[b]) & =x \cdot [a +_V b] \\
+                                             & =[x(a +_V b)]      \\
+                                             & =[xa +_V xb]       \\
+                                             & =x[a]+x[b]
+                              \end{align*}
+                        \item \textbf{Distributivity P2}
+                              \begin{align*}
+                                  (x+y)[a] & =[(x+y) \cdot_V a] \\
+                                           & =[xa +_V ya]       \\
+                                           & =x[a]+y[b]
+                              \end{align*}
+                    \end{enumerate}
+          \end{enumerate}
+\end{enumerate}
+\end{document}

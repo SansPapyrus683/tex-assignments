@@ -1,0 +1,82 @@
+\documentclass[12pt]{article}
+
+\input{../kz}
+
+\rhead{ECE 236A}
+
+\begin{document}
+
+\begin{enumerate}
+      \item \begin{enumerate}
+                  \item $P^*=-3$, and the set of optimal solutions is $\{(3, 0, 0)\}$.
+                  \item $P^*=0$. This time, the optimal set is infinite:
+                  $\{(x_1, 0, x_3)\,|\,1 \le x_1 \le 3, x_3 \in \mathbb{R}^+\}$.
+                  \item We can make $x_3$ arbitrarily large in the negative direction, so $P^*=-\infty$
+                  and the optimal set is empty.
+            \end{enumerate}
+      \item Let $x \in \mathbb{R}^n$ be the vector of money the company invests in each person.
+            Also, let $m$ be the maximum of the differences between the money a person gets and the money any of their friends get.
+            \begin{gather*}
+                  \min_{x, m} m\text{ s.t.} \\
+                  -m \le a_{ij}(x_i-x_j) \le m, 1 \le i, j \le n \\
+                  C_1 \le \mathbf{A}x \le C_2 \\
+                  \mathbf{1}^T x = 10^4 \\
+                  x \ge \mathbf{0}
+            \end{gather*}
+      \item We define the overall objective maximum we're trying to minimize as $M$.
+            Then, for each of the infinity norms, we define their maximum as $m_{i}$.
+            To handle the absolute values in the infinity norm definition, we take
+            a new matrix $H_i$ for $1 \le i \le p$.
+
+            Thus, our objective becomes
+            \begin{gather*}
+                  \min_{m, H_i, X} m\text{ s.t.} \\
+                  m \ge \mathbf{1}^T (H_i)_j^T, 1 \le i \le p, 1 \le j \le n \\
+                  -H_i \le A_iX-I \le H_i, 1 \le i \le p
+            \end{gather*}
+            In the third constraint, matrix comparison is done elementwise.
+            $(H_i)_j$ is the $j$-th row of $H_i$.
+      \item Although it's difficult to define a solution in formal mathematical terms,
+            I can give an efficient algorithm for coming up with the solution.
+            In both these algorithms, $x$ is initially a vector of all $0$s that we slowly fill up.
+            \begin{enumerate}[label=\roman*.]
+                  \item Iterate through the indices of $1$ through $n$ sorted by their corresponding value of $c_i$.
+                        While $\mathbf{1}^T x < k$, set $x_i=\min(2, k-\mathbf{1}^Tx)$.
+                  \item If $d^T \mathbf{1} < \alpha$, then there is no feasible solution.
+
+                        Otherwise, iterate through the indices of $1$ through $n$
+                        sorted by their corresponding value of $\frac{c_i}{d_i}$.
+                        While $d^T x < \alpha$, set $x_i=\min(1, \alpha - d^T x)$.
+            \end{enumerate}
+      \item \begin{enumerate}
+                  \item $a$ represents the absolute value of $x$.
+                        \begin{gather*}
+                              \min_{x, a} \mathbf{1}^T a\text{ s.t.} \\
+                              -a \le x \le a \\
+                              -\mathbf{1} \le Ax-b \le \mathbf{1}
+                        \end{gather*}
+                  \item $a$ represents the absolute value of $Ax-b$, and $m$ is the infinity norm of $x$.
+                        \begin{gather*}
+                              \min_{x, a, m} \mathbf{1}^T a+m\text{ s.t.} \\
+                              -m \le x \le m \\
+                              -a \le Ax-b \le a
+                        \end{gather*}
+            \end{enumerate}
+      \item The only ambiguity expressed in the problem statement is whether
+            we want to minimize the \textit{sum} of the two radii or the \textit{maximum}
+            of the two radii, as both could be plausible.
+
+            Besides that, the constraints can be made to line up exactly with the problem statement.
+            Let $p_1, p_2 \in \mathbb{R}^3$ be the locations of the first and second lamps respectively
+            (not to be confused with $p$, the maximum radius a lamp can be).
+            \begin{gather*}
+                  \min_{r_1, r_2, p_1, p_2, d_1, d_2, d_3, d_4} r_1+r_2\text{ s.t.} \\
+                  0 \le r_1, r_2 \le p \\
+                  -d_1 \le \mathbf{b}^{(1)}-p_1 \le d_1, r_1 \ge \mathbf{1}^T d_1 \\
+                  -d_2 \le \mathbf{b}^{(2)}-p_1 \le d_2, r_1 \ge \mathbf{1}^T d_2 \\
+                  -d_3 \le \mathbf{b}^{(2)}-p_2 \le d_3, r_2 \ge \mathbf{1}^T d_3 \\
+                  -d_4 \le \mathbf{b}^{(3)}-p_2 \le d_4, r_2 \ge \mathbf{1}^T d_4
+            \end{gather*}
+            The $d$ variables are the absolute values of the distances from the lamps to the bats.
+\end{enumerate}
+\end{document}
