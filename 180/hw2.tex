@@ -1,0 +1,246 @@
+\documentclass[12pt]{article}
+
+\input{../kz}
+
+\rhead{CS 180}
+
+\begin{document}
+
+\section{Topological Ordering or Cycle}
+
+\subsection*{Algorithm}
+
+\begin{algorithmic}[1]
+    \State Run the standard DAG toposort algorithm
+    \If{All nodes have been added}
+        \State \Return computed topological order
+    \EndIf
+    \State Do another run of the toposort algorithm on the \textit{reversed} graph
+
+    \item[]
+    \State $v \gets$ any node that is in neither toposort's already sorted nodes
+    \State $\texttt{frontier} \gets \text{empty queue}$
+    \State $\texttt{comeFrom} \gets \text{array of size }n\text{, all nil}$
+    \State Add $v$ to $\texttt{frontier}$
+    \While{\texttt{comeFrom}[v] is nil}
+        \State $\texttt{curr} \gets \text{popped front of }\texttt{frontier}$
+        \ForAll{$n \in$ \texttt{curr}'s neighbors}
+            \If{$\texttt{comeFrom}[n]$ is nil}
+                \State $\texttt{comeFrom}[n] = \texttt{curr}$
+                \State Add $n$ to $\texttt{frontier}$
+            \EndIf
+        \EndFor
+    \EndWhile
+
+    \item[]
+    \State Trace back cycle starting from $v$
+    \State \Return the computed cycle
+\end{algorithmic}
+
+\subsection*{Complexity}
+
+The first section runs in $O(m+n)$ time, as has already been established in class.
+The second section runs a multi-source BFS from all the neighbors of $v$.
+Besides that the initial queue has more than one node, all other aspects
+of the BFS are identical to the one we already came up with,
+so the time complexity of this section is $O(m+n)$.
+
+Finally, tracing back the cycle will take time proportional to the length of the cycle.
+Since the cycle can have at most $n$ nodes, the complexity of this is $O(n)$.
+
+Adding these complexities together,
+we see that the overall time complexity is $O(m+n)$.
+
+\pagebreak
+
+\section{Deleting a Node to Destroy All Paths}
+
+\subsection*{Proof of Existence}
+
+SWOC the $v$ supposed in the problem doesn't exist.
+Then, there must be two disjoint paths from $s$ to $t$.
+Each path must have strictly greater than $\frac{n}{2}-1$ intermediary nodes,
+and since none of the paths intersect, this means
+\[|V| > 2\left(\frac{n}{2}-1\right)+2 = n\]
+Contradiction, since $|V|=n$ by definition. $\square$
+
+\subsection*{Algorithm}
+
+\begin{algorithmic}[1]
+    \State $L_0 \gets \{s\}$
+    \State $\texttt{dist} \gets 0$
+    \State Mark $s$ as explored
+    \While{$L_{\texttt{dist}}$ isn't empty}
+        \State Increment \texttt{dist}
+        \State $L_{\texttt{dist}} \gets \{\}$
+        \ForAll{$\texttt{curr} \in L_{\texttt{dist} - 1}$}
+            \ForAll{$n \in$ \texttt{curr}'s neighbors}
+                \If{$n$ isn't explored}
+                    \State $L_{\texttt{dist}} \gets L_{\texttt{dist}} \cup \{n\}$
+                \EndIf
+            \EndFor
+        \EndFor
+
+        \item[]
+        \If{$L_{\texttt{dist}} = 1$}
+            \State \Return the only element in $L_{\texttt{dist}}$
+        \EndIf
+    \EndWhile
+\end{algorithmic}
+
+\subsection*{Complexity}
+
+This algorithm is a basic BFS.
+The only modification is that it stops early if it sees that the current
+$L_{\texttt{dist}}$ is of size exactly $1$, in which case it stops early.
+Thus, we see that the overall time complexity is $O(m+n)$.
+
+\pagebreak
+
+\section{Butterfly Classification}
+
+\subsection*{Algorithm}
+
+\begin{algorithmic}[1]
+    \State $\texttt{comp} \gets \text{array of size }n\text{, all nil}$
+    \State $\texttt{currComp} \gets 0$
+    \For{$b \gets 1, n$}
+        \If{$\texttt{comp}[i]$ isn't nil}
+            \State \textbf{continue}
+        \EndIf
+
+        \item[]
+        \State $\texttt{comp}[b] \gets \texttt{currComp}$
+        \State $\texttt{frontier} \gets \text{empty queue}$
+        \State Add $b$ to \texttt{frontier}
+        \While{\texttt{frontier} isn't empty}
+            \State $\texttt{curr} \gets \text{popped front of }\texttt{frontier}$
+            \ForAll{$n \in L_{\texttt{curr},\text{same}}$}
+                \If{$\texttt{comp}[n]$ is nil}
+                    \State $\texttt{comp}[n] = \texttt{currComp}$
+                    \State Add $n$ to $\texttt{frontier}$
+                \EndIf
+            \EndFor
+        \EndWhile
+        \State Increment \texttt{currComp}
+    \EndFor
+
+    \item[]
+    \For{$b \gets 1, n$}
+        \ForAll{$n \in L_{\texttt{curr},\text{diff}}$}
+            \If{$\texttt{comp}[b] \ne \texttt{comp}[n]$}
+                \State \Return not consistent
+            \EndIf
+        \EndFor
+    \EndFor
+    \State \Return consistent
+\end{algorithmic}
+
+\subsection*{Complexity}
+
+The first section does a DFS floodfill of all connected components.
+Each edge ("same" judgement) is traversed at most once and each node (butterfly)
+is explored at most once, so the complexity of this part is $O(n+m)$.
+
+The second section does an $O(1)$ operation for all the "different" judgemenets,
+so the complexity of that part is $O(m)$.
+Combined with the first part, we have a total time complexity of $O(n+m)$.
+
+\section{Number of Shortest Paths}
+
+\subsection*{Algorithm}
+
+\begin{algorithmic}[1]
+    \State $L_0 \gets \{v\}$
+    \State $\texttt{dist} \gets 0$
+    \State $\texttt{numWays} \gets \text{array of size }n\text{, all }0$
+    \State Mark $v$ as explored
+    \State $\texttt{numWays}[v] \gets 1$
+
+    \item[]
+    \While{$w \notin L_{\texttt{dist}}$}
+        \State Increment \texttt{dist}
+        \State $L_{\texttt{dist}} \gets \{\}$
+        \ForAll{$\texttt{curr} \in L_{\texttt{dist} - 1}$}
+            \ForAll{$n \in$ \texttt{curr}'s neighbors}
+                \If{$n$ isn't explored}
+                    \State $L_{\texttt{dist}} \gets L_{\texttt{dist}} \cup \{n\}$
+                    \State $\texttt{numWays}[n] \gets \texttt{numWays}[\texttt{curr}]$
+                \ElsIf{$n \in L_{\texttt{dist}}$}
+                    \State $\texttt{numWays}[n] \gets \texttt{numWays}[n] + \texttt{numWays}[\texttt{curr}]$
+                \EndIf
+            \EndFor
+        \EndFor
+    \EndWhile
+
+    \item[]
+    \State \Return $\texttt{numWays}[w]$
+\end{algorithmic}
+
+\subsection*{Complexity}
+
+Once again, we have a standard BFS with the addition of the array \texttt{numWays}
+that stores the number of shortest paths from $v$ to all other nodes.
+If we store $L_{\texttt{dist}}$ with a hash set, we can do the membership check
+in the else if statement in constant time.
+Thus, this algorithm has the same time complexity as a standard BFS,
+which is $O(m+n)$.
+
+\pagebreak
+
+\section{Births and Deaths}
+
+\subsection*{Algorithm}
+
+This problem reduces to topological sorting.
+
+\begin{algorithmic}[1]
+    \State $V \gets \{P_1, P_1', P_2, P_2', \cdots P_n, P_n'\}$
+    \State $E \gets \{\}$
+    \For{$p \gets 1, n$}
+        \State $E \gets E \cup (P_p, P_p')$
+    \EndFor
+
+    \item[]
+    \ForAll{$\texttt{fact} \in \texttt{facts}$}
+        \If{\texttt{fact} is of the first type}
+            \State $E \gets E \cup (P_i', P_j)$
+        \ElsIf{\texttt{fact} is of the second type}
+            \State $E \gets E \cup (P_i', P_j')$
+        \ElsIf{\texttt{fact} is of the third type}
+            \State $E \gets E \cup (P_i, P_j')$
+            \State $E \gets E \cup (P_j, P_i')$
+        \EndIf
+    \EndFor
+
+    \item[]
+    \State Attempt to toposort $G = (V, E)$
+    \If{valid ordering}
+        \State $\texttt{allEvents} \gets []$
+        \State $t \gets 0$
+        \ForAll{$\texttt{event} \in \text{the given ordering}$}
+            \If{\texttt{event} is $P_i$}
+                \State Append $i$'s birth event at time $t$ to \texttt{allEvents}
+            \ElsIf{\texttt{event} is $P_i'$}
+                \State Append $i$'s death event at time $t$ to \texttt{allEvents}
+            \EndIf
+            \State $t \gets t + 1$
+        \EndFor
+        \State \Return \texttt{allEvents}
+    \Else
+        \State \Return inconsistent memories
+    \EndIf
+\end{algorithmic}
+
+\subsection*{Complexity}
+
+The graph we construct has $2n$ nodes and at most $2m$ edges,
+where $m$ is the number of facts.
+The toposort algorithm will thus run in $O(2n+2m)=O(n+m)$ time.
+
+The remaining section where we transform the ordering into a
+log of the births and deaths takes $O(n)$, since that's just
+a simple for loop through all the nodes in the topolgocial ordering.
+Thus, the entire algorithm runs in time $O(m+n)$.
+
+\end{document}
