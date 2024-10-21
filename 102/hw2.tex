@@ -167,11 +167,20 @@
                         The magnitude of $e^{j\phi}$ is $1$, so it doesn't contribute anything.
                         Considering only the expression in parenthesis,
                         the square of its magnitude is
-                        \[(r_1+r_2)^2+(r_1-r_2)^2=2r_1^2+2r_2^2\]
+                        \[((r_1+r_2)\cos(\omega t))^2+((r_1-r_2)\sin(\omega t))^2
+                              = r_1^2+r_2^2 + 2r_1r_2(\cos^2(\omega t)-\sin^2(\omega t))\]
 
-                        This is a constant value, so $x(t)$ isn't an energy signal.
-                        However, it does make it a power signal with
-                        average power $\boxed{2r_1^2+2r_2^2}$.
+                        Taking the integral, we get that it's
+                        \begin{align*}
+                              &\hphantom{={}} \int_{-T}^T r_1^2+r_2^2+2r_1r_2(\cos^2(\omega t)-\sin^2(\omega t)) \\
+                              &= 2T(r_1^2+r_2^2)+\int_{-T}^{T} \cos^2(\omega t)-\sin^2(\omega t)\,dt \\
+                              &= 2T(r_1^2+r_2^2)+\int_{-T}^{T} \cos(2\omega t)\,dt \\
+                              &= 2T(r_1^2+r_2^2)
+                        \end{align*}
+                        As $T \to \infty$, this expression also diverges,
+                        but $\frac{1}{2T}$ times the expression gives a constant value.
+
+                        Thus, this is a power signal with average power $\boxed{r_1^2+r_2^2}$.
                   \item \[\begin{aligned}[t]
                                     \exp(-t(1+j\omega_1+j\omega_2))
                                      & = e^{-t}\exp(-tj(\omega_1+\omega_2))                           \\
