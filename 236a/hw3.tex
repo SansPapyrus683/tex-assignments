@@ -1,0 +1,239 @@
+\documentclass[12pt]{article}
+
+\input{../kz}
+
+\rhead{ECE 236A}
+
+\newcommand*{\vertbar}{\rule[-1ex]{0.5pt}{2.5ex}}
+\newcommand*{\horzbar}{\rule[.5ex]{2.5ex}{0.5pt}}
+
+\begin{document}
+
+\begin{enumerate}
+      \item The maximization problem is equivalent to the following:
+            \begin{gather*}
+                  \min_{\lambda} b^T\lambda\text{ s.t.} \\
+                  A^T\lambda+c = \mathbf{0} \\
+                  -\lambda \le \mathbf{0}
+            \end{gather*}
+            The Lagrangian is as follows ($x_1 \in \mathbb{R}^n$, $x_2 \in \mathbb{R}^m$):
+            \begin{align*}
+                  \mathcal{L}(\lambda, x_1, x_2)
+                   & =b^T\lambda + x_1^T(A^T\lambda+c) + x_2^T(-\lambda) \\
+                   & =(b^T+x_1^TA^T-x_2^T)\lambda+x_1^Tc
+            \end{align*}
+            $g(x_1, x_2)=x_1^Tc$ when $b^T+x_1^TA^T-x_2^T=\mathbf{0}$ and $-\infty$ otherwise.
+
+            Now we check to see what constraints on $x$ must be necessary for
+            $\mathcal{L}$ to be a lower bound:
+            \begin{align*}
+                  g(x) \le \mathcal{L}(\lambda^*, x_1, x_2)
+                   & = b^T\lambda^* + x_1^T(A^T\lambda^*+c) - x_2^T\lambda^* \\
+                   & = b^T\lambda^* - x_2^T\lambda^*
+            \end{align*}
+            For $\mathcal{L}(\lambda^*, x_1, x_2) \le b^T\lambda^*$,
+            $x^T\lambda^* \ge 0$, so we need $x_2 \ge \mathbf{0}$.
+
+            The dual of the dual is thus
+            \begin{gather*}
+                  \max_{x_1, x_2} c^Tx_1\text{ s.t.} \\
+                  b+Ax_1-x_2=\mathbf{0} \\
+                  x_2 \ge \mathbf{0}
+            \end{gather*}
+            We still need to make some observations to see that this is equivalent to the primal.
+
+            Note that $x_2$ serves as nothing more than a slack variable of sorts, so
+            we can rewrite the two constraints as just
+            \[Ax_1 \ge -b \to -Ax_1 \le b\]
+            Next, we can make the substitution $x=-x_1$ to turn this constraint into
+            \[Ax \le b\]
+            $c^Tx_1=-c^Tx$, so the maximization objective then turns back into a minimization one.
+            With these observations, we have turned the dual of the dual back into the primal. $\square$
+
+            \pagebreak
+
+      \item We first derive the Lagrangian ($\lambda_1, \lambda_2, \lambda_3 \in \mathbb{R}^m$):
+            \begin{align*}
+                   & \hphantom{={}} \mathcal{L}(s, x, \lambda_1, \lambda_2, \lambda_3)                                                                            \\
+                   & = \mathbf{1}^Ts+\lambda_1^T(Ax-b-\mathbf{1}-s)+\lambda_2^T(-Ax+b-\mathbf{1}-s)+\lambda_3^T(-s)                                               \\
+                   & = (\mathbf{1}^T-\lambda_1^T-\lambda_2^T-\lambda_3^T)s+(\lambda_1^T-\lambda_2^T)Ax-\mathbf{1}^T(\lambda_1+\lambda_2)+b^T(\lambda_2-\lambda_1)
+            \end{align*}
+            For $\mathcal{L}$ to be a finite value,
+            we need $\sum \lambda_i = \mathbf{1}$ and $A^T(\lambda_1-\lambda_2)=\mathbf{0}$.
+
+            Now we check what other conditions the $\lambda$s need to hold:
+            \begin{align*}
+                  g(x, s) & \le \mathcal{L}(x^*, s^*, \lambda_1, \lambda_2, \lambda_3)                                                \\
+                          & =\mathbf{1}^Ts^*+\lambda_1^T(Ax^*-b-\mathbf{1}-s^*)+\lambda_2^T(-Ax^*+b-\mathbf{1}-s^*)+\lambda_3^T(-s^*)
+            \end{align*}
+            The coefficients of $\lambda_1$, $\lambda_3$, and $\lambda_3$ are all nonpositive.
+            Thus, we need all the $\lambda$s to be non\textit{negative}.
+
+            Our final dual problem is as follows:
+            \begin{gather*}
+                  \max_{\lambda_1, \lambda_2, \lambda_3} -\mathbf{1}^T(\lambda_1+\lambda_2)-b^T(\lambda_1-\lambda_2)\text{ s.t.} \\
+                  \lambda_1+\lambda_2+\lambda_3=\mathbf{1} \\
+                  A^T(\lambda_1-\lambda_2)=\mathbf{0} \\
+                  \lambda_1, \lambda_2, \lambda_3 \ge \mathbf{0}
+            \end{gather*}
+            $\lambda_3$ is just a slack variable, so we can remove it
+            and change the second constraint to \[\lambda_1+\lambda_2 \le \mathbf{1}\]
+
+            With $\lambda_3$ out of the way, we see that this is equivalent
+            to the LP problem in the exercise with $z=\lambda_1-\lambda_2$ and $|z|=\lambda_1+\lambda_2$.
+            This is because optimizers won't set both $(\lambda_1)_i$ and $(\lambda_2)_i$ to be nonzero.
+
+            From there, we can see that $\mathbf{1}^T (\lambda_1+\lambda_2)=||z||_1$
+            and that $||z||_\infty \le 1 \leftrightarrow \lambda_1 + \lambda_2 \le \mathbf{1}$.
+
+      \item \begin{enumerate}
+                  \item Let $v \in \mathbb{R}^n$ be a vector s.t. $v_i=1$ if $a_i \ge \alpha$ and $0$ otherwise.
+                        Then, our linear program is
+                        \begin{gather*}
+                              \max_{p} v^Tp \text{ s.t.} \\
+                              1^Tp = 1 \\
+                              p \ge \mathbf{0} \\
+                              a^Tp = b
+                        \end{gather*}
+                  \item Before we start, we can change the maximization objective into
+                        a minimization one to make things more standard.
+
+                        Lagrangian ($\lambda_1, \lambda_3 \in \mathbb{R}, \lambda_2 \in \mathbb{R}^n$):
+                        \begin{align*}
+                              \mathcal{L}(p, \lambda_1, \lambda_2, \lambda_3)
+                               & = -v^Tp+\lambda_1(\mathbf{1}^Tp-1)+\lambda_2^T(-p)+\lambda_3(a^Tp-b)              \\
+                               & = (v^T+\lambda_1 \mathbf{1}^T - \lambda_2^T+\lambda_3 a^T)p-\lambda_1-\lambda_3 b \\
+                               & \therefore v+\lambda_1\mathbf{1} - \lambda_2 + \lambda_3 a = 0
+                        \end{align*}
+
+                        Additional conditions:
+                        \begin{align*}
+                              g(\lambda_1, \lambda_2, \lambda_3)
+                               & \le \mathcal{L}(p^*, \lambda_1, \lambda_2, \lambda_3)                       \\
+                               & = v^Tp^*+\lambda_1(\mathbf{1}^Tp^*-1)+\lambda_2^T(-p^*)+\lambda_3(a^Tp^*-b) \\
+                               & = v^Tp^*-\lambda_2^T p^*                                                    \\
+                               & \therefore \lambda_2 \ge \mathbf{0}
+                        \end{align*}
+
+                        Final LP:
+                        \begin{gather*}
+                              \max_{\lambda_1, \lambda_2, \lambda_3} -\lambda_1-\lambda_3 b\text{ s.t.} \\
+                              v + \lambda_1\mathbf{1} - \lambda_2+\lambda_3 a = \mathbf{0} \\
+                              \lambda_2 \ge \mathbf{0}
+                        \end{gather*}
+
+                        First, maximizing a value is the same as minimizing its negative,
+                        so we can turn the objective function into
+                        \[\min_{\lambda_1, \lambda_2, \lambda_3} \lambda_1+\lambda_3 b\]
+
+                        We see that $\lambda_2$ is nothing more than a slack variable, so we can reformulate the first constraint as
+                        \[v + \lambda_1\mathbf{1} + \lambda_3 a \ge \mathbf{0}\]
+
+                        Recall that $v$ is an "indicator" vector of sorts that indicates whether $a_i \ge \alpha$.
+                        Breaking the constraint down, we see that when $v_i=1$, it's
+                        \[-1+\lambda_1+a_i \lambda_3 \ge 0 \to \lambda_1+a_i \lambda_3 \ge 1\]
+                        Similarly, when $v_i=0$, the constraint turns to
+                        \[\lambda_1+a_i \lambda_3 \ge 0\]
+
+                        Putting all these observations together, we get our transformed LP:
+                        \begin{gather*}
+                              \min_{\lambda_1, \lambda_3} \lambda_1+\lambda_3 b\text{ s.t.} \\
+                              \lambda_1+a_i \lambda_3 \ge 1\ \forall a_i \ge \alpha \\
+                              \lambda_1+a_i \lambda_3 \ge 0\ \forall a_i < \alpha
+                        \end{gather*}
+                        which by inspection is equivalent to the one that was given in the problem.
+            \end{enumerate}
+
+            \pagebreak
+
+      \item \begin{enumerate}
+                  \item The constraint of the associated dual is
+                        \[\begin{bmatrix}
+                                    -1 & -1 & 0   & -6  & 1  \\
+                                    -6 & -2 & 3   & -11 & 6  \\
+                                    1  & 7  & -10 & -2  & -1 \\
+                                    3  & 1  & -1  & 12  & -3
+                              \end{bmatrix} \begin{bmatrix}
+                                    \lambda_1 \\ \lambda_2 \\ \lambda_3 \\ \lambda_4 \\ \lambda_5
+                              \end{bmatrix} = \begin{bmatrix}
+                                    -47 \\ -93 \\ -17 \\ 93
+                              \end{bmatrix}\]
+
+                        $J(x)=\{1, 2, 3, 4\}$, so $\lambda_5 = 0$.
+                        Solving the set of linear equations with that constraint, we get
+                        \[\lambda = \begin{bmatrix}3 & 2 & 2 & 7 & 0\end{bmatrix}^T\]
+                        Since a feasible $\lambda$ exists for the given $x$
+                        that satisfies complementary slackness,
+                        $x$ is optimal.
+
+                  \item The constraints of the associated dual are
+                        \begin{gather*}
+                              \begin{bmatrix}
+                                    1  & 4  & 2  & 3  \\
+                                    3  & 2  & 4  & 1  \\
+                                    5  & -2 & 4  & 2  \\
+                                    -2 & 1  & -2 & -1 \\
+                                    3  & 1  & 5  & -2
+                              \end{bmatrix}\lambda_1 - \lambda_2 = \begin{bmatrix}
+                                    -7 \\ -6 \\ -5 \\ 2 \\ -3
+                              \end{bmatrix} \\
+                              \lambda_2 \ge \mathbf{0}
+                        \end{gather*}
+
+                        $x$ meets the constraints of the 1st, 2nd, and 4th rows with equality,
+                        and its 1st and 5th elements are $0$.
+                        This constrains our $\lambda$s to the following:
+                        \[\begin{bmatrix}
+                                    1  & 4  & 2  & 3  \\
+                                    3  & 2  & 4  & 1  \\
+                                    5  & -2 & 4  & 2  \\
+                                    -2 & 1  & -2 & -1 \\
+                                    3  & 1  & 5  & -2
+                              \end{bmatrix}\begin{bmatrix}
+                                    (\lambda_1)_1 \\ (\lambda_1)_2 \\ 0 \\ (\lambda_1)_4
+                              \end{bmatrix} - \begin{bmatrix}
+                                    (\lambda_2)_1 \\ 0 \\ 0 \\ 0 \\ (\lambda_2)_5
+                              \end{bmatrix} = \begin{bmatrix}
+                                    -7 \\ -6 \\ -5 \\ 2 \\ -3
+                              \end{bmatrix}\]
+                        Solving, we get $\lambda_1 = \begin{bmatrix}-1 & -1 & 0 & -1\end{bmatrix}^T$
+                        and $\lambda_2 = \begin{bmatrix}1 & 0 & 0 & 0 & -1\end{bmatrix}^T$.
+                        However, this violates $\lambda_2 \ge \mathbf{0}$.
+
+                        Since no feasible $\lambda$ exists that satisfies
+                        complementary slackness for this $x$, this $x$ isn't optimal.
+            \end{enumerate}
+
+            \pagebreak
+
+      \item Suppose that the optimal solutions are $x^*$ and $y^*$.
+            By strong duality, $c^Tx^*=-b^Ty^*$.
+            Using that $x^*$ and $y^*$ inherently satisfy the constraints,
+            \begin{gather*}
+                  c^Tx^*=-b^Ty^* \\
+                  c^Tx^*=-(Ax^*)^Ty^* \\
+                  (x^*)^T c + (x^*)^T A^T y^*=0 \\
+                  (x^*)^T (c + A^T y^*) = 0
+            \end{gather*}
+            $x^*, c+A^Ty^* \ge \mathbf{0}$, so at least one of the terms must be nonzero for each $i$.
+
+            Let us extend $x_I^*$ to a solution for the original LP
+            inserting $0$s in all the indices that weren't included in $I$.
+            No numbers were removed from $y_I^*$, so it stays the same.
+
+            Let us check feasibility.
+            $A_I x_I = b$, and we've only added $0$s to the vector,
+            so $Ax$ stays the same.
+            That $c+A^Ty \ge 0$ is given as part of the premise, so $y$ is also feasible.
+
+            Now it remains to show that $x^T(c+A^T y)=0$, since we can deduce optimality from that.
+            For this, it suffices to show that $x_i(c_i+a^T_i y)=0\ \forall i=1, \cdots, n$.
+
+            If $i \in I$, then $x_i(c_i+a^T_i y)=0$ since $x_i$ and $y$
+            were optimal in the reduced problem and must satisfy complementary slackness.
+            OTOH, if $i \notin I$, $x_i = 0$ and the equation is trivially true.
+
+            Complementary slackness holds, so this $x^*$ is optimal.
+            My friend is right. $\square$
+\end{enumerate}
+\end{document}
