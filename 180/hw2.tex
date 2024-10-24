@@ -8,7 +8,7 @@
 
 \section{Topological Ordering or Cycle}
 
-\subsection*{Algorithm}
+\subsection{Algorithm}
 
 \begin{algorithmic}[1]
     \State Run the standard DAG toposort algorithm
@@ -37,7 +37,7 @@
     \State \Return the computed cycle
 \end{algorithmic}
 
-\subsection*{Complexity}
+\subsection{Complexity}
 
 The first section runs in $O(m+n)$ time, as has already been established in class.
 The second section runs a multi-source BFS from all the neighbors of $v$.
@@ -55,7 +55,7 @@ we see that the overall time complexity is $O(m+n)$.
 
 \section{Deleting a Node to Destroy All Paths}
 
-\subsection*{Proof of Existence}
+\subsection{Proof of Existence}
 
 SWOC the $v$ supposed in the problem doesn't exist.
 Then, there must be two disjoint paths from $s$ to $t$.
@@ -64,7 +64,7 @@ and since none of the paths intersect, this means
 \[|V| > 2\left(\frac{n}{2}-1\right)+2 = n\]
 Contradiction, since $|V|=n$ by definition. $\square$
 
-\subsection*{Algorithm}
+\subsection{Algorithm}
 
 \begin{algorithmic}[1]
     \State $L_0 \gets \{s\}$
@@ -88,7 +88,7 @@ Contradiction, since $|V|=n$ by definition. $\square$
     \EndWhile
 \end{algorithmic}
 
-\subsection*{Complexity}
+\subsection{Complexity}
 
 This algorithm is a basic BFS.
 The only modification is that it stops early if it sees that the current
@@ -99,7 +99,7 @@ Thus, we see that the overall time complexity is $O(m+n)$.
 
 \section{Butterfly Classification}
 
-\subsection*{Algorithm}
+\subsection{Algorithm}
 
 \begin{algorithmic}[1]
     \State $\texttt{comp} \gets \text{array of size }n\text{, all nil}$
@@ -127,7 +127,7 @@ Thus, we see that the overall time complexity is $O(m+n)$.
 
     \item[]
     \For{$b \gets 1, n$}
-        \ForAll{$n \in L_{\texttt{curr},\text{diff}}$}
+        \ForAll{$n \in L_{b,\text{diff}}$}
             \If{$\texttt{comp}[b] \ne \texttt{comp}[n]$}
                 \State \Return not consistent
             \EndIf
@@ -136,19 +136,46 @@ Thus, we see that the overall time complexity is $O(m+n)$.
     \State \Return consistent
 \end{algorithmic}
 
-\subsection*{Complexity}
+\pagebreak
+
+\subsection{Correctness}
+
+This algorithm just runs a basic DFS followed
+by a for loop through all of the different judgements,
+so it definitely terminates.
+
+Suppose the judgements are consistent.
+Let $G$ be a graph where there's an edge from butterly $i$ to $j$ if
+the two were judged to be the same.
+Notice that for all pairs of butterflies $a$ and $b$, they're the same species
+iff there exists a path from $a$ to $b$ in $G$.
+From this, it follows that if two butterflies
+are judged differently, then they must be in different connected
+components of the graph, since undirected connectivity goes both ways.
+
+With these two facts, we can now say that there is an inconsistency in
+the judgmenets iff there exists two butterflies $a$ and $b$
+that are in the same connected component but have been explicitly
+judged to be different.
+
+The proposed algorithm computes the connected components
+and checks all the "different" judgements by construction, so it is correct.
+
+\subsection{Complexity}
 
 The first section does a DFS floodfill of all connected components.
 Each edge ("same" judgement) is traversed at most once and each node (butterfly)
 is explored at most once, so the complexity of this part is $O(n+m)$.
 
-The second section does an $O(1)$ operation for all the "different" judgemenets,
+The second section does an $O(1)$ operation for all the "different" judgements,
 so the complexity of that part is $O(m)$.
-Combined with the first part, we have a total time complexity of $O(n+m)$.
+Combined with the first part, we get $\boxed{O(n+m)}$.
+
+\pagebreak
 
 \section{Number of Shortest Paths}
 
-\subsection*{Algorithm}
+\subsection{Algorithm}
 
 \begin{algorithmic}[1]
     \State $L_0 \gets \{v\}$
@@ -165,8 +192,8 @@ Combined with the first part, we have a total time complexity of $O(n+m)$.
             \ForAll{$n \in$ \texttt{curr}'s neighbors}
                 \If{$n$ isn't explored}
                     \State $L_{\texttt{dist}} \gets L_{\texttt{dist}} \cup \{n\}$
-                    \State $\texttt{numWays}[n] \gets \texttt{numWays}[\texttt{curr}]$
-                \ElsIf{$n \in L_{\texttt{dist}}$}
+                \EndIf
+                \If{$n \in L_{\texttt{dist}}$}
                     \State $\texttt{numWays}[n] \gets \texttt{numWays}[n] + \texttt{numWays}[\texttt{curr}]$
                 \EndIf
             \EndFor
@@ -177,10 +204,26 @@ Combined with the first part, we have a total time complexity of $O(n+m)$.
     \State \Return $\texttt{numWays}[w]$
 \end{algorithmic}
 
-\subsection*{Complexity}
+\subsection{Correctness}
 
-Once again, we have a standard BFS with the addition of the array \texttt{numWays}
-that stores the number of shortest paths from $v$ to all other nodes.
+We'll prove by induction that by the end of the algorithm,
+$\texttt{numWays}[n]$ contains the number of shortest $v-n$ paths in $G$.
+Our base case, $v-v$, is trivially true, since there's only one
+shortest path from $v$ to $v$.
+With this, we assume that $\texttt{numWays}[n]$ contains the number
+of shortest paths for all $n \in L_d$.
+It remains to prove that the same is true for all $n \in L_{d+1}$.
+
+Any shortest path from $v$ to $n \in L_{d+1}$ has to pass
+through a $n' \in L_d$ before getting to $n$.
+From this, we can find that
+\[\texttt{numWays}[n]=\sum_{(n', n) \in E \land n' \in L_d} \texttt{numWays}[n']\]
+This formula is precisely what the algorithm calculates,
+so the proof is complete.
+
+\subsection{Complexity}
+
+Once again, we have a standard BFS with the addition of \texttt{numWays}.
 If we store $L_{\texttt{dist}}$ with a hash set, we can do the membership check
 in the else if statement in constant time.
 Thus, this algorithm has the same time complexity as a standard BFS,
@@ -190,7 +233,7 @@ which is $O(m+n)$.
 
 \section{Births and Deaths}
 
-\subsection*{Algorithm}
+\subsection{Algorithm}
 
 This problem reduces to topological sorting.
 
@@ -232,7 +275,29 @@ This problem reduces to topological sorting.
     \EndIf
 \end{algorithmic}
 
-\subsection*{Complexity}
+\pagebreak
+
+\subsection{Correctness}
+
+It's easily seen that this algorithm terminates.
+It remains to show that a the existence of a consistent ordering
+is equivalent with the algorithm outputting such a consistent ordering.
+
+If there exists a valid order of birth/death events that align
+with the collected facts, then the following things must be true:
+\begin{itemize}
+    \item \textbf{Type 1}: $P_i$'s death occurred before $P_j$'s birth.
+    \item \textbf{Type 2}: $P_i$'s death occurred before $P_j$'s death.
+    \item \textbf{Type 3}: $P_i$'s birth occurred before $P_j$'s death
+          and $P_j$'s birth occurred before $P_i$'s death.
+\end{itemize}
+By construction of a graph with edges between birth events ($P_i$ elements)
+and death events ($P_i'$ elements) and topologically sorting it,
+the algorithm guarantees an ordering that is consistent with the facts.
+If there is no ordering consistent with the facts, the toposort
+is guaranteed to reoprt that as well.
+
+\subsection{Complexity}
 
 The graph we construct has $2n$ nodes and at most $2m$ edges,
 where $m$ is the number of facts.
