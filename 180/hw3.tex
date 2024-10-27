@@ -1,0 +1,196 @@
+\documentclass[12pt]{article}
+
+\input{../kz}
+
+\lhead{406-196-414}
+\rhead{CS 180}
+
+\begin{document}
+
+\section{Cell Phone Coverage}
+
+\subsection{Algorithm}
+
+\begin{algorithmic}[1]
+    \State Sort $A$
+    \State $\texttt{lastHouse} \gets 0$
+    \State $\texttt{minStations} \gets 0$
+    \For{$i = 1, \cdots, n$}
+        \If{$A[i] > A[\texttt{lastHouse}] + 8$}
+            \State $\texttt{lastHouse} \gets i$
+            \State $\texttt{minStations} \gets \texttt{minStations} + 1$
+        \EndIf
+    \EndFor
+    \LComment{When loop terminates we're still "building" a station}
+    \State $\texttt{minStations} \gets \texttt{minStations} + 1$
+    \State \Return \texttt{minStations}
+\end{algorithmic}
+
+\subsection{Correctness}
+
+\subsection{Complexity}
+
+It is clear that this algorithm terminates.
+
+Sorting $A$ takes $O(n \log n)$ time, and the for loop completes in $O(n)$
+iterations, with each iteration taking constant time.
+The total time complexity is easily seen to be $\boxed{O(n \log n)}$.
+
+\pagebreak
+
+\section{Graph Degree}
+
+\subsection{Algorithm}
+
+\begin{algorithmic}[1]
+    \If{$\sum_{i=1}^n d_i > \frac{n(n-2)}{2}$ or is odd}
+        \State \Return impossible
+    \EndIf
+
+    \item[]
+    \State $\texttt{todo} \gets []$
+    \State $E \gets \{\}$
+    \For{$i = 2, 4, \cdots, |\texttt{todo}|$}
+        \State $E \gets E \cup \{(\texttt{todo}[i-1], \texttt{todo}[i])\}$
+    \EndFor
+
+    \item[]
+    \State \Return graph with vertices $1$ through $n$ and edges $E$
+\end{algorithmic}
+
+\subsection{Correctness}
+
+\pagebreak
+
+\section{Triathlon}
+
+\subsection{Algorithm}
+
+Let $s_i$, $r_i$, and $b_i$ be the swimming time, running time,
+and biking time of each contestant.
+
+\subsection{Correctness}
+
+The problem is asking for a permutation of the campers to minimize the maximum value of
+$r_i+b_i+\sum_{j=1}^{i} s_j$ across all $i$.
+
+\subsection{Complexity}
+
+\pagebreak
+
+\section{Video Streams}
+
+\subsection{Valid Condition}
+
+Unfortunately, the given assertion isn't true.
+Consider
+\[(b_1, t_1) = (1000, 1), (b_2, t_2)=(3000, 1), r=2000\]
+We can make this valid by putting the first stream first and the second stream second.
+
+\subsection{Algorithm}
+
+\begin{algorithmic}[1]
+    \State Sort streams from smallest $\frac{b_i}{t_i}$ to largest.
+    \State $\texttt{storedBits} \gets 0$
+    \For{$i = 1, \cdots, n$}
+        \State $\texttt{storedBits} \gets \texttt{storedBits} + t_i (r - b_i)$
+        \If{$\texttt{storedBits} < 0$}
+            \State \Return no valid schedule
+        \EndIf
+    \EndFor
+    \State \Return valid schedule
+\end{algorithmic}
+
+\subsection{Correctness}
+
+Say there is a permutation of the video streams that is under the ratelimit.
+We'll prove that we can reach the sorted order the algorithm uses while staying under the limit.
+
+Notice that to reach our order, we will \textit{never} have to swap
+two streams $i$ and $j$ where $i < j$ and $\frac{b_i}{t_i} < \frac{b_j}{t_j}$.
+We only have to consider when $\frac{b_i}{t_i} \ge \frac{b_j}{t_j}$.
+In this case, we frontload the stream with the lesser bits per second,
+so even though the total amount of bits at the end is the same, the
+prefix sum of the bits is guaranteed to be no greater than the last
+prefix sum elementwise.
+
+Thus, after making some number of these swaps, we can see that
+our sorted order is guaranteed to be valid if there exists any valid schedule.
+
+OTOH, if there is no valid schedule, then clearly
+our selected permutation won't be a valid schedule, and the algorithm
+will correctly return that no valid schedule exists. $\square$
+
+\subsection{Complexity}
+
+It is clear that this algorithm terminates.
+The algorithm sorts the streams then does an elementary for loop, so it runs in $\boxed{O(n \log n)}$.
+
+\pagebreak
+
+\section{Bottleneck Rates}
+
+\subsection{Algorithm}
+
+\begin{algorithmic}[1]
+    \State Sort edges from \textit{largest} to smallest.
+    \State Run Kruskal's on those edges.
+    \Comment{Yep, that's literally it.}
+\end{algorithmic}
+
+\subsection{Correctness}
+
+It's easy to see that this algorithm terminates.
+
+The proof of correctness is done by induction.
+We assert that at each step in the algorithm, each tree in the forest
+Kruskal's has the best bottleneck rates for all pairs of nodes that
+lie within it.
+
+The base case is trivial, as at the start each node is its own "tree".
+We now want to show that adding an edge according to the algorithm's
+sorting order won't change this invariant.
+
+BWOC suppose there exist nodes $u$ and $v$ that are in different components
+$\mathcal{C}_1$ and $\mathcal{C}_2$, and the edge we add isn't the one on the best bottleneck path.
+Suppose there's some other edge we missed that's actually the better one.
+
+Since we sorted the edges from largest weight to smallest, any new edge we add
+is guaranteed to be equal to the minimum value along any paths from $\mathcal{C}_1$ to $\mathcal{C}_2$.
+By the same reason, not considering this alternate edge would've meant that
+it had a weight that was no greater than the one we actually added.
+However, this means that the bottleneck rate of this supposed "better path"
+is actually just as bad, if not worse, than the one we actually added.
+Contradiction.
+
+With this, the inductive step is shown and our algorithm has been proven. $\square$
+
+\subsection{Complexity}
+
+$\boxed{O(|E| \log |E|)}$ time, since our algorithm just runs Kruskal's with a tiny modification.
+
+\pagebreak
+
+\section{Squaring Edge Weights}
+
+\subsection{Shortest Path Invariance}
+
+False. Consider a graph with 3 nodes and the following edges:
+\begin{itemize}[nolistsep]
+    \item One from $0$ to $2$ of weight 10
+    \item One from $0$ to $1$ of weight 6
+    \item One from $1$ to $2$ of weight 6
+\end{itemize}
+While the shortest path in this goes from $0$ to $2$ directly,
+after squaring the edge weights it would be more optimal
+to go to $1$ then to $2$, as that only costs $6^2+6^2=72$ units.
+
+\subsection{MST Invariance}
+
+Squaring all the edge weights preserves their sorted order in terms
+of weight, since $a < b$ implies $a^2 < b^2$.
+If Kruskal's algorithm gets the same edges in the same order,
+it'll output the same MST regardless of the actual weights of the edges.
+Thus, $T$ wouldn't change if we squared all the edge weights. $\square$
+
+\end{document}
