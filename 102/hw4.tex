@@ -57,20 +57,20 @@
                                     \end{align*}
                                     From this, we can derive the coefficients:
                                     \[c_k=\begin{cases}
-                                                -\frac{j}{2} & k=7             \\
-                                                \frac{j}{2}  & k=-7            \\
+                                                -\frac{j}{2} & k=7              \\
+                                                \frac{j}{2}  & k=-7             \\
                                                 \frac{1}{6}  & k=4              \\
                                                 \frac{1}{6}  & k=-4             \\
                                                 0            & \text{otherwise}
                                           \end{cases}\]
                               \item $\omega_0=\frac{2\pi}{1}=2\pi$.
-                              \begin{align*}
-                                    c_k
-                                    &= \frac{1}{T} \int_{0}^{1} f(t)e^{-2\pi jkt}\,dt \\
-                                    &= \int_{0}^{1} e^{-t}e^{-2\pi jkt}\,dt \\
-                                    &= \int_{0}^{1} e^{-t(2\pi jk+1)}\,dt \\
-                                    &= \boxed{\frac{1-\exp(-2\pi jk-1)}{2\pi jk+1}}
-                              \end{align*}
+                                    \begin{align*}
+                                          c_k
+                                           & = \frac{1}{T} \int_{0}^{1} f(t)e^{-2\pi jkt}\,dt \\
+                                           & = \int_{0}^{1} e^{-t}e^{-2\pi jkt}\,dt           \\
+                                           & = \int_{0}^{1} e^{-t(2\pi jk+1)}\,dt             \\
+                                           & = \boxed{\frac{1-\exp(-2\pi jk-1)}{2\pi jk+1}}
+                                    \end{align*}
                         \end{enumerate}
                   \item \begin{enumerate}
                               \item $z_k=3x_k+2y_k$
@@ -82,9 +82,12 @@
             \end{enumerate}
       \item \begin{enumerate}
                   \item \begin{enumerate}
-                              \item $g(t)=\sum_{k=-\infty}^{\infty} (3c_k)e^{jk\omega_0t}$
-                              \item $g(t)=\sum_{k=-\infty}^{\infty} c_{-k}e^{jk\omega_0at}$
-                              \item \[\begin{aligned}
+                              \item $T_0'=T_0$ \\
+                                    $g(t)=\sum_{k=-\infty}^{\infty} (3c_k)e^{jk\omega_0t}$
+                              \item $T_0'=\frac{T_0}{a}$ \\
+                                    $g(t)=\sum_{k=-\infty}^{\infty} c_{-k}e^{jk\omega_0at}$
+                              \item $T_0'=T_0$
+                                    \[\begin{aligned}
                                                 g(t)
                                                  & = \sum_{k=-\infty}^{\infty} c_k e^{jk\omega_0(t-t_0)}                                         \\
                                                  & = \sum_{k=-\infty}^{\infty} c_k e^{jk\omega_0t}e^{-jk\omega_0t_0}                             \\
