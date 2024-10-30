@@ -5,6 +5,8 @@
 \lhead{406-196-414}
 \rhead{CS 180}
 
+\newcommand{\what}{\stackrel{?}=}
+
 \begin{document}
 
 \section{Cell Phone Coverage}
@@ -14,23 +16,50 @@
 \begin{algorithmic}[1]
     \State Sort $A$
     \State $\texttt{lastHouse} \gets 0$
-    \State $\texttt{minStations} \gets 0$
+    \State $\texttt{stations} \gets \{\}$
     \For{$i = 1, \cdots, n$}
         \If{$A[i] > A[\texttt{lastHouse}] + 8$}
-            \State $\texttt{lastHouse} \gets i$
-            \State $\texttt{minStations} \gets \texttt{minStations} + 1$
+        \State $\texttt{stations} \gets \texttt{stations} \cup \{A[\texttt{lastHouse}] + 4\}$
+        \State $\texttt{lastHouse} \gets i$
         \EndIf
     \EndFor
     \LComment{When loop terminates we're still "building" a station}
-    \State $\texttt{minStations} \gets \texttt{minStations} + 1$
+    \State $\texttt{stations} \gets \texttt{stations} \cup \{A[\texttt{lastHouse}] + 4\}$
     \State \Return \texttt{minStations}
 \end{algorithmic}
 
 \subsection{Correctness}
 
-\subsection{Complexity}
-
 It is clear that this algorithm terminates.
+
+By construction, this algorithm is guranteed to output a sufficient number
+of stations, since it makes sure that every house is covered.
+it remains to prove that this is the minimum number of stations needed.
+
+BWOC let there be some $O=\{p_1', p_2', \cdots, p_n'\}$ that's smaller
+than the set of base stations our algorithm calculates $S=\{p_1, p_2, \cdots, p_m\}$.
+Assume that the two are sorted by position.
+
+Let us prove by induction that $p_i \ge p_i'$.
+For a base case, $p_1 \ge p_1'$ since our algorithm
+places the first base station as far to the right of the first house as possible.
+Any other possible base station that covers the first house
+must be placed to the left of $p_1$.
+
+We know assume $p_i \ge p_i'$ and WTS $p_{i+1} \ge p_{i+1}'$.
+Consider the first house that isn't covered by $p_i$.
+By our inductive hypothesis, we know $O$ hasn't covered this house yet either.
+Again, since our algorithm tries to place $p_{i+1}$ as far to the right as possible,
+any other station that covers this house must not be to the right of it.
+Thus, $p_{i+1} \ge p_{i+1}'$, and the inductive step is complete.
+
+Now let $n < m$.
+If this was the case, then there must be some house that isn't covered by $O$
+since $p_m$ must cover a nonzero number of houses and $p_n \ge p_n'$,
+which contradicts that $O$ is a feasiable covering.
+Thus, $n=m$ and our solution is optimal. $\square$
+
+\subsection{Complexity}
 
 Sorting $A$ takes $O(n \log n)$ time, and the for loop completes in $O(n)$
 iterations, with each iteration taking constant time.
@@ -60,6 +89,22 @@ The total time complexity is easily seen to be $\boxed{O(n \log n)}$.
 
 \subsection{Correctness}
 
+It is clear that this algorithm terminates.
+
+By construction, the algorithm outputs a graph with the given set of degrees.
+It remains to prove that it'll always output such a set if one is possible.
+By the \href{https://en.wikipedia.org/wiki/Erd%C5%91s%E2%80%93Gallai_theorem}{\color{blue}{Erdos-Gallai Theorem}},
+a graph with the given $d_i$ can exist iff the sum of all degress is even and
+\[\sum_{i=1}^{k} d_i \le k(k-1)+\sum_{i=k+1}^{n} \min(d_i, k)\]
+for all $i$ from $1$ to $n$.
+
+The algorithm checks for the even condition since it only adds edges in pairs.
+If the sum of degrees was odd, we'd always hit a situation where a degree
+runs out of nodes to connect to or tries to connect to a node with $0$ remaining connections.
+
+Similarly, due to how we iterate through the degrees from largest to smallest,
+the algorithm guarantees that the main condition is satisfied. $\square$
+
 \pagebreak
 
 \section{Triathlon}
@@ -67,14 +112,38 @@ The total time complexity is easily seen to be $\boxed{O(n \log n)}$.
 \subsection{Algorithm}
 
 Let $s_i$, $r_i$, and $b_i$ be the swimming time, running time,
-and biking time of each contestant.
+and biking time of each camper.
+
+\begin{algorithmic}[1]
+    \State Sort campers by in decreasing order by $r_i+b_i$
+    \LComment{The question asks for the order itself, not the completion time.}
+    \State \Return the sorted campers
+\end{algorithmic}
 
 \subsection{Correctness}
 
-The problem is asking for a permutation of the campers to minimize the maximum value of
-$r_i+b_i+\sum_{j=1}^{i} s_j$ across all $i$.
+It's easy to see that this algorithm terminates.
+
+We proceed with an exchange argument.
+For convenience, let $l_i=r_i+b_i$.
+Suppose the optimal order of campers $c$ has $c_i$ and $c_j$ s.t. $l_{c_i} < l_{c_j}$.
+
+Swapping these two, the completion time at index $i$ changes from
+\[\left(\sum_{k=1}^{i} l_{c_k}\right)+l_{c_i} \to \left(\sum_{k=1}^{i-1} s_{c_k}\right)+s_{c_j}+l_{c_j}\]
+and the one at index $j$ changes from
+\[\left(\sum_{k=1}^{j} s_{c_k}\right)+l_{c_j} \to \left(\sum_{k=1}^{j} s_{c_k}\right)+l_{c_i}\]
+
+Let the old values be $a$ and $b$ and the new values be $a'$ and $b'$.
+By inspection, $a' \le b$ and $b'<b$, so this swapped order of campers
+achieves a completion time that is no greater than the time achieved by the supposed optimal permutation.
+
+Swapping all pairs of $i$ and $j$ s.t. $l_{c_i} < l_{c_j}$, we get the
+sorted order that our algorithm originally defines.
+Thus, our algorithm produces the order with minimal completion time. $\square$
 
 \subsection{Complexity}
+
+All the algorithm does is sort the campers, so it runs in $\boxed{O(n \log n)}$.
 
 \pagebreak
 
@@ -103,6 +172,8 @@ We can make this valid by putting the first stream first and the second stream s
 
 \subsection{Correctness}
 
+It's easy to see that this algorithm terminates.
+
 Say there is a permutation of the video streams that is under the ratelimit.
 We'll prove that we can reach the sorted order the algorithm uses while staying under the limit.
 
@@ -123,7 +194,6 @@ will correctly return that no valid schedule exists. $\square$
 
 \subsection{Complexity}
 
-It is clear that this algorithm terminates.
 The algorithm sorts the streams then does an elementary for loop, so it runs in $\boxed{O(n \log n)}$.
 
 \pagebreak
