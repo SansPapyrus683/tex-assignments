@@ -1,0 +1,128 @@
+\documentclass[12pt]{article}
+
+\input{../kz}
+
+\rhead{ECE 102}
+
+\newcommand{\rect}{\operatorname{rect}}
+
+\begin{document}
+
+\begin{enumerate}
+      \item \begin{enumerate}
+                  \item If $f(t)$ is purely imaginary, then $\frac{f(t)}{i} \in \mathbb{R}$.
+                        Let's call this new function $g(t)$.
+                        \begin{gather*}
+                              \Re(c_k)=\frac{1}{T_0} \int_{-\infty}^{\infty} g(t)\sin(k\omega_0 t)\,dt \\
+                              \Im(c_k)=\frac{1}{T_0} \int_{-\infty}^{\infty} g(t)\cos(k\omega_0 t)\,dt
+                        \end{gather*}
+
+                        Because of that,
+                        \begin{itemize}
+                              \item $\Re(c_k)=-\Re(c_{-k})$, since sine is odd.
+                              \item $\Im(c_k)=\Im(c_{-k})$, since cosine is odd.
+                              \item $c_k^* = -c_{-k}$, since $c_k$ is just $c_{-k}$ reflected across the y-axis.
+                              \item $|c_k|=|c_{-k}|$ by the same reason.
+                              \item $\angle c_k=\pi - \angle c_k$ because ditto.
+                        \end{itemize}
+                  \item From the get-go, we know $x$ takes the form of
+                        \[x(t)=\sum_{k=-1}^{1} a_k \exp\left(jk\omega_0t\right)\]
+                        where $a_0=4$ and $\omega_0=\frac{\pi}{8}$.
+                        It remains to figure out $a_1$ and $a_{-1}$.
+
+                        Since $x(t)$ is even, we have
+                        \[a_{-1}e^{-j\omega_0t}+4+a_1e^{j\omega_0t}=a_{-1}e^{j\omega_0t}+4+a_1e^{-j\omega_0t}\]
+                        Expanding with Euler's formula, we get $a_1=a_{-1}$, which from now on will be $a$.
+
+                        The only piece of information we haven't used yet is the integral:
+                        \begin{gather*}
+                              \int_{0}^{4} \left|x(t)-\left(\sum_{l=0}^{\infty} a_{2l}\right)\right|^2\,dt  = 2 \\
+                              \int_{0}^{4} (x(t)-4)^2\,dt = 2 \\
+                              \int_{0}^{4} \left(a(\exp(j\omega_0t)+\exp(-j\omega_0t))\right)^2\,dt = 2 \\
+                              a^2=2 \div \int_{0}^{4} \left(\exp(j\omega_0t)+\exp(-j\omega_0t)\right)^2\,dt \\
+                              a^2=2 \div \int_{0}^{4} 4\cos^2(\omega_0 t)\,dt
+                        \end{gather*}
+
+                        Evaluating that and getting $a=\frac{1}{2}$, we get \[x(t)=4+\cos\left(\frac{\pi}{8}t\right)\]
+            \end{enumerate}
+      \item \begin{enumerate}
+                  \item \begin{enumerate}
+                              \item a, d, and e.
+                              \item f only.
+                              \item c and e.
+                              \item a and b.
+                              \item e only.
+                              \item f only.
+                              \item d only.
+                              \item b only.
+                        \end{enumerate}
+                  \item \begin{enumerate}
+                              \item Convolution in the time domain is multiplication in the frequency domain,
+                                    so this is equivalent to multiplying a real even signal with an imaginary odd signal,
+                                    which clearly produces an \boxed{\text{odd}} signal. (true)
+                              \item $F(j\omega)$ is real and odd for both signals,
+                                    and multiplying an odd signal by its reversed version
+                                    produces an \boxed{\text{even}} signal. (false)
+                        \end{enumerate}
+                  \item \begin{enumerate}
+                              \item \[\begin{aligned}
+                                                X(j\omega)
+                                                 & = \int_{-\infty}^{\infty} x(t)e^{-j\omega t}\,dt                             \\
+                                                 & = \int_{0}^{\infty} x(t)e^{-j\omega t}+x^*(t)e^{j\omega t}\,dt               \\
+                                                 & = \int_{0}^{\infty} \cos(\omega t)(x(t)-x^*(t))+j\sin(\omega t)(x^*(t)-x(t)) \\
+                                                 & = \int_{0}^{\infty} 2\Re(x(t))\cos(\omega t)+2\Im(x(t))\sin(\omega t)\,dt    \\
+                                                 & \in \mathbb{R}\quad\square
+                                          \end{aligned}\]
+                              \item Proof for even component:
+                                    \begin{align*}
+                                          X_e(j\omega)
+                                           & = \int_{-\infty}^{\infty} x_e(t)e^{-j\omega t}\,dt                                                                     \\
+                                           & = \int_{-\infty}^{\infty} \frac{x(t)+x(-t)}{2}e^{-j\omega t}\,dt                                                       \\
+                                           & = \left(\int_{-\infty}^{\infty} x(t)e^{-j\omega t}\,dt + \int_{-\infty}^{\infty} x(-t)e^{-j\omega t}\,dt\right) \div 2 \\
+                                           & = \frac{X(j\omega)+X(-j\omega)}{2}                                                                                     \\
+                                           & = \frac{X(j\omega)+X^*(j\omega)}{2}                                                                                    \\
+                                           & = \Re(X(j\omega))\quad\square
+                                    \end{align*}
+
+                                    For the odd component, we can do the same steps to obtain
+                                    \[X_o(j\omega)=\frac{X(j\omega)-X(-j\omega)}{2}=j\Im(X(j\omega))\quad\square\]
+                        \end{enumerate}
+            \end{enumerate}
+      \item \begin{enumerate}
+                  \item The box is doing an FT on the input function.
+                  \item \begin{enumerate}
+                              \item $X(0)$ is the area of the signal, which is \boxed{5}.
+                              \item Taking the area is equivalent to convolving the FT with $F(t)=1$.
+                                    The inverse FT of $F$ is \[f(t)=\frac{1}{2\pi}\int_{-\infty}^{\infty} e^{j\omega t}\,d\omega =\frac{\delta(t)}{2\pi}\]
+
+                                    Then, by the multiplication principle,
+                                    \begin{align*}
+                                          (F * X)(t)
+                                           & = 2\pi\mathcal{F}[x(t)f(t)]                              \\
+                                           & = 2\pi\int_{-\infty}^{\infty} x(t)f(t)e^{-j\omega t}\,dt \\
+                                           & = x(0)                                                   \\
+                                           & = \boxed{1}
+                                    \end{align*}
+                              \item By Parseval's Theorem,
+                                    \begin{align*}
+                                          \int_{-\infty}^{\infty} |X(j\omega)|^2\,d\omega
+                                           & = 2\pi \int_{-\infty}^{\infty} |f(t)|^2\,dt                \\
+                                           & = 2\pi \cdot 2 \cdot \left(\frac{1}{3}+\frac{26}{6}\right) \\
+                                           & = \boxed{\frac{56\pi}{3}}
+                                    \end{align*}
+                              \item $x(t+1)+x(-t+1)$ is real and even, so $X(j\omega)$ is also real and even. $\Im(X(j\omega))=\boxed{0}$.
+                              \item For FTs, it's the shift that's scaled, not the other way around.
+                              Thus, we should input $x(t)=\boxed{x\left(5t-10j\right)}$
+                        \end{enumerate}
+                  \item $x^4$ doesn't have an FT.
+                        I could've at least plugged in the integral into Wolfram Alpha to see that the
+                        integral for the FT had no chance of converging.
+            \end{enumerate}
+      \item \begin{enumerate}
+                  \item \begin{enumerate}
+                              \item (optional)
+                              \item
+                        \end{enumerate}
+            \end{enumerate}
+\end{enumerate}
+\end{document}
