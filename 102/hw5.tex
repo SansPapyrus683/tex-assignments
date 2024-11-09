@@ -5,6 +5,7 @@
 \rhead{ECE 102}
 
 \newcommand{\rect}{\operatorname{rect}}
+\newcommand{\sinc}{\operatorname{sinc}}
 
 \begin{document}
 
@@ -106,13 +107,13 @@
                               \item By Parseval's Theorem,
                                     \begin{align*}
                                           \int_{-\infty}^{\infty} |X(j\omega)|^2\,d\omega
-                                           & = 2\pi \int_{-\infty}^{\infty} |f(t)|^2\,dt                \\
+                                           & = 2\pi \int_{-\infty}^{\infty} |x(t)|^2\,dt                \\
                                            & = 2\pi \cdot 2 \cdot \left(\frac{1}{3}+\frac{26}{6}\right) \\
                                            & = \boxed{\frac{56\pi}{3}}
                                     \end{align*}
                               \item $x(t+1)+x(-t+1)$ is real and even, so $X(j\omega)$ is also real and even. $\Im(X(j\omega))=\boxed{0}$.
-                              \item For FTs, it's the shift that's scaled, not the other way around.
-                              Thus, we should input $x(t)=\boxed{x\left(5t-10j\right)}$
+                              \item $\mathcal{F}[f(at-b)]=\frac{1}{|a|}e^{-j\omega\frac{b}{a}}\mathcal{F}[f(t)]$, so
+                                    we should input $x(t)=\boxed{x\left(5t-10j\right)}$
                         \end{enumerate}
                   \item $x^4$ doesn't have an FT.
                         I could've at least plugged in the integral into Wolfram Alpha to see that the
@@ -120,8 +121,68 @@
             \end{enumerate}
       \item \begin{enumerate}
                   \item \begin{enumerate}
-                              \item (optional)
-                              \item
+                              \item $\rect$ is an even function, so $\rect\left(\frac{-t-3}{2}\right)=\rect\left(\frac{t+3}{2}\right)$.
+                                    \begin{gather*}
+                                          \mathcal{F}\left[\rect\left(\frac{t}{2}\right)\right] = 2\sinc\left(\frac{\omega}{\pi}\right) \\
+                                          \mathcal{F}\left[\rect\left(\frac{t+3}{2}\right)\right] = 2e^{3j\omega}\sinc\left(\frac{\omega}{\pi}\right) \\
+                                          \begin{align*}
+                                                \mathcal{F}[x_1(t)]
+                                                 & = 2 \cdot \frac{1}{2}\left(2e^{3j(\omega-10\pi)}\sinc\left(\frac{\omega}{\pi}-10\right)+2e^{3j(\omega+10\pi)}\sinc\left(\frac{\omega}{\pi}+10\right)\right) \\
+                                                 & = 2e^{3j(\omega-10\pi)}\sinc\left(\frac{\omega}{\pi}-10\right)+2e^{3j(\omega+10\pi)}\sinc\left(\frac{\omega}{\pi}+10\right)                                 \\
+                                                 & = \boxed{2e^{3j\omega}\left(e^{-30j\pi}\sinc\left(\frac{\omega}{\pi}-10\right)+e^{30j\pi}\sinc\left(\frac{\omega}{\pi}+10\right)\right)}
+                                          \end{align*}
+                                    \end{gather*}
+                              \item \[\begin{aligned}
+                                                \mathcal{F}[x_2(t)]
+                                                 & = \int_{-\infty}^{\infty} \exp(t(2+3j))u(-t+1)\exp(-j\omega t)\,dt                  \\
+                                                 & = \int_{-\infty}^{1} \exp(t(2+3j-j\omega))\,dt                                      \\
+                                                 & = \left.\left(\frac{1}{2+3j-j\omega}\exp(t(2+3j-j\omega))\right)\right|^1_{-\infty} \\
+                                                 & = \boxed{\frac{\exp(2+3j-j\omega)}{2+3j-j\omega}}
+                                          \end{aligned}\]
+                              \item Notice that the piecewise part can be simplified to multiplication by $\rect\left(\frac{t}{2}\right)$.
+                                    \begin{align*}
+                                          x_3(t)
+                                           & = \rect\left(\frac{t}{2}\right)(1+\cos(\pi t))                                                                                                 \\
+                                           & = \rect\left(\frac{t}{2}\right)+\rect\left(\frac{t}{2}\right)\cos(\pi t)                                                                       \\
+                                           & \rightarrow 2\sinc\left(\frac{\omega}{T}\right)+\mathcal{F}\left[\rect\left(\frac{t}{2}\right)\cos(\pi t)\right]                               \\
+                                          % jesus christ this line is long
+                                           & =2\sinc\left(\frac{\omega}{\pi}\right)+\frac{1}{2}\left(2\sinc\left(\frac{\omega}{\pi}-1\right)+2\sinc\left(\frac{\omega}{\pi}+1\right)\right) \\
+                                           & =\boxed{2\sinc\left(\frac{\omega}{\pi}\right)+\sinc\left(\frac{\omega}{\pi}-1\right)+\sinc\left(\frac{\omega}{\pi}+1\right)}
+                                    \end{align*}
+                              \item \[\begin{aligned}
+                                                \mathcal{F}[x_4(t)]
+                                                 & = \int_{-\infty}^{\infty} te^{-2t}u(t)e^{-j\omega t}\,dt \\
+                                                 & = \int_{0}^{\infty} t\exp(-t(2+j\omega))\,dt             \\
+                                          \end{aligned}\]
+                                    Before we continue, let's assign $a=2+j\omega$ for brevity.
+                                    \begin{align*}
+                                          \int t\exp(-ta)\,dt
+                                          &= t \cdot \left(-\frac{1}{a}\right)e^{-ta}-\int \left(-\frac{1}{a}\right)e^{-ta}\,dt \\
+                                          &= -\frac{t}{a}e^{-ta}-\frac{1}{a^2}e^{-ta} \\
+                                          &= -\frac{1}{a}e^{-ta}\left(t+\frac{1}{a}\right)
+                                    \end{align*}
+
+                                    Evaluating this integral from $0$ to $\infty$,
+                                    we have \[\boxed{F(j\omega)=\frac{1}{(2+j\omega)^2}}\]
+                        \end{enumerate}
+                  \item \begin{enumerate}
+                              \item Let's FT $f_1$:
+                                    \begin{gather*}
+                                          \mathcal{F}\left[\frac{1}{4\pi}\rect\left(\frac{t}{4\pi}\right)\right]=\sinc(2\omega) \\
+                                          \mathcal{F}[\sinc(2t)]=2\pi \cdot \frac{1}{4\pi}\rect\left(\frac{-\omega}{4\pi}\right)=\frac{1}{2}\rect\left(\frac{\omega}{4\pi}\right) \\
+                                    \end{gather*}
+
+                                    and then $f_2$:
+                                    \begin{gather*}
+                                          \mathcal{F}\left[\frac{1}{2\pi}\rect\left(\frac{t}{2\pi}\right)\right]=\sinc(\omega) \\
+                                          \mathcal{F}[\sinc(t)]=\rect\left(\frac{\omega}{2\pi}\right) \\
+                                          \mathcal{F}[\sinc(t)\cos(3.1\pi t)]=\frac{1}{2}\left(\rect\left(\frac{\omega}{2\pi}+\frac{3.1}{2}\right)+\rect\left(\frac{\omega}{2\pi}-\frac{3.1}{2}\right)\right)
+                                    \end{gather*}
+
+                                    By the convolution theorem, the FT of $f$ is just the product of these two FTS.
+                                    However, there's no space where both of them are nonzero,
+                                    so the end result is just... $\boxed{F(j\omega)=0}$.
+                              \item $f(t)=0$
                         \end{enumerate}
             \end{enumerate}
 \end{enumerate}
