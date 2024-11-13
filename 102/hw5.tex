@@ -24,7 +24,7 @@
                               \item $\Im(c_k)=\Im(c_{-k})$, since cosine is odd.
                               \item $c_k^* = -c_{-k}$, since $c_k$ is just $c_{-k}$ reflected across the y-axis.
                               \item $|c_k|=|c_{-k}|$ by the same reason.
-                              \item $\angle c_k=\pi - \angle c_k$ because ditto.
+                              \item $\angle c_k=- \angle c_k^*$ still because the property holds for any complex number.
                         \end{itemize}
                   \item From the get-go, we know $x$ takes the form of
                         \[x(t)=\sum_{k=-1}^{1} a_k \exp\left(jk\omega_0t\right)\]
@@ -44,7 +44,7 @@
                               a^2=2 \div \int_{0}^{4} 4\cos^2(\omega_0 t)\,dt
                         \end{gather*}
 
-                        Evaluating that and getting $a=\frac{1}{2}$, we get \[x(t)=4+\cos\left(\frac{\pi}{8}t\right)\]
+                        Evaluating that and getting $a=\pm \frac{1}{2}$, we get \[x(t)=4\pm\cos\left(\frac{\pi}{8}t\right)\]
             \end{enumerate}
       \item \begin{enumerate}
                   \item \begin{enumerate}
@@ -93,16 +93,16 @@
                   \item The box is doing an FT on the input function.
                   \item \begin{enumerate}
                               \item $X(0)$ is the area of the signal, which is \boxed{5}.
-                              \item Taking the area is equivalent to convolving the FT with $F(t)=1$.
-                                    The inverse FT of $F$ is \[f(t)=\frac{1}{2\pi}\int_{-\infty}^{\infty} e^{j\omega t}\,d\omega =\frac{\delta(t)}{2\pi}\]
+                              \item This is equivalent to convolving with $F(t)=1$.
+                                    From class, $\mathcal{F}[\delta(t)]=1$.
 
-                                    Then, by the multiplication principle,
+                                    By the multiplication principle,
                                     \begin{align*}
                                           (F * X)(t)
                                            & = 2\pi\mathcal{F}[x(t)f(t)]                              \\
                                            & = 2\pi\int_{-\infty}^{\infty} x(t)f(t)e^{-j\omega t}\,dt \\
-                                           & = x(0)                                                   \\
-                                           & = \boxed{1}
+                                           & = 2\pi \cdot x(0)                                                   \\
+                                           & = \boxed{2\pi}
                                     \end{align*}
                               \item By Parseval's Theorem,
                                     \begin{align*}
@@ -113,7 +113,7 @@
                                     \end{align*}
                               \item $x(t+1)+x(-t+1)$ is real and even, so $X(j\omega)$ is also real and even. $\Im(X(j\omega))=\boxed{0}$.
                               \item $\mathcal{F}[f(at-b)]=\frac{1}{|a|}e^{-j\omega\frac{b}{a}}\mathcal{F}[f(t)]$, so
-                                    we should input $x(t)=\boxed{x\left(5t-10j\right)}$
+                                    we should input $x(t)=\boxed{x\left(5t+10\right)}$
                         \end{enumerate}
                   \item $x^4$ doesn't have an FT.
                         I could've at least plugged in the integral into Wolfram Alpha to see that the
@@ -144,7 +144,7 @@
                                           x_3(t)
                                            & = \rect\left(\frac{t}{2}\right)(1+\cos(\pi t))                                                                                                 \\
                                            & = \rect\left(\frac{t}{2}\right)+\rect\left(\frac{t}{2}\right)\cos(\pi t)                                                                       \\
-                                           & \rightarrow 2\sinc\left(\frac{\omega}{T}\right)+\mathcal{F}\left[\rect\left(\frac{t}{2}\right)\cos(\pi t)\right]                               \\
+                                           & \rightarrow 2\sinc\left(\frac{\omega}{\pi}\right)+\mathcal{F}\left[\rect\left(\frac{t}{2}\right)\cos(\pi t)\right]                               \\
                                           % jesus christ this line is long
                                            & =2\sinc\left(\frac{\omega}{\pi}\right)+\frac{1}{2}\left(2\sinc\left(\frac{\omega}{\pi}-1\right)+2\sinc\left(\frac{\omega}{\pi}+1\right)\right) \\
                                            & =\boxed{2\sinc\left(\frac{\omega}{\pi}\right)+\sinc\left(\frac{\omega}{\pi}-1\right)+\sinc\left(\frac{\omega}{\pi}+1\right)}
