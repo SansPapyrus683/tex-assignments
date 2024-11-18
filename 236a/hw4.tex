@@ -1,0 +1,180 @@
+\documentclass[12pt]{article}
+
+\input{../kz}
+
+\rhead{ECE 236A}
+
+\newcommand*{\vertbar}{\rule[-1ex]{0.5pt}{2.5ex}}
+\newcommand*{\horzbar}{\rule[.5ex]{2.5ex}{0.5pt}}
+
+\begin{document}
+
+\begin{enumerate}
+      \item \begin{enumerate}
+                  \item Let there be $n$ players and $m$ opssible matchups respectively.
+
+                        For variables, let $g \in \mathbb{Z}^m$ and $A \in \mathbb{Z}^{n \times m}$
+                        be a matrix defined as follows:
+                        \[A_{ij}=\begin{cases}
+                                    1 & \text{Player $i$ is in matchtup $j$} \\
+                                    0 & \text{otherwise}
+                              \end{cases}\]
+
+                        Now our ILP is as follows:
+                        \begin{gather*}
+                              \max_{g} \mathbf{1^T}g \text{ s.t.} \\
+                              Ag \le \mathbf{1} \\
+                              \mathbf{0} \le g \le \mathbf{1}
+                        \end{gather*}
+
+                        Unfortunately, the feasible set described by the matrix is not TUM.
+                        Consider the following $A$ with $n=m=3$:
+                        \[\begin{bmatrix}
+                                    1 & 1 & 0 \\
+                                    0 & 1 & 1 \\
+                                    1 & 0 & 0
+                              \end{bmatrix}\]
+                        Its determinant is $2 \notin \{-1, 0, 1\}$.
+                  \item We can make two more copies of $g$ for the following LP:
+                        \begin{gather*}
+                              \max_{g_1, g_2, g_3} \mathbf{1^T}(g_1+g_2+g_3) \text{ s.t.} \\
+                              Ag_1, Ag_2, Ag_3 \le \mathbf{1} \\
+                              g_1^Tg_2=g_1^Tg_3=g_2^Tg_3=0 \\
+                              \mathbf{0} \le g_1, g_2, g_3 \le \mathbf{1}
+                        \end{gather*}
+            \end{enumerate}
+
+      \item The statement is equivalent saying that one of the following is true:
+            \begin{gather}
+                  \exists x \in \mathbb{R}^n: Ax \ge b \\
+                  \exists \lambda \in \mathbb{R}^m: A^T \lambda \le \mathbf{0}, \lambda^Tb > 0, \lambda \ge \mathbf{0}
+            \end{gather}
+            where $A \in \mathbb{R}^{m \times n}$ and $b \in \mathbb{R}^m$.
+
+            The prove this, notice that the first part is equivalent to the first
+            part of the theorem of alternatives with $-A$ and $-b$:
+            \[Ax \ge b \rightarrow -Ax \le -b\]
+            Now by this part $\exists z \in \mathbb{R}^m: z \ge 0, (-A)^Tz = 0, (-b)^Tz < 0$.
+            Taking out the negative signs, we get $z \ge 0, A^Tz=0 \le 0, b^Tz > 0$,
+            which correspond exactly to the conditions described in (2). $\square$
+
+      \item \begin{enumerate}
+                  \item The constraint of the max-flow LP is
+                        \[\begin{bmatrix}
+                                    \horzbar & I_{|E|}    & \horzbar & \mathbf{0} \\
+                                    \horzbar & m^T        & \horzbar              \\
+                                    \horzbar & -I_{|E|+1} & \horzbar
+                              \end{bmatrix}\]
+
+                        Since concatenating $e_x$ or $\mathbf{0}$ to a TUM matrix preserves its TUM-ness
+                        (see \href{https://math.stackexchange.com/a/3618732/713952}{\color{blue}{here}}),
+                        the new constraint matrix is still TUM.
+
+                  \item The dual of the max-flow LP is
+                        \begin{gather*}
+                              \min_{p \in \mathbb{R}^{|V|}, d \in \mathbb{R}^{|E|}} c^Td \text{ s.t.} \\
+                              p_s - p_t \ge 1 \\
+                              d_{ij} \ge p_i - p_j \\
+                              d_{ij}, p_i, p_j \ge 0
+                        \end{gather*}
+
+                        If we stack $d$ on top of $p$ for the formal inequality form,
+                        the constraint matrix is as follows:
+                        \begin{itemize}
+                              \item One row with one $1$ and one $-1$ somewhere in the right $|V|$ elements.
+                              \item $-I_{|E|}$ on the left side with some vectors on the right
+                                    such that there's exactly one $1$ and one $-1$ in each row not including the ID matrix.
+                              \item $I_{|E| + |V|}$
+                        \end{itemize}
+
+                        Notice that the last $|V|$ columns of the first $|E|+1$ rows
+                        is equivalent to $m$ in the previous problem.
+                        Thus, by the same reasoning, the constraint matrix
+                        here is still TUM and our solution is guaranteed to be integral.
+
+                        Also, it's never strictly more optimal to have a solution
+                        with elements greater than $1$ because we can always
+                        reach a solution that's in $\{0, 1\}$ from there. $\square$
+            \end{enumerate}
+
+      \pagebreak
+
+      \item \begin{enumerate}
+                  \item Assuming the roads can receive fractional funding:
+                        \begin{gather*}
+                              \min_{r} \mathbf{1}^Tr\text{ s.t.} \\
+                              r \ge \mathbf{0} \\
+                              Ar \ge \mathbf{1} \\
+                              A_{ij}=\begin{cases}
+                                    1 & \text{road $j$ connects city $i$} \\
+                                    0 & \text{otherwise}
+                              \end{cases}
+                        \end{gather*}
+                  \item Lagrangian:
+                        \begin{align*}
+                              \mathcal{L}(\lambda_1, \lambda_2)
+                               & =\mathbf{1}^Tr+\lambda_1^T(-r)+\lambda_2^T(\mathbf{1}-Ar)              \\
+                               & =(\mathbf{1}^T-\lambda_1^T-\lambda_2^TA)r+\lambda_2^T \cdot \mathbf{1}
+                        \end{align*}
+
+                        For $g(\lambda_1, \lambda_2)$ to be a valid lower bound,
+                        we also need $\lambda_1, \lambda_2 \ge 0$.
+
+                        Thus, the dual is
+                        \begin{gather*}
+                              \max_{\lambda_1, \lambda_2} \mathbf{1}^T\lambda_2\text{ s.t.} \\
+                              \mathbf{1}-\lambda_1-A^T\lambda_2=\mathbf{0} \\
+                              \lambda_1, \lambda_2 \ge 0
+                        \end{gather*}
+                        We can further simplify this by noticing that $\lambda_1$ serves only as a slack variable:
+                        \begin{gather*}
+                              \max_{\lambda} \mathbf{1}^T\lambda\text{ s.t.} \\
+                              A^T\lambda \le \mathbf{1} \\
+                              \lambda \ge 0
+                        \end{gather*}
+                  \item Contraining $\lambda \in \{0, 1\}$ makes the dual the MIS ILP problem.
+                  \item I propose that the slackness condition is
+                  \[\boxed{\lambda^T(Ar-\mathbf{1})=\mathbf{0}}\]
+                  and will prove that this is true when and only when strong duality holds.
+
+                  $\lambda \ge 0$ and $Ar-1 \ge \mathbf{0}$, so their dot product must be nonnegative.
+                  As for nonpositivity, notice that
+                  \begin{align*}
+                        \lambda^T(Ar-\mathbf{1})
+                        &= (A^T\lambda)^Tr-\lambda^T\mathbf{1} \\
+                        &\le \mathbf{1}^Tr-\lambda^T\mathbf{1} \\
+                        &= \mathbf{0}
+                  \end{align*}
+                  From this we can see that the expression must equal $\mathbf{0}$.
+
+                  OTOH, say that the equality above is what we are given.
+                  By a similar chain of equalities, we can obtain
+                  \[(A^T\lambda)^Tr=\mathbf{1}^T\lambda \rightarrow \mathbf{1}^Tr \le \mathbf{1}^T\lambda\]
+                  Through weak duality $\mathbf{1}^Tr \ge \mathbf{1}^T\lambda$, so
+                  with this it must be that $\mathbf{1}^Tr=\mathbf{1}^T\lambda$. $\square$
+
+            \end{enumerate}
+
+      \item This is a grossly inefficient formulation, but it's still
+            polynomial in terms of the input.
+
+            Let $A \in \mathbb{Z}^{m \times n}$ be defined as follows:
+            \[A_{ij}=\begin{cases}
+                        1 & \text{Lecturer $j$ offers class $i$} \\
+                        0 & \text{otherwise}
+                  \end{cases}\]
+
+            Also, let $C_{i} \in \mathbb{Z}^{m \times n}$ be the classes offered on the $i$th day
+            and $d \in \mathbb{Z}^{mn}$ indicate all $C_i$s with nonzero sums.
+
+            Our LP is as follows:
+            \begin{gather*}
+                  \max_{C_{i}, d} \mathbf{1}^T(\mathbf{1}-d) \text{ s.t.} \\
+                  \sum_{i=1}^{mn} C_{i}=A \\
+                  C_i\mathbf{1} \le 1, C_i^T\mathbf{1} \le 1 \\
+                  \left(C_i\mathbf{1}\right)^T\mathbf{1} \le K \\
+                  \left(C_i\mathbf{1}\right)^T\mathbf{1} \cdot d_i = 0 \\
+                  0 \le C_i \le 1, \mathbf{0} \le d \le \mathbf{1}
+            \end{gather*}
+\end{enumerate}
+\end{document}
