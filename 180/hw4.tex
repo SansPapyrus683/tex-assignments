@@ -1,0 +1,343 @@
+\documentclass[12pt]{article}
+
+\input{../kz}
+
+\lhead{406-196-414}
+\rhead{CS 180}
+
+\newcommand{\what}{\stackrel{?}=}
+
+\begin{document}
+
+\section{A General Recurrence Relation}
+
+My guy, this is just the
+\href{https://en.wikipedia.org/wiki/Master_theorem_(analysis_of_algorithms)}{Master Theorem}...
+
+\subsection{Proof of Lemma 0.3}
+
+The proof is by induction.
+
+\subsubsection{Base Case}
+
+Set $n=b=b^1$.
+Then, $\log_b^n=1$ and
+\begin{align*}
+    T(n)
+     & = a^1T(1)+cn^d\left(\sum_{j=0}^{0}\left(\frac{a}{b^d}\right)^j\right) \\
+     & = aT\left(\frac{n}{b}\right)+cn^d
+\end{align*}
+
+We now assume this is true for all $n=b^i$.
+
+\subsubsection{Inductive Step}
+
+It remains to prove that the statement being true for $n=b^i$ implies the same for $n=b^{i+1}$.
+\begin{align*}
+    T\left(b^{i+1}\right)
+     & = aT\left(b^i\right)+cb^{i+1}d                                                                         \\
+     & = a\left[a^iT(1)+cb^{id}\left(\sum_{j=0}^{i-1} \left(\frac{a}{b^d}\right)^j\right)\right]+cb^{d(i+1)}  \\
+     & = a^{i+1}T(1)+acb^{id}\left(\sum_{j=0}^{i-1} \left(\frac{a}{b^d}\right)^j\right)+cb^{d(i+1)}           \\
+     & = a^{i+1}T(1)+cb^{(i+1)d}\left[\left(\sum_{j=0}^{i-1} \left(\frac{a}{b^d}\right)^{j+1}\right)+1\right] \\
+     & = a^{i+1}T(1)+cb^{(i+1)d}\left[\left(\sum_{j=1}^{i} \left(\frac{a}{b^d}\right)^j\right)+1\right]       \\
+     & = a^{i+1}T(1)+cb^{(i+1)d}\left(\sum_{j=0}^{i} \left(\frac{a}{b^d}\right)^j\right)\quad\square
+\end{align*}
+
+The final line is due to that $\left(\frac{a}{b^d}\right)^0=1$.
+
+\subsection{Proof of Lemma 0.4}
+
+For all the below, proofs, we can use lemma 0.1
+to change $a^{\log_b n}$ to $n^{\log_b a}$.
+
+\subsubsection{Case 1: $d=\log_b a$}
+
+Note that $d=\log_b a \rightarrow a=b^d \rightarrow \frac{a}{b^d}=1$.
+\begin{align*}
+    T(n)
+    &= n^{\log_b a} T(1) + cn^d \left(\sum_{j=0}^{\log_b n - 1} 1\right) \\
+    &= n^{\log_b a} T(1)+cn^d\left(\log_b n - 1\right) \\
+    &= n^d\left(T(1)+c\left(\log_b n - 1\right)\right) \\
+    &= O\left(n^d \log_b n\right)
+\end{align*}
+
+\subsubsection{Case 2: $d>\log_b a$}
+
+The logarithm means $\frac{a}{b^d}<1$ and we can treat the sum as if it converges.
+\begin{align*}
+    T(n)
+    &< n^{\log_b a}T(1)+cn^d \cdot \frac{a/b^d}{1-a/b^d} \\
+    &= n^{\log_b a}T(1)+cn^d \cdot \frac{a}{b^d-a} \\
+    &= O\left(n^d\right)
+\end{align*}
+We cast out $n^{\log_b a}$ since $n^{\log_b a}<n^d$.
+
+\subsubsection{Case 3: $d<\log_b a$}
+
+We use the formula for the sum of a geometric series provided in lemma 0.2.
+\begin{align*}
+    T(n)
+    &= n^{\log_b a}T(1)+cn^d \cdot \frac{a}{b^d} \cdot \frac{1-\left(\frac{a}{b^d}\right)^{\log_b n}}{1-\frac{a}{b^d}} \\
+    &= n^{\log_b a}T(1)+cn^d \cdot \frac{a}{b^d} \cdot \frac{1-n^{\log_b a/b^d}}{1-\frac{a}{b^d}} \\
+    &= n^{\log_b a}T(1)+\frac{ac}{b^d} \cdot n^d \cdot \frac{1-n^{(\log_b a) - d}}{1-\frac{a}{b^d}} \\
+    &= n^{\log_b a}T(1)+\frac{ac}{b^d} \cdot \frac{n^d-n^{\log_b a}}{1-\frac{a}{b^d}} \\
+    &= n^{\log_b a}T(1)+\frac{ac}{b^d} \cdot \frac{n^{\log_b a}-n^d}{\frac{a}{b^d}-1} \\
+    &= O\left(n^{\log_b a}\right)
+\end{align*}
+
+\section{Array Shift}\label{arrshift}
+
+\subsection{Algorithm}
+
+Binary search on the greatest $i$ s.t. $A[i] \ge A[0]$.
+If the array is 0-indexed, the answer is $i+1$.
+
+\subsection{Correctness}
+
+It is well-established that binary search terminates
+and returns the greatest or lowest element such that it makes some
+monotonic function that only returns $0$ or $1$ return $1$.
+Now we just have to prove that $f(i)=A[i] \ge A[0]$ is monotonic.
+
+Note that due to the structure of the array,
+we have two strictly increasing sequences of numbers side by side,
+with the largest of the second sequence lesser than the smallest of the first sequence.
+
+Any $i$ that resides within the first sequence is trivially
+going to be greater than or equal to $A[0]$, since $A[0]$ is the smallest element
+in the first sequence.
+As for any $i$ in the second sequence, $A[i]<A[n-1]<A[0]$.
+
+Since all elements in the first sequence occur before the second sequence (obviously),
+$f$ will return $1$ for some left segment of the search space and $0$ everywhere else.
+Thus, binary search will return the correct answer. $\square$
+
+\subsection{Time Complexity}
+
+The computation within the binary search is constant time and the length of the
+initial range is $n$, so our overall complexity is $\boxed{O(\log n)}$.
+
+\pagebreak
+
+\section{k-th Smallest Element}
+
+\subsection{Algorithm}
+
+With binary search we can find the number of elements that are strictly
+less than or less than or equal to a specified value $k$,
+so I'll calculate that stuff without any elaboration.
+
+The algorithm itself is also a binary search.
+The pseudocode for the comparison function is as follows:
+\begin{algorithmic}[1]
+    \Procedure{\texttt{beforeK}}{i}
+        \State $\texttt{pos1} \gets $ number of elements in array 1 that are strictly lesser than $i$
+        \State $\texttt{pos2} \gets $ same but for array 2
+        \State \Return $\texttt{pos1}+\texttt{pos2} < k$
+    \EndProcedure
+\end{algorithmic}
+We binary search for the largest $i$ that makes \texttt{beforeK} return true.
+
+\subsection{Correctness}
+
+We first prove that $\texttt{beforeK}$ is monotonic just like in \ref{arrshift}.
+Notice that \texttt{pos1} and \texttt{pos2} are both nondecreasing (ND),
+since the number of elements a value is greater than can only increase
+as the value itself increases.
+The sum of two ND sequences is also ND, so $\texttt{pos1}+\texttt{pos2}$ is ND.
+
+It remains to prove that the breakpoint is the value of the $k$th element $x$.
+By the premise of the problem, this is strictly greater than at \textit{most}
+$k-1$ other elements across both arrays.
+Thus, the value of the $k$-th element will make $\texttt{beforeK}$ return true.
+
+Now consider $x+1$.
+$x+1>x$, so it's greater than the $k$-th element of the array and has
+is also strictly greater than at least $k$ elements across both arrays.
+As such, $\texttt{beforeK}$ will output false for $x+1$
+(and any value greater than that). $\square$
+
+\subsection{Time Complexity}
+
+Our initial range is the smallest element in the array to the largest element.
+These two can be computed in constant time
+by looking at the starts and ends of both arrays.
+
+Next, the binary search in $\texttt{beforeK}$ runs in $O(\log n)$,
+since it has to calculate \texttt{pos1} and \texttt{pos2}.
+Our final complexity is then $\boxed{O(\log (\texttt{max}-\texttt{min})\log n)}$,
+where \texttt{max} and \texttt{min} are the largest and smallest elements
+across both arrays respectively.
+
+\pagebreak
+
+\section{Majority Bank Card}
+
+\subsection{Algorithm}
+
+To avoid the time consuming process of splitting it in half,
+this can also be implemented with a single global array with
+two indices to tell the function what range it should look at.
+
+\begin{algorithmic}[1]
+    \LComment{Returns the card of the majority (if there is one) and how many times it occurs}
+    \Procedure{\texttt{majority}}{\texttt{cards}}
+        \State $\texttt{sz} \gets $ length of cards
+        \Comment{just a shorthand}
+        \If{\texttt{cards} only has one card}
+            \State \Return $(\text{that card}, 1)$
+        \EndIf
+
+        \item[]
+        \State Split \texttt{cards} into \texttt{half1} and \texttt{half2}
+        \State $(c_1, s_1) \gets \Call{\texttt{majority}}{\texttt{half1}}$
+        \State $(c_2, c_2) \gets \Call{\texttt{majority}}{\texttt{half2}}$
+        \If{$c_1 \ne \varnothing$}
+            \State $\texttt{other} \gets $ \# of cards in $\texttt{half2}$ equivalent to $c_1$
+            \If{$s_1+\texttt{other}>\frac{\texttt{sz}}{2}$}
+                \State \Return $(c_1, s_1+\texttt{other})$
+            \EndIf
+        \ElsIf{$c_2 \ne \varnothing$}
+            \State $\texttt{other} \gets $ \# of cards in $\texttt{half1}$ equivalent to $c_2$
+            \If{$s_2+\texttt{other}>\frac{\texttt{sz}}{2}$}
+                \State \Return $(c_2, s_2+\texttt{other})$
+            \EndIf
+        \EndIf
+
+        \item[]
+        \State \Return $\varnothing$
+    \EndProcedure
+
+    \item[]
+    \State $(c, s) \gets \Call{\texttt{majority}}{\text{the initial set of cards}}$
+    \State \Return true if $c \ne \varnothing$, false otherwise
+\end{algorithmic}
+
+\subsection{Correctness}
+
+Since $\textproc{\texttt{majority}}$ always splits $\texttt{cards}$
+into smaller and smaller halves with a base case of $1$,
+this algorithm clearly terminates.
+
+For actual correctness,
+the key observation is that if more than $\frac{n}{2}$ cards are identical,
+then no matter how we split the array there will always be at least one
+half that also has a strict majority of these identical cards.
+
+To prove this, AFSOC we can split the cards in two halves of size $x_1$ and $x_2$
+such that no half has a strict majority.
+Then, $s_1 \le \frac{x_1}{2}$ and $s_2 \le \frac{x_2}{2}$,
+where the $s$ variables indicate the amount of the majority card
+that occurs in the half.
+
+But adding these two inequalities gives us
+\[s_1+s_2 \le \frac{x_2+x_2}{2} = \frac{n}{2}\]
+which is a contradiction, since we know that the majority
+card occurs strictly more than $\frac{n}{2}$ times.
+
+Now we move on to the actual correctness of our algorithm.
+It is trivial to see that the base case is true,
+as any set of size $1$ has a strict majority with its only element.
+
+As for the recurrence relation, there's two cases.
+If a strict majority exists in $\texttt{cards}$,
+at least one of the halves we recursed on would return a non-null value
+by the observation we made.
+We also perform a linear search on the other half to find the remaining
+cards that are in the majority, so no card is excluded from calculation.
+
+No strict majority existing would also force the algorithm to return $\varnothing$,
+since it only returns a non-null value if it found some card
+that occurred more than $\frac{n}{2}$ times.
+
+It remains to show that this procedure makes $O(n \log n)$ queries.
+Notice that at each level we make at most $O(n)$ queries
+where $n$ is the size of the array passed as a parameter.
+Letting $Q(n)$ be the number of queries we make, we have the relation
+\[Q(n)=2Q\left(\frac{n}{2}\right)+O(n)\]
+which is easily seen to be equivalent to $O(n \log n)$
+as it's no different from the mergesort time complexity recurrence.
+
+\subsection{Time Complexity}
+
+We break problems of size $n$ into 2 problems of size $\frac{n}{2}$,
+and then we combine them through a time proportional to $n$
+as a linear search to get $\texttt{other}$ is required.
+
+This recurrence relation is equivalent to merge sort and
+thus our algorithm runs in $\boxed{O(n \log n)}$ time, assuming
+that a query for card equality runs in constant time.
+
+\pagebreak
+
+\section{Hidden Surface Removal}
+
+\subsection{Algorithm}
+
+\begin{algorithmic}[1]
+    \State Sort all the lines from lowest slope to highest
+
+    \item[]
+    \Procedure{\texttt{visible}}{\texttt{lines}}
+        \If{\texttt{lines} has only one line}
+            \State \Return \texttt{lines}
+        \EndIf
+    
+        \item[]
+        \LComment{Again, we can use indices instead of actually creating new arrays if need be.}
+        \State Split \texttt{lines} into \texttt{half1} and \texttt{half2}
+        \State $l_1 \gets \Call{\texttt{visible}}{\texttt{half1}}$
+        \State $l_2 \gets \Call{\texttt{visible}}{\texttt{half2}}$
+        \State $\texttt{intersection}_1 \gets$ intersection points of adjacent lines in $l_1$
+        \State $\texttt{intersection}_2 \gets$ same thing for $l_2$
+
+        \item[]
+        \If{last line of $l_1$ is above any points in $\texttt{intersection}_2$}
+            \State Get the last point in $\texttt{intsersection}_2$ that's below said last line
+            \State \Return $l_1$ concatenated with all of $l_2$'s lines that are after that point
+        \ElsIf{first line of $l_2$ is above any points in $\texttt{intersection}_1$}
+            \State Get the \textit{first} point in $\texttt{intsersection}_1$ that's below said first line
+            \State \Return All of $l_1$'s lines before that point concatenated with $l_2$
+        \Else
+            \State \Return $l_1$ concatenated with $l_2$
+        \EndIf
+    \EndProcedure
+
+    \item[]
+    \State \Return \Call{\texttt{visible}}{all lines}
+\end{algorithmic}
+
+It should be trivial to compute if a point is above or below a line
+given that they're givein in slope-intercept form, so I'm omitting the pseudocode for that.
+
+\pagebreak
+
+\subsection{Correctness}
+
+A key observation is that the set of visible lines form
+a convex parabola of sorts where as we move from segment to segment
+the slope always increases.
+
+At each step we maintain this piecewise linear function
+that we obtain from merging the two smaller functions.
+For our base case, this invariant is obviously true
+since there's only one line and it can't be blocked by anything.
+
+Notice that since we've sorted the slopes so that the largest slope
+in $l_1$ is strictly smaller than the smallest slope in $l_2$,
+the only lines that can block out lines in the merged hull
+can be the last line in $l_1$ and the first line in $l_2$.
+
+As the line functions are piecewise and convex,
+the two lines mentioned above will block out a continuous prefix
+or suffix of the array they are interfering with.
+Thus, we can see that this function correctly merges
+the two sets and ultimately returns the set of all visible lines.
+
+\subsection{Time Complexity}
+
+Just like with merge sort we split each problem
+into two smaller problems of size around $\frac{n}{2}$ and then
+merge them in $O(n)$, making the total time complexity $\boxed{O(n \log n)}$.
+
+\end{document}
