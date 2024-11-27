@@ -1,0 +1,319 @@
+\documentclass[12pt]{article}
+
+\input{../kz}
+
+\lhead{406-196-414}
+\rhead{CS 180}
+
+\begin{document}
+
+\section{Coin Game}
+
+\subsection{Algorithm}
+
+Let $\texttt{dp}[s][e]$ be the maximums core we can achieve if the starting state
+consisted only of the coins from $v_s$ to $v_e$, inclusive and we go first.
+For simplicity, let $\texttt{dp}[s][e]=0$ if $s>e$.
+The base case is $\texttt{dp}[i][i]=v_i\ \forall i=1,\cdots, n$.
+
+Starting from ranges of length $2$, we slowly move on to bigger and bigger ranges
+with the following transition:
+
+\begin{algorithmic}[1]
+    \State $\texttt{removeLeft} \gets \left(\sum_{i=s+1}^{e} v_i\right)-\texttt{dp}[s+1][e]$
+    \State $\texttt{removeRight} \gets \left(\sum_{i=s}^{e-1} v_i\right)-\texttt{dp}[s][e-1]$
+    \State $\texttt{dp}[s][e] \gets \max(\texttt{removeLeft}, \texttt{removeRight})$
+\end{algorithmic}
+
+Our answer is $\texttt{dp}[1][n]$.
+
+\subsection{Correctness}
+
+The proof is by induction on the size of the range, namely $e-s+1$.
+Our base case is trivially true since there's only one coin we can take.
+
+Now assume we have a range of size $n$ from $v_s$ to $v_e$.
+There's two moves we can make.
+If we take from the start, the range reduces to $v_{s+1}, \cdots, v_e$,
+while taking from the end reduces it to $v_s, \cdots, v_{e+1}$.
+
+Notice that the turn has also changed.
+Assuming both players play optimally, the second player will try to maximize
+the value of the coins they take, which is exactly how $\texttt{dp}$ is defined.
+The first player has to take whatever the second player leaves us with,
+which is the sum of the coins in the remaining range
+minus $\texttt{dp}[s+1][e]$ or $\texttt{dp}[s][e-1]$.
+
+As the first player, we obviously want to maximize our value,
+so we take the maximum of \texttt{removeLeft} and \texttt{removeRight}
+given their definition above in the pseudocode. $\square$
+
+\subsection{Time Complexity}
+
+The amount of DP states is equivalent to the number of continuous ranges
+in the array, which is on the order of $O(n^2)$.
+The transition can be done in constant time, since we can compute
+continuous range sum queries with prefix sums.
+Past that all there is is some arithmetic and a maximum operation,
+all of which is $O(1)$.
+
+$O(n^2)$ states and an $O(1)$ transition make for a total TC of $\boxed{O(n^2)}$.
+
+\pagebreak
+
+\section{Number of Shortest Paths}
+
+\subsection{Algorithm}
+
+For simplicity, I'll assume that $E$
+has both $(a, b)$ and $(b, a)$ in itself for each undirected edge.
+
+\begin{algorithmic}[1]
+    \State $\texttt{dist} \gets$ array of size $|V|$, initially all $\infty$
+    \State $\texttt{dist}[v] \gets 0$
+    \State $\texttt{comeFrom} \gets$ array of sets of size $|V|$
+    \ForAll{$i \in \{1, \cdots, |V|-1\}$}
+        \Comment{$i$ isn't used for anything}
+        \ForAll{$(\texttt{from}, \texttt{to}, w) \in E$}
+            \If{$\texttt{dist}[\texttt{from}]+w<\texttt{dist}[\texttt{to}]$}
+                \State $\texttt{dist}[\texttt{to}]=\texttt{dist}[\texttt{from}]+w$
+            \EndIf
+            \If{$\texttt{dist}[\texttt{from}]+w=\texttt{dist}[\texttt{to}]$}
+                \State $\texttt{comeFrom}[\texttt{to}]=\texttt{comeFrom}[\texttt{to}] \cup \{\texttt{from}\}$
+            \EndIf
+        \EndFor
+    \EndFor
+
+    \item[]
+    \State $\texttt{numWays} \gets$ array of size $|V|$, initially all $0$
+    \Comment{Holds the \# of SPs to each node}
+    \State $\texttt{numWays}[v] \gets 1$
+    \ForAll{$n \in $ nodes of the graph in topological order}
+        \ForAll{$\texttt{from} \in \texttt{comeFrom}[n]$}
+            \State $\texttt{numWays}[n]=\texttt{numWays}[n]+\texttt{numWays}[\texttt{from}]$
+        \EndFor
+    \EndFor
+
+    \item[]
+    \State \Return $\texttt{numWays}[w]$
+\end{algorithmic}
+
+\subsection{Correctness}
+
+The first part of the algorithm is just
+\href{https://en.wikipedia.org/wiki/Bellman%E2%80%93Ford_algorithm#Algorithm}{Bellman-Ford},
+so it definitely works.
+
+We can iterate through the nodes in topological order
+for the second loop because there can't be any cycles in the directed
+graph indicated by \texttt{comeFrom} where $\texttt{comeFrom}[i]$
+gives all the nodes one can reach from node $i$.
+If there were, that would mean a nonpositive cycle in $G$,
+which the problem has stated can't happen.
+
+With this, we can see that the DP invariant mentioned in the pseudocode comment
+holds true after we're done looping over each node.
+The base case is true (since there's obviously only one way to get from $v$ to $v$),
+When we're at node $n$, all SPs to it must come from a node in $\texttt{comeFrom}[n]$,
+and we add them all up to get the correct value for $\texttt{numWays}[n]$.
+
+\subsection{Time Complexity}
+
+BF takes $O(|V| \cdot |E|)$ time.
+The DP part does a toposort then a for loop that goes
+through each edge at most once, and that takes $O(|V|+|E|)$ time.
+
+This algorithm's time complexity is $\boxed{O(|V| \cdot |E|)}$.
+
+\section{Word Segmentation}
+
+\subsection{Algorithm}
+
+Let $\texttt{dp}[i]$ be the best quality of $y_1 \cdots y_i$,
+with a base case $\texttt{dp}[0]=0$.
+
+We can fill out this array as follows:
+\begin{algorithmic}
+    \ForAll{$i \in \{1, \cdots, n\}$}
+        \State $\texttt{dp}[i] \gets 0$
+        \ForAll{$\texttt{prev} \in \{1, \cdots, i\}$}
+            \State $\texttt{new} \gets \texttt{dp}[\texttt{prev}-1]+\Call{\texttt{quality}}{y_\texttt{prev} \cdots y_i}$
+            \State $\texttt{dp}[i] \gets \max(\texttt{dp}[i], \texttt{new})$
+        \EndFor
+    \EndFor
+\end{algorithmic}
+
+The final answer we return is $\texttt{dp}[n]$.
+
+\subsection{Correctness}
+
+Consider the optimal partitioning of the words among all prefixes.
+We'll prove that \texttt{dp} corresponds to the best quality
+given by this optimal partitioning for all $i$.
+
+For our base case, $\texttt{dp}=0$ trivially
+since there aren't any characters to partition in the first place.
+
+At each step $i$, the final character must be part of some word segment.
+To be more formal, if we know the optimal partition
+has an ending segment from $j$ to $i$, its value must be
+$\texttt{dp}[j-1]+\textproc{\texttt{quality}}(y_j \cdots y_i)$.
+We can use $\texttt{dp}[j-1]$ because of our inductive hypothesis.
+Taking the maximum over all possible $j$ has to catch the optimal last segment,
+so $\texttt{dp}[i]$ must be optimal as well. $\square$
+
+\subsection{Time Complexity}
+
+There's exactly $n+1$ states including the base case.
+When computing $\texttt{dp}[i]$, we have to check all positions
+we could extend from to $i$, so our DP transition takes $O(n)$ steps.
+
+Combining the two gives a complexity of $\boxed{O(n^2)}$.
+Note that this assumes calls to $\textproc{\texttt{quality}}$ takes $O(1)$ time.
+
+\pagebreak
+
+\section{Signal Untangling}
+
+\subsection{Algorithm}
+
+For simplicity, we'll pad $x$ and $y$ with repetitions
+until they're at least as long as $s$.
+
+Our array $\texttt{dp}[a][b]$ will indicate whether
+we can interleave the first $a$ characters of $x$ and the first $b$ characters
+of $y$ to form a prefix of $s$.
+
+The transition is as follows:
+\begin{algorithmic}
+    \State $\texttt{dp}[0][0]=\texttt{true}$
+    \ForAll{$a \in \{0, \cdots, n\}$}
+        \ForAll{$b \in \{0, \cdots, n\}$}
+            \State $\texttt{dp}[a][b]=\texttt{false}$
+            \LComment{Assumes $x$, $y$, and $s$ are 1-indexed.}
+            \If{$a>0$ and $s_{a+b}=y_a$}
+                \State $\texttt{dp}[a][b] \gets \texttt{dp}[a][b] \lor \texttt{dp}[a-1][b]$
+            \EndIf
+            \If{$b>0$ and $s_{a+b}=y_b$}
+                \State $\texttt{dp}[a][b] \gets \texttt{dp}[a][b] \lor \texttt{dp}[a][b-1]$
+            \EndIf
+        \EndFor
+    \EndFor
+\end{algorithmic}
+
+Finally we go through all pairs of $a$ and $b$ that sum to $|s|$,
+checking if $\texttt{dp}[a][b]$ is true for any of them.
+If there is a true one, we return true.
+Otherwise, we output false.
+
+\subsection{Correctness}
+
+We induct on $a+b$. The base case is trivial because two empty strings make another.
+
+Now assume $\texttt{dp}[a][b]$ is valid for all $a+b=n$
+and consider the case where $a+b=n+1$.
+There's two cases:
+\begin{enumerate}[nosep]
+    \item In the interleaving of, the last character of $s$ corresponds to the last character of $x$.
+          Then we must also be able to construct a prefix from $x_1 \cdots x_{a-1}$ and $y_1 \cdots y_b$,
+          which corresponds to $\texttt{dp}[a-1][b]=\texttt{true}$.
+
+    \item Same as the last case, but now it's the last character of $y$.
+          In this case, we can interleave a prefix from $x_1 \cdots x_a$ and $y_1 \cdots y_{b-1}$,
+          which corresponds to $\texttt{dp}[a][b-1]=\texttt{true}$
+\end{enumerate}
+
+By our inductive hypothesis, $\texttt{dp}[a][b]$ is guranteed to have been filled out and valid,
+so our algorithm won't rely on any missing states.
+This completes the inductive step, and our proof is complete. $\square$
+
+\subsection{Time Complexity}
+
+The initial padding is $O(|s|)$ time.
+For the DP, $O(|s|^2)$ states and an $O(1)$ transition make
+for an $\boxed{O(|s|^2)}$ algorithm total (as quadratic dominates linear).
+
+\pagebreak
+
+\section{Computing Plan}
+
+\subsection{Incorrect Greedy}
+
+Consider $A=[10, 10]$ and $B=[1, 100]$.
+The algorithm starts with $A$, which immediately casts it as suboptimal.
+The optimal choice is to stick with $B$ and get $101$ steps.
+
+\subsection{Correct DP}
+
+\subsubsection{Algorithm}
+
+Let $\texttt{dp}[i][m]$ be the most steps given that you're at minute $i$
+and have to end the computation on machine $m$.
+$\texttt{step}[i][m]$ will contain the move you made to get to that point.
+
+\begin{algorithmic}[1]
+    \State $\texttt{dp}[1][a] \gets A[1]$
+    \State $\texttt{dp}[1][b] \gets B[1]$
+    \State $\texttt{step}[1][a] \gets \varnothing$
+    \State $\texttt{step}[1][b] \gets \varnothing$
+
+    \item[]
+    \ForAll{$i \in \{2, \cdots, n\}$}
+        \ForAll{$m \in \{A, B\}$}
+            \State $\texttt{stay} \gets m[i]+\texttt{dp}[i-1][m]$
+            \State $\texttt{switch} \gets 0$
+            \If{$i>2$}
+                \State $\texttt{switch} \gets m[i]+\texttt{dp}[i-2][\text{the other machine}]$
+            \EndIf
+
+            \item[]
+            \If{$\texttt{stay}>\texttt{switch}$}
+                \State $\texttt{dp}[i][m] \gets \texttt{stay}$
+                \State $\texttt{step}[i][m] \gets \text{stay}$
+            \Else
+                \State $\texttt{dp}[i][m] \gets \texttt{switch}$
+                \State $\texttt{step}[i][m] \gets \text{switch}$
+            \EndIf
+        \EndFor
+    \EndFor
+
+    \item[]
+    \State Backtrack from $\max(\texttt{dp}[n][a], \texttt{dp}[n][b])$ and construct movelist as you go along
+\end{algorithmic}
+
+The problem asks for what we should do at any point in time.
+While I feel like that's redundant since we can uniquely reconstruct
+a series of steps just from the instructions "stay at the current machine"
+or "move to the next machine", it's possible to do this in $O(n)$ time,
+just really tedious and implementation-heavy.
+
+\pagebreak
+
+\subsubsection{Correctness}
+
+The base cases only allow for one option,
+since if we end at any machine on minute $1$ we'd have to
+have started there in the first place.
+
+Inducting from there, we see that to end at machine $m$ at step $i$,
+there's only two ways we could've gotten there:
+\begin{enumerate}[nosep]
+    \item We were at $m$ at step $i-1$ and remained at the same machine.
+          This case is simple- our new value would just be $dp[i-1][m]+m[i]$.
+    \item We switched to it from the other machine.
+          In this case we have to transition from $dp[i-2][\text{the other machine}]$,
+          since minute $i-1$ was spent moving.
+          This makes our value $dp[i-2][\text{the other machine}]+m[i]$.
+\end{enumerate}
+To get the actual optimal value for the current state, we just take the larger of the two.
+
+Since we also log which one was bigger for each step,
+we can backtrack along the auxiliary \texttt{step} array to get
+the actual operations we have to do to achieve the optimal schedule.
+
+\subsubsection{Time Complexity}
+
+$n-1$ iterations of a for loop with a constant amount of operations
+within means that our time complexity is $\boxed{O(n)}$.
+
+\end{document}
