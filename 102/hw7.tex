@@ -15,12 +15,12 @@
 \begin{document}
 \begin{enumerate}
       \item \begin{enumerate}
-                  \item The bandwidth of this signal is $B=4\pi$, so the Nyquist rate is $2B=\boxed{8\pi\text{ Hz}}$.
+                  \item The bandwidth of this signal is $B=2$, so the Nyquist rate is $2B=\boxed{4\text{ Hz}}$.
                   \item $F_s=0.5\text{ Hz} \rightarrow \omega_0=\pi$: \\
-                        \includegraphics[width=12cm]{img/hw7/half_hertz}
+                        \includegraphics[width=10cm]{img/hw7/half_hertz}
 
                         $F_s=1\text{ Hz} \rightarrow \omega_0=2\pi$: \\
-                        \includegraphics[width=12cm]{img/hw7/one_hertz}
+                        \includegraphics[width=10cm]{img/hw7/one_hertz}
 
                         As we can see, only the first one has aliasing.
                         To get $F_s$ out of the sampled second one, we can use a bandpass
@@ -36,6 +36,10 @@
                                      & = \frac{1}{2} \sum_{k=-\infty}^{\infty} F(j(\omega-k\pi))+F(j(\omega-k\pi))e^{-jk\pi(1+\tau)}                                                \\
                                      & = \frac{1}{2} \sum_{k=-\infty}^{\infty} F(j(\omega-k\pi))\left(1+e^{-jk\pi(1+\tau)}\right)
                               \end{aligned}\] \label{list:2b}
+                              And future me is realizing that this is not what the question was asking.
+                              Thankfully, we can plug in $\ft{1}=2\pi\delta(\omega)$ to find that
+                              \[\boxed{\ft{f(t)}=\pi \sum_{k=-\infty}^{\infty} \delta(\omega-k\pi)\left(1+e^{-jk\pi(1+\tau)}\right)}\]
+                              
                   \item When $\tau=0$, our summation becomes
                         \[\frac{1}{2} \sum_{k=-\infty}^{\infty} F(j(\omega-k\pi))\left(1+e^{-jk\pi}\right)\]
                         Notice that at even $k$, $e^{-jk\pi}=1$, while at odd $k$, $e^{-jk\pi}=-1$.
@@ -51,7 +55,7 @@
       \item \begin{enumerate}
                   \item By a similar process to what we did in \ref{list:2b}, we have
                         \[X_p(j\omega)=\frac{1}{2\Delta}\sum_{k=-\infty}^{\infty} F\left(jw-\frac{k\pi}{\Delta}\right)\left(1-e^{-jk\pi}\right)\]
-                        This only preserves odd $k$, as add even $k$ $e^{-jk\pi}=1$ and the term becomes $0$.
+                        This only preserves odd $k$, as at even $k$ $e^{-jk\pi}=1$ and the term becomes $0$.
 
                         \includegraphics[width=12cm]{img/hw7/sampled_sig}
                   \item To recover $x(t)$ from $x_p(t)$, we could first put it through a modulator
@@ -69,10 +73,15 @@
                               \item \[\begin{aligned}
                                                 \lt{f(t)}
                                                  & = \lt{e^{-at}t \cdot \frac{1-\cos 2\omega_0t}{2}}                       \\
-                                                 & = \left(\lt{e^{-at}t}-\lt{e^{-at}\cos 2\omega_0t}\right) \div 2         \\
-                                                 & = \left(\frac{1}{(s+a)^2}-\frac{s+a}{(s+a)^2+4\omega_0^2}\right) \div 2 \\
-                                                 & = \boxed{\frac{1}{2(s+a)^2}-\frac{s+a}{2(s+a)^2+8\omega_0^2}}
+                                                 & = \left(\lt{e^{-at}t}-\lt{e^{-at}t\cos 2\omega_0t}\right) \div 2         \\
+                                                 & = \left(\lt{e^{-at}t}+\frac{d}{ds}\lt{e^{-at}\cos 2\omega_0t}\right) \div 2         \\
+                                                 & = \left(\frac{1}{(s+a)^2}+\frac{d}{ds}\frac{s+a}{(s+a)^2+4\omega_0^2}\right) \div 2 \\
+                                                 & = \left(\frac{1}{(s+a)^2}+\frac{4\omega_0^2-(s+a)^2}{\left((s+a)^2+4\omega_0^2\right)^2}\right) \div 2 \\
+                                                 & = \boxed{\frac{1}{2(s+a)^2}-\frac{4\omega_0^2-(s+a)^2}{2\left((s+a)^2+4\omega_0^2\right)^2}}
                                           \end{aligned}\]
+                                    The ROC of the first one is $\Re(s) > -a$.
+                                    The second one turns from $\Re(s) > 0$ to the same one as the first one,
+                                    so the total ROC is $\boxed{\Re(s) > -a}$.
                               \item \[\begin{aligned}
                                                 \lt{f(t)}
                                                  & = \int_{0}^{\infty} e^{-b|t|}e^{-st}\,dt                       \\
@@ -97,36 +106,41 @@
                   \item $\lt{f(t-1)}=e^{-s}F(s)$,
                         so we can ILT the rational fraction independently.
                         \begin{gather*}
-                              \frac{s+1}{(s-2)^2(s+3)} = \frac{r_1}{s-2}+\frac{r_2}{(s-2)^2}+\frac{s_3}{s+3} \\
-                              s+1=r_1(s+3)+r_2(s-2)(s-3)+r_3(s-2)^2 \\
-                              s+1=r_1(s+3)+r_2(s-2)(s-3)-r_2(s-2)^2 \\
-                              s+1=r_1(s+3)+r_2(5s-10)
+                              \frac{s+1}{(s-2)^2(s-3)} = \frac{r_1}{s-2}+\frac{r_2}{(s-2)^2}+\frac{s_3}{s-3} \\
+                              s+1=r_1(s-2)(s-3)+r_2(s-3)+r_3(s-2)^2 \\
+                              s+1=r_1(s-2)(s-3)+r_2(s-3)-r_1(s-2)^2 \\
+                              s+1=r_1(2-s)+r_2(s-3)
                         \end{gather*}
                         Solving the linear equations given allows us to obtain
-                        \[\frac{s+1}{(s-2)^2(s+3)}=\frac{3}{5(s-2)^2}+\frac{2}{25(s-2)}-\frac{2}{25(s+3)}\]
+                        \[\frac{s+1}{(s-2)^2(s-3)}=-\frac{4}{s-2}-\frac{3}{(s-2)^2}+\frac{4}{s-3}\]
                         The ILT of this is
-                        \[u(t)\left(\frac{3t}{5}e^{2t}+\frac{2}{25}e^{2t}-\frac{2}{25}e^{-3t}\right)\]
+                        \[u(t)\left(-4e^{2t}-3te^{2t}-4e^{3t}\right)\]
                         Noting that this is actually $f(t-1)$, our actual ILT is
-                        \[\boxed{u(t-1)\left(\frac{3t-3}{5}e^{2t-2}+\frac{2}{25}e^{2t-2}-\frac{2}{25}e^{-3t+3}\right)}\]
+                        \[\boxed{u(t-1)\left(-4e^{2t-2}-3te^{2t-2}-4e^{3t-3}\right)}\]
 
                   \item We use the linear algebra method:
                         \begin{gather*}
                               \frac{s+4}{s(s+2j)(s-2j)}=\frac{r_1}{s}+\frac{r_2}{s+2j}+\frac{r_3}{s-2j} \\
-                              s+4=r_1(s^2-4)+r_2(s^2-2js)+r_3(s^2+2js)
+                              s+4=r_1(s^2+4)+r_2(s^2-2js)+r_3(s^2+2js)
                         \end{gather*}
 
                         This gives us the following set of equations:
                         \begin{gather*}
                               \sum r_i=0 \\
-                              -4r_1=4 \\
-                              -2jr_2+2jr_2=1
+                              4r_1=4 \\
+                              -2jr_2+2jr_3=1
                         \end{gather*}
                         Solving, we find
                         \begin{align*}
-                              r_1=-1 &  & r_2=\frac{1}{2}-\frac{1}{4j} &  & r_3=\frac{1}{2}+\frac{1}{4j}
+                              r_1=1 &  & r_2=-\frac{1}{2}-\frac{1}{4j} &  & r_3=-\frac{1}{2}+\frac{1}{4j}
                         \end{align*}
                         and using $\ilt{\frac{1}{s-\lambda}}=u(t)e^{\lambda}$ gives us
-                        \[\boxed{\ilt{F(s)}=u(t)\left(-1+\left(\frac{1}{2}-\frac{1}{4j}\right)e^{-2jt}+\left(\frac{1}{2}+\frac{1}{4j}\right)e^{2jt}\right)}\]
+                        \begin{align*}
+                              \ilt{F(s)}
+                              &=u(t)\left(1+\left(-\frac{1}{2}-\frac{1}{4j}\right)e^{-2jt}+\left(-\frac{1}{2}+\frac{1}{4j}\right)e^{2jt}\right) \\
+                              &=u(t)\left(1+\left(-\frac{1}{2}+\frac{j}{4}\right)e^{-2jt}+\left(-\frac{1}{2}-\frac{j}{4}\right)e^{2jt}\right) \\
+                              &=u(t)\left(1-\cos(2t)+\frac{1}{2}\sin(2t)\right)
+                        \end{align*}
             \end{enumerate}
       \item \begin{enumerate}
                   \item The transfer function is
@@ -146,7 +160,7 @@
                               \end{aligned}
                         \end{gather*}
                         Applying the ILT to each of these individually gives
-                        \[\boxed{y(t)=u(t)\left(\frac{5}{4}-\frac{5}{3}e^t+\frac{5}{12}e^{4t}\right)}\]
+                        \[\boxed{y(t)=u(t)\left(\frac{5}{4}-\frac{5}{3}e^{-t}+\frac{5}{12}e^{-4t}\right)}\]
                   \item The LT of the input is
                         \[\frac{1}{s}-\frac{e^{-s}}{s}\]
                         and since $r(t)=u(t)t$, the LT of the output is
@@ -157,8 +171,8 @@
                         and the transfer function of the two systems combined is
                         \[H(s)=\frac{5-5e^{-s}}{s(s+1)(s+4)}\]
                         Using the same PFD as in the previous part, we get our impulse response
-                        \[\boxed{h(t)=u(t)\left(\frac{5}{4}-\frac{5}{3}e^t+\frac{5}{12}e^{4t}\right)
-                        -u(t-1)\left(\frac{5}{4}-\frac{5}{3}e^{t-1}+\frac{5}{12}e^{4t-4}\right)}\]
+                        \[\boxed{h(t)=u(t)\left(\frac{5}{4}-\frac{5}{3}e^{-t}+\frac{5}{12}e^{-4t}\right)
+                        -u(t-1)\left(\frac{5}{4}-\frac{5}{3}e^{-t+1}+\frac{5}{12}e^{-4t+4}\right)}\]
             \end{enumerate}
 \end{enumerate}
 \end{document}
