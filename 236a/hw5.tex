@@ -126,11 +126,61 @@
                         c_5 & 1   & 1   & -1  & 0           \\ \hline
                             & -1  & 1   & 0   & 0           \\
                   \end{array}\]
-            Only $c_1$ is available to pivot; $x_1$ blocks 
+            Only $c_1$ is available to pivot; $x_1$ blocks
       \item \begin{enumerate}
-            \item wtf
-            \item wtf
-      \end{enumerate}
+                  \item I won't put $p$ into the tableau since this LP is supposed to be infeasible:
+                        \[\begin{array}{c|rrr|l}
+                                        & x_1 & x_2 & x_0 & \mathbf{1} \\ \hline
+                                    c_1 & -1  & -1  & 0   & 1          \\
+                                    c_2 & -2  & 1   & 1   & -2         \\ \hline
+                                    z_0 & 0   & 0   & 1   & 0          \\
+                              \end{array}\]
+                        Pivotting so that $x_0=2$ gives us
+                        \[\begin{array}{c|rrr|l}
+                                        & x_1 & x_2 & c_2 & \mathbf{1} \\ \hline
+                                    c_1 & -1  & -1  & 0   & 1          \\
+                                    x_0 & 2   & -1  & 1   & 2          \\ \hline
+                                    z_0 & 2   & -1  & 1   & 2          \\
+                              \end{array}\]
+                        Now we choose $x_2$ to enter.
+                        $c_1$ blocks it at $x_2=1$, so our new tableau is
+                        \[\begin{array}{c|rrr|l}
+                                        & x_1 & c_1 & c_2 & \mathbf{1} \\ \hline
+                                    x_2 & -1  & -1  & 0   & 1          \\
+                                    x_0 & 3   & 1   & 1   & 2          \\ \hline
+                                    z_0 & 3   & 1   & 1   & 1          \\
+                              \end{array}\]
+                        As we can see, the optimal value is $x_0=1$, proving the original LP infeasible. $\square$
+                  \item Starting with
+                        \[\begin{array}{c|rrr|l}
+                                        & x_1 & x_2 & x_0 & \mathbf{1} \\ \hline
+                                    c_1 & 2   & -1  & 1   & -1         \\
+                                    c_2 & 1   & 2   & 1   & -2         \\ \hline
+                                    z   & -2  & 1   & 0   & 0          \\ \hline
+                                    z_0 & 0   & 0   & 1   & 0          \\
+                              \end{array}\]
+                        We do a special pivot to set $x_0=2$ and get
+                        \[\begin{array}{c|rrr|l}
+                                        & x_1 & x_2 & c_2 & \mathbf{1} \\ \hline
+                                    c_1 & 1   & -3  & 1   & 1          \\
+                                    x_0 & -1  & -2  & 1   & 2          \\ \hline
+                                    z   & -2  & 1   & 0   & 0          \\ \hline
+                                    z_0 & -1  & -2  & 1   & 2          \\
+                              \end{array}\]
+                        Then we can pivot $x_1$ which $x_0$ blocks at $x_1=2$:
+                        \[\begin{array}{c|rrr|l}
+                                        & x_0 & x_2 & c_2 & \mathbf{1} \\ \hline
+                                    c_1 & -1  & -5  & 2   & 3          \\
+                                    x_1 & -1  & -2  & 1   & 2          \\ \hline
+                                    z   & 2   & 5   & -2  & -4         \\ \hline
+                                    z_0 & 1   & 2   & 0   & 0          \\
+                              \end{array}\]
+                        We've hit $x_0=0$, so we can start reducing the actual objective function.
+                        Notice, though, that if we choose $c_2$ as our entering variable,
+                        we can decrease the objective function arbitrarily,
+                        since there's no negative entries in its column.
+                        Thus, this problem is unbounded. $\square$
+            \end{enumerate}
       \item \begin{enumerate}
                   \item \begin{enumerate}
                               \item No, because $e_1+e_2$ literally isn't feasible.
