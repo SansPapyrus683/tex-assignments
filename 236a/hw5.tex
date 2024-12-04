@@ -107,26 +107,38 @@
                         The path is below: \\
                         \includegraphics[width=12cm]{img/hw5/unbounded_path}
             \end{enumerate}
-      \item I'll name the constraints as follows:
+      \item Notice that $x_3$ functions as nothing more than a slack variable.
+            The sum of $x_1$ and $x_2$ just has to be greater than $\frac{1}{2}$,
+            and $x_3$ can fill in the rest to meet the equality.
+
+            I'll name the constraints as follows:
             \begin{gather*}
                   c_1=-x_1+\frac{1}{2} \ge 0 \\
                   c_2=-x_2+\frac{1}{2} \ge 0 \\
-                  c_3=-x_3+\frac{1}{2} \ge 0 \\
-                  c_4=x_1+x_2+x_3-1 \ge 0 \\
-                  c_5=-x_1-x_2-x_3+1 \ge 0
+                  c_3=x_1+x_2-\frac{1}{2} \ge 0 \\
             \end{gather*}
-
             We start with
-            \[\begin{array}{c|rrr|l}
-                            & c_1 & c_2 & x_3 & \mathbf{1}  \\ \hline
-                        x_1 & -1  & 0   & 0   & \frac{1}{2} \\
-                        x_2 & 0   & -1  & 0   & \frac{1}{2} \\
-                        c_3 & 0   & 0   & -1  & \frac{1}{2} \\
-                        c_4 & -1  & -1  & 1   & 0           \\
-                        c_5 & 1   & 1   & -1  & 0           \\ \hline
-                            & -1  & 1   & 0   & 0           \\
+            \[\begin{array}{c|rr|l}
+                            & c_1 & c_2 & \mathbf{1}  \\ \hline
+                        x_1 & -1  & 0   & \frac{1}{2} \\
+                        x_2 & 0   & -1  & \frac{1}{2} \\
+                        c_3 & -1  & -1  & \frac{1}{2} \\ \hline
+                            & -1  & 1   & 0           \\
                   \end{array}\]
-            Only $c_1$ is available to pivot; $x_1$ blocks
+            Only $c_1$ is available to pivot; $x_1$ and $c_3$ block it at $c_1=\frac{1}{2}$.
+            Arbitrarily choosing $x_1$ as the blocker, we get
+            \[\begin{array}{c|rr|l}
+                            & x_1 & c_2 & \mathbf{1}   \\ \hline
+                        c_1 & -1  & 0   & \frac{1}{2}  \\
+                        x_2 & 0   & -1  & \frac{1}{2}  \\
+                        c_3 & 1  & -1  & 0            \\ \hline
+                            & 1  & 1   & -\frac{1}{2} \\
+                  \end{array}\]
+            There's nowhere to go now, so our optimal value is $z=\frac{1}{2}$
+            at $x_1=0, x_2=\frac{1}{2}, x_3=\frac{1}{2}$.
+
+            \pagebreak
+
       \item \begin{enumerate}
                   \item I won't put $p$ into the tableau since this LP is supposed to be infeasible:
                         \[\begin{array}{c|rrr|l}
