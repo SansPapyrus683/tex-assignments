@@ -1,0 +1,146 @@
+\documentclass[12pt]{article}
+
+\input{../kz}
+
+\rhead{Math 131AH}
+
+\begin{document}
+
+\begin{enumerate}
+      \item \begin{itemize}
+                  \item You've tied your life to a goal, not people or things, but you still aren't happy.
+                  \item The plane left, you're not on it and you don't regret it.
+                  \item There exists a person such that no one makes them unhappy.
+            \end{itemize}
+      \item The base case for $n=1$ is trivially true: $1=1^2$.
+            We now assume this for $n \ge 1$ and try to prove it for $n+1$.
+
+            For $n+1$, the sum consists of all positive odd numbers from $1$ to $2n+1$.
+            \begin{align*}
+                   & \hphantom{\leftrightarrow{}} 1+3+5+ \cdots + (2n-1) = n^2      \\
+                   & \leftrightarrow 1+3+5+ \cdots + (2n-1) + (2n+1) = n^2 + 2n + 1 \\
+                   & \leftrightarrow 1+3+5+ \cdots + (2n+1) = (n+1)^2
+            \end{align*}
+            By adding $2n+1$ to both sides of the equation that we assumed was true
+            for $n$, we've shown that it must hold for $n+1$ as well,
+            completing the inductive step. $\square$
+      \item At least one of the three must be divisble by $3$.
+            We'll represent it as $3n$.
+            There's a total of three cases as to where this multiple is.
+
+            \textbf{At the start}
+            \begin{align*}
+                   & \hphantom{={}} (3n)^3+(3n+1)^3+(3n+2)^3        \\
+                   & = 27n^3+(27n^3+27n^2+9n+1)+(27n^3+54n^2+36n+8) \\
+                   & = 81n^3+81n^2+45n+9                            \\
+                   & \equiv 0 \pmod 3
+            \end{align*}
+
+            \textbf{In the middle}
+            \begin{align*}
+                   & \hphantom{={}} (3n-1)^3+(3n)^3+(3n+1)^3       \\
+                   & = (27n^3-27n^2+9n-1)+27n^3+(27n^3+27n^2+9n+1) \\
+                   & = 81n^3+18n                                   \\
+                   & \equiv 0 \pmod 3
+            \end{align*}
+
+            \textbf{At the end}
+            \begin{align*}
+                   & \hphantom{={}} (3n-2)^3+(3n-1)^3+(3n)^3        \\
+                   & = (27n^3-54n^2+36n-8)+(27n^3-27n^2+9n-1)+27n^3 \\
+                   & = 81n^3-81n^2+45n-9                            \\
+                   & \equiv 0 \pmod 3
+            \end{align*}
+
+            No matter where the $3n$ is, the sum of cubes always winds up
+            divisble by $3$. $\square$
+
+      \item Once again, the base case $n=1$ is trivial: $30 \mid 1^5-1=0$.
+
+            It remains to show $30 \mid n^5-n \implies 30 \mid (n+1)^5-(n+1)$.
+            \begin{align*}
+                  (n+1)^5-(n+1)
+                   & =n^5+5n^4+10n^3+10n^2+4n               \\
+                   & =\left(n^5-n\right)+5(n^4+2n^3+2n^2+n)
+            \end{align*}
+            By our inductive hypothesis, the first term is divisible by $30$ already.
+            The second term has an explicit coefficient of $5$, so we need to show
+            $6 \mid n^4+2n^3+2n^2+n$, which can be separated into proving that
+            the expression is divisible by both $2$ and $3$.
+
+            For brevity, let's set $x=n^4+2n^3+2n^2+n$.
+
+            To prove that $x$ is even, we have to consider two cases.
+            \begin{itemize}[nolistsep]
+                  \item If $n$ is even, then all the individual terms are even, as is their sum.
+                  \item If $n$ is odd, $n^4$ and $n$ are odd while $2n^3+2n^2$ is even due to them being multiplied by $2$.
+                        The two odds cancel out, so $x$ still turns out even.
+            \end{itemize}
+            In both cases, the sum is even, and thus $x$.
+
+            For divisibility by $3$, let's consider the numbers modulo $3$.
+            \begin{itemize}[nolistsep]
+                  \item $n \equiv 0$: all terms are still $0 \mod 3$, so the expression itself is also $0 \mod 3$.
+                  \item $n \equiv 1$: $n^4 \equiv n \equiv 1 \pmod 3$ while $2n^3 \equiv 2n^2 \equiv 2 \pmod 3$.
+                        Adding up these four terms results in $x \equiv 1+1+2+2 \equiv 0 \pmod 3$.
+                  \item $n \equiv 2$: $n^4 \equiv 2n^3 \equiv 1 \pmod 3$, while $2n^2 \equiv n \equiv 2 \pmod 3$.
+                        Same thing, $x \equiv 0 \pmod 3$.
+            \end{itemize}
+            In all three cases, $3 \mid x$.
+
+            Now $x$ is divisible by $2$ and $3$, so $6 \mid x$ since $2$ and $3$ are coprime.
+            This makes $30 \mid 5x$ and our implication is finally proved. $\square$
+
+      \item Doing partial fraction decomposition gives us
+            \[\frac{n^2}{(2n-1)(2n+1)}=\frac{1}{8(2n-1)}-\frac{1}{8(2n+1)}+\frac{1}{4}\]
+
+            Given this, I propose
+            \[\sum_{k=1}^{n} \frac{k^2}{(2k-1)(2k+1)}=\frac{n}{4}+\frac{1}{8}-\frac{1}{8(2n+1)}\]
+            which I will prove by induction.
+
+            The base case $n=1$ is as follows:
+            \begin{gather*}
+                  \sum_{k=1}^{1} \frac{k^2}{(2k-1)(2k+1)}=\frac{1}{3} \\
+                  \frac{1}{4}+\frac{1}{8}-\frac{1}{8 \cdot 3}=\frac{9}{24}-\frac{1}{24}=\frac{1}{3}
+            \end{gather*}
+            We now assume this is true for $n \ge 1$ and try to prove that the formula holds for $n+1$.
+
+            \begin{align*}
+                  \sum_{k=1}^{n+1} \frac{k^2}{(2k-1)(2k+1)}
+                   & = \sum_{k=1}^{n} \frac{k^2}{(2k-1)(2k+1)} + \frac{(n+1)^2}{(2n+1)(2n+3)}                      \\
+                   & = \frac{n}{4}+\frac{1}{8}-\frac{1}{8(2n+1)} + \frac{(n+1)^2}{(2n+1)(2n+3)}                    \\
+                   & = \frac{n}{4}+\frac{1}{8}-\frac{1}{8(2n+1)} + \frac{1}{8(2n+1)}-\frac{1}{8(2n+3)}+\frac{1}{4} \\
+                   & = \frac{n}{4}+\frac{1}{4}+\frac{1}{8}-\frac{1}{8(2n+3)}                                       \\
+                   & = \frac{n+1}{4}+\frac{1}{8}-\frac{1}{8(2n+3)}\quad\square
+            \end{align*}
+
+      \item We WTS $\forall q \in \mathbb{Q}\ q^2 \ne 6$.
+
+            BWOC let $q \in \mathbb{Q}: q^2=6$.
+            Then $\exists a, b \in \mathbb{N}: \gcd(a,b)=1 \text{ and } \frac{a}{b}=q$.
+            By our premise, $\frac{a^2}{b^2}=6 \therefore a^2=6b^2$ and $6 \mid a^2$,
+            which we can decompose into $2 \mid a^2$ and $3 \mid a^2$ since they're coprime.
+            This then means $6 \mid a$ and $\exists a' \in \mathbb{N}: 6a'=a$.
+
+            Rewriting our original expression, we have $\left(6a'\right)^2=6b^2 \therefore 6\left(a'\right)^2=b^2$.
+            By the same logic in the previous paragraph, we get $6 \mid b$ as well.
+            This contradicts our previous premise that $\gcd(a, b)=1$ though, since
+            we have that $6$ divides both $a$ and $b$.
+            Contradiction. $\square$
+
+      \item We can only deduce \boxed{c} by the contrapositive of the given implication.
+
+      \item If X and Y are both false, then none of them are true- we have to show \boxed{b}.
+
+      \item The negation of $P(x)\ \forall x \in X$ is $\exists x \in X: \lnot P(x)$,
+            so to disprove we have to show \boxed{e}.
+
+      \item $\lnot X \implies Z \therefore \lnot Z \implies X$.
+            $Z$ is false, so $X$ and $Y$ must both be true.
+            Option \boxed{d} is the correct one.
+
+      \item The negation of $\exists n \in Z: \forall m \in \mathbb{Z}\ P(n, m)$ is
+            $\forall n \in Z\ \exists m \in \mathbb{Z}: \lnot P(n, m)$.
+            This negation lines up exactly wih option \boxed{b}.
+\end{enumerate}
+\end{document}
