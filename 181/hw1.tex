@@ -1,0 +1,132 @@
+\documentclass[12pt]{article}
+
+\input{../kz}
+
+\lhead{406-196-414}
+\rhead{CS 181}
+
+\begin{document}
+
+\section{$\binom{3}{2}$-regular Languages}
+
+\subsection*{Part A}
+
+Let the parameters for DFA $M_i=(Q_i, F_i, q_{0i}, \Sigma, \delta_i)$.
+
+Let's define our new DFA with these parameters:
+\begin{itemize}[nolistsep]
+    \item $Q=Q_1 \times Q_2 \times Q_3$
+    \item $F=\{q \in Q \mid \text{exactly 2 states in $q$ are accepting in their machine}\}$
+    \item $q'=\left(q_{01}, q_{02}, q_{03}\right)$
+    \item $\Sigma$ stays the same
+    \item $\delta: Q \times \Sigma \rightarrow Q$ defined as
+          $\delta((q_1, q_2, q_3), s)=(\delta_1(q_1, s), \delta_2(q_2, s), \delta_3(q_3, s))$
+\end{itemize}
+
+If exactly two out of the three DFAs accept some input string, then this
+new DFA $M$ will wind up in a state where exactly two of the three elements
+are in their machine's $F$, resulting in $M$ itself accepting too.
+
+\subsection*{Part B}
+
+Say our regular language was implemeneted by a DFA $M$.
+We can define the following:
+\begin{itemize}[nolistsep]
+    \item $M_1=M$
+    \item $M_2=M$
+    \item $M_3$ is a machine that never accepts.
+          This can be done with the following simple DFA construction:
+          \begin{itemize}[nolistsep]
+              \item $Q=\{q_0\}$
+              \item $F=\varnothing$
+              \item $q_0=q_0$
+              \item $\Sigma$ is the same
+              \item $\delta: Q \times \Sigma \rightarrow Q$ defined as $\delta(q, s)=q$
+          \end{itemize}
+\end{itemize}
+
+Any $L$ that's in the language will get accepted by $M_1$ and $M_2$ and rejected by $M_3$,
+while any $L$ that isn't in the language will get rejected by all three.
+
+\pagebreak
+
+\section{Reversed Languages}
+
+Let us construct an NFA $M'$ from the DFA $M$ that does the reversed version of the language,
+as it was shown in class that any NFA can be reduced to a DFA.
+
+If $M=(Q, F, q_0, \Sigma, \delta)$, then we can make our NFA as follows:
+\begin{itemize}[nolistsep]
+    \item $Q'=Q \cup \{q_0'\}$
+    \item $F'=\{q_0\}$
+    \item $q_0'$ is a new state that I've introduced.
+    \item $\Sigma$ stays the same
+    \item $\delta': Q' \times \Sigma \rightarrow S \subseteq Q$ defined as
+          \[\delta'(q, s)=\begin{cases}
+                  \{x \in Q \mid \delta(x, s)=q\} & q \ne q_0'                \\
+                  F                               & q=q_0' \land s = \epsilon \\
+                  \varnothing                     & \text{otherwise}
+              \end{cases}\]
+\end{itemize}
+
+On input strings that $M$ accepts, the NFA starts at $q_0'$ and chooses
+the states $M$ goes through but in reverse.
+Due to the how I've constructed $\delta'$, the path back to $q_0$
+will always be valid.
+
+\section{Alternating Languages}
+
+The idea is to make two copies of the original FSM that we have to alternate between.
+One copy has all the states as usual, while the other appends a prime to the end.
+\begin{itemize}[nolistsep]
+    \item $Q'=Q \cup \{q' \mid q \in Q\}$
+    \item $F'=F \cup \{f' \mid f \in F\}$
+    \item $q_0=q_0$
+    \item $\delta': F' \times \Sigma \rightarrow S \subseteq Q'$ defined by
+          \begin{gather*}
+              \delta'(q, s)=\{\delta(q, s)'\} \\
+              \delta'\left(q', s\right)=\begin{cases}
+                  \{\delta(q, i) \mid i \in \Sigma\} & s=\epsilon       \\
+                  \varnothing                        & \text{otherwise}
+              \end{cases}
+          \end{gather*}
+\end{itemize}
+
+We start off at the initial copy, and then for each input token we consume,
+we're \textit{forced} to make another transition in the copy of the FSM
+that doesn't consume any input.
+
+Notice that $F'$ has both the original $F$ and prime versions of the states
+to account for the last character possibly being either in or not in
+the alternating string.
+
+\pagebreak
+
+\section{Halved Languages}
+
+We can go through all the intermediary states the two halves
+of the string could meet up at and simulate the machine for each of them.
+\begin{itemize}[nolistsep]
+    \item $Q'=(Q \times Q \times Q) \cup \{q'_0\}$
+    \item $F'=\{(m, a, b) \in Q' \mid a=m \land b \in F\}$
+    \item $q_0=q'_0$
+    \item $\delta': Q' \rightarrow S \subseteq Q'$ defined by
+          \begin{gather*}
+              \delta'(q'_0, s)=\begin{cases}
+                  \{(m, q_0, m) \mid m \in Q\} & s=\epsilon       \\
+                  \varnothing                  & \text{otherwise}
+              \end{cases} \\
+              \delta'((m, a, b), s)=\{(m, \delta(a, s), \delta(b, i)) \mid i \in \Sigma\}
+          \end{gather*}
+\end{itemize}
+
+Say the halves of our string are $x$ and $y$ with $|x|=|y|$.
+The initial machine accepts $xy$, so after taking $x$ it must end
+up at some state $m$, and then after that it'll end up at some $q \in F$.
+
+Our NFA simulates this by iterating over all possible intermediary states $m$.
+During transition, the first half is known, so we call $\delta(a, s)$.
+The second half could be anything, so $\delta'$ enumerates all possible $i \in \Sigma$
+for what the second part of the state could end up being.
+
+\end{document}
