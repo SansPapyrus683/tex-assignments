@@ -1,0 +1,200 @@
+\documentclass[12pt]{article}
+
+\input{../kz}
+
+\rhead{ECE C147}
+
+\DeclareMathOperator{\Cov}{Cov}
+\DeclareMathOperator{\Var}{Var}
+\DeclareMathOperator{\E}{E}
+\DeclareMathOperator{\Tr}{Tr}
+\newcommand{\norm}[1]{\left\lVert#1\right\rVert}
+
+\begin{document}
+\begin{enumerate}
+      \item \begin{enumerate}
+                  \item $Q \in \mathbb{R}^{n \times n}$ is orthogonal iff $Q^TQ=QQ^T=I$.
+                        \begin{enumerate}
+                              \item $\left(Q^T\right)^T Q^T=Q Q^T=I$.
+                                    Similarly, $Q^T\left(Q^T\right)^T=Q^T Q=I$.
+
+                                    For the inverse, notice that $Q^T Q=I \therefore Q^{-1}=Q^T$,
+                                    which we already proved was orthogonal. $\square$
+                              \item Any eigenvalue $\lambda$ of $Q$ must satisfy $Qv=\lambda v$.
+                                    \begin{align*}
+                                          \left(\lambda v^T\right) (\lambda v)
+                                           & = (Qv)^T (Qv) \\
+                                           & = v^T Q^T Qv  \\
+                                           & = v^T v
+                                    \end{align*}
+                                    This gives $\lambda^2=1 \therefore \lambda=\pm 1$. $\square$
+                              \item Thank god determinants are multiplicative.
+                                    \begin{gather*}
+                                          \det I = 1 \\
+                                          \det Q^T Q = 1 \\
+                                          \det Q^T \cdot \det Q = 1 \\
+                                          (\det Q)^2 = 1 \\
+                                          \det Q = \pm 1 \quad\square
+                                    \end{gather*}
+                              \item Multiplying $Q$ with a vector $x$ preserves length.
+                                    This is because
+                                    \[(Qx)^T(Qx) = x^T Q^T Q x = x^T x\]
+                                    So $Qx$ and $x$ have the same inner prduct with themselves,
+                                    which also means they have the same length. $\square$
+                        \end{enumerate}
+                  \item \begin{enumerate}
+                              \item The eigenvectors of $AA^T$ are the left singular vectors of $A$.
+                                    This is because
+                                    \begin{align*}
+                                          AA^T
+                                           & = \left(U \Sigma V^T\right)\left(U \Sigma V^T\right)^T \\
+                                           & = U \Sigma V^T V \Sigma^T U^T                          \\
+                                           & = U \Sigma^2 U^T                                       \\
+                                           & = U \Sigma^2 U^{-1}
+                                    \end{align*}
+                                    which just happens to be the eigenvalue decomposition of $AA^T$.
+
+                                    OTOH, the eigenvectors of $A^T A$ are the \textit{right} singular vectors of $A$.
+                              \item As shown above, the eigenvalues of $AA^T$ and $A^TA$ are
+                                    the singular values of $A$ squared- $\Sigma^2$ to be more specific.
+                        \end{enumerate}
+                  \item \begin{enumerate}
+                              \item False
+                              \item False
+                              \item True
+                              \item True
+                              \item True
+                        \end{enumerate}
+            \end{enumerate}
+
+            \pagebreak
+
+      \item \begin{enumerate}
+                  \item \begin{enumerate}
+                              \item For the match to end in $n$ shots and A to not get hit,
+                                    we have to go through $n-1$ rounds of both missing followed by
+                                    a round of A hitting and B missing.
+                                    This gives the infinite sum
+                                    \[\sum_{n=1}^{\infty} \left(\left(1-p_A\right)\left(1-p_B\right)\right)^{n-1} p_A \left(1-p_B\right)\]
+                                    Using the formula for infinite geometric series yields
+                                    \boxed{\frac{p_A(1-p_B)}{p_A+p_B-p_Ap_B}}.
+                              \item Same thing, but now the the desired final match happens with probability $p_A p_B$,
+                                    so the final probability becomes \boxed{\frac{p_A p_B}{p_A+p_B-p_Ap_B}}.
+                              \item The chance a duel ends is $1-(1-p_A)(1-p_B)$, making our final answer
+                                    \[\boxed{((1-p_A)(1-p_B))^{n-1}(p_A+p_B-p_Ap_B)}\]
+
+                              \item We use that $P(A \mid B)=\frac{P(A \cap B)}{P(B)}$:
+                                    \begin{gather*}
+                                          P(\text{ends at $n$ rounds} \cap \text{A not hit})=\left(\left(1-p_A\right)\left(1-p_B\right)\right)^{n-1} p_A \left(1-p_B\right) \\
+                                          P(\text{A not hit})=\frac{p_A(1-p_B)}{p_A+p_B-p_Ap_B} \\
+                                          P(\text{ends at $n$ rounds} \mid \text{A not hit})=\boxed{\left(\left(1-p_A\right)\left(1-p_B\right)\right)^{n-1}(p_A+p_B-p_Ap_B)}
+                                    \end{gather*}
+                              \item Doing basically the same thnig as in the previous problem, we get
+                                    \[P(\text{ends at $n$ rounds} \mid \text{both hit})=\boxed{\left(\left(1-p_A\right)\left(1-p_B\right)\right)^{n-1}(p_A+p_B-p_Ap_B)}\]
+                                    the same answer, actually!
+                        \end{enumerate}
+                  \item \begin{enumerate}
+                              \item $f_Y(x \mid X=1)=\mathcal{N}\left(1, \sigma^2\right)$ and $f_Y(x \mid X=-1)=\mathcal{N}\left(-1, \sigma^2\right)$
+                              \item We're wrong when $Y \ge \gamma$ but $X=-1$ or when $Y < \gamma$ but $X=1$.
+                                    \begin{gather*}
+                                          P(Y \ge \gamma \cap X=-1) = \frac{1}{2}\left(1-\phi\left(\frac{\gamma+1}{\sigma}\right)\right) \\
+                                          P(Y < \gamma \cap X=1) = \frac{1}{2}\phi\left(\frac{\gamma-1}{\sigma}\right) \\
+                                          P(\text{wrong}) = \frac{1}{2}\left(1-\phi\left(\frac{\gamma+1     }{\sigma}\right)+\phi\left(\frac{\gamma-1}{\sigma}\right)\right)
+                                    \end{gather*}
+                              \item The best choice is $\gamma=0$.
+                                    Then, the chance we're wrong is \boxed{1-\phi\left(\frac{1}{\sigma}\right)}.
+                        \end{enumerate}
+                  \item Let $D$ denote the event that a man has the dangerous version of the disease,
+                        and $+$/$-$ denote the event of a positive and negative test respectively.
+                        \begin{enumerate}
+                              \item \hfill\[\begin{aligned}[t]
+                                    P(D \mid +)
+                                           & = \frac{P(D \cap +)}{P(+)}              \\
+                                           & = \frac{0.0005 \cdot 0.9}{0.0005 \cdot 0.9 + (1-0.0005) \cdot 0.01} \\
+                                           & \approx \boxed{0.0431}
+                              \end{aligned}\]\hfill\null
+                              \item \hfill\[\begin{aligned}[t]
+                                    P(D \mid -)
+                                    &= \frac{0.0005 \cdot 0.1}{0.0005 \cdot 0.1 + (1-0.0005) \cdot 0.99} \\
+                                    &\approx \boxed{5.05 \cdot 10^{-5}}
+                              \end{aligned}\]\hfill\null
+                        \end{enumerate}
+                  \item \begin{enumerate}
+                              \item $E(X_iX_i)=E(X_i)=\frac{1}{2} \therefore \Cov(X_i, X_i)=\frac{1}{2}-\frac{1}{2}^2=\boxed{\frac{1}{4}}$
+                              \item $E(X_iX_j)$ is the chance both $i$ and $j$ are selected.
+                                    There's $\binom{4}{1}=4$ groups with both and $\binom{6}{3}=20$ total groups,
+                                    so $E(X_iX_j)=\frac{1}{5}$ and
+                                    \[\Cov(X_i, X_j)=\frac{1}{5}-\frac{1}{2}^2=\boxed{-\frac{1}{20}}\]
+                              \item We use the formula for variance of the sum of random variables with covariance.
+                                    \begin{align*}
+                                          \Var(X_1+X_2+X_3)
+                                           & = \sum_{i=1}^{3} \Var(X_i)+2\sum_{1 \le i < j \le 3} {\Cov(X_i, X_j)} \\
+                                           & = \frac{3}{4}+2 \cdot 3 \cdot \left(-\frac{1}{20}\right)              \\
+                                           & = \boxed{\frac{9}{20}}
+                                    \end{align*}
+                        \end{enumerate}
+            \end{enumerate}
+
+            \pagebreak
+
+      \item Almost all the derivatives are pulled from the matrix cookbook.
+            \begin{enumerate}
+                  \item $\nabla_x x^T A y = A^T y$
+                  \item $\nabla_y x^T A y = A^T x$
+                  \item $\nabla_A x^T A y = xy^T$
+                  \item $\nabla_x \left(x^T A x + b^T x\right)= \nabla_x x^T A x + \nabla_x b^T x = \boxed{\left(A+A^T\right)x+b}$
+                  \item $\nabla_A \Tr(AB)=B^T$
+                  \item $\begin{aligned}[t]
+                                    \nabla_A \Tr\left(BA+A^TB+A^2B\right)
+                                     & = \nabla_A \Tr(BA)+\nabla_A \Tr\left(A^TB\right)+\nabla_A \Tr\left(A^2B\right) \\
+                                     & = \boxed{B^T + B + (AB+BA)^T}
+                              \end{aligned}$
+                  \item $\begin{aligned}[t]
+                                    \nabla_A ||A+\lambda B||^2_F
+                                     & = \nabla_A \Tr\left((A+\lambda B)(A+\lambda B)^T\right)                       \\
+                                     & = \nabla_A \Tr\left((A+\lambda B)\left(A^T+\lambda B^T\right)\right)          \\
+                                     & = \nabla_A \Tr\left(AA+\lambda A B^T + \lambda B A^T + \lambda^2 B B^T\right) \\
+                                     & = \boxed{2A^T+2\lambda B}
+                              \end{aligned}$
+            \end{enumerate}
+
+      \item We first vectorize the summation.
+            Let $Y$ contain all the $y^{(i)}$s as column vectors
+            and $X$ all the $x^{(i)}$s as column vectors as well.
+            Then we have
+            \begin{align*}
+                  \frac{1}{2} \sum_{i=1}^{n} \norm{y^{(i)} - Wx^{(i)}}^2
+                   & = \frac{1}{2} \left(y^{(i)} - Wx^{(i)}\right)^T\left(y^{(i)} - Wx^{(i)}\right) \\
+                   & = \frac{1}{2} \norm{Y-WX}^2_F                                                  \\
+                   & = \frac{1}{2} \Tr\left((Y-WX)(Y-WX)^T\right)                                   \\
+                   & = \frac{1}{2} \Tr\left(YY^T-YX^TW^T-WXY^T+WXX^TW^T\right)
+            \end{align*}
+            The gradient of this wrt $W$ is then
+            \begin{align*}
+                   & \hphantom{={}} \frac{1}{2} \left(-\nabla_W \Tr\left(YX^TW^T\right)-\nabla_W \Tr\left(WXY^T\right)+\nabla_W \Tr\left(WXX^TW^T\right)\right) \\
+                   & = \frac{1}{2} \left(-YX^T-YX^T+WXX^T+WXX^T\right)                                                                                          \\
+                   & = -YX^T+WXX^T
+            \end{align*}
+            Setting this equal to the zero matrix, we have
+            \[YX^T=WXX^T \therefore W=\boxed{YX^{-1}}\]
+
+            \pagebreak
+
+      \item We first vectorize:
+            \begin{align*}
+                  \frac{1}{2}\sum_{i=1}^{N} \left(y^{(i)}-\theta^T\hat{x}^{(i)}\right)^2+\frac{\lambda}{2}\norm{\theta}^2_2
+                   & =\frac{1}{2}\left(y^T-\theta^TX\right)\left(y^T-\theta^TX\right)^T+\frac{\lambda}{2}\theta^T\theta \\
+                   & =\frac{1}{2}\left(y^T-\theta^TX\right)\left(y-X^T\theta\right)+\frac{\lambda}{2}\theta^T\theta
+            \end{align*}
+            and then take the gradient:
+            \begin{align*}
+                   & \hphantom{={}}\frac{1}{2}\left(y^T-\theta^TX\right)\left(y-X^T\theta\right)+\frac{\lambda}{2}\theta^T\theta \\
+                   & = \frac{1}{2}\left(y^Ty-y^Tx^T\theta-\theta^TXy+\theta^TXX^T\theta\right)+\lambda\theta                     \\
+                   & = XX^T\theta-Xy+\lambda\theta
+            \end{align*}
+            Setting the expression equal to $\mathbf{0}$ and solving yields
+            $\boxed{\theta=\left(XX^T+\lambda I\right)^{-1}Xy}$.
+
+      \item After this PDF will be the Jupyter Notebook I ran.
+\end{enumerate}
+\end{document}
