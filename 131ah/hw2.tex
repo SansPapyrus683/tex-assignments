@@ -1,0 +1,571 @@
+\documentclass[12pt]{article}
+
+\input{../kz}
+
+\rhead{Math 131AH}
+
+\makeatletter
+\def\@seccntformat#1{%
+  \expandafter\ifx\csname c@#1\endcsname\c@section\else
+  \csname the#1\endcsname\quad
+  \fi}
+\makeatother
+
+\newcommand{\lra}{\xLeftrightarrow}
+\newcommand{\ra}{\xRightarrow}
+
+\begin{document}
+
+\section{Problem 1}
+
+I'll assume that $2x$ really means $x+x$.
+For the first statement:
+\begin{align*}
+      (a-b)(a-b) \ge 0
+       & \ra{D} a(a-b)-b(a-b) \ge 0      \\
+       & \ra{D} a^2-ab-ba+b^2 \ge 0      \\
+       & \ra{A2} a^2-ab-ab+b^2 \ge 0     \\
+       & \ra{A3} a^2+b^2-2ab \ge 0       \\
+       & \ra{01} a^2+b^2-2ab+2ab \ge 2ab \\
+       & \ra{A4} a^2+b^2 \ge 2ab
+\end{align*}
+which is equivalent to what we wanted to prove,
+it's just a matter of direction/notation.
+
+For the second statement, allow me to first prove
+$a<b \land c<d \ra\  a+c<b+d$:
+\begin{gather*}
+      a<b \ra{01} a+d<b+d \\
+      c<d \ra{01} c+a<d+a \\
+      a+c=c+a<d+a=a+d<b+d
+\end{gather*}
+The last line is by additive commutatitivity and ordered transitivity.
+
+Now by the first statement, we can get
+\begin{align*}
+      2bc \le b^2+c^2 & 2ac \le a^2+c^2
+\end{align*}
+Adding the three inequalities together
+(which we know we can do by what we just proved), we have
+\begin{align*}
+              & 2ab+2bc+2ac \le a^2+b^2+b^2+c^2+a^2+c^2        \\
+      \ra\ {} & 2ab+2bc+2ac \le 2a^2+2b^2+2c^2                 \\
+      \ra\ {} & 2^{-1}(2ab+2bc+2ac) \le 2^{-1}(2a^2+2b^2+2c^2) \\
+      \ra\ {} & ab+bc+ac \le a^2+b^2+c^2\quad\square
+\end{align*}
+
+\pagebreak
+
+\section{Problem 2}
+
+We first do the multiplication table, where we show
+\[b \ne c \ra\  ab \ne ac\ \forall a \in F \setminus \{0\}\]
+We argue by contradiction.
+If $ab=ac$, we times both sides by $a^{-1}$ to get $b=c$,
+which conflicts with $b \ne c$.
+
+$ab \ne 0$, since this forces either $a$ or $b$ to be
+$0$, which they aren't.
+It can't be $a$ either, because $ab=a \ra\  b=1$, which is false.
+$b$ is banned by similar reasoning, leaving $ab=1$ as the only viable option.
+The rest of the table is filled out either by identities or process of elimination:
+\begin{center}
+      \begin{tabular}{ c|c|c|c|c }
+            $\cdot$ & 0 & 1 & a & b \\ \hline
+            0       & 0 & 0 & 0 & 0 \\ \hline
+            1       & 0 & 1 & a & b \\ \hline
+            a       & 0 & a & b & 1 \\ \hline
+            b       & 0 & b & 1 & a
+      \end{tabular}
+\end{center}
+
+For the addition table, that rows and columns must be unique is equivalent
+to showing
+\[b \ne c \ra\  a+b \ne a+c\ \forall a \in F\]
+We argue by contradiction.
+If $a+b=a+c$, then we can add $-a$ to each side to get $b=c$,
+which clearly contradicts the premise.
+
+The first row and column are easily filled out due to $0$
+being the additive identity.
+For the second row/column, there's three possible options:
+\begin{center}
+      \hfill
+      \begin{tabular}{ c|c|c|c|c }
+            + & 0 & 1 & a & b \\ \hline
+            0 & 0 & 1 & a & b \\ \hline
+            1 & 1 & a & 0 & b \\ \hline
+            a & a & 0 &   &   \\ \hline
+            b & b & b &   &
+      \end{tabular}
+      \hfill
+      \begin{tabular}{ c|c|c|c|c }
+            + & 0 & 1 & a & b \\ \hline
+            0 & 0 & 1 & a & b \\ \hline
+            1 & 1 & a & b & 0 \\ \hline
+            a & a & b &   &   \\ \hline
+            b & b & 0 &   &
+      \end{tabular}
+      \hfill
+      \begin{tabular}{ c|c|c|c|c }
+            + & 0 & 1 & a & b \\ \hline
+            0 & 0 & 1 & a & b \\ \hline
+            1 & 1 & 0 & b & a \\ \hline
+            a & a & b &   &   \\ \hline
+            b & b & a &   &
+      \end{tabular}
+      \hfill \mbox{}  % WHAT???
+\end{center}
+The first option can't be because it results in
+\begin{align*}
+      b(a+(-a)) & = b \cdot 0 & b(a+(-a)) & = b(a+1) \\
+                & = 0         &           & = ba+b   \\
+                &             &           & = 1+b    \\
+                &             &           & = b
+\end{align*}
+which doesn't reconcile with the distributive property.
+
+The second option can't be because then we would have
+\begin{align*}
+      a(b+(-b)) & = a \cdot 0 & a(b+(-b)) & = a(b+1) \\
+                & = 0         &           & = ab+a   \\
+                &             &           & = 1+a    \\
+                &             &           & = b
+\end{align*}
+which again violates the distributive property.
+
+This leaves only the third table.
+For the final square, we have two options:
+\begin{center}
+      \hfill
+      \begin{tabular}{ c|c|c|c|c }
+            + & 0 & 1 & a & b \\ \hline
+            0 & 0 & 1 & a & b \\ \hline
+            1 & 1 & 0 & b & a \\ \hline
+            a & a & b & 1 & 0 \\ \hline
+            b & b & a & 0 & 1
+      \end{tabular}
+      \hfill
+      \begin{tabular}{ c|c|c|c|c }
+            + & 0 & 1 & a & b \\ \hline
+            0 & 0 & 1 & a & b \\ \hline
+            1 & 1 & 0 & b & a \\ \hline
+            a & a & b & 0 & 1 \\ \hline
+            b & b & a & 1 & 0
+      \end{tabular}
+      \hfill \mbox{}
+\end{center}
+The first square is invalid because it results in
+\begin{align*}
+      a(b+(-b)) & = a \cdot 0 & a(b+(-b)) & = a(b+1) \\
+                & = 0         &           & = ab+a   \\
+                &             &           & = 1+a    \\
+                &             &           & = b
+\end{align*}
+breaking the distributive property.
+
+This leaves the second square as our only option.
+Our final tables are below:
+\begin{center}
+      \hfill
+      \begin{tabular}{ c|c|c|c|c }
+            + & 0 & 1 & a & b \\ \hline
+            0 & 0 & 1 & a & b \\ \hline
+            1 & 1 & 0 & b & a \\ \hline
+            a & a & b & 0 & 1 \\ \hline
+            b & b & a & 1 & 0
+      \end{tabular}
+      \hfill
+      \begin{tabular}{ c|c|c|c|c }
+            $\cdot$ & 0 & 1 & a & b \\ \hline
+            0       & 0 & 0 & 0 & 0 \\ \hline
+            1       & 0 & 1 & a & b \\ \hline
+            a       & 0 & a & b & 1 \\ \hline
+            b       & 0 & b & 1 & a
+      \end{tabular}
+      \hfill \mbox{}
+\end{center}
+
+\pagebreak
+
+\section{Problem 3}
+
+\subsection{Well-defined}
+
+\textbf{Addition} \\
+Say $a \sim b$ and $c \sim d$.
+We WTS $a+c \sim b+d$.
+
+By the definition of divisibility, $\exists n_1, n_2 \in \mathbb{Z}: qn_1=b-a, qn_2=d-c$.
+Adding the two equations,
+\[qn_1+qn_2=b-a+d-c \therefore q(n_1+n_2)=(b+d)-(a+c)\]
+$n_1+n_2 \in \mathbb{Z}$, so $q \mid (b+d)-(a+c)$ and $a+c \sim b+d$. $\square$
+
+\textbf{Multiplication} \\
+The premise is the same, excect now we WTS $ac \sim bd$.
+This time, let's define the following:
+\begin{align*}
+      a=qn_1+m_1 &  & b=qn_2+m_1 \\
+      c=qn_3+m_2 &  & d=qn_4+m_2
+\end{align*}
+This gives us
+\begin{gather*}
+      ac=q^2n_1n_3+qn_1m_2+qn_3m_1+m_2m_1 \\
+      bd=q^2n_2n_4+qn_2m_2+qn_4m_1+m_2m_1 \\
+      ac-bd=q(qn_1n_3+n_1m_2+n_3m_1-qn_2n_4+n_2m_2+n_4m_1)
+\end{gather*}
+As we can see, $q \mid ac-bd$, so $ac \sim bd$. $\square$
+
+\pagebreak
+
+\subsection{Axioms}
+
+\textbf{A. Commutativity}
+\[C(a)+C(b)=C(a+b)=C(b+a)=C(b)+C(a)\]
+
+\textbf{A. Associativity}
+\begin{align*}
+      (C(a)+C(b))+C(c)
+       & = C(a+b)+C(c)      \\
+       & = C(a+b+c)         \\
+       & = C(a+(b+c))       \\
+       & = C(a)+C(b+c)      \\
+       & = C(a)+(C(b)+C(c))
+\end{align*}
+
+\textbf{A. Identity}
+\[C(a)+C(0)=C(a+0)=C(a)\]
+
+\textbf{A. Inverse}
+\[C(a)+C(-a)=C(a+(-a))=C(0)\]
+
+\textbf{M. Commutativity}
+\[C(a) \cdot C(b)=C(ab)=C(ba)=C(b) \cdot C(a)\]
+
+\textbf{M. Associativity}
+\begin{align*}
+      (C(a) \cdot C(b)) \cdot C(c)
+       & = C(a \cdot b) \cdot C(c) \\
+       & = C(abc)                  \\
+       & = C(a(b \cdot c))         \\
+       & = C(a) \cdot C(bc)
+\end{align*}
+
+\textbf{M. Identity}
+\[C(a) \cdot C(1)=C(a \cdot 1)=C(a)\]
+
+\textbf{M. Inverse} \\
+For each $a$, we WTS $\exists b, n \in \mathbb{Z}: ab=nq+1$.
+Rearranging, we have $ab-nq=1$.
+Notice that since $q$ is prime, $\gcd(a, q)=1$.
+By Bezout's identity, there must exist integers $b$ and $n$
+that satisfy the given equality.
+
+\textbf{Distributivity}
+\begin{align*}
+      (C(a)+C(b)) \cdot C(c)
+       & = C(a+b) \cdot C(c)                 \\
+       & = C((a+b) \cdot c)                  \\
+       & = C(ac+bc)                          \\
+       & = C(ac)+C(bc)                       \\
+       & = C(a) \cdot C(c) + C(b) \cdot C(c)
+\end{align*}
+
+All the axioms are fulfilled;
+$\mathbb{Z}/q\mathbb{Z}$ with the given operations is a field. $\square$
+
+\subsection{No Ordering}
+
+BWOC let we have an ordering relation on $\mathbb{Z}/q\mathbb{Z}$.
+
+By Theorem 5.2, this implies a $P \in \mathbb{Z}/q\mathbb{Z}$
+that satisfies all the relevant properties.
+Out of $C(x)$ and $-C(x)=C(q-x)$, exactly
+one has to be in $P$ (besides $C(0)$).
+In particular, either $C(1)$ or $C(q-1)=C(-1)$ have to be in $P$.
+
+If $C(1) \in P$, we can add $C(1)$ to itself $q-1$ times to get $C(q)=0$,
+which definitely isn't in $P$.
+OTOH, if $C(-1) \in P$, we can again add $C(-1)$
+to itself $q-1$ times to get $C(-q)=C(0)$, which results in the same thnig.
+
+Both cases result in a contradiction, and thus
+such a $P$ satisfying the properties (and an associated ordering)
+cannot exist. $\square$
+
+\pagebreak
+
+\section{Problem 4}
+
+\subsection{Axioms}
+
+\textbf{A. Commutativity}
+\[(a,b)+(c,d)=(a+b,c+d)=(b+a,d+c)=(b,d)+(c,a)\]
+
+\textbf{A. Associativity}
+\begin{align*}
+      ((a,b)+(c,d))+(e,f)
+       & = (a+c,b+d)+(e,f)     \\
+       & = (a+c+e,b+d+f)       \\
+       & = (a+(c+e),b+(d+f))   \\
+       & = (a,b)+(c+e,d+f)     \\
+       & = (a,b)+((c,d)+(e,f))
+\end{align*}
+
+\textbf{A. Identity}
+\[(a,b)+(0,0)=(a+0,b+0)=(a,b)\]
+
+\textbf{A. Inverse}
+\[(a,b)+(-a,-b)=(a-a,b-b)=(0,0)\]
+
+\textbf{M. Commutativity}
+\[(a,b)\cdot(c,d)=(ac-bd,ad+bc)=(ca-db,cb+da)=(c,d)\cdot(a,b)\]
+
+\textbf{M. Associativity}
+\begin{align*}
+      ((a,b)\cdot(c,d))\cdot(e,f)
+       & = (ac-bd,ad+bc)\cdot(e,f)           \\
+       & = (a+c+e,b+d+f)                     \\
+       & = (eac-adf-bcf-ebd,acf+ead+ebc-bdf) \\
+       & = (a,b)\cdot(ec-df,cf+de)           \\
+       & = (a,b)\cdot((c,d)\cdot(e,f))
+\end{align*}
+
+\textbf{M. Identity}
+\[(a,b)\cdot(1,0)=(1 \cdot a - 0 \cdot b, a \cdot 0 + b \cdot 1)=(a,b)\]
+
+\textbf{M. Inverse} \\
+I propose that the inverse for $(a, b)$ is $\left(\frac{a}{a^2+b^2},-\frac{b}{a^2+b^2}\right)$.
+We can verify like so:
+\begin{align*}
+      (a,b) \cdot \left(\frac{a}{a^2+b^2},-\frac{b}{a^2+b^2}\right)
+       & = \left(\frac{a^2}{a^2+b^2}-\frac{-b^2}{a^2+b^2}, -\frac{ab}{a^2+b^2}+\frac{ab}{a^2+b^2}\right) \\
+       & = \left(\frac{a^2+b^2}{a^2+b^2}, 0\right)                                                       \\
+       & = (1, 0)
+\end{align*}
+
+\textbf{Distributivity}
+\begin{align*}
+      (a,b) \cdot ((c,d)+(e,f))
+       & = (a,b) \cdot (c+e,d+f)                 \\
+       & = (ac+ae+bd+bf, ad+af+bc+be)            \\
+       & = (ac+bd, ad+bc)+(ae+bf, af+be)         \\
+       & = (a,b) \cdot (c,d) + (a,b) \cdot (e,f)
+\end{align*}
+
+All the axioms are fulfilled; $F$ with the given operations is a field. $\square$
+
+\subsection{No Ordering}
+
+BWOC let there exists an ordering on $F$.
+
+Again, by Theorem 5.2, this implies a $P \in \mathbb{Z}/q\mathbb{Z}$
+that satisfies all the relevant properties.
+
+Note that either $i \in P, -i \notin P$ or vice versa.
+If $i \in P$, $i \cdot i \cdot i=-i$, which violates closure under multiplication.
+OTOH, if $-i \in P$, $-i \cdot -i \cdot -i=i$, which is also wrong.
+
+Either way, we get a contradiction- no ordering can exist. $\square$
+
+\pagebreak
+
+\section{Problem 5}
+
+\subsection{Axioms}
+
+\textbf{A. Commutativity}
+\[(a,b)+(c,d)=(a+b,c+d)=(b+a,d+c)=(b,d)+(c,a)\]
+
+\textbf{A. Associativity}
+\begin{align*}
+      ((a,b)+(c,d))+(e,f)
+       & = (a+c,b+d)+(e,f)     \\
+       & = (a+c+e,b+d+f)       \\
+       & = (a+(c+e),b+(d+f))   \\
+       & = (a,b)+(c+e,d+f)     \\
+       & = (a,b)+((c,d)+(e,f))
+\end{align*}
+
+\textbf{A. Identity}
+\[(a,b)+(0,0)=(a+0,b+0)=(a,b)\]
+
+\textbf{A. Inverse}
+\[(a,b)+(-a,-b)=(a-a,b-b)=(0,0)\]
+
+\textbf{M. Associativity}
+\begin{align*}
+      ((a,b)\cdot(c,d))\cdot(e,f)
+       & = (ac+2bd,ad+bc)\cdot(e,f)               \\
+       & = (eac+2(bde+fad+fbc), ead+ebc+fac+2bdf) \\
+       & = (a,b)\cdot(ec+2df,cf+de)               \\
+       & = (a,b)\cdot((c,d)\cdot(e,f))
+\end{align*}
+
+\textbf{M. Identity}
+\[(a,b)\cdot(1,0)=(1 \cdot a + 2 \cdot 0 \cdot b, a \cdot 0 + b \cdot 1)=(a,b)\]
+
+\textbf{Distributivity P1}
+\begin{align*}
+      (a,b) \cdot ((c,d)+(e,f))
+       & = (a,b) \cdot (c+e,d+f)                 \\
+       & = (ac+ae+2bd+2bf,ad+af+bc+be)           \\
+       & = (ac+2bd, ad+bc)+(ae+2bf, af+be)       \\
+       & = (a,b) \cdot (c,d) + (a,b) \cdot (e,f)
+\end{align*}
+
+\textbf{Distributivity P2}
+\begin{align*}
+      ((c,d)+(e,f))\cdot
+       & = (c+e,d+f)\cdot(a,b)               \\
+       & = (ac+ae+2bd+2bf,ad+af+bc+be)       \\
+       & = (ac+2bd, ad+bc)+(ae+2bf, af+be)   \\
+       & = (c,d)\cdot(a,b) + (e,f)\cdot(a,b)
+\end{align*}
+
+All the axioms are fulfilled; $R$ with the given operations is a ring. $\square$
+
+\pagebreak
+
+\subsection{Order Relation}
+
+\subsubsection{Trichotomy}
+
+Notice that with $(a,b)$ and $(c,d)$ we're really comparing
+$a+b\sqrt{2}$ and $c+d\sqrt{2}$.
+These two quantities are in $\mathbb{R}$, and given that the ordering on $\mathbb{R}$
+is a valid one, the trichotomy from there carries over.
+
+\subsubsection{Transitivity}
+
+We're given $(a,b)<(c,d)$ and $(c,d)<(e,f)$, which means
+$a+b\sqrt{2}<c+d\sqrt{2}$ and $c+d\sqrt{2}<e+f\sqrt{2}$.
+By transitivity in $\mathbb{R}$, this means $a+b\sqrt{2}<e+f\sqrt{2}$ as well.
+
+\subsubsection{Adding to Both Sides}
+
+If $(a,b)<(c,d)$, then we have
+\begin{align*}
+              & a+b\sqrt{2}<c+d\sqrt{2}                         \\
+      \ra\ {} & a+b\sqrt{2}+e+f\sqrt{2}<c+d\sqrt{2}+e+f\sqrt{2} \\
+      \ra\ {} & (a+e)+\sqrt{2}(b+f)<(c+e)+\sqrt{2}(d+f)
+\end{align*}
+which is equivalent to saying $(a,b)+(e,f)=(a+e,b+f)<(c+e,d+f)=(c,d)+(e,f)$.
+
+\subsubsection{Multiplying Both Sides}
+
+$(e,f)>(0,0)$, so $e+f\sqrt{2}>0$ and we can multiply both sides of an inequality by it.
+\begin{align*}
+              & a+b\sqrt{2}<c+d\sqrt{2}                                                                             \\
+      \ra\ {} & \left(e+f\sqrt{2}\right)\left(a+b\sqrt{2}\right) < \left(e+f\sqrt{2}\right)\left(c+d\sqrt{2}\right) \\
+      \ra\ {} & ae+2bf+\sqrt{2}(af+be) < ce+2df+\sqrt{2}(cf+de)                                                     \\
+      \ra\ {} & (a,b) \cdot (e, f) < (c, d) \cdot (e, f)
+\end{align*}
+
+All four ordering properties are satisfied.
+This is a valid ordering. $\square$
+
+\pagebreak
+
+\section{Problem 6}
+
+\subsection{}
+
+I'll just prove that all lower bounds are smaller than all upper bounds.
+The infinimum and supremum are included in those, so it's implied.
+
+Suppose we have any LB $m$ and any UB $M$.
+Since $S \ne \varnothing$, we know there's an $x$ to use the transitive property on,
+so $m \le x \le M \ra\ m \le M$. $\square$
+
+\subsection{}
+
+If $\inf S = \sup S$, then we can choose lower and upper bounds $m$/$M$
+such that $m=M$ and $m \le x \le M$.
+The two are equal, meaning $x=m$, so there can only be exactly one number
+in the subset.
+
+\pagebreak
+
+\section{Problem 7}
+
+\subsection{}
+
+We've already proven $\inf S \le \sup S$, so we just WTS $\inf T \le \inf S$ and $\sup S \le \sup T$.
+
+BWOC let $\inf T > \inf S$.
+This means $\inf T$ isn't a valid LB for $S$, meaning $\exists x \in S: \inf T > x$.
+But $S \subseteq T$, so $\exists x \in T: \inf T > x$,
+which means $\inf T$ isn't even a valid LB for it's own set.
+Contradiction.
+
+The proof for the other inequality goes much the same way.
+BWOC let $\sup S > \inf T$.
+This means $\sup T$ isn't a valid UB for $S$, so $\exists x \in S: \sup T < x$.
+Again, $S \subseteq T$, so $\exists x \in T: \sup T < x$,
+contradicting the definition of the supremum and proving just what we wanted. $\square$
+
+\subsection{}
+
+Let's prove this first by $\sup(S \cup T) \le \max(\sup S, \sup T)$ and then
+by showing that strict inequality can't happen.
+
+\subsubsection{At Least}
+
+It suffices to show that $\max(\sup S, \sup T)$ is a valid UB for $S \cup T$.
+
+If $\sup S \ge \sup T$, then $x \le \sup S\ \forall x \in S$ and $x \le \sup T \le \sup S\ \forall x \in T$,
+which covers all the elements.
+This makes $\max(\sup S, \sup T)=\sup T$ a valid UB for $S \cup T$.
+
+OTOH, if $\sup S < \sup T$, then $x \le \sup S < \sup T\ \forall x \in S$ and $x \le \sup T\ \forall x \in T$.
+Again, this covers every element, so $\max(\sup S, \sup T)=\sup S$ in this case is still a valid UB.
+
+\subsubsection{No Strict}
+
+BWOC let $\sup(S \cup T) < \max(\sup S, \sup T)$.
+This implies an $x \in \mathbb{R}$ that's a lower UB for $S \cup T$.
+
+Again we casework on which value the max takes.
+If $\sup S \ge \sup T$, $i \le s < \sup S\ \forall i \in S \cup T$.
+$S \subseteq S \cup T$, so $s$ is a lower UB for $S$ than $\sup S$, which violates the
+definition of the supremum.
+
+If $\sup S < \sup T$, $i \le s < \sup T\ \forall i \in S \cup T$.
+$T \subseteq S \cup T$, so in this case $s$ is a lower UB for $T$ than $\sup T$,
+again contradicting how the supremum is defined.
+
+Both cases result in a contradiction, so we only have $\sup(S \cup T)=\max(\sup S, \sup T)$. $\square$
+
+\pagebreak
+
+\section{Problem 8}
+
+We'll prove this by showing $-\sup(-A) \le \inf A$ and vice versa.
+
+\subsection{One Way}
+
+All we have to do is show that $-\sup(-A)$ is a valid LB for $A$.
+
+By definition $x \le \sup(-A)\ \forall x \in -A$.
+$x \in -A \iff -x \in A$, so we can turn this into
+\begin{gather*}
+      -x \le \sup(-A)\ \forall x \in A \\
+      x \ge -\sup(-A)\ \forall x \in A
+\end{gather*}
+showing that $-\sup(-A)$ is a valid LB for $A$.
+
+\subsection{Then the Other}
+
+$-\sup(-A) \ge \inf A \iff \sup(-A) \le -\inf A$,
+which means now we have to show $-\inf A$ is a valid UB for $-A$.
+\begin{gather*}
+      x \ge \inf A\ \forall x \in A \\
+      -x \ge \inf A\ \forall x \in -A \\
+      x \le -\inf A\ \forall x \in -A
+\end{gather*}
+showing that $-\inf A$ is indeed a valid LB.
+
+With inequalities in both directions proved, we finally have $-\sup(-A)=\inf A$. $\square$
+
+\end{document}
