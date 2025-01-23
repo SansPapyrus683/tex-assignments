@@ -1,0 +1,53 @@
+\documentclass[12pt]{article}
+
+\input{../kz}
+
+\rhead{ECE C147}
+
+\DeclareMathOperator{\Cov}{Cov}
+\DeclareMathOperator{\Var}{Var}
+\DeclareMathOperator{\E}{E}
+\DeclareMathOperator{\Tr}{Tr}
+\newcommand{\norm}[1]{\left\lVert#1\right\rVert}
+
+\begin{document}
+\begin{enumerate}
+      \item \begin{enumerate}
+                  \item Let us work on the summation term without all the superscripts first:
+                        \begin{align*}
+                              \left(y-(x+\delta)^T\theta\right)^2
+                               & = y^2-2y(x+\delta)^T\theta+((x+\delta)^T\theta)^2                                                                  \\
+                               & = y^2-2yx^T\theta-2y\delta^T\theta+\left(x^T\theta\right)^2+\left(\delta^T\theta\right)^2+2x^T\theta\delta^T\theta \\
+                               & = y^2-2yx^T\theta+\left(x^T\theta\right)^2-2y\delta^T\theta+\left(\delta^T\theta\right)^2+2x^T\theta\delta^T\theta \\
+                               & = \left(y-x^T\theta\right)^2-2y\delta^T\theta+\left(\delta^T\theta\right)^2+2x^T\theta\delta^T\theta
+                        \end{align*}
+
+                        This allows us to simplify the summation as follows:
+                        \begin{align*}
+                                  & \frac{1}{N} \sum_{i=1}^{N} \left(y^{(i)}-\left(x^{(i)}+\delta^{(i)}\right)^T\theta\right)^2                            \\
+                              ={} & \mathcal{L}(\theta)+\frac{1}{N}\sum_{i=1}^{N} -2y^{(i)}\delta^{(i)T}\theta+\left(\delta^{(i)T}\theta\right)^2+2x^{(i)}\theta^{(i)T}\theta
+                        \end{align*}
+                        Taking the expected value of this, $\mathcal{L}(\theta)$ stays since it's constant.
+                        The expected value of the first and third terms in the summation are $0$ since
+                        they all have a single coefficient of $\delta^{(i)}$.
+
+                        This leaves $\E\left[\left(\delta^{T}\theta\right)^2\right]$,
+                        which we can evaluate like so:
+                        \begin{align*}
+                              \E\left[\left(\delta^T\theta\right)^2\right]
+                              &= \E\left[\delta^T\theta \delta^T\theta\right] \\
+                              &= \E\left[\theta^T \delta \delta^T \theta\right] \\
+                              &= \theta^T \E\left[\delta \delta^T\right] \theta \\
+                              &= \sigma^2 \theta^T \cdot I \cdot \theta \\
+                              &= \sigma^2 \theta^T\theta
+                        \end{align*}
+                        making our final expected value
+                        \[\E_{\sigma \sim \mathcal{N}}\left[\tilde{\mathcal{L}}(\theta)\right]=\boxed{\mathcal{L}(\theta)+\sigma^2 \theta^T\theta}\]
+                  \item The noise has the effect of regularizing the model with respect to the l2 norm of its weights.
+                  \item Setting $\sigma=0$ has the same effect as doing regression without any regularizing.
+                  \item As $\sigma \to \infty$, the optimal $\theta$ goes to $\mathbf{0}$.
+            \end{enumerate}
+            
+      \item After this PDF will be the Jupyter Notebook I ran.
+\end{enumerate}
+\end{document}
