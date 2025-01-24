@@ -8,46 +8,117 @@
 \DeclareMathOperator{\Var}{Var}
 \DeclareMathOperator{\E}{E}
 \DeclareMathOperator{\Tr}{Tr}
+\DeclareMathOperator{\softmax}{softmax}
 \newcommand{\norm}[1]{\left\lVert#1\right\rVert}
 
 \begin{document}
-\begin{enumerate}
-      \item \begin{enumerate}
-                  \item Let us work on the summation term without all the superscripts first:
-                        \begin{align*}
-                              \left(y-(x+\delta)^T\theta\right)^2
-                               & = y^2-2y(x+\delta)^T\theta+((x+\delta)^T\theta)^2                                                                  \\
-                               & = y^2-2yx^T\theta-2y\delta^T\theta+\left(x^T\theta\right)^2+\left(\delta^T\theta\right)^2+2x^T\theta\delta^T\theta \\
-                               & = y^2-2yx^T\theta+\left(x^T\theta\right)^2-2y\delta^T\theta+\left(\delta^T\theta\right)^2+2x^T\theta\delta^T\theta \\
-                               & = \left(y-x^T\theta\right)^2-2y\delta^T\theta+\left(\delta^T\theta\right)^2+2x^T\theta\delta^T\theta
-                        \end{align*}
 
-                        This allows us to simplify the summation as follows:
-                        \begin{align*}
-                                  & \frac{1}{N} \sum_{i=1}^{N} \left(y^{(i)}-\left(x^{(i)}+\delta^{(i)}\right)^T\theta\right)^2                            \\
-                              ={} & \mathcal{L}(\theta)+\frac{1}{N}\sum_{i=1}^{N} -2y^{(i)}\delta^{(i)T}\theta+\left(\delta^{(i)T}\theta\right)^2+2x^{(i)}\theta^{(i)T}\theta
-                        \end{align*}
-                        Taking the expected value of this, $\mathcal{L}(\theta)$ stays since it's constant.
-                        The expected value of the first and third terms in the summation are $0$ since
-                        they all have a single coefficient of $\delta^{(i)}$.
+\section{Noisy Linear Regression}
 
-                        This leaves $\E\left[\left(\delta^{T}\theta\right)^2\right]$,
-                        which we can evaluate like so:
-                        \begin{align*}
-                              \E\left[\left(\delta^T\theta\right)^2\right]
-                              &= \E\left[\delta^T\theta \delta^T\theta\right] \\
-                              &= \E\left[\theta^T \delta \delta^T \theta\right] \\
-                              &= \theta^T \E\left[\delta \delta^T\right] \theta \\
-                              &= \sigma^2 \theta^T \cdot I \cdot \theta \\
-                              &= \sigma^2 \theta^T\theta
-                        \end{align*}
-                        making our final expected value
-                        \[\E_{\sigma \sim \mathcal{N}}\left[\tilde{\mathcal{L}}(\theta)\right]=\boxed{\mathcal{L}(\theta)+\sigma^2 \theta^T\theta}\]
-                  \item The noise has the effect of regularizing the model with respect to the l2 norm of its weights.
-                  \item Setting $\sigma=0$ has the same effect as doing regression without any regularizing.
-                  \item As $\sigma \to \infty$, the optimal $\theta$ goes to $\mathbf{0}$.
-            \end{enumerate}
-            
-      \item After this PDF will be the Jupyter Notebook I ran.
+\begin{enumerate}[label=(\alph*)]
+      \item Let us work on the summation term without all the superscripts first:
+            \begin{align*}
+                  \left(y-(x+\delta)^T\theta\right)^2
+                   & = y^2-2y(x+\delta)^T\theta+((x+\delta)^T\theta)^2                                                                  \\
+                   & = y^2-2yx^T\theta-2y\delta^T\theta+\left(x^T\theta\right)^2+\left(\delta^T\theta\right)^2+2x^T\theta\delta^T\theta \\
+                   & = y^2-2yx^T\theta+\left(x^T\theta\right)^2-2y\delta^T\theta+\left(\delta^T\theta\right)^2+2x^T\theta\delta^T\theta \\
+                   & = \left(y-x^T\theta\right)^2-2y\delta^T\theta+\left(\delta^T\theta\right)^2+2x^T\theta\delta^T\theta
+            \end{align*}
+
+            This allows us to simplify the summation as follows:
+            \begin{align*}
+                      & \frac{1}{N} \sum_{i=1}^{N} \left(y^{(i)}-\left(x^{(i)}+\delta^{(i)}\right)^T\theta\right)^2                                               \\
+                  ={} & \mathcal{L}(\theta)+\frac{1}{N}\sum_{i=1}^{N} -2y^{(i)}\delta^{(i)T}\theta+\left(\delta^{(i)T}\theta\right)^2+2x^{(i)}\theta^{(i)T}\theta
+            \end{align*}
+            Taking the expected value of this, $\mathcal{L}(\theta)$ stays since it's constant.
+            The expected value of the first and third terms in the summation are $0$ since
+            they all have a single coefficient of $\delta^{(i)}$.
+
+            This leaves $\E\left[\left(\delta^{T}\theta\right)^2\right]$,
+            which we can evaluate like so:
+            \begin{align*}
+                  \E\left[\left(\delta^T\theta\right)^2\right]
+                   & = \E\left[\delta^T\theta \delta^T\theta\right]   \\
+                   & = \E\left[\theta^T \delta \delta^T \theta\right] \\
+                   & = \theta^T \E\left[\delta \delta^T\right] \theta \\
+                   & = \sigma^2 \theta^T \cdot I \cdot \theta         \\
+                   & = \sigma^2 \theta^T\theta
+            \end{align*}
+            making our final expected value
+            \[\E_{\sigma \sim \mathcal{N}}\left[\tilde{\mathcal{L}}(\theta)\right]=\boxed{\mathcal{L}(\theta)+\sigma^2 \theta^T\theta}\]
+      \item The noise has the effect of regularizing the model with respect to the l2 norm of its weights.
+      \item Setting $\sigma=0$ has the same effect as doing regression without any regularizing.
+      \item As $\sigma \to \infty$, the optimal $\theta$ goes to $\mathbf{0}$.
 \end{enumerate}
+
+\pagebreak
+
+\setcounter{section}{2}
+\section{Softmax Classifier Gradient}
+
+As the note suggests, let's augment the feature vectors to combine $w_i$ and $b_i$ into a single $\tilde{w}_i$.
+
+This changes the log-likelihood into
+\begin{align*}
+      \ln \frac{\exp\left(\tilde{w}^T_{y^{(j)}} \tilde{x}^{(j)}\right)}{\sum_{k=1}^{c} \exp\left(\tilde{w}^T_{k} \tilde{x}^{(j)}\right)}
+       & = \ln \exp\left(\tilde{w}^T_{y^{(j)}} \tilde{x}^{(j)}\right) - \ln \sum_{k=1}^{c} \exp\left(\tilde{w}^T_{k} \tilde{x}^{(j)}\right) \\
+       & = \tilde{w}^T_{y^{(j)}} \tilde{x}^{(j)} - \ln \sum_{k=1}^{c} \exp\left(\tilde{w}^T_{k} \tilde{x}^{(j)}\right)
+\end{align*}
+
+There's two cases- one where $i=y^{(j)}$ and one where it isn't.
+In the first case, we just have to add an additional $\tilde{x}^{(j)}$ to our gradient.
+
+This leaves the summation.
+\begin{align*}
+          & \frac{\partial}{\partial w_i} \ln \sum_{k=1}^{c} \exp\left(\tilde{w}^T_{k} \tilde{x}^{(j)}\right)                                                                             \\
+      ={} & \frac{1}{\sum_{k=1}^{c} \exp\left(\tilde{w}^T_{k} \tilde{x}^{(j)}\right)} \cdot \frac{\partial}{\partial w_i} \sum_{k=1}^{c} \exp\left(\tilde{w}^T_{k} \tilde{x}^{(j)}\right) \\
+      ={} & \frac{1}{\sum_{k=1}^{c} \exp\left(\tilde{w}^T_{k} \tilde{x}^{(j)}\right)} \cdot \frac{\partial}{\partial w_i} \exp\left(\tilde{w}^T_{i} \tilde{x}^{(j)}\right)                \\
+      ={} & \frac{\exp\left(\tilde{w}^T_{i} \tilde{x}^{(j)}\right)}{\sum_{k=1}^{c} \exp\left(\tilde{w}^T_{k} \tilde{x}^{(j)}\right)} \cdot \tilde{x}^{(j)}                                \\
+      ={} & \softmax_i\left(x^{(j)}\right) \cdot \tilde{x}^{(j)}
+\end{align*}
+
+Thus, our final gradient is
+\[\nabla_{\tilde{w}_i} \mathcal{L}=\begin{cases}
+            \tilde{x}^{(j)}-\softmax_i\left(x^{(j)}\right) \cdot \tilde{x}^{(j)} & i=y^{(j)} \\
+            -\softmax_i\left(x^{(j)}\right) \cdot \tilde{x}^{(j)}                 & \text{otherwise}
+      \end{cases}\]
+which we can break down into
+\begin{gather*}
+      \nabla_{w_i} \mathcal{L}=\begin{cases}
+            x^{(j)}-\softmax_i\left(x^{(j)}\right) \cdot x^{(j)} & i=y^{(j)} \\
+            -\softmax_i\left(x^{(j)}\right) \cdot x^{(j)}                 & \text{otherwise}
+      \end{cases} \\
+      \nabla_{b_i} \mathcal{L}=\mathbbm{1}\left[i=y^{(j)}\right]-\softmax_i\left(x^{(j)}\right)
+\end{gather*}
+
+\pagebreak
+
+\section{Hinge Loss Gradient}
+
+Like in the previous option, let's combine $w$ and $b$ into $\tilde{w}$
+as well as augment $x$ into $\tilde{x}$.
+
+As for the summation, there's two cases, one for each possible value of $y^{(i)}$.
+If we let $f(i)$ denote the $i$-th term of the summation, we have
+\[f(i)=\begin{cases}
+      \max\left(0, 1-\tilde{w}^T\tilde{x}^{(i)}\right) & y^{(i)}=1 \\
+      \max\left(0, 1+\tilde{w}^T\tilde{x}^{(i)}\right) & y^{(i)}=-1
+\end{cases}\]
+
+Taking note that the gradient is only nonzero when the right term is positive, we can have
+\[\nabla_{\tilde{w}} f(i)=\begin{cases}
+      \mathbbm{1}\left[\tilde{w}^T\tilde{x}^{(i)}<1\right] \cdot \left(-\tilde{x}^{(i)}\right) & y^{(i)}=1 \\
+      \mathbbm{1}\left[\tilde{w}^T\tilde{x}^{(i)}>-1\right] \cdot \tilde{x}^{(i)} & y^{(i)}=-1
+\end{cases}\]
+Notice that this simplifies to
+\[\nabla_{\tilde{w}} f(i)=-y^{(i)}\tilde{x}^{(i)} \cdot \mathbbm{1}\left[y^{(i)}\tilde{w}^T\tilde{x}^{(i)}<1\right] \]
+
+Putting this back into the actual summation gives us
+\[\nabla_{\tilde{w}} \mathcal{L}=-\frac{1}{K} \sum_{i=1}^{K} y^{(i)}\tilde{x}^{(i)} \cdot \mathbbm{1}\left[y^{(i)}\tilde{w}^T\tilde{x}^{(i)}<1\right]\]
+which we can decompose into
+\begin{gather*}
+      \nabla_{w} \mathcal{L}=-\frac{1}{K} \sum_{i=1}^{K} y^{(i)}x^{(i)} \cdot \mathbbm{1}\left[y^{(i)}\left(w^Tx^{(i)}+b\right)<1\right] \\
+      \nabla_{b} \mathcal{L}=-\frac{1}{K} \sum_{i=1}^{K} y^{(i)} \cdot \mathbbm{1}\left[y^{(i)}\left(w^Tx^{(i)}+b\right)<1\right]
+\end{gather*}
+
 \end{document}
