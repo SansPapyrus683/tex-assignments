@@ -100,9 +100,9 @@ $0^{t+\frac{t}{2}-1} 2 1^{t+\frac{t}{2}-1}$, give or take a couple
 $0$s and $1$s in the middle to account for divisibility issues.
 
 By the lemma, we have a decomposition of $x$ into $uvw$ s.t. $|uv| \le t$ and $v \ne \epsilon$.
-Since the first $t$ characters of $x$ are all $0$s, $u=1^a$ and $v=1^b$.
+Since the first $t$ characters of $x$ are all $0$s, $u=0^a$ and $v=0^b$.
 We can repeat $v$ any number of times, so
-\[\forall n \in \mathbb{Z}^+\ 1^{t+nb}0^t \in L_{\frac{1}{3}-\frac{1}{3}}\]
+\[\forall n \in \mathbb{Z}^+\ 0^{t+nb}1^t \in L_{\frac{1}{3}-\frac{1}{3}}\]
 
 Now take $n$ to be incredibly large, say, $100t$.
 We'd have at least $101t$ $1$s followed by only $t$ $0$s.
@@ -116,6 +116,6 @@ However, we've just shown that the last third of some string in $L$
 contains $01$ as a substring by assuming the regularity of $L_{\frac{1}{3}-\frac{1}{3}}$.
 Contradiction.
 
-Thus, $L$ being regular doesn't force $L_{\frac{1}{3}-\frac{1}{3}}$ to be regular as well.
+Thus, $L$ being regular doesn't force $L_{\frac{1}{3}-\frac{1}{3}}$ to be regular as well. $\square$
 
 \end{document}
