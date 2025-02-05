@@ -1,0 +1,416 @@
+\documentclass[12pt]{article}
+
+\input{../kz}
+
+\rhead{Math 131AH}
+
+\makeatletter
+\def\@seccntformat#1{%
+  \expandafter\ifx\csname c@#1\endcsname\c@section\else
+  \csname the#1\endcsname\quad
+  \fi}
+\makeatother
+
+\newcommand{\lra}{\xLeftrightarrow}
+\newcommand{\ra}{\xRightarrow}
+\newcommand{\R}{\mathbb{R}}
+\newcommand{\Q}{\mathbb{Q}}
+
+\begin{document}
+
+\section{Problem 1} \label{sec:prob1}
+
+\subsection{Supremums' Additivity}
+
+We first prove $\sup A + \sup B$ is a valid UB and that it's also the least UB.
+
+First, $\sup A \ge a\ \forall a \in A$ and similarly for $B$,
+so for any $a$ in $A$ and $b$ in $B$ we can write
+\[\sup A \ge a \land \sup B \ge b \ra{} \sup A + \sup B \ge a + b\]
+$A+B$ is defined as the sum of all pairs from $A$ and $B$,
+so by the above inequality $\sup A + \sup B$ is indeed a valid UB.
+
+Now for the second part, consider any $M < \sup A + \sup B$.
+Let $d=\sup A + \sup B - M > 0$.
+By how the supremum works, $\forall \epsilon > 0\ \exists a \in A: a > \sup A - \epsilon$,
+and we can say something similar for $B$.
+Setting $\epsilon=\frac{d}{2}$, we have
+\begin{align*}
+  \exists a \in A: a > \sup A - \frac{d}{2} &  &
+  \exists b \in B: b > \sup B - \frac{d}{2}
+\end{align*}
+Adding the two inequalities together, we get $a+b>\sup A + \sup B-d=M$,
+thus showing that any $M < \sup A + \sup B$ can't be a UB. $\square$
+
+\subsection{Infinimums' Additivity}
+
+For convenience, I'll write $A + (-B)$ as just $A-B$.
+
+By a result in HW 2, $\inf A = -\sup(-A)$.
+Consider $-A$ and $-B$.
+By the previous subproblem,
+\[\sup (-A -B)=\sup -A + \sup -B=-\inf A - \inf B\]
+It remains to show that $-\sup (-A-B)=\inf (A+B)$.
+
+Notice that it suffices to prove $-A-B=-(A+B)$ by the HW 2 result.
+This is true by construction, since
+when we expand out all the set builder notation we get that the LHS is
+\[\{a+b \mid a \in \{-x \mid x \in A\}, b \in \{-y \mid y \in B\}\}
+  = \{(-a)+(-b) \mid a \in A, b \in B\}\]
+and that the RHS is
+\[\{-x \mid x \in \{a+b \mid a \in A, b \mid B\}\}=\{-(a+b) \mid a \in A, b \mid B\}\]
+The two are equivalent by inspection. $\square$
+
+\pagebreak
+
+\section{Problem 2}\label{sec:prob2}
+
+Let the set $S$ be $\{r \in \Q \mid r < a\}$.
+By construction, $a \ge r\ \forall r \in S$, so $a$ is definitely a UB.
+
+Now we NTS $a$ is the lowest UB possible.
+BWOC let there be a lower UB $M \in \R$.
+
+Consider $a-M \in \R^+$.
+By the Archimedean property, $\exists n \in \mathbb{N}: n(a-M)>1$.
+\begin{align*}
+  n(a-M)>1 & \ra{} na-nM>1         \\
+           & \ra{} na>nM+1         \\
+           & \ra{} a>M+\frac{1}{n}
+\end{align*}
+By the same property, $\exists m \in \mathbb{Z}: m \le nM < m+1 \ra{} \frac{m}{n} \le M < \frac{m+1}{n}$.
+
+We can then do the following chain of inequalities:
+\[M < \frac{m+1}{n}=\frac{m}{n}+\frac{1}{n} \le M + \frac{1}{n} < a \]
+This proves the existence of a rational number $\frac{m+1}{n}$ that's
+strictly between $a$ and $M$, thus being in $S$ and contradicting
+that $M$ is a valid UB. $\square$
+
+\pagebreak
+
+\section{Problem 3}\label{sec:prob3}
+
+Once again we show that it's an UB and the \textit{least} UB separately.
+
+\subsection{Is UB}
+
+By definition, $\sup A \ge a \ \forall a \in A$ and $\sup B \ge b\ \forall b \in B$.
+By the ordering properties of the real numbers and that $A$ and $B$ are both positive,
+we have these two inequalities:
+\begin{align*}
+  \sup A \cdot b \ge a \cdot b &  & \sup A \cdot \sup B \ge \sup A \cdot b
+\end{align*}
+By the transitivity property, we have $a \cdot b \le \sup A \cdot \sup B$.
+Thus, $\sup A \cdot \sup B$ is a valid UB for the given set.
+
+\subsection{Is \textit{Least} UB}
+
+Consider any $0 < M < \sup A \cdot \sup B$.
+We assume $M$ is positive because no negative number can be an upper bound for $A \cdot B$.
+Take $r=\frac{M}{\sup A \cdot \sup B} < 1$, and note that $\sqrt{r} < 1$ as well.
+
+By definition, $\forall r < 1 \exists a \in A: a > r \cdot \sup A$ and similarly for $B$, so
+\begin{align*}
+  \exists a \in A: a > \sqrt{r} \cdot \sup A &  &
+  \exists b \in B: b > \sqrt{r} \cdot \sup B
+\end{align*}
+By the second property of ordered fields,
+\begin{gather*}
+  a \cdot \sqrt{r} \cdot \sup B > r \cdot \sup A \cdot \sup B \\
+  b \cdot a > a \cdot \sqrt{r} \cdot \sup B \\
+  \therefore ab > r \cdot \sup A \cdot \sup B = M
+\end{gather*}
+which means any $M < \sup A \cdot \sup B$ is unable to be a UB. $\square$
+
+\pagebreak
+
+\section{Problem 4}
+
+\subsection{Closure}
+
+\subsubsection{Not Null or Everything}
+
+$\alpha, \beta > \mathbf{0}$, so by definition $\exists a \in \alpha, b \in \beta: a, b > 0$.
+$0 < a \cdot b$, so $0 \in \alpha \cdot \beta \ne \varnothing$.
+
+To prove that it's bounded above, first define
+\[P=\{p \cdot q \mid 0 < p \in \alpha, 0 < q \in \beta\}\]
+This allows us to redefine $\alpha \cdot \beta$ as
+\[\{r \in \Q: \exists p \in P: r < p\}\]
+
+Notice that $p$ and $q$ are positive, so $\sup P=\sup \alpha \cdot \sup \beta$
+by \hyperref[sec:prob2]{the result in problem 2}.
+
+$\forall r \in \alpha \cdot \beta, \exists p \in P: r < p \le \sup P \therefore r < \sup P$
+and $\sup P$ serves as a UB for $\alpha \cdot \beta$.
+
+\subsubsection{Downwards Closure}
+
+Suppose we have $a \in \alpha \cdot \beta$ and $b \in \Q$ with $a>b$.
+
+$\forall r \in \alpha \cdot \beta\ \exists p \in \alpha, q \in \beta: r < pq$.
+
+Choosing $a$ as our $r$ in this case, we have $b<a<pq$, so $b \in \alpha \cdot \beta$ as well.
+
+\subsubsection{No Maximum}
+
+It STP $\forall a \in \alpha \cdot \beta\ \exists b \in \alpha \cdot \beta: b > a$.
+
+Let $p$ and $q$ be defined as in the set building conditions.
+Since $\alpha$ is a cut, $\exists p' \in \alpha: p' > p$.
+Multiplying both sides of this by $q$ and chaining some inequalities gives us $a < pq < p'q$.
+Again by density of $\Q$ in $\R$, $\exists b \in \Q: a < pq < b < p'q$,
+thus completing the search for a larger element. $\square$
+
+\subsection{Commutativity}
+
+It STP $\alpha \cdot \beta \subseteq \beta \cdot \alpha$ and vice versa.
+
+$\forall a \in \alpha \cdot \beta\ \exists 0 < p \in \alpha, 0 < q \in \beta: a < pq$.
+By commutativity of multiplication in $\Q$, $a<qp$ so
+we can choose $q \in \beta$ and $p \in \alpha$ for $\beta \cdot \alpha$
+to get something greater than $a$ in $\beta \cdot \alpha$ as well.
+
+The other direction is true by symmetry. $\square$
+
+\subsection{Associativity}
+
+The set for $(a \cdot \beta) \cdot \gamma$ is
+\[\{x \in \Q \mid \exists 0 < p \in \{y \in \Q \mid \exists 0 < r \in \alpha, 0 < s \in \beta: y < rs\}, \exists 0 < q \in \gamma: x < pq\}\]
+Taking out the nested set. We have that $x$ is in the set iff
+\[\exists 0 < r \in \alpha, 0 < s \in \beta, 0 < p \in \Q, 0 < q \in \gamma: p < rs \land x < pq\]
+
+Now we're going to show that this condition is equivalent to
+\[\exists 0 < r \in \alpha, 0 < s \in \beta, 0 < q \in \gamma: x < rsq\]
+The forward direction is trivial: just choose the same $r$, $s$, and $q$ that you already did.
+For the reverse direction, due to the lack of a maximum we can choose $r' \in \alpha: r' > r \therefore r's > rs$.
+Thus, we can choose $r=r'$, $s=s$, $q=q$, and $p=rs$ to fulfill OG condition.
+
+OTOH, the set for $a \cdot (\beta \cdot \gamma)$ is
+\[\{x \in \Q \mid \exists 0 < p \in \alpha, \exists 0 < q \in \{y \in \Q \mid \exists 0 < r \in \beta, 0 < s \in \gamma: y < rs\}: x < pq\}\]
+and the condition for this one is
+\[\exists 0 < r \in \beta, 0 < s \in \gamma, 0 < p \in \gamma, 0 < q \in \Q: q < rs \land x < pq\]
+which by a nearly identical argument is equivalent to
+\[\exists 0 < r \in \alpha, 0 < s \in \beta, 0 < q \in \gamma: x < rsq\]
+
+The inclusion condition for these two sets are one and the same,
+so we can finally say $(a \cdot \beta) \cdot \gamma = a \cdot (\beta \cdot \gamma)=$.
+$\square$
+
+\pagebreak
+
+\subsection{Identity}
+
+I propose
+\[\mathbf{1}=\{r \in \Q: r < 1\}\]
+which is obviously a valid cut by inspection.
+
+Now we NTS $\mathbf{1} \cdot \alpha \subseteq \alpha$ and vice versa.
+
+For the first direction, suppose $x \in \mathbf{1} \cdot \alpha$.
+\begin{align*}
+               & \exists 0<p \in \mathbf{1}, 0<q \in \alpha: x < pq                                 \\
+  \therefore{} & 0<pq<q                                             &  & \text{since } 0 < p < 1    \\
+  \therefore{} & pq \in \alpha                                      &  & \text{by the cut property} \\
+  \therefore{} & x \in \alpha                                       &  & \text{ditto}
+\end{align*}
+
+To do the second direction, suppose $x \in \alpha$.
+If $x \le 0$, we can take any two positive elements in $\alpha$ and $\mathbf{1}$
+for a product that's strictly greater than $x$.
+
+This just leaves the case where $x > 0$.
+$\alpha$ has no maximum, so $\exists y, z \in \alpha: x < y < z$.
+
+Given $y<z$, we multiply both sides by $\frac{x}{y}$ to get $x<z \cdot \frac{x}{y}$.
+$0 \le x < y$, so $0 \le \frac{x}{y} < 1$ and $\frac{x}{y} \in \mathbf{1}$.
+We previously defined $z$ to be positive and in $\alpha$, so
+we've found a $p$ and $q$ that allows for $x$'s inclusion in $\mathbf{1} \cdot \alpha$. $\square$
+
+\pagebreak
+
+\subsection{Inverse}
+
+For $x \in \alpha$, let the inverse be
+\[y=\left\{r \in \Q\ \Big|\ \exists p \notin x: r < \frac{1}{p}\right\}\]
+
+$p \notin x \ra{} \frac{1}{p} > 0$, so $0 \in x$.
+Any $p$ also serves as a UB on the entirety of $y$, so $y \ne \Q$.
+It's closed downwards by construction, and by the density of the rational
+numbers we can always find an $r': r < r' < \frac{1}{p}$.
+Thus, $y$ is a valid cut.
+
+It remains to prove $xy=\mathbf{1}$.
+
+If $a \in xy$, $\exists 0 < p \in x, 0 < q \in y: a < pq$.
+By the conditions of $y$, $\exists p' \notin x: q < \frac{1}{p'}$.
+Since $p' \notin x$, we can deduce $p' > p$ and $\frac{1}{p'} < \frac{1}{p}$.
+Note that we can do the reciprocals since both $p$ and $p'$ are positive
+by definition.
+\[q < \frac{1}{p'} < \frac{1}{p} \therefore q < \frac{1}{p} \therefore qp < 1\]
+This gives us $a < qp < 1$, which means $a \in \mathbf{1}$.
+
+For the other direction, suppose $a < 1$.
+
+First, notice that $\exists N \in \mathbb{N}: n^{-1}<1-a\ \forall n \ge N$
+by the Archimedean property.
+Isolating $a$, this inequality turns into $a < \frac{n-1}{n}$.
+
+This gives us an actual fraction $\frac{n-1}{n}$ to work with.
+Notice that it STP $\exists n \ge N, p \in x, p' \notin x: \frac{p}{p'}=\frac{n}{n+1}$.
+This is because we can take $q=\frac{1}{p'} \cdot \frac{n^2-1}{n^2}<\frac{1}{p'}$, which gives us
+\[pq=\frac{p}{p'} \cdot \frac{n^2-1}{n^2}=\frac{n}{n+1} \cdot \frac{(n-1)(n+1)}{n^2}=\frac{n-1}{n} > a\]
+
+We now prove $\exists n \ge N, m \in \Q: nm \in x \land (n+1)m \notin x$.
+We're guaranteed a positive element in $x$ since $\mathbf{0} \subsetneq x$,
+and we can just take $m=\frac{\text{any positive thing in $x$}}{n}$.
+
+$mn \in x$ by construction.
+If $m(n+1) \notin x$, we've got our numbers.
+Otherwise, we can keep on increasing $n$ by $1$ until we get a valid pair.
+This process can't go on forever since that would imply $x$ isn't bounded above.
+
+Given this, we can take $p=nm$ and $p'=(n+1)m$ for $\frac{p}{p'}=\frac{n}{n+1}>a$. $\square$
+
+\pagebreak
+
+\section{Problem 5}
+
+Before we start, just notice that we can get the natural numbers in
+$F$ by applying $\phi$ on $\mathbb{N} \subset \R$.
+Since $F$'s an ordered field with the LUBP we can derive the Archimedean
+property and use all its implications in a proof virtually identical to the one in the notes.
+
+\subsection{\texorpdfstring{$A_x$}{Ax} is BA}
+
+$x-1 < x < x+1$, and by the density of $\Q$ in $\R$,
+we can always find rational numbers that are larger and smaller than $x$.
+Let $a, b \in \Q: a < x < b$.
+The mere existence of $a$ forces $A_x \ne \varnothing$.
+
+$\forall e \in A_x e < x \therefore e < b \therefore \phi(e) < \phi(b)$,
+so $b$ indeed serves as a valid UB for $A_x$, thus proving that $A_x$
+is bounded above as well. $\square$
+
+\subsection{Validity of \texorpdfstring{$\phi$}{Phi}}
+
+\subsubsection{Additivity} \label{sec:additivity}
+
+We WTS
+\[\sup A_{x+y}=\sup A_x + \sup A_y\]
+
+In \ref{sec:prob1} we proved that suprema are additive, so it STP
+the set on the left is equivalent to the sums of the sets on the right.
+
+Suppose $r \in \Q: r < x+y$.
+Then we can write $r=x+y-\epsilon$, where $\epsilon > 0$.
+Take $p=x-\frac{\epsilon}{2}<x$ and $q=y-\frac{\epsilon}{2}<y$.
+These two elements are in the first and second term of the RHS,
+so any element in the LHS is in the RHS  as well.
+
+OTOH, if we had $p, q \in \Q: p < x, q < y$, then $p+q<x+y$ and $\phi(p+q) \in \text{LHS}$.
+So summing the two RHS sets gives us the LHS set. $\square$
+
+\pagebreak
+
+\subsubsection{Multiplicity}
+
+Now we NTS
+\[\sup A_{xy}=\sup A_x \cdot \sup A_y\]
+
+We first prove this for $x, y > 0$ and then extend it to negatives.
+
+If we denote $A_x^+$ as $A_x$ with only strictly positive elements, notice that
+$\sup A_x^+=\sup A_x$ since the positive elements serve as upper bounds on the negative elements anyways.
+
+Now it STP $A_{xy}^+ = \{a \cdot b \mid a \in A_x^+, b \in A_y^+\}$
+since with this, by \ref{sec:prob3} $\sup A_{xy}^+ = \sup A_x^+ \cdot \sup A_y^+$
+
+If $a \in A_x^+$ and $b \in A_y^+$,
+\begin{align*}
+               & \phi^{-1}(a)<x, \phi^{-1}(b)<y                                          &  & \text{by definition}   \\
+  \therefore{} & \phi^{-1}(a) \cdot \phi^{-1}(b)<xy                                      &  & \text{by some algebra} \\
+  \therefore{} & \phi\left(\phi^{-1}(a) \cdot \phi^{-1}(b)\right)=a \cdot b \in A_{xy}^+
+\end{align*}
+
+OTOH, if we have an $0 < a < xy$, then we can choose $r^2=\frac{xy}{a}$ so $a = r^2xy < xy = (rx)(ry)$.
+$r^2 < 1$, so $r < 1$ and $rx < x \land ry < y$.
+So if $\phi(a) \in A_{xy}^+$, we can take a $\phi(rx) \in A_x^+$ and
+$\phi(ry) \in A_y^+$ to get $\phi(a)=\phi(rx) \cdot \phi(ry)$. 
+
+It remains to extend this to negatives.
+By \ref{sec:additivity}, $\phi(0-x)=\phi(0)-\phi(x) \therefore \phi(-x)=-\phi(x)$.
+
+Then if $x<0$ and $y>0$,
+\begin{align*}
+  \phi(xy)
+  &= \phi(-(-x \cdot y)) \\
+  &= -\phi(-x \cdot y) \\
+  &= -(\phi(-x) \cdot \phi(y)) \\
+  &= \phi(x) \cdot \phi(y)
+\end{align*}
+The other cases are proved in much the same way. $\square$
+
+\subsubsection{Valid Ordering} \label{sec:ordering}
+
+If $x < y$, $\exists z \in \Q: x < z < y$ by the density of $\Q$ in $\R$.
+By construction, $\phi(z)$ is a valid UB for $A_x$ and $\sup A_x \le \phi(z)$.
+
+For $A_y$, notice that since the set is open ended, there's no maximum
+and we can find another $w$ s.t. $z < w < y$.
+This means $z < \sup A_y$, since if $z \ge \sup A_y$
+that would mean it's a valid UB which it clearly isn't by the existence of $w$.
+
+With these two things proven we have
+\[\sup A_x \le \phi(z) < \sup A_y \therefore \sup A_x < \sup A_Y \therefore \phi(x) < \phi(y)\quad\square\]
+
+\pagebreak
+
+\subsection{Bijectivity}
+
+\subsubsection{Injectivity}
+
+If $x \ne y$, then either $x < y$ or $y > x$.
+WLOG assume $x < y$.
+
+By \ref{sec:ordering}, $\phi(x) < \phi(y) \therefore \phi(x) \ne \phi(y)$.
+
+\subsubsection{Surjectivity}
+
+For any $p \in F$, let
+\[S=\{r \in \phi(\Q) \mid r < p\}\]
+By the Archimedean property and an argument similar to that in \ref{sec:prob2}, $\sup S=p$.
+
+We can construct another set
+\[T=\left\{\phi^{-1}(r) \mid r \in S\right\}\]
+It remains to prove $\phi(\sup T)=p$.
+The cut constructed is
+\[A_{\sup T}=\{\phi(x) \mid x \in \Q \land x < \sup T\}\]
+
+To prove $\phi(\sup T)=p$, it STP $A_{\sup T}=S$ since then they must have the same suprema $p$.
+
+If $r \in S$, by density of $\phi(\Q)$ in $F$ $\exists r': r < r' < p$.
+$\phi$ on $\Q$ is injective and preserves order, so
+\[\phi^{-1}(r) < \phi^{-1}(r') \le \sup T \therefore \phi\left(\phi^{-1}(r)\right)=r \in A_{\sup T}\]
+
+OTOH, say $r \notin S \ra{} r \ge p$.
+If $r \notin \phi(\Q)$ then $r \notin A_{\sup T}$ by construction, so
+let's just consider the case where $r \in \phi(\Q)$.
+$r \ge p$ means $r \ge \sup S$ and $r \notin T$ by extension.
+
+Notice that $x \in T \ra{} x < \sup T$.
+To prove this, we NTS $x \ne \sup T$.
+BWOC say $y \le x\ \forall y \in T$.
+Then $\phi(y) \le \phi(x) < p\ \forall y \in T$.
+But there's always a $z \in \phi(\Q): \phi(x) < z < p$,
+$z \in S$, so $\phi^{-1}(z) \in T$ and $x < \phi^{-1}(z)$, which is a contradiction.
+
+Then we can take the contrapositive of what we just proved to get$r \ge \sup T$.
+
+We make $A_{\sup T}$ by taking all elements \textit{strictly} smaller than $\sup T$,
+so $\phi\left(\phi^{-1}(r)\right)=r \notin A_{\sup T}$,
+the two sets are equal, and $\phi(\sup T)=p$.
+
+With these two properties proven, we see that $\phi$ is bijective. $\square$
+
+\end{document}
