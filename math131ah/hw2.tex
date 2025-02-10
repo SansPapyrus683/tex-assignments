@@ -474,13 +474,13 @@ I'll just prove that all lower bounds are smaller than all upper bounds.
 The infinimum and supremum are included in those, so it's implied.
 
 Suppose we have any LB $m$ and any UB $M$.
-Since $S \ne \varnothing$, we know there's an $x$ to use the transitive property on,
+Since $S \ne \varnothing$, we know there's an $x \in S$ to use the transitive property on,
 so $m \le x \le M \ra\ m \le M$. $\square$
 
 \subsection{}
 
 If $\inf S = \sup S$, then we can choose lower and upper bounds $m$/$M$
-such that $m=M$ and $m \le x \le M$.
+such that $m=M$ and $m \le x \le M\ \forall x \in S$.
 The two are equal, meaning $x=m$, so there can only be exactly one number
 in the subset.
 
@@ -523,7 +523,7 @@ Again, this covers every element, so $\max(\sup S, \sup T)=\sup S$ in this case 
 \subsubsection{No Strict}
 
 BWOC let $\sup(S \cup T) < \max(\sup S, \sup T)$.
-This implies an $x \in \mathbb{R}$ that's a lower UB for $S \cup T$.
+This implies an $s \in \mathbb{R}$ that's a lower UB for $S \cup T$.
 
 Again we casework on which value the max takes.
 If $\sup S \ge \sup T$, $i \le s < \sup S\ \forall i \in S \cup T$.
