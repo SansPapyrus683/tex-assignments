@@ -1,0 +1,309 @@
+\documentclass[12pt]{article}
+
+\input{../kz}
+
+\rhead{Math 131AH}
+
+\makeatletter
+\def\@seccntformat#1{%
+  \expandafter\ifx\csname c@#1\endcsname\c@section\else
+  \csname the#1\endcsname\quad
+  \fi}
+\makeatother
+
+\newcommand{\lra}{\xLeftrightarrow}
+\newcommand{\ra}{\xRightarrow}
+\newcommand{\N}{\mathbb{N}}
+\newcommand{\R}{\mathbb{R}}
+\newcommand{\Q}{\mathbb{Q}}
+
+\begin{document}
+
+\section{Problem 1}
+
+Take $\epsilon$ and $n_\epsilon$ s.t. $|a_n-a|<\epsilon\ \forall n > n_\epsilon$.
+By the Inverse Triangle Inequality, $||a_n|-|a|| \le |a_n-a|<\epsilon$,
+so any $n_\epsilon$ that works for $a_n$ works for $|a_n|$ as well. $\square$
+
+Note, however, that the converse is not true.
+An example is $a_n=(-1)^n$.
+Although its absolute value converges to $1$, the sequence itself
+doesn't converge at all.
+
+\section{Problem 2}
+
+We first show $a_n=\sum_{i=0}^{n-1} \frac{1}{3^i}$ by induction.
+The base case $a_1$ is trivially true ($\frac{1}{3^0}=1$).
+
+For the inductive step, we have
+\begin{align*}
+  a_{n+1}
+   & = a_n + \frac{1}{3^n}                            \\
+   & = \sum_{i=0}^{n-1} \frac{1}{3^i} + \frac{1}{3^n} \\
+   & = \sum_{i=0}^{n} \frac{1}{3^i}
+\end{align*}
+
+Using the formula for a \textit{finite} geometric series, we have
+\[a_n = \sum_{i=0}^{n-1} \frac{1}{3^i} = \frac{1-\frac{1}{3^n}}{1-\frac{1}{3}}=\frac{3-\frac{1}{3^{n-1}}}{2}\]
+
+$3^{n-1}$ diverges to $+\infty$, so $\lim_{n \to \infty} \frac{1}{3^{n-1}}=0$
+and we're just left with our limit of $\boxed{\frac{3}{2}}$.
+
+\pagebreak
+
+\section{Problem 3}
+
+Let $A=\sup \{|a_n| \mid n > 1\}$.
+Suppose $\epsilon > 0$.
+Choose an $n_b$ s.t. $|b_n-0|=|b_n| < \frac{\epsilon}{A}$.
+
+Then $|a_nb_n-0|=|a_n||b_n| < A \cdot \frac{\epsilon}{A} = \epsilon$,
+so our $n_\epsilon$ in this case is just $n_b$. $\square$
+
+\textbf{Note:} There is an edge case where $a_n=0$, but in that case $a_nb_n=0$ which obviously still converges to $0$.
+
+\section{Problem 4}
+
+Let $\lim_{n \to \infty} a_n=\lim_{n \to \infty} c_n=a$.
+This also means $\lim_{n \to \infty} a_n - c_n=0$ by limit subtraction properties.
+
+Suppose $\epsilon > 0$.
+Choose an $n_{ac}$ s.t.:
+\begin{itemize}[nolistsep]
+  \item $|a_n-a| < \frac{\epsilon}{2}$ (though this isn't used)
+  \item $|c_n-a| < \frac{\epsilon}{2}$
+  \item $|a_n-c_n-0|=|a_n-c_n| < \frac{\epsilon}{2}$
+\end{itemize}
+
+Then for any $n \ge n_{ac}$ we have
+\begin{align*}
+  |b_n-a|
+   & = |b_n-c_n+c_n-a|                         \\
+   & \le |b_n-c_n|+|c_n-a|                     \\
+   & \le |c_n - a_n| + |c_n - a|               \\
+   & < \frac{\epsilon}{2} + \frac{\epsilon}{2} \\
+   & = \epsilon\quad\square
+\end{align*}
+
+\pagebreak
+
+\section{Problem 5}
+
+Let's first prove $a_{n+1} > a_n$:
+\begin{align*}
+         & \sqrt{4(n+1)^2+n+1}-2(n+1)>\sqrt{4n^2+n}-2n \\
+  \iff{} & \sqrt{4n^2+9n+5}>2+\sqrt{4n^2+n}            \\
+  \iff{} & 4n^2+9n+5 > 4+4n^2+n+4\sqrt{4n^2+n}         \\
+  \iff{} & 8n+1 > 4\sqrt{4n^2+n}                       \\
+  \iff{} & 64n^2+16n+1 > 64n^2+16n
+\end{align*}
+which is obviously true. (Every time I squared I made sure both sides are positive.)
+
+Also, $a_n < \frac{1}{4}$, since
+\begin{align*}
+         & \sqrt{4n^2+n}-2n<\frac{1}{4}           \\
+  \iff{} & 4n^2+n < \left(2n+\frac{1}{4}\right)^2 \\
+  \iff{} & 4n^2+n < 4n^2+n+\frac{1}{16}
+\end{align*}
+
+Now we just need an $n_\epsilon$ so $\frac{1}{4}-\epsilon < \sqrt{4n^2+n}-2n$.
+First off, if $\epsilon$ is larger than $1$, we can choose $n_\epsilon=1$
+since $\sqrt{5}-2>0>\frac{1}{4}-1$.
+So now we can do the following:
+\begin{align*}
+         & 2n+\frac{1}{4}-\epsilon < \sqrt{4n^2+n}                                               \\
+  \iff{} & 4n^2+4n\left(\frac{1}{4}-\epsilon\right)+\left(\frac{1}{4}-\epsilon\right)^2 < 4n^2+n \\
+  \iff{} & -4n\epsilon+\left(\frac{1}{4}-\epsilon\right)^2 < 0                                   \\
+  \iff{} & n > \frac{\left(\frac{1}{4}-\epsilon\right)^2}{\epsilon}
+\end{align*}
+so we just choose $n_\epsilon$ as the first natural number larger than that quantity.
+
+$a_n$ is strictly increasing and upper bounded by $\frac{1}{4}$,
+so any term of the sequence past this is only going to get closer to $\frac{1}{4}$. $\square$
+
+\pagebreak
+
+\section{Problem 6}
+
+\subsection{Part 1}
+
+For convenience let $a=\lim_{n \to \infty}$.
+
+BWOC say $A < a$.
+For a contradiction it suffices to find an $\epsilon$ where there is no valid $n_\epsilon$.
+
+Let $\epsilon=\frac{1}{2}(a-A)$.
+For any $n \in \N$, since there's only finitely many $a_n$ that are less than $a$,
+we can always find a $n' > n$ s.t. $a_n \ge a$.
+
+Then
+\[a_{n'} - A = a_{n'} - a + a - A = a_{n'} - a + 2\epsilon\]
+which is a contradiction since $a_{n'}-a \ge 0$ and $2\epsilon > \epsilon$, obviously. $\square$
+
+\subsection{Part 2}
+
+If we take $b_n=-a_n$, $b_n \ge -b$ for all but finitely many $n$ as well.
+This means
+\begin{align*}
+               & \lim_{n \to \infty} b_n \ge -b                                                        \\
+  \therefore{} & \lim_{n \to \infty} -a_n \ge -b                                                       \\
+  \therefore{} & \left(\lim_{n \to \infty} -1\right) \cdot \left(\lim_{n \to \infty} a_n\right) \ge -b \\
+  \therefore{} & -\lim_{n \to \infty} a_n \ge -b                                                       \\
+  \therefore{} & \lim_{n \to \infty} a_n \le b\quad\square
+\end{align*}
+
+\subsection{Part 3}
+
+If all but finitely many $a_n$ belong in $[a, b]$,
+then all these numbers are greater than or equal to $a$
+and less than or equal to $b$.
+Then by what we just proved $a \le \lim_{n \to \infty} a_n \le b$. $\square$
+
+\section{Problem 7}
+
+Let $\lim_{n \to \infty} a_n=L$ and $\epsilon=L - a$.
+By definition of convergence $\exists n_\epsilon \in \N: |a_n - L| \le \epsilon$.
+
+Let's just do casework.
+If $a_n > L$, $a_n > L > a$ obviously.
+OTOH, if $a_n < L$, then
+\[|a_n - L| = L - a_n < \epsilon = L - a \therefore -a_n < -a \therefore a_n > a\]
+Either way, $a_n > a$. $\square$
+
+\pagebreak
+
+\section{Problem 8}
+
+By what was proven in class, $a_n$ converges; call the limit $L$.
+Then
+\[\lim_{n \to \infty} a_n^2 = \lim_{n \to \infty} a_n \cdot \lim_{n \to \infty} a_n = L^2\quad\square\]
+
+\section{Problem 9}
+
+\subsection{All Rationals}
+
+$a_n \in \Q$ since $a_1 \in \Q$ and the rationals are closed
+under division and addition, which are the only operations
+that are used to generate new terms of the sequence.
+
+\subsection{Bounded Below and Decreasing}
+
+I'll prove by induction $\sqrt{2} < a_{n+1} < a_n$.
+
+The base case is simple.
+$a_2=\frac{3}{2}+\frac{1}{3}=\frac{11}{6}$ which is both greater than $\sqrt{2}$ and less than $a_1=3$.
+
+For the inductive step, we have
+\begin{align*}
+               & \sqrt{2} < a_n                                                                      \\
+  \therefore{} & \frac{a_n^2}{2} > 1                 &  & \text{some basic algebra}                  \\
+  \therefore{} & a_n^2 > 1 + \frac{a_n^2}{2}         &  & \text{add $\frac{a_n^2}{2}$ to both sides} \\
+  \therefore{} & a_n > \frac{1}{a_n} + \frac{a_n}{2} &  & \text{we can do this since $a_n > 0$}
+\end{align*}
+where the RHS is precisely the formula for $a_{n+1}$.
+
+Now to show $a_{n+1} > \sqrt{2}$ as well, we can do
+\[\left(a_n - \sqrt{2}\right)^2 > 0 \therefore 2 + a_n^2 > 2\sqrt{2}a_n \therefore \frac{1}{a_n} + \frac{a_n}{2} > \sqrt{2}\]
+so we can see that $a_{n+1} > \sqrt{2}$ as well, so our proof is complete. $\sqrt{2} < a_{n+1} < a_n\ \forall n$. $\square$
+
+\subsection{Finding Limit}
+
+Since $a_n$ is strictly increasing and bounded above, it must converge to some value $L$.
+\begin{gather*}
+  \lim_{n \to \infty} a_{n+1} = \lim_{n \to \infty} \frac{1}{a_n}+\frac{a_n}{2} \\
+  L = \frac{1}{L} + \frac{L}{2} \therefore L=\boxed{\sqrt{2}}
+\end{gather*}
+The simplification just uses some limit properties that were proved in class already.
+
+\section{Problem 10}
+
+\subsection{Increasing and Bounded Above}
+
+I'll prove by induction that $a_n < a_{n+1} < 2$.
+The base case is simple: $\sqrt{2} < \sqrt{2+\sqrt{2}} < 2$.
+
+Now for the indutive step, we have
+\begin{align*}
+               & a_n(a_n - 1) < 2   &  & \text{since $a_n-1 < 1$}                   \\
+  \therefore{} & a_n^2 - a_n < 2                                                    \\
+  \therefore{} & a_n^2 < 2+a_n      &  & \text{the sequence is definitely positive} \\
+  \therefore{} & a_n < \sqrt{2+a_n}
+\end{align*}
+to show the first part of the inequality.
+
+The remaining part is prety simple: $2+a_n < 4 \therefore \sqrt{2+a_n} < 2$. $\square$
+
+\subsection{Finding Limit} \label{sec:sqrtlim}
+
+First lemme just show that $\lim_{n \to \infty} a_n=a \land a_n > 0 \ra{} \lim_{n \to \infty} \sqrt{a_n}=\sqrt{a}$.
+This also requires an auxiliary result that $\sqrt{|x-y|} \ge \left|\sqrt{x}-\sqrt{y}\right|$.
+We can prove this by assuming WLOG $x > y$, which takes away the absolute values.
+Then
+\begin{align*}
+         & \sqrt{x-y} \ge \sqrt{x}-\sqrt{y} \\
+  \iff{} & x-y \ge x+y-2\sqrt{xy}           \\
+  \iff{} & 2\sqrt{xy} \ge 2y
+\end{align*}
+which is true by our previous assumption.
+
+For the actual limit, choose an $n_\epsilon$ s.t. $|a_n-a| < \epsilon^2\ \forall n \ge n_\epsilon$.
+Then
+\[\left|\sqrt{a_n}-\sqrt{a}\right| \le \sqrt{|a_n-a|} \le \sqrt{\epsilon^2}=\epsilon\]
+so the limit breakpoint we chose turned out to be valid.
+
+We know the sequence converges, so again we assign the value $L$ to the limit.
+\begin{gather*}
+  \lim_{n \to \infty} a_{n+1} = \lim_{n \to \infty} \sqrt{2+a_n} = \sqrt{2+\lim_{n \to \infty} a_n} \\
+  L=\sqrt{2+L} \therefore L^2=2+L \therefore L=\boxed{2}
+\end{gather*}
+Though $L=-1$ is also a valid solution, there's no possible way it can
+be right since the initial term is already greater than $-1$.
+
+\pagebreak
+
+\section{Problem 11}
+
+Lemme show AM-GM real quick:
+\begin{gather*}
+  \left(\sqrt{a}-\sqrt{b}\right)^2 \ge 0 \\
+  a-2\sqrt{ab}+b \ge 0 \\
+  \frac{a+b}{2} \ge \sqrt{ab}\quad\square
+\end{gather*}
+
+\subsection{Monotone and Bounded}
+
+I'll prove by induction $a_n \le a_{n+1} \le b_{n+1} \le b_n$.
+Since we're given $0 < a_1 < b_1$, this implies the boundedness of the sequences as well.
+
+For the base case $a_1 < \sqrt{a_1b_1} \le \frac{a_1+b_1}{2} < b_1$,
+the middle inequality is true by AM-GM.
+The first part's true since
+\[a_1 = \sqrt{a_1a_1} < \sqrt{a_1b_1}\]
+and the second part is true because
+\[\frac{a_1+b_1}{2} < \frac{b_1+b_1}{2}=b_1\]
+
+The inductive step is the easier part, actually.
+By the hypothesis we know $0 < a_n \le b_n$, so
+the proof that $a_n \le \sqrt{a_nb_n} \le \frac{a_n+b_n}{2} \le b_n$
+goes the exact same way as it did for the base case. $\square$
+
+\subsection{Limit Equivalence}
+
+$a_n$ is increasing and bounded above, while $b_n$ is decreasing and bounded below.
+This makes both of them converge.
+Let $\lim_{n \to \infty} a_n=A$ and $\lim_{n \to \infty} b_n=B$.
+
+We take the limits of both sides of the recursive definition:
+\begin{gather*}
+  \lim_{n \to \infty} a_{n+1} = \lim_{n \to \infty} \sqrt{a_n b_n} = \sqrt{\lim_{n \to \infty} a_n \cdot \lim_{n \to \infty} b_n} \\
+  \lim_{n \to \infty} a_{n+1} = \lim_{n \to \infty} \frac{a_n+b_n}{2} = \frac{\lim_{n \to \infty} a_n + \lim_{n \to \infty} b_n}{2}
+\end{gather*}
+We can put the limit in the square root by what was proven in \ref{sec:sqrtlim}.
+
+This then gives us the system of equations
+\begin{align*}
+  A=\sqrt{AB} &  & B=\frac{A+B}{2}
+\end{align*}
+though simplifying either of them gives the same result that $A=B$. $\square$
+
+\end{document}
