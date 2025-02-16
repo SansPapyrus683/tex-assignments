@@ -62,7 +62,8 @@ to actually go to the finishing state.
 \subsection{\texorpdfstring{$L_1$}{L\_1}}
 
 For this language I found it easier to make two CFGs.
-If either of them match, we accept.
+If either of them match, we accept; we can do this since context-free languages
+are closed under union.
 
 This first CFG accepts if $|x| \ne |y|$.
 Setting $A$ as the root variable, we have
