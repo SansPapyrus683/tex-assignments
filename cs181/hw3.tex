@@ -1,0 +1,138 @@
+\documentclass[12pt]{article}
+
+\input{../kz}
+
+\lhead{406-196-414}
+\rhead{CS 181}
+
+\begin{document}
+
+% https://tex.stackexchange.com/a/336688
+\hspace{0pt}
+\vfill
+\begin{center}
+    For this homework, I worked with Andrew Sun and Uday Shukla.
+\end{center}
+\vfill
+\hspace{0pt}
+
+\pagebreak
+
+\section{CFL Concatenation}
+
+If $A$ and $B$ are regular, then they can be implemented by a DFA.
+Let $A$ be defined by the standard tuple $(Q_A, F_A, q_{0A}, \Sigma, \delta_A)$
+and $B$ be defined by something similar.
+I'll assume the two have the same alphabet for convenience.
+
+I found it easier instead to define a PDA with these rudimentary parameters:
+\begin{itemize}
+    \item $Q=\{q_0, q_{\text{fin}}\} \cup Q_A \cup Q_B$
+    \item $F=\{q_{\text{fin}}\}$
+    \item $\Sigma$ stays the same
+    \item $\Gamma=\{\$, 0\}$
+\end{itemize}
+and a transition function
+$\delta: Q \times \Sigma \times \{\text{push}, \text{pop}, \text{noop}\} \times \Gamma \rightarrow \mathbb{P}(Q)$
+defined like so:
+\begin{gather*}
+    \delta(q_0, \epsilon, \text{push}, \$)=\{q_{0A}\} \\
+    \delta(q \in Q_A, s, \text{push}, 0)=\{\delta_A(q, s)\} \\
+    \delta(q \in Q_A, \epsilon, \text{noop}, 0)=\{q_{0B}\} \\
+    \delta(q \in Q_B, s, \text{pop}, 0)=\{\delta_B(q, s)\} \\
+    \delta(q \in F_B, \epsilon, \text{pop}, \$)=\{q_{\text{fin}}\}
+\end{gather*}
+Everything that is not covered by the cases maps to $\varnothing$.
+$A$ and $B$ are implemented by DFAs, so $\delta_{A\text{ or }B}(q, \epsilon)=\varnothing$
+
+This is a machine that only accepts on an empty stack.
+I've made it so that it can either be in the $A$-portion or the $B$-portion.
+By construction, for every token in $x$ it consumes in the $A$-portion,
+it has to consume a corresponding token in the $B$-portion.
+
+When the machine is done with whatever part of the string $A$ should be,
+it does an epsilon (and noop) transition into the $B$-portion of the machine.
+After running through $B$, it needs to have an empty stack (which means $|x|=|y|$)
+to actually go to the finishing state.
+
+\pagebreak
+
+\section{Proving CFLs}
+
+\subsection{\texorpdfstring{$L_1$}{L\_1}}
+
+For this language I found it easier to make two CFGs.
+If either of them match, we accept.
+
+This first CFG accepts if $|x| \ne |y|$.
+Setting $A$ as the root variable, we have
+\begin{align*}
+    A & \to XAX \mid C\$ \mid \$C \\
+    C & \to XC \mid X             \\
+    X & \to 0 \mid 1
+\end{align*}
+This grammar accepts the language
+\[\{x\$y \mid x, y \in \{0, 1\}^* \text{ and } |x| \ne |y|\}\]
+It keeps on stripping characters from the beginning and end until it hits the center \$.
+If $|x| \ne |y|$, then either $|x| < |y|$ or vice versa,
+so when the parser hits the center \$ exactly one side will have some
+nonempty string consisting of 0s and 1s, which is exactly what $C$ matches.
+
+Now we need another CFG that checks the language
+\[\{x\$y \mid x, y \in \{0, 1\}^* \text{ and } \exists 1 \le k \le \min(|x|, |y|): x_k \ne y_k\}\]
+This is becuase the case where $|x| \ne |y|$ is handled by the first language.
+
+I propose the grammar
+\begin{align*}
+    S & \to A0C \mid B1C     \\
+    A & \to XAX \mid 1C\$    \\
+    B & \to XBX \mid 0C\$    \\
+    C & \to XC \mid \epsilon \\
+    X & \to 1 \mid 0
+\end{align*}
+Here, $C$ matches the regex $(0|1)^*$.
+
+First consider the rule $A0C$, which makes $x_k=1$ and $y_k=0$ for some $k \ge 0$.
+
+$A$'s base case is $1$ ($x_k$) followed by $C$ and \$.
+We then pad both sides with an equal amount of arbitrary 0s and 1s.
+Notice that since one character goes before $x_k$ and another goes after the \$,
+each time we match on $XAX$ we're adding $1$ to $k$.
+
+Then, when we recurse back up to $S$, we add a 0 to the end ($y_k$)
+followed by another $C$.
+This forces the $x$ and $y$ to differ at some index $k$.
+
+$B$ works in basically the same way as well, except now $x_k=0$ and $y_k=1$.
+
+\pagebreak
+
+\subsection{\texorpdfstring{$L_2$}{L\_2}}
+
+If we let $x$ be a shorthand for $\{0, 1\}$, notice that this language is equivalent to
+\[\{x^j\ 1\ x^{j+k}\ 0\ x^k \mid j, k \ge 0\} \cup \{x^j\ 0\ x^{j+k}\ 1x^k \mid j, k \ge 0\}\]
+since in the original language, $|x|=|y|$, so there must be some index
+at which $x$ is a $1$ and $y$ is a $0$ or vice versa.
+
+Notice that the left set can be written as $A \circ B$, where
+\begin{gather*}
+    A=\{x^j\ 1\ x^j \mid j \ge 0\} \\
+    B=\{x^k\ 0\ x^k \mid k \ge 0\}
+\end{gather*}
+This is because the middle $x^{j+k}$ can be any string of characters,
+so it doesn't particularly matter how we partition it so long as it has the proper length.
+
+Similarly, the right set can be written as $B \circ A$.
+
+These observations allow us to write the following CFG with $S$ as the root variable:
+\begin{align*}
+    S & \to AB \mid BA \\
+    A & \to XAX \mid 1 \\
+    B & \to XBX \mid 0 \\
+    X & \to 0 \mid 1
+\end{align*}
+Variables $A$ and $B$ parse the \textit{languages} $A$ and $B$ described above.
+We concatenate them in both orders and take the union to get our final
+grammar for $L_2$.
+
+\end{document}
