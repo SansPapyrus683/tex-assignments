@@ -1,0 +1,543 @@
+\documentclass[12pt]{article}
+
+\input{../kz}
+
+\rhead{Math 131AH}
+
+\makeatletter
+\def\@seccntformat#1{%
+  \expandafter\ifx\csname c@#1\endcsname\c@section\else
+  \csname the#1\endcsname\quad
+  \fi}
+\makeatother
+
+\newcommand{\lra}{\xLeftrightarrow}
+\newcommand{\ra}{\xRightarrow}
+\newcommand{\N}{\mathbb{N}}
+\newcommand{\R}{\mathbb{R}}
+\newcommand{\Q}{\mathbb{Q}}
+
+\begin{document}
+
+\section{Problem 1}
+
+% $a_n > 0$, since $a_1 > 1$ and $1-\frac{1}{(n+1)^2}>0\ \forall n \in \N$.
+% Both terms in the recurrence are positive, so multiplying them should
+% yield another positive number.
+
+% Also, $0 < 1-\frac{1}{(n+1)^2} < 1$ since the fraction is positive,
+% meaning $a_{n+1} < a_n$ and that $a_n$ is strictly decreasing.
+% These two facts combined imply the convergence of $a_n$. $\square$
+
+To see what this actually converges to, notice that for $n > 1$
+\[a_n = \prod_{i=1}^{n-1} \left(1-\frac{1}{(i+1)^2}\right)\]
+The proof of this is by induction.
+The base case is trivial, as $a_2 = \left(1-\frac{1}{2^2}\right) \cdot a_1$.
+
+For the indutive step, we have
+\begin{align*}
+  a_{n+1}
+   & = \left(1-\frac{1}{(n+1)^2}\right) \cdot a_n                                                 \\
+   & = \left(1-\frac{1}{(n+1)^2}\right) \cdot  \prod_{i=1}^{n-2} \left(1-\frac{1}{(i+1)^2}\right) \\
+   & =  \prod_{i=1}^{n} \left(1-\frac{1}{(n+1)^2}\right)
+\end{align*}
+which is exactly what we want.
+
+Now, notice
+\begin{align*}
+  a_n
+  =\prod_{i=1}^{n-1} \left(1-\frac{1}{(i+1)^2}\right)
+   & = \prod_{i=2}^{n} \frac{i^2-1}{i^2}            \\
+   & = \prod_{i=2}^{n} \frac{(i-1)(i+1)}{i^2}       \\
+   & = \frac{1}{2} \cdot \frac{n+1}{n}              \\
+   & = \frac{1}{2} \cdot \left(1+\frac{1}{n}\right)
+\end{align*}
+by telescoping products.
+
+From lecture, $\lim_{n \to \infty} \frac{1}{n}=0$ so the limit of this sequence is $\boxed{\frac{1}{2}}$.
+
+\pagebreak
+
+\section{Problem 2}
+
+For convenience let $L=\sup A$.
+
+Take any $a_1 \in A$ as our starting element.
+$L \notin A$, so let $\delta = L-a_1 > 0$.
+
+Now we define our sequence:
+\[a_{n+1} = \text{any element in $A$ s.t. } a_{n+1} > \max\left(a_n, L - \frac{\delta}{n}\right)\]
+with the exception of $a_1$, which we defined by hand above.
+
+Such an element is guaranteed to exist.
+If $a_n \ge L-\frac{\delta}{n}$, then using that $L \notin A$
+we know that there's always a bigger element in $A$.
+OTOH, if the fraction is bigger, there's still a guranteed element
+since $\forall \epsilon > 0\ \exists a \in A: a > \sup A - \epsilon$.
+
+To show that this converges, consider any $\epsilon > 0$.
+$\exists n_\epsilon \in \N: \frac{\delta}{n} < \epsilon$,
+so let's use that as our breakpoint.
+$L - \epsilon < L-\frac{\delta}{n_\epsilon} < a_{n_\epsilon} < L$,
+and since $a_n$ is increasing and bounded above by $L$ (everything in the sequence is in $A$ as well),
+we know this is true for all $n$ past $n_\epsilon$ as well. $\square$
+
+\pagebreak
+
+\section{Problem 3}
+
+% OH MY GOD WHAT THE ACTUAL FUCK IS THIS PROBLEM HOLY JESUS FUCK MENZ
+
+I'll use things like $\mathbf{0}$ and $\mathbf{1}$ to denote constant sequences.
+
+\subsection{Equivalence Relation}
+
+\subsubsection{Reflexive}
+
+$\{a_n-a_n\}_{n \ge 1}=\mathbf{0}$, which obviously converges to zero.
+
+\subsubsection{Symmetric}
+
+If $\lim_{n \to \infty} \{a_n-b_n\}_{n \ge 1} = 0$,
+\begin{align*}
+  \lim_{n \to \infty} \{b_n-a_n\}_{n \ge 1}
+   & = \lim_{n \to \infty} -\{a_n-b_n\}_{n \ge 1} \\
+   & = -\lim_{n \to \infty} \{a_n-b_n\}_{n \ge 1} \\
+   & = 0 \quad\square
+\end{align*}
+
+\subsubsection{Transitive}
+
+We're given $\lim_{n \to \infty} \{a_n-b_n\}_{n \ge 1}=\lim_{n \to \infty} \{c_n-b_n\}_{n \ge 1}=0$.
+With that,
+\begin{align*}
+  \lim_{n \to \infty} \{a_n-c_n\}_{n \ge 1}
+   & = \lim_{n \to \infty} \{a_n-b_n+b_n-c_n\}_{n \ge 1}                                     \\
+   & = \lim_{n \to \infty} \{a_n-b_n\}_{n \ge 1} + \lim_{n \to \infty} \{b_n-c_n\}_{n \ge 1} \\
+   & = 0 + 0                                                                                 \\
+   & = 0 \quad\square
+\end{align*}
+
+\subsection{Closure}
+
+I'll omit the $n \ge 1$ subscript for brevity.
+Say we have two Cauchy sequences $\{a_n\}$ and $\{b_n\}$.
+
+\subsubsection{Addition}
+
+To show that $\{a_n+b_n\}$ is Cauchy, notice that for any $\epsilon$
+we can pick an $n_1$ s.t. $\forall n, m \ge n_1$ we have $|a_n-a_m| < \frac{\epsilon}{2}$
+and a similar $n_2$ for $b_n$.
+
+Taking $n_\epsilon = \max(n_1, n_2)$,
+we now have that $\forall n, m \ge n_\epsilon$
+\begin{align*}
+  |a_n+b_n - a_m-b_m|
+   & \le |a_n-a_m| + |b_n-b_m|                   \\
+   & \le \frac{\epsilon}{2} + \frac{\epsilon}{2} \\
+   & = \epsilon\quad\square
+\end{align*}
+
+\subsubsection{Multiplication}
+
+All Cauchy sequences are bounded, so let $|a_n|, |b_n| < M$ for all $n$.
+
+For any $\epsilon$, pick an $n_1$ s.t. $\forall n, m \ge n_1$
+we have $|a_n-a_m| < \frac{\epsilon}{2M}$ and a similar $n_2$ for $b_n$.
+
+Taking $n_\epsilon = \max(n_1, n_2)$,
+we now have that $\forall n, m \ge n_\epsilon$
+\begin{align*}
+  |a_nb_n - a_mb_m|
+   & = |a_nb_n - a_nb_m + a_nb_m - a_mb_m|                       \\
+   & \le |a_nb_n - a_nb_m| + |a_nb_m - a_mb_m|                   \\
+   & = |a_n||b_n - b_m| + |b_m||a_n - a_m|                       \\
+   & < M \cdot \frac{\epsilon}{2M} + M \cdot \frac{\epsilon}{2M} \\
+   & = \epsilon\quad\square
+\end{align*}
+
+\subsection{Valid Operation Definitions}
+
+Let $\{a_n\} \sim \{c_n\}$ and $\{b_n\} \sim \{d_n\}$.
+
+\subsubsection{Addition}
+
+For addition, we NTS $\{a_n + b_n\} \sim \{c_n + d_n\}$:
+\begin{align*}
+  \lim_{n \to \infty} \{a_n+b_n-c_n-d_n\}
+   & = \lim_{n \to \infty} \{a_n-c_n\} + \lim_{n \to \infty} \{b_n-d_n\} \\
+   & = 0+0                                                               \\
+   & = 0
+\end{align*}
+
+\subsubsection{Multiplication}
+
+For this, we NTS $\lim_{n \to \infty} \{a_nb_n-c_nd_n\} = 0$.
+First, take $M \in \Q$ s.t. it's greater than the absolute values of all the elements of all the sequences,
+since we know they're all Cauchy and therefore bounded.
+
+Then for any $\epsilon > 0$, since $\{a_n\} \sim \{c_n\}$ and $\{b_n\} \sim \{d_n\}$,
+we can choose $n_1 \in \N: |a_n-c_n| < \frac{\epsilon}{2M}\ \forall n > n_1$
+and a similar $n_2$ for $|b_n-d_n|$.
+
+Taking $n_\epsilon = \max(n_1, n_2)$, we have
+\begin{align*}
+  |a_nb_n-c_nd_n|
+   & = |a_nb_n-b_nc_n+b_nc_n-c_nd_n|                             \\
+   & \le |a_nb_n-b_nc_n| + |b_nc_n-c_nd_n|                       \\
+   & = |b_n||a_n - c_n| + |c_n||b_n-d_n|                         \\
+   & < M \cdot \frac{\epsilon}{2M} + M \cdot \frac{\epsilon}{2M} \\
+   & = \epsilon\quad\square
+\end{align*}
+
+\subsection{Field Axioms}
+
+\subsubsection{Commutativity, Associativity, and Distributivity}
+
+All of these come for free since these properties are true for $\Q$.
+Here we're just applying them elementwise across the sequences,
+and no matter what order we do the operations in the resulting sequences
+will always be the same.
+
+\subsubsection{Identities}
+
+$\mathbf{0}$ is the additive identity.
+Adding $0$ to each element of a sequence doesn't do anything to it.
+
+For the multiplicative identity, we have $\mathbf{1}$,
+since multiplying each element of a sequence by $1$ doesn't change anything either.
+
+\subsubsection{Additive Inverse}
+
+The additive inverse for $\{a_n\}$ is $\{-a_n\}$.
+This is because $\forall n \in \N$
+\[a_n + (-a_n) = 0\]
+which gives us the resulting sequence of $\mathbf{0}$, our additive identity.
+
+\subsubsection{Multiplicative Inverse}
+
+If $\{a_n\}$ doesn't converge to $0$,
+$\exists \epsilon > 0: \forall n_\epsilon \in \N\ \exists n \ge n_\epsilon: |a_n| > \epsilon$.
+
+$\{a_n\}$ is also Cauchy, so $\exists x \in \N: |a_n-a_m| < \epsilon\ \forall n, m \ge x$.
+
+Take the $n_t$ that's at least $x$ where $|a_{n_t}| > \epsilon$.
+Then for all $i \ge n_t$ we have $a_i \ne 0$,
+because if it \textit{was} $0$, $|a_i-a_{n_t}| = |a_{n_t}| < \epsilon$, which is a contradiction.
+
+Now $\{a_n\}^{-1}$ is defined like so:
+\[a_n = \begin{cases}
+    a_n           & n < n_t          \\
+    \frac{1}{a_n} & \text{otherwise}
+  \end{cases}\]
+We can take the reciprocal of anything after $n_t$ because it's all nonzero past it.
+
+Then $\{a_n\} \cdot \{a_n\}^{-1}$ is going to be all $1$s past a certain point,
+so we know it has to converge to $1$ (which is what $\mathbf{1}$ also converges to).
+
+\pagebreak
+
+\subsection{Order Relations}
+
+\subsubsection{Well-Defined}
+
+We NTS that if $\{a_n\} \sim \{c_n\}$, $\{b_n\} \sim \{d_n\}$,
+and $\{a_n\} < \{b_n\}$, then $\{c_n\} < \{d_n\}$.
+
+By definition, $\exists N \in \N: a_n < b_n\ \forall n \ge N$.
+
+The inequality is strict, so take $\epsilon=\frac{b_n-a_n}{2}>0$ so $a_n + \epsilon \le b_n - \epsilon\ \forall n > N$ as well.
+
+Choose $n_1$ s.t. $|a_n-c_n| < \epsilon\ \forall n \ge n_1$,
+and $n_2$ s.t. $|b_n-d_n| < \epsilon\ \forall n \ge n_2$.
+
+I propose that $b_n < d_n\ \forall n \ge N' = \max(N, n_1, n_2)$.
+This is because for any $n \ge N'$ we have
+\[|a_n-c_n| < \epsilon \therefore -\epsilon < a_n-c_n < \epsilon \therefore c_n < a_n +\epsilon\]
+and
+\[|b_n-d_n| < \epsilon \therefore -\epsilon < b_n-d_n < \epsilon \therefore b_n - \epsilon < d_n\]
+so we have the inequality chain
+\[c_n < a_n + \epsilon < b_n - \epsilon < d_n\quad\square\]
+
+\subsubsection{Trichotomy}
+
+If $\{a_n\} \sim \mathbf{0}$, then both $\{a_n\}$ and $\{-a_n\}$ converge to $0$,
+so neither is in $P$.
+
+If $[a_n] > [\mathbf{0}]$, then $[a_n] \ne [\mathbf{0}]$ by definition and it remains to prove $- [a_n] \notin P$.
+
+To show this, take an $\{a_n\}$ s.t. $[a_n] > [\mathbf{0}]$.
+This means $\exists N \in \N: a_n > 0\ \forall n \ge N$
+and $\exists \epsilon > 0: \forall n_\epsilon \in \N\ \exists n \ge n_\epsilon: |a_n-0| = |a_n| \ge \epsilon$.
+
+The additive inverse of this sequence is $\{-a_n\}$, which means $a_n < 0\ \forall n \ge N$.
+Also, $[-a_n] \ne [\mathbf{0}]$ since $|a_n|=|-a_n|$.
+
+This means $-[a_n] < [\mathbf{0}]$, so $-[a_n] \notin P$ by extension.
+
+OTOH, if $-[a_n] > [\mathbf{0}]$, then we can use a near-identical argument to show
+that $[a_n] < [\mathbf{0}]$ and thus can't be in $P$.
+
+\pagebreak
+
+\subsubsection{Addition Closure}
+
+Suppose we have $[a_n] > [\mathbf{0}]$ and $[b_n] > [\mathbf{0}]$.
+
+By definition, we have $N_a \in \N: a_n > 0\ \forall n \ge N_a$ and a similar $N_b$ for $\{b_n\}$.
+We also have $\epsilon_a > 0: \forall n_{\epsilon_a} \in \N\ \exists n_a \ge n_{\epsilon_a}: |a_n| \ge \epsilon_a$.
+and a similar $\epsilon_b > 0$.
+
+For addition, we have to prove $[a_n+b_n]$ is positive past an $N \in \N$ and doesn't converge to $0$.
+
+The first part is quite simple: we take $N=\max(N_a, N_b)$.
+Then we have $a_n+b_n > 0\ \forall n \ge N$, since two positives add to another positive.
+
+Take $\epsilon = \epsilon_a$.
+We NTS $\forall n_\epsilon \in \N\ \exists n \ge n_\epsilon: |a_n+b_n| \ge \epsilon$.
+
+By how we defined $N$ and that $a_n$ doesn't converge to $0$,
+for any $n_\epsilon$ we can find an $n$ after it s.t. $a_n, b_n > 0$ and $|a_n| \ge \epsilon_a$.
+This then gives us
+\[|a_n+b_n|=a_n+b_n \ge \epsilon + b_n > \epsilon\]
+so for any $n_\epsilon$ we can always find an $n$ after where $|a_n+b_n| \ge \epsilon$.
+
+\subsubsection{Multiplication Closure}
+
+We now prove the same things for multiplication.
+
+Again, past $N = \max(N_a, N_b)$, $a_nb_n > 0$
+since two a positive times a positive is still positive.
+
+Now I'll show that if $\epsilon=\frac{\epsilon_a\epsilon_b}{2}$,
+we can always find an $n$ past any $n_\epsilon$ s.t. $|a_nb_n-0|=|a_nb_n| \ge \epsilon$
+
+Since $b_n$ is Cauchy, we can also find an $M \in \N: |b_x-b_y| < \frac{\epsilon_b}{2}\ \forall, x, y \ge M$.
+
+Now, past anything greater than $\max(N, M)$, there must exist an $n$ and $m$ where
+\begin{itemize}[nolistsep]
+  \item $a_n, b_m, b_n > 0$
+  \item $a_n \ge \epsilon_a$
+  \item $b_m \ge \epsilon_b$
+  \item $|b_n-b_m| < \frac{\epsilon_b}{2} \ra{} b_n > b_m - \frac{\epsilon_b}{2} \ge \frac{\epsilon_b}{2}$
+\end{itemize}
+so we can write
+\[|a_nb_n|=a_nb_n \ge \frac{\epsilon_a\epsilon_b}{2}=\epsilon\]
+which is exactly what we wanted. $\square$
+
+With all these tedious properties and definitions finally proven,
+we can conclue that these cursed Cauchy sequences do indeed form a godforsaken Ordered Field\textsuperscript{TM}.
+
+\pagebreak
+
+\section{Problem 4}\label{sec:p4}
+
+For any $n \ge \N$, consider the three sets
+\begin{align*}
+  S_n=\{a_k+b_k \mid k \ge n\}
+   &  & A_n=\{a_k \mid k \ge n\}
+   &  & B_n=\{b_k \mid k \ge n\}
+\end{align*}
+This way, we can now denote the inequality we WTS as
+\[\lim_{n \to \infty} \sup S_n \le \lim_{n \to \infty} \sup A_n + \lim_{n \to \infty} \sup B_n\]
+
+It STP $\sup S_n \le \sup A_n + \sup B_n\ \forall n \in \N$.
+I'll omit the subscripts for convenience.
+
+Recall from HW 3 that
+\[\sup \{x+y \mid x \in A, y \in B\} = \sup A + \sup B\]
+since both sequences are bounded.
+Denoting the LHS set as $A+B$, notice that $S \subseteq A+B$,
+so $\sup S \le \sup A+B = \sup A + \sup B$. $\square$
+
+\section{Problem 5}
+
+Let $A_n$ and $B_n$ be as they were in \ref{sec:p4} and $S_n=\{a_kb_k \mid k \ge n\}$.
+
+Again from HW 3, we know that if we let $A \cdot B = \{a \cdot b \mid a \in A, b \in B\}$
+where $A$ and $B$ are non-negative, $\sup A \cdot B = \sup A \cdot \sup B$.
+(look i know the problem said \textit{positive} but allowing $0$ in the sets literally doesn't change any part of the proof)
+
+Applying the same general logic as we did in \ref{sec:p4},
+\[S \subseteq \sup A \cdot B \therefore \sup S \le \sup A \cdot B = \sup A \cdot \sup B\quad\square\]
+
+\pagebreak
+
+\section{Problem 6}
+
+By definition,
+\[\limsup_{n \to \infty} |a_n|=\infty \iff \text{$|a_n|$ is unbounded above}\]
+
+Assuming that $\{a_n\}_{n \ge 1}$ is bounded, $\exists M \in \R: |a_n| < M\ \forall n \in \N$,
+which then means $|a_n|$ is bounded from above, thus making $\limsup_{n \to \infty} |a_n| < \infty$.
+
+OTOH, if we assume $\limsup{n \to \infty} |a_n| < \infty$, this means $|a_n|$ is bounded above,
+or that $\exists M \in \R: |a_n| \in \R\ \forall n \in \N$.
+This makes $a_n$ itself bounded as well by definition. $\square$
+
+\section{Problem 7}
+
+Let $B=\lim_{n \to \infty} b_n$.
+
+First assume $B \in \R$.
+For all elements $b_n$, there's a subsequence in $a_n$ that converges to them.
+Let the subsequence corresponding to $b_x$ be $k^{(x)}_n$.
+Since $a_{k^{(x)}_n}$ converges to $b_x$,
+\[\forall \epsilon > 0\ \exists n_\epsilon \in \N: \left|a_{k^{(x)}_{n_\epsilon}}-b_x\right| < \epsilon\ \forall n \ge n_\epsilon\]
+
+Now let's define the subsequence $i_n$.
+If $\epsilon=|b_n - B|$, $i_n$ is the first term in $k_n$
+that's greater than both $k_{n_\epsilon}$ and $i_{n-1}$.
+If we're talking about the first term it just has to be greater than $k_{n_\epsilon}$.
+
+By construction, $i_n$ is indeed a valid subsequence and $|a_{i_n} - b_n| < |b_n - B|\ \forall n \in \N$.
+
+Now take any $\epsilon > 0$ (the old $\epsilon$ i used for sequence construction doesn't apply anymore).
+Since $b_n$ converges, $\exists N \in \N: |b_n-B| < \frac{\epsilon}{2}\ \forall n \ge N$.
+This gives us
+\begin{align*}
+  |a_{i_n}-B|
+   & = |a_{i_n} - b_n + b_n - B|               \\
+   & \le |a_{i_n} - b_n| + |b_n - B|           \\
+   & < \frac{\epsilon}{2} + \frac{\epsilon}{2} \\
+   & = \epsilon
+\end{align*}
+so we can see that $a_{i_n}$ itself also converges to $B$.
+
+For the cases where $B=\pm \infty$, this just means that $A$ is either
+unbounded above or below, which implies that the corresponding infinity is in $A$ as well. $\square$
+
+\pagebreak
+
+\section{Problem 8}
+
+The middle inequality comes for free since from lecture we know that the
+liminf of a seqeuence is always less than or equal to its limsup.
+
+\subsection{Right Inequality}
+
+\subsubsection{Real Numbers}
+
+First let's handle the case where the limsup is a real number.
+
+I'll show that $\limsup_{n \to \infty} s_n \le M\ \forall M > \limsup_{n \to \infty} a_n$.
+
+For this $M$, since successive supremums are nonincreasing,
+$\exists N \in \N: \sup \{a_n \mid n > N\} < M$,
+so taking $\epsilon = M - \sup \{a_n \mid n > N\} > 0$, we have $a_n + \epsilon < M\ \forall n > N$.
+
+With this, we can show that
+\begin{align*}
+  Mn - \sum_{i=N+1}^{N+n} a_i
+   & = \sum_{i=N+1}^{N+n} (M - a_i) \\
+   & > \sum_{i=N+1}^{N+n} \epsilon  \\
+   & = n\epsilon
+\end{align*}
+
+By the Archimedian Property, we can take $T \in \N: t\epsilon > \sum_{i=1}^{N} a_i - MN\ \forall t \ge T$.
+We can say this because the term on the RHS is constant.
+This gives us
+\begin{gather*}
+  t\epsilon > \sum_{i=1}^{N} a_i - MN \\
+  Mt - \sum_{i=N+1}^{N+t} a_i > \sum_{i=1}^{N} a_i - MN \\
+  M(N+t) > \sum_{i=1}^{N+t} a_i \\
+  M > \frac{\sum_{i=1}^{N+t} a_i}{N+t} = s_{N+t}\ \forall t \ge T
+\end{gather*}
+So $\sup \{s_n \mid n \ge N+T\} \le M$.
+
+Now for any $n \ge N+T$, we have
+$\sup \{s_{n'} \mid n' \ge n\} \le M \therefore \limsup_{n \to \infty} s_n \le M$. $\square$
+
+\subsubsection{Edge Cases}
+
+Suppose $a_n$ wasn't BA, making $\limsup_{n \to \infty} a_n = +\infty$.
+Then no matter what $\limsup_{n \to \infty} s_n$ is it's always going to be less than $\infty$.
+
+OTOH, if $\limsup_{n \to \infty} a_n = -\infty$, we NTS $\limsup_{n \to \infty} s_n = -\infty$ as well.
+With that limsup, for any $M < 0$ we can find $N \in \N: \sup \{a_n \mid n > N\} < M$.
+
+Then with a proof that goes exactly the same way as it did in the previous section
+with this $M$ that's some $\epsilon$ away from all $a_n$,
+we can show that $\limsup_{n \to \infty} s_n \le M$.
+Since this is true for all negative $M$, the only way for this to be true is if the limsup is $s_n$.
+
+\subsection{Left Inequality}
+
+With the right inequality proven, the left side actually follows quite straightforwardly.
+
+We can let $a'_n = -a_n$ and $s'_n$ be the $s_n$ corresponding to this sequence.
+$s'_n=-s_n$ since
+\[s'_n=\frac{\sum_{i=1}^{n} a'_i}{n}=\frac{\sum_{i=1}^{n} -a_i}{n} = -s_n\]
+Then, utilizing the right inequality and that $\liminf_{n \to \infty} a_n = -\limsup_{n \to \infty} -a_n$,
+\begin{gather*}
+  \limsup_{n \to \infty} s'_n \le \limsup_{n \to \infty} a'_n \\
+  -\liminf_{n \to \infty} -s_n \le -\liminf_{n \to \infty} -a_n \\
+  \liminf_{n \to \infty} s_n \ge \liminf_{n \to \infty} a_n\quad\square
+\end{gather*}
+
+\pagebreak
+
+\section{Problem 9}
+
+$\{a_n\}_{n \ge 1}$ is BA, so we can assume $L \in \R$ (thank god).
+
+\subsection{Part 1}\label{sec:prob9p1}
+
+BWOC say $\exists \epsilon > 0$ s.t. there's infinitely many $a_n$ that are greater than $L+\epsilon$.
+Then for any $n \in \N$, $\{a_{n'} \mid n' \ge n\}$ always has a number strictly greater than $L+\epsilon$.
+If this isn't the case then there's at most $n$ numbers greater than $L+\epsilon$ which is a contradiction.
+
+With this,
+\begin{align*}
+  \limsup_{n \to \infty} a_n
+   & = \lim_{n \to \infty} \sup \{a_{n'} \mid n' \ge n\} \\
+   & > \lim_{n \to \infty} L+\epsilon                    \\
+   & = L+\epsilon                                        \\
+   & > L
+\end{align*}
+which contradicts that $L$ is the limsup of the sequence. $\square$
+
+\subsection{Part 2}\label{sec:prob9p2}
+
+BWOC suppose $\exists \epsilon > 0$ s.t. there's only finitely many $a_n > L-\epsilon$.
+This means $\exists n \in \N$ s.t. $a_{n'} \le L-\epsilon\ \forall n' \ge n$.
+
+This then means $\sup \{a_{n'} \mid n' \ge n\} \le L-\epsilon$,
+since the above implies that $L-\epsilon$ is a UB.
+
+From lecture, we know tail supremums form a nonincreasing sequence, so we have
+\[L \le \sup \{a_{n'} \mid n' \ge n\} \le L-\epsilon\]
+which is a contradiction. $\square$
+
+\pagebreak
+
+\section{Problem 10}
+
+\subsection{Not Bounded Above}
+
+If $\{a_n\}_{n \ge 1}$ isn't BA, then no real number $L$ exists.
+
+This is because for any real number $L$ and any positive $\epsilon$,
+\[\exists N \in \N: a_n > L+\epsilon\ \forall n \ge N\]
+by definition of converging to $\infty$, which means there's infinitely many $a_n$ greater than $L=\epsilon$.
+
+\subsection{Assuming BA}
+
+If the sequence \textit{is} BA, then only $L=\limsup_{n \to \infty} a_n$ satisfies this property.
+
+Suppose there $\exists l > L$ that worked.
+Take $0 < \delta < l-L$.
+The second requirement needs infinitely many $a_n$ that are greater than $l-\delta$.
+But $l-\delta > L$, so we can choose $\epsilon=l-\delta-L > 0$
+to see that by \ref{sec:prob9p1} there's only finitely many $a_n$ that are greater than $l-\delta$,
+which breaks the second constraint.
+
+OTOH, suppose $\exists l < L$ that worked.
+Then take $0 < \delta < L-l$ and $\epsilon = L-l-\delta > 0$.
+The first requirement needs finitely many $a_n$ that are less than $l+\delta$,
+but by \ref{sec:prob9p2} there's infinitely many elements greater than $L-\epsilon = l+\delta$,
+so any $l < L$ breaks the first constraint.
+
+Eliminating these two options means that only $L$ can meet the requirements described. $\square$
+
+\end{document}
