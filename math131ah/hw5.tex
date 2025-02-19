@@ -21,27 +21,9 @@
 
 \section{Problem 1}
 
-% $a_n > 0$, since $a_1 > 1$ and $1-\frac{1}{(n+1)^2}>0\ \forall n \in \N$.
-% Both terms in the recurrence are positive, so multiplying them should
-% yield another positive number.
-
-% Also, $0 < 1-\frac{1}{(n+1)^2} < 1$ since the fraction is positive,
-% meaning $a_{n+1} < a_n$ and that $a_n$ is strictly decreasing.
-% These two facts combined imply the convergence of $a_n$. $\square$
-
 To see what this actually converges to, notice that for $n > 1$
 \[a_n = \prod_{i=1}^{n-1} \left(1-\frac{1}{(i+1)^2}\right)\]
-The proof of this is by induction.
-The base case is trivial, as $a_2 = \left(1-\frac{1}{2^2}\right) \cdot a_1$.
-
-For the indutive step, we have
-\begin{align*}
-  a_{n+1}
-   & = \left(1-\frac{1}{(n+1)^2}\right) \cdot a_n                                                 \\
-   & = \left(1-\frac{1}{(n+1)^2}\right) \cdot  \prod_{i=1}^{n-2} \left(1-\frac{1}{(i+1)^2}\right) \\
-   & =  \prod_{i=1}^{n} \left(1-\frac{1}{(n+1)^2}\right)
-\end{align*}
-which is exactly what we want.
+which is true by a straightforward induction proof.
 
 Now, notice
 \begin{align*}
@@ -55,9 +37,6 @@ Now, notice
 by telescoping products.
 
 From lecture, $\lim_{n \to \infty} \frac{1}{n}=0$ so the limit of this sequence is $\boxed{\frac{1}{2}}$.
-
-\pagebreak
-
 \section{Problem 2}
 
 For convenience let $L=\sup A$.
@@ -261,22 +240,24 @@ so we have the inequality chain
 
 \subsubsection{Trichotomy}
 
-If $\{a_n\} \sim \mathbf{0}$, then both $\{a_n\}$ and $\{-a_n\}$ converge to $0$,
-so neither is in $P$.
+We first prove that at least one is true by showing
+$[a_n] \nless [\mathbf{0}] \land [a_n] \ngtr [\mathbf{0}] \ra{} [a_n] = [\mathbf{0}]$.
 
-If $[a_n] > [\mathbf{0}]$, then $[a_n] \ne [\mathbf{0}]$ by definition and it remains to prove $- [a_n] \notin P$.
+It STP $\lim_{n \to \infty} a_n = 0$, so we need an $n_\epsilon$ for any $\epsilon > 0$ and we're free.
 
-To show this, take an $\{a_n\}$ s.t. $[a_n] > [\mathbf{0}]$.
-This means $\exists N \in \N: a_n > 0\ \forall n \ge N$
-and $\exists \epsilon > 0: \forall n_\epsilon \in \N\ \exists n \ge n_\epsilon: |a_n-0| = |a_n| \ge \epsilon$.
+By our assumptions, past any $N$ we can always find a nonpositive and nonnegative elemnt.
+Since $\{a_n\}$ is Cauchy, take $M: |a_n-a_m| < \epsilon\ \forall n, m \ge M$.
+There must exist some $a_x \le 0$ past $M$, so $|a_n-a_x| < \epsilon \therefore a_n < \epsilon\ \forall n \ge M$. 
 
-The additive inverse of this sequence is $\{-a_n\}$, which means $a_n < 0\ \forall n \ge N$.
-Also, $[-a_n] \ne [\mathbf{0}]$ since $|a_n|=|-a_n|$.
+Similarly, we can find an $a_y \ge 0$ past $M$, so $|a_y-a_n| < \epsilon \therefore a_n > -\epsilon\ \forall n \ge M$.
+This inequality combined with the one above shows that $|a_n| < \epsilon\ \forall n \ge M$,
+so I guess our $n_\epsilon$ is just $M$.
 
-This means $-[a_n] < [\mathbf{0}]$, so $-[a_n] \notin P$ by extension.
-
-OTOH, if $-[a_n] > [\mathbf{0}]$, then we can use a near-identical argument to show
-that $[a_n] < [\mathbf{0}]$ and thus can't be in $P$.
+Now, to show that these categories are mutually exclusive,
+notice that to actually be greater or less than $[\mathbf{0}]$
+a sequence has to by definition not converge to $0$, so that's a given.
+Also, if a sequence is always strictly positive past a certain point,
+it definitely can't be strictly negative past any other point. $\square$
 
 \pagebreak
 
