@@ -1,0 +1,183 @@
+\documentclass[12pt]{article}
+
+\input{../kz}
+
+\rhead{Math 180}
+
+\makeatletter
+\def\@seccntformat#1{%
+  \expandafter\ifx\csname c@#1\endcsname\c@section\else
+  \csname the#1\endcsname\quad
+  \fi}
+\makeatother
+
+\begin{document}
+
+\section{Chapter 7.1}
+
+\begin{enumerate}
+    % probably redundant, idc
+    \item[1] Construct an auxiliary graph $G$ similar to the one in lecture,
+        where each face in the OG graph maps to a vertex and edges are
+        drawn across adjacent faces if the vertices over the OG edge are assigned different labels.
+
+        A face will have all three labels iff its corresponding vertex in $G$
+        has odd degree.
+        This is because a face with one and two distinct labels will have a node degree of $0$
+        and $2$ degree respectively, while if it has three labels it'll have a node degree of $3$.
+
+        All graphs have an even number of odd degee vertices,
+        so there must be an even number of faces whose vertices get all labels. $\square$
+\end{enumerate}
+
+\section{Chapter 7.2}
+
+\begin{enumerate}
+    \item[1] \begin{enumerate}
+            \item As in lecture, we count the size of the set
+                  \[X=\{(N, C) \mid N \in \mathcal{N}, \text{$C$ is a maximal chain, and } N \in C\}\]
+                  A semi-independent set has at most two elements from any chain, so $|X| \le 2n!$.
+
+                  Now we directly count and bound $|X|$ like so:
+                  \begin{align*}
+                                   & |X| = \sum_{N \in \mathcal{N}} |N|!(n-|N|)!                              \\
+                      \therefore{} & \sum_{N \in \mathcal{N}} |N|!(n-|N|)! \le 2n!                            \\
+                      \therefore{} & \sum_{N \in \mathcal{N}} \frac{|N|!(n-|N|)!}{2n!} \le 1                  \\
+                      \therefore{} & \sum_{N \in \mathcal{N}} \frac{1}{2\binom{n}{|N|}} \le 1                 \\
+                      \therefore{} & \sum_{N \in \mathcal{N}} \frac{1}{2\binom{n}{\lfloor n/2 \rfloor}} \le 1 \\
+                      \therefore{} & |N| \le 2\binom{n}{\lfloor n/2 \rfloor}\quad\square
+                  \end{align*}
+
+                  \pagebreak
+
+            \item For any $X$ with odd size we can construct a semi-independent set
+                  which meets the UB exactly like so:
+                  \[\mathcal{N}=\left\{\text{all subsets of size $\left\lfloor \frac{n}{2} \right\rfloor$}\right\}
+                      \cup \left\{\text{all subsets of size $\left\lceil \frac{n}{2} \right\rceil$}\right\}\]
+                  For a subset in $\mathcal{N}$ to be a subset, by
+                  construction they must be of different sizes.
+                  There's only two different sizes in this $\mathcal{N}$,
+                  so no three sets form a chain.
+        \end{enumerate}
+
+    \item[6] WLOG assume $a_i>0$.
+        $\epsilon_i$ is what determines the sign, anyways.
+
+        For convenience, let $a$ denote the vector of all $a_i$s and $\epsilon$ denote
+        the vector of all $\epsilon_i$s.
+        \begin{enumerate}
+            \item Consider the set of sets
+                  \[\{\{i \mid \epsilon_i=1\} \mid \text{all possible $\epsilon$}\}\]
+                  I propose that if a subset of this only has $\epsilon$ where $-1 < a \cdot \epsilon < 1$,
+                  then it must be independent as well.
+
+                  BWOC say $\exists \epsilon_1, \epsilon_2$ s.t.
+                  both are valid choise and that $\epsilon_1$'s associated set
+                  was a strict subset of the set of $\epsilon_2$.
+                  At least one $a_i$ must be converted from a negative to a positive,
+                  and since $a_i > 1$, so
+                  \[a \cdot \epsilon_2 > a \cdot \epsilon_1 + 2 \therefore a \cdot \epsilon_2 \therefore a \cdot \epsilon_2 > 1\]
+                  which is a contradiction.
+
+                  With this, we can apply Sperner's Theorem.
+                  The largest independent subset of the $\epsilon$ set defined above
+                  has size $\binom{n}{\lfloor n/2 \rfloor}$, and since
+                  a set with only valid $\epsilon$ must be independent,
+                  this binomial expression must be an upper bound on the size
+                  of the set with all valid $\epsilon$s. $\square$
+
+            \item If $n$ is even, we can let $a_i=1\ \forall i$.
+                  Then, any $\epsilon$ with exactly $\frac{n}{2}$ $1$s and $-1$s
+                  will have a dot product of $0$ with $a$.
+                  Clearly, there's $\binom{n}{n/2}$ such $\epsilon$s.
+        \end{enumerate}
+
+    \item[7] If $n$ isn't divisible by the square of any other number,
+        its prime factorization has at most one (1) power of any prime.
+
+        A divisor of $n$ can then be represented by a subset of all the primes that divide $n$.
+        To get the actual divisor, we just multiply together all the elements.
+
+        If a divisor $x$'s set is a subset of another divosor's set $y$,
+        then by construction $x \mid y$ and the two can't both be in $M$.
+
+        We see that we just want the largest independent system of subsets
+        from the set of prime factors of $n$.
+        Sperner's Theorem gets us $\boxed{|M| \le \binom{p}{\lfloor p/2 \rfloor}}$,
+        where $p$ is the number of prime factors of $n$.
+\end{enumerate}
+
+\section{Chapter 7.3}
+
+\begin{enumerate}
+    \item[5b] A function is convex if its derivative is monotonically increasing.
+        The first part is just $0$, and the second part is $x-\frac{1}{2}$.
+        Although there's a discontinuity at $x=1$, it doesn't really make
+        a difference in terms of overall convexity since the function is continuous.
+
+    \item[5c] We start again at the summation step:
+        \begin{align*}
+            \binom{n}{2}
+             & \ge \sum_{i=1}^{n} \binom{d_i}{2}                                                                   \\
+             & = \sum_{i=1}^{n} f(d_i)                                        &  & \text{since $d_i \ge 1$}        \\
+             & = n \cdot \sum_{i=1}^{n} \frac{1}{n} \cdot f(d_i)                                                   \\
+             & \ge n \cdot f\left(\frac{1}{n} \cdot \sum_{i=1}^{n} d_i\right) &  & \text{by Jensen's Inequality}   \\
+             & = n \cdot f\left(\frac{2m}{n}\right)                           &  & \text{by the Handshaking Lemma}
+        \end{align*}
+
+        Then simplify the inequality:
+        \begin{align*}
+                         & n \cdot f\left(\frac{m}{2n}\right) \le \binom{n}{2}              \\
+            \therefore{} & \frac{2m}{n} \cdot \left(\frac{2m}{n} - 1\right) \le n-1         \\
+            \therefore{} & 4m^2-2mn \le n^3-n^2                                             \\
+            \therefore{} & \left(2m-\frac{1}{2}n\right) \le n^3-\frac{3}{4}n^2              \\
+            \therefore{} & 2m-\frac{1}{2}n \le n\sqrt{n-\frac{3}{4}}                        \\
+            \therefore{} & m \le \frac{1}{2}\left(n\sqrt{n-\frac{3}{4}}+\frac{1}{2}n\right) \\
+            \therefore{} & m \le \frac{1}{4}\left(n\sqrt{4n-3} + n\right)
+        \end{align*}
+        which we know is less than $\frac{1}{2}\left(n^{3/2}+n\right)$ because
+        \begin{align*}
+                   & \frac{1}{4}\left(n\sqrt{4n-3}+n\right) \le \frac{1}{2}\left(n^{3/2}+n\right)                                                      \\
+            \iff{} & n\sqrt{4n-3} \le 2n^{3/2}+n                                                  &  & \text{multiply by $4$ and subtract $n$}         \\
+            \iff{} & \sqrt{4n-3} \le 2\sqrt{n}+1                                                  &  & \text{can divide since $n > 0$}                 \\
+            \iff{} & 4n-3 \le 4n+1+4\sqrt{n}                                                      &  & \text{can square since both sides are positive} \\
+            \iff{} & -4 \le \sqrt{n}
+        \end{align*}
+        so we've actually wound up proving a lower UB! $\square$ \label{prob:5c}
+
+    \item[6] Like with proving graphs with no $K_{2,2}$, we use the set
+        \[\{(v, \{a, b, c\}) \mid (v, a), (v, b), (v, c) \in E\}\]
+        No unordered triple $\{a, b, c\}$ can appear in the set more than twice,
+        so the size of this set is at most $2\binom{n}{3}$.
+
+        Now counting from the PoV of the $v$s, we get the inequality
+        \[\sum_{i=1}^{n} \binom{d_i}{3} \le 2\binom{n}{3}\]
+        Notice that $f(x)=\binom{x}{3}$ is convex for $x \ge 2$
+        (its second derivative is $x-1$), so we do a similar inequality chain as in \hyperref[prob:5c]{5c}:
+        \begin{align*}
+            2\binom{n}{3}
+             & \ge \sum_{i=1}^{n} f(d_i)                              \\
+             & = n \sum_{i=1}^{n} \frac{1}{n} f(d_i)                  \\
+             & \le n f\left(\frac{1}{n} \cdot \sum_{i=1}^{d_i}\right) \\
+             & = n f\left(\frac{2m}{n}\right)
+        \end{align*}
+        and then simplify the inequality:
+        \begin{align*}
+                         & 2\binom{n}{3} \ge n\binom{\frac{2m}{n}}{3}                                         \\
+            \therefore{} & 2(n-1)(n-2) \ge \frac{2m}{n}\left(\frac{2m}{n}-1\right)\left(\frac{2m}{n}-2\right) \\
+            \therefore{} & n(n-1)(n-2) \ge m\left(\frac{2m}{n}-1\right)\left(\frac{2m}{n}-2\right) \\
+            \therefore{} & O\left(n^3\right) \ge \frac{2m^3}{n^2} - \frac{6m^2}{n} + 2 \\
+            \therefore{} & O\left(n^3\right) \ge \frac{m^3}{n^2}-\frac{3m^2}{n} \\
+            \therefore{} & O\left(n^4\right) \ge \frac{m^3}{n}-3m^2
+        \end{align*}
+        BWOC suppose $m > O\left(n^{5/3}\right)$, then
+        \begin{align*}
+            \frac{m^3}{n}-3m^2
+            &> \frac{O\left(n^{5/3}\right)^3}{n}-3O\left(n^{5/3}\right)^2 \\
+            &= \frac{\left(n^5\right)}{n}-O\left(n^{10/3}\right) \\
+            &= O\left(n^4\right)
+        \end{align*}
+        which contradicts our initial inequality, so $m \le O\left(n^{5/3}\right)$. $\square$
+\end{enumerate}
+
+\end{document}
