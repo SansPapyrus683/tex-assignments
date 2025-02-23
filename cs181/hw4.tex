@@ -1,0 +1,113 @@
+\documentclass[12pt]{article}
+
+\input{../kz}
+
+\lhead{406-196-414}
+\rhead{CS 181}
+
+\newcommand{\N}{\mathbb{N}}
+
+\begin{document}
+
+\section{Ordered Triples of Integers}
+
+We start off with something like this:
+\[\begin{array}{cccccc}
+        0 & 1 & -1 & 2 & -2 & \cdots \\
+        0 & 1 & -1 & 2 & -2 & \cdots \\
+        0 & 1 & -1 & 2 & -2 & \cdots
+    \end{array}\]
+We proved in class that $|\mathbb{Z}|=|\N|$, so
+we can indeed order the integers in each row.
+
+Now, even though there's thric the number of integers,
+we can still map $\N$ onto them:
+\[\begin{array}{cccccc}
+        1 & 4 & 7 & 10 & 13 & \cdots \\
+        2 & 5 & 8 & 11 & 14 & \cdots \\
+        3 & 6 & 9 & 12 & 15 & \cdots
+    \end{array}\]
+which shows that $|\N|=\left|\mathbb{Z}^3\right|$. $\square$
+
+\section{More Unsolvable Languages}
+
+Also, for convenience, I'll let $M_{ij}$ denote whether the $i$th language accepts
+the $j$th string in the supposed enumeration the universe gives us,
+and let $s_j$ denote the $j$th string as well.
+
+\subsection{Another \texorpdfstring{$L^{DIAG}$}{L\^DIAG}}\label{sec:onemore}
+
+Notice that $\exists i \in \N: M_{11} \ne M_{j1}$.
+This is because there must exist an infinite number
+of languages that accept $s_1$ (and the same can be said for rejecting $s_1$).
+
+This allows us to construct $L_2^{DIAG}$ as follows:
+\begin{enumerate}[nolistsep]
+    \item Accept $s_1$ if and only if $M_{i1}=0$.
+    \item Accept $s_i$ if and only if $M_{1i}=0$.
+    \item For all other $x \ne 1, i$, we do the standard diagonalization.
+\end{enumerate}
+We just swap the order in which we go along all the strings and languages,
+so by the same argument this $L_2^{DIAG}$ shouldn't be in the enumeration.
+
+It also disagress with $L_1^{DIAG}$ on $s_1$.
+While we accept iff $M_{i1}=0$, $L_1^{DIAG}$ accepts iff $M_{11}=0$,
+which we know isn't equal to $M_{i1}$.
+
+\pagebreak
+
+\subsection{Infinitely More?}\label{sec:infmore}
+
+(this is going to be basically the same as \ref{sec:onemore} but it is what it is)
+
+There was nothing special about using $1$ for the first index.
+
+Thus, $\forall i \in \N\ \exists j > i: M_{ii} \ne M_{ji}$, so we can construct $L_i^{DIAG}$ like so:
+\begin{enumerate}[nolistsep]
+    \item Accept $s_i$ if and only if $M_{ji}=0$.
+    \item Accept $s_j$ if and only if $M_{ij}=0$.
+    \item For all other $x \ne i, j$, we do the standard diagonalization.
+\end{enumerate}
+
+By the same logic as in \ref{sec:onemore}, we can see that none
+of these languages are in the enumeration we were given.
+It remains to show that none of them are equal to each other, either.
+
+Consider $L_a^{DIAG}$ and $L_b^{DIAG}$, and WLOG assume $a < b$.
+
+Since $a < b$, our rules dictate that $L_b^{DIAG}$ accepts $s_a$ iff $M_{aa}=0$.
+However, $L_a^{DIAG}$ accepts the same string iff $M_{ja}=0$,
+where $j$ was the succeeding language that we initially chose for $a$.
+
+$M_{aa} \ne M_{ja}$, so the two languages differ in behavior on $s_a$ and are different overall.
+
+\subsection{One More}
+
+All our $L_i^{DIAG}$s relied on "swapping" two parts of the diagonal.
+This means that the OG Cantor's diagonalization wasn't included in our
+new infinite set of diagonal languages!.
+
+\subsection{And Another!}
+
+Unfortunately, we can't cheese this next part.
+
+Take $1$ and its associated $j$ that we chose in \ref{sec:infmore}.
+Then, take $j+1$ and its associated $k$ that was also chose back there.
+Now we construct $L_2^{SUPERDIAG}$ as follows:
+\begin{enumerate}[nolistsep]
+    \item Accept $s_1$ iff $M_{j1}=0$, and $s_j$ iff $M_{1j}=0$.
+    \item Accept $s_{j+1}$ iff $M_{k(j+1)}=0$, and $s_k$ iff $M_{(j+1)k}=0$.
+    \item For all other $x \ne i, j$, we do the standard diagonalization.
+\end{enumerate}
+Still, this language isn't in the initial enumerated set of languages,
+nor is it equal to the raw diagonalization we choose for $L_1^{SUPERDIAG}$
+since we swapped two pairs.
+
+For $L_i^{DIAG}$, if $i \ne 1$, the language's behavior must differ
+from $L_2^{SUPERDIAG}$ on $s_1$ by the same argument as in \ref{sec:infmore}.
+OTOH, if $i=1$, then it differs from $L_2^{SUPERDIAG}$ on accepting $s_{j+1}$.
+These two cases cover all $i \in \N$, so $L_2^{SUPERDIAG}$
+must be different from both the enumerated languages and the
+enumerated DIAG languages.
+
+\end{document}
