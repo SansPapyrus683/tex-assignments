@@ -110,10 +110,17 @@
 \section{Chapter 7.3}
 
 \begin{enumerate}
-    \item[5b] A function is convex if its derivative is monotonically increasing.
-        The first part is just $0$, and the second part is $x-\frac{1}{2}$.
-        Although there's a discontinuity at $x=1$, it doesn't really make
-        a difference in terms of overall convexity since the function is continuous.
+    \item[5b] A function is convex if and only if its second derivative is nonnegative.
+        The second derivatives of $0$ and $\frac{x(x-1)}{2}$ are $0$ and $1$ respectively,
+        so we know the individual pieces are piecewise convex.
+
+        To handle the case wehre $x \le 1$ and $y > 1$, notice that
+        \begin{align*}
+            f(\lambda x + (1-\lambda)y)
+             & \le f(\lambda \cdot 1 + (1-\lambda) y) &  & \text{$f$ is monotonic}                \\
+             & \le \lambda f(1) + (1-\lambda)f(y)     &  & \text{the right half of $f$ is convex} \\
+             & = \lambda f(x) + (1-\lambda)f(y)       &  & \text{$f$ is constant before $1$}      \\
+        \end{align*}
 
     \item[5c] We start again at the summation step:
         \begin{align*}
@@ -145,6 +152,8 @@
         \end{align*}
         so we've actually wound up proving a lower UB! $\square$ \label{prob:5c}
 
+        \pagebreak
+
     \item[6] Like with proving graphs with no $K_{2,2}$, we use the set
         \[\{(v, \{a, b, c\}) \mid (v, a), (v, b), (v, c) \in E\}\]
         No unordered triple $\{a, b, c\}$ can appear in the set more than twice,
@@ -165,17 +174,17 @@
         \begin{align*}
                          & 2\binom{n}{3} \ge n\binom{\frac{2m}{n}}{3}                                         \\
             \therefore{} & 2(n-1)(n-2) \ge \frac{2m}{n}\left(\frac{2m}{n}-1\right)\left(\frac{2m}{n}-2\right) \\
-            \therefore{} & n(n-1)(n-2) \ge m\left(\frac{2m}{n}-1\right)\left(\frac{2m}{n}-2\right) \\
-            \therefore{} & O\left(n^3\right) \ge \frac{2m^3}{n^2} - \frac{6m^2}{n} + 2 \\
-            \therefore{} & O\left(n^3\right) \ge \frac{m^3}{n^2}-\frac{3m^2}{n} \\
+            \therefore{} & n(n-1)(n-2) \ge m\left(\frac{2m}{n}-1\right)\left(\frac{2m}{n}-2\right)            \\
+            \therefore{} & O\left(n^3\right) \ge \frac{2m^3}{n^2} - \frac{6m^2}{n} + 2                        \\
+            \therefore{} & O\left(n^3\right) \ge \frac{m^3}{n^2}-\frac{3m^2}{n}                               \\
             \therefore{} & O\left(n^4\right) \ge \frac{m^3}{n}-3m^2
         \end{align*}
         BWOC suppose $m > O\left(n^{5/3}\right)$, then
         \begin{align*}
             \frac{m^3}{n}-3m^2
-            &> \frac{O\left(n^{5/3}\right)^3}{n}-3O\left(n^{5/3}\right)^2 \\
-            &= \frac{\left(n^5\right)}{n}-O\left(n^{10/3}\right) \\
-            &= O\left(n^4\right)
+             & > \frac{O\left(n^{5/3}\right)^3}{n}-3O\left(n^{5/3}\right)^2 \\
+             & = \frac{\left(n^5\right)}{n}-O\left(n^{10/3}\right)          \\
+             & = O\left(n^4\right)
         \end{align*}
         which contradicts our initial inequality, so $m \le O\left(n^{5/3}\right)$. $\square$
 \end{enumerate}
