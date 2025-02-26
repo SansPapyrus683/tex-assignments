@@ -1,0 +1,338 @@
+\documentclass[12pt]{article}
+
+\input{../kz}
+
+\rhead{Math 131AH}
+
+\makeatletter
+\def\@seccntformat#1{%
+  \expandafter\ifx\csname c@#1\endcsname\c@section\else
+  \csname the#1\endcsname\quad
+  \fi}
+\makeatother
+
+\newcommand{\lra}{\xLeftrightarrow}
+\newcommand{\ra}{\xRightarrow}
+\newcommand{\N}{\mathbb{N}}
+\newcommand{\R}{\mathbb{R}}
+\newcommand{\Q}{\mathbb{Q}}
+
+\begin{document}
+
+\section{Problem 1}
+
+Since $|a_n| \ge 0$ and liminfs are nondecreasing,
+this must mean $\inf_{n \ge N} |a_n|=0\ \forall N \in \N$.
+
+So for any $N$ and $\epsilon > 0$, we can find an $a_n$ s.t. $n \ge N$ and $|a_n| < \epsilon$.
+
+Let's define the subsequence element by element.
+$k_n$ is going to be any index $i$ s.t. $|a_i| < \frac{1}{2^n}$ and $n \ge k_{n-1}$.
+The second condition doesn't apply if we're talking about $k_1$.
+By what was said above, we can always find such a $k_n$.
+
+This gives us a subsequence $a_{k_n}$ whose absolute value is always
+less than $\frac{1}{2^n}$, a geometric series that definitely converges.
+By the Comparison Test, the series of this subsequence must
+absolutely converge, which implies convergence. $\square$
+
+\section{Problem 2}
+
+\subsection{Series 1}
+
+Let's use the Ratio Test.
+\begin{align*}
+  \limsup_{n \to \infty} \left|\frac{\frac{(n+1)^4}{2^{n+1}}}{\frac{n^4}{2^n}}\right|
+   & = \limsup_{n \to \infty} \left|\frac{\frac{(n+1)^4}{n^4}}{2}\right| \\
+   & = \frac{\limsup_{n \to \infty} \frac{(n+1)^4}{n^4}}{2}              \\
+   & = \frac{1}{2}
+\end{align*}
+I was able to take out the absolute value since both $(n+1)^4$ and $n^4$ are positive.
+
+$\frac{1}{2}<1$, so the series converges.
+
+\subsection{Series 2}
+
+Let's use the Ratio Test again.
+\begin{align*}
+  \limsup_{n \to \infty} \left|\frac{\frac{2^{n+1}}{(n+1)!}}{\frac{2^n}{n!}}\right|
+   & = \limsup_{n \to \infty} \left|\frac{2}{n+1}\right| \\
+   & = 0
+\end{align*}
+$0 < 1$, so the series converges.
+
+\subsection{Series 3 \& 4}
+
+$(-1)^n$ and $\sin \left(\frac{n\pi}{3}\right)$ don't even converge to $0$; no way their series converges.
+
+\pagebreak
+
+\section{Problem 3}
+
+\subsection{Series 1}
+
+The numerator and denominator are both positive, so the sequence
+only has positive elements and we can rearrange them without consequences.
+
+Listing out the terms, we get
+\[\frac{1}{(2+1)^2}, \frac{1}{(3-1)^2}, \frac{1}{(4+1)^2}, \frac{1}{(5-1)^2}, \frac{1}{(6+1)^2}, \cdots\]
+Notice that this sequence is just $\{a_n\}_{n \ge 2}$ with $a_n=\frac{1}{n^2}$ and adjacent terms swapped.
+
+From lecture we know the latter converges, so the OG series must as well.
+
+\subsection{Series 2}
+
+The $n$th partial sum is
+\begin{align*}
+  \sum_{i=1}^{n} \sqrt{i+1}-\sqrt{i}
+   & = \sum_{i=2}^{n+1} \sqrt{i} - \sum_{i=1}^{n} \sqrt{i} \\
+   & = \sqrt{n+1}-\sqrt{1}
+\end{align*}
+The partial sums pretty clearly diverge, so the series itself should too.
+
+\subsection{Series 3}
+
+Using the Ratio Test, we get that
+\begin{align*}
+  \frac{\frac{(n+1)!}{(n+1)^{n+1}}}{\frac{n!}{n^n}}
+   & = \frac{n+1}{\frac{(n+1)^(n+1)}{n^n}}            \\
+   & = \frac{n^n}{(n+1)^n}                            \\
+   & = \left(\frac{n}{n+1}\right)^n                   \\
+   & = \left(\left(1+\frac{1}{n}\right)^n\right)^{-1}
+\end{align*}
+The portion inside the inverse converges to $e$ as $n \to \infty$,
+so the ratios as a whole converge to $\frac{1}{e}$ and the series converges.
+
+\section{Problem 4}
+
+\subsection{Series 1}
+
+We use the Dyadic criterion to reduce the proof of convergence to showing that
+\begin{align*}
+  \sum_{n \ge 2} \frac{2^n \cdot \left(2^n\right)^{n \ln 2}}{(n \ln 2)^{2^n}}
+\end{align*}
+converges.
+
+By the Comparison Test, we can chain inequalities to get
+\begin{align*}
+  \frac{2^n \cdot \left(2^n\right)^{n \ln 2}}{(n \ln 2)^{2^n}}
+   & = \frac{\left(2^n\right)^{n \ln 2+1}}{(n \ln 2)^{2^n}} \\
+   & \le \frac{\left(2^n\right)^{n \ln 2+1}}{2^{2^n}}       \\
+   & = 2^{n^2\ln 2 + n - 2^n}                               \\
+   & \le 2^{n^2 \cdot 2 + n^2 - 2^n}                        \\
+   & = 2^{3n^2+2^n}
+\end{align*}
+To prove that the series defined by the formula above converges,
+we use the Ratio Test:
+\begin{align*}
+  \frac{2^{3(n+1)^2-2^{n+1}}}{2^{3n^2-2^n}}
+   & = 2^{6n+3-2^{n+1}+2^n} \\
+   & = 2^{6n+3-2^n}
+\end{align*}
+This converges to $0$ iff $6n+3-2^n$ goes to $-\infty$.
+
+To show this, notice that past $n=3$ the expression decreases by at least $1$.
+The proof is by induction,
+where the base case is $n=3$ and $n=4$:
+\begin{gather*}
+  6 \cdot 3 + 3 - 2^3 = 13 \\
+  6 \cdot 4 + 3 - 2^4 = 11
+\end{gather*}
+and the inductive step goes like so:
+\begin{align*}
+  \left(6x+3-2^x\right) - \left(6(x+1)+3+2^{x+1}\right)
+  &= 2^{x+1}-2^x - 6 \\
+  &= 2^x - 6 \\
+  &> 1
+\end{align*}
+since $x \ge 3$ and $2^x \ge 8$.
+This means that the ratio goes to $0$, the series we used as a UB converges,
+and the OG series converges too. $\square$
+
+\subsection{Series 2}
+
+Using the Dyadic criterion again gets us
+\[\sum_{n \ge 2} \frac{1}{(\ln n)^{\ln n}}\text{ converges} \iff \sum_{n \ge 2} \frac{2^n}{(\ln 2^n)^{\ln 2^n}}\text{ converges}\]
+
+We simplify the terms of the new series:
+\[\frac{2^n}{(\ln 2^n)^{\ln 2^n}} = \frac{2^n}{(n \ln 2)^{n \ln 2}}\]
+and use the Root Test:
+\[\left(\frac{2^n}{(n \ln 2)^{n \ln 2}}\right)^{\frac{1}{n}} = \frac{2}{(n \ln 2)^{\ln 2}}\]
+The numerator is constant and the bottom is increasing, so this converges to $0$.
+$0 < 1$, so our new series and by extension the OG series both converge.
+
+\subsection{Series 3}
+
+The sequence itself doesn't converge. 'Nuff said.
+
+\section{Problem 5}
+
+\subsection{Divergent Then Convergent}
+
+$\sum_{n \ge 1} \frac{1}{n}$ diverges, but $\sum_{n \ge 1} \frac{1}{n^2}$ converges.
+
+\subsection{Convergent Both Times}
+
+Define $b_n=|a_n|$ so $b_n \ge 0$.
+Squaring makes things positive anyways so $\sum a_n^2=\sum b_n^2$.
+
+If $b_n$ is convergent, then it must tend to $0$
+and $\exists n_\epsilon: 0 \le b_n < 1\ \forall n \ge n_\epsilon$.
+
+Since $0 \le b_n < 1\ \forall n \ge n_\epsilon$, $b_n^2 < b_n$ as well and we have
+\begin{align*}
+  \sum_{n=1}^{\infty} b_n^2
+   & = \sum_{n=1}^{n_\epsilon-1} b_n^2 + \sum_{n=n_\epsilon}^{\infty} b_n^2 \\
+   & < \sum_{n=1}^{n_\epsilon-1} b_n^2 + \sum_{n=n_\epsilon}^{\infty} b_n
+\end{align*}
+The first summand is finite, while the second
+must converge since it's just the tail of an already converging series.
+
+Thus, $\sum b_n^2$ must converge. $\square$
+
+\subsection{Convergent Then Divergent}
+
+$\sum_{n \ge 1} \frac{(-1)^n}{\sqrt{n}}$ converges since it's
+alternating and its absolute value tends to $0$.
+However, it's square is the harmonic series, which diverges.
+
+\section{Problem 6}
+
+We use telescoping sums to get the $n$th partial sum:
+\begin{align*}
+  \sum_{i=1}^{n} \frac{1}{i}-\frac{1}{i+1}
+   & = \sum_{i=1}^{n} \frac{1}{I} - \frac{i=2}{n+1} \frac{1}{i} \\
+   & = 1-\frac{1}{n+1}
+\end{align*}
+This clearly converges to $\boxed{1}$ as $n$ (and $n+1$) go to $\infty$.
+
+\section{Problem 7}
+
+\subsection{Auxiliary Series}
+
+% We do the Ratio Test first:
+% \begin{align*}
+%   \frac{\frac{n}{2^{n+2}}}{\frac{n-1}{2^{n+1}}}
+%    & = \frac{\frac{n}{n-1}}{\frac{2^{n+2}}{2^{n+1}}} \\
+%    & = \frac{\frac{n}{n-1}}{2}                       \\
+%    & = \frac{1-\frac{1}{n}}{2}
+% \end{align*}
+% This sequence converges to $\frac{1}{2} < 1$ as $n \to \infty$,
+% so the series must absolutely converge since it's positive.
+
+We again get the $n$th partial sum with telescoping sums:
+\begin{align*}
+  \sum_{i=1}^{n} \frac{i-1}{2^{i+1}}
+   & = \sum_{i=1}^{n} \frac{i}{2^i} - \frac{i+1}{2^{i+1}}            \\
+   & = \sum_{i=1}^{n} \frac{n}{2^n} - \sum_{i=2}^{n+1} \frac{n}{2^n} \\
+   & = \frac{1}{2^1}-\frac{n+1}{2^{n+1}}
+\end{align*}
+and see that the subband tends to $0$, so the overall series converges to $\boxed{\frac{1}{2}}$.
+
+\subsection{Actual Result}
+
+We can multiply the initial series by $2^2$ to have
+\begin{align*}
+  4 \cdot \sum_{n \ge 1} \frac{n-1}{2^{n+1}}
+   & = \sum_{n \ge 1} \frac{n-1}{2^{n-1}}           \\
+   & = \frac{0}{2^0} + \sum_{n \ge 1} \frac{n}{2^n} \\
+   & = \sum_{n \ge 1} \frac{n}{2^n}
+\end{align*}
+The LHS is equal to $2$, so the series on the RHS must be $\boxed{2}$.
+
+\section{Problem 8}
+
+\textbf{I'm omitting absolute values since we're only dealing with nonnegatives.}
+
+\subsection{Sequence Over Itself}
+
+If $\lim_{n \to \infty} a_n = a > 0$,
+\[\lim_{n \to \infty} \frac{a_n}{a_n+1}=\frac{a}{a+1} > 0\]
+and summing this to infinity will definitely produce a divergent series.
+
+Now we handle the nontrivial case of $a=0$, which implies an $M: a_n < M$.
+$a_n$ diverges, so it violates the Cauchy Criterion:
+\[\exists \epsilon: \forall n_\epsilon \in \N\ \exists n \ge n_\epsilon, k \ge 0: \sum_{i=n}^{n+k} a_n \ge \epsilon\]
+
+Notice that $\forall n, k \ge 0$,
+\begin{align*}
+  \sum_{i=n}^{n+k} \frac{a_n}{a_n+1}
+   & > \sum_{i=n}^{n+k} \frac{a_n}{M+1} \\
+   & = \frac{\sum_{i=n}^{n+k} a_n}{M+1} \\
+   & \ge \frac{\epsilon}{M+1}
+\end{align*}
+thus proving that $\frac{\epsilon}{M+1}$ is the divergent $\epsilon$ for our new series. $\square$
+
+\subsection{Sequence Over Partial Sums}
+
+Since $a_n$ is nonnegative, $s_n$ monotonically increases and must diverge to $\infty$.
+
+We have
+\begin{align*}
+  \sum_{k=1}^{n} \frac{a_{N+k}}{s_{N+k}}
+   & \le \sum_{k=1}^{n} \frac{a_{N+k}}{s_{N+n}} \\
+   & = \frac{\sum_{k=1}^{n} a_{N+k}}{s_{N+n}}   \\
+   & = \frac{s_{N+n} - s_N}{s_{N+n}}            \\
+   & = 1-\frac{s_N}{s_{N+n}}\quad\square
+\end{align*}
+
+Now we can arbitrarily take $\epsilon=\frac{1}{2}$ for the negation of convergence.
+
+For any $n_\epsilon$, by the inequality we've proven we
+can take $n=n_\epsilon+1$ and $k$ big enough s.t.
+\[\sum_{i=n}^{n+k} \frac{a_i}{s_i} \ge 1-\frac{s_n}{s_{n+k}} \ge \frac{1}{2}\]
+since $s_n$ is constant and we can make $s_{n+k}$ arbitrarily large.
+
+Thus, even after dividing by partial sums, we still have a divergent series.
+
+\subsection{Squaring the Sums}
+
+We have
+\begin{align*}
+  \frac{1}{s_{n-1}} - \frac{1}{s_n}
+   & = \frac{s_n-s_{n-1}}{s_ns_{n-1}}  \\
+   & = \frac{a_n}{s_ns_{n-1}}          \\
+   & \ge \frac{a_n}{s_n^2}\quad\square
+\end{align*}
+
+Now to show the convergence of $\sum_{n \ge 1} \frac{a_n}{s_n^2}$, we use the Comparison Test on $\sum_{n \ge 2} \frac{a_n}{s_n^2}$.
+
+Notice that $\sum_{n \ge 2} \frac{1}{s_{n-1}}-\frac{1}{s_n}$ converges.
+Taking $t_n$ as the $n$th partial sum, we get
+\begin{align*}
+  t_n
+   & =\sum_{i=2}^{n} \frac{1}{s_{i-1}}-\frac{1}{s_i}                \\
+   & =\sum_{i=1}^{n-1} \frac{1}{s_i} - \sum_{i=2}^{n} \frac{1}{s_i} \\
+   & =\frac{1}{s_1} - \frac{1}{s_i}
+\end{align*}
+which converges to $\frac{1}{s_1}$ since $\lim_{n \to \infty} \frac{1}{s_n}=0$.
+
+By the inequality above and the convergence of $\sum_{n \ge 2} \frac{1}{s_{n-1}}-\frac{1}{s_n}$,
+$\sum_{n \ge 2} \frac{a_n}{s_n^2}$ converges.
+This means that the OG series must converge too since it only has one more term.
+
+\section{Problem 9}
+
+Since $\sum a_n$ converges, the partial sums have to be Cauchy.
+This means that $\forall \epsilon > 0\ \exists n_\epsilon \in \N$
+s.t. all range sums which start past that point are strictly less than $\epsilon$.
+
+Notice that for all $n \in \N$,
+\[\sum_{i=n+1}^{2n} a_i \ge na_{2n}\]
+For any $\epsilon > 0$, we can find an $n_\epsilon$ and take $n=n_\epsilon$
+in the above expression to get $na_{2n} < \frac{\epsilon}{n}$.
+This gives us $\lim_{n \to \infty} na_{2n}=0$.
+
+Now, also notice that
+\[\sum_{i=n+2}^{2n+1} a_i \ge na_{2n+1}\]
+and we can use the same chain of logic as we did above to see that $\lim_{n \to \infty} na_{2n+1}=0$.
+
+Now we use limit properties and that $\lim_{n \to \infty} a_n=0$ to see
+\begin{gather*}
+  \lim_{n \to \infty} na_{2n} = \lim_{n \to \infty} 2na_{2n}=0 \\
+  \lim_{n \to \infty} na_{2n+1}= \lim_{n \to \infty} 2na_{2n+1}+a_{2n+1}= \lim_{n \to \infty} (2n+1)a_{2n+1}=0
+\end{gather*}
+The odd and even subsequences both converge to $0$,
+so the overall subsequence $na_n$ must do the same. $\square$
+
+\end{document}
