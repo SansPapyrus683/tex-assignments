@@ -1,0 +1,219 @@
+\documentclass[12pt]{article}
+
+\input{../kz}
+
+\rhead{Math 131AH}
+
+\makeatletter
+\def\@seccntformat#1{%
+  \expandafter\ifx\csname c@#1\endcsname\c@section\else
+  \csname the#1\endcsname\quad
+  \fi}
+\makeatother
+
+\newcommand{\lra}{\xLeftrightarrow}
+\newcommand{\ra}{\xRightarrow}
+\newcommand{\N}{\mathbb{N}}
+\newcommand{\R}{\mathbb{R}}
+\newcommand{\Z}{\mathbb{Z}}
+\newcommand{\Q}{\mathbb{Q}}
+
+\begin{document}
+
+\section{Problem 1}
+
+If $|A|=n$, we can create a bijection $f: A \to \{1, \cdots, n\}$
+and we can have a similar bijection $g: \{1, \cdots, m\} \to B$ as $|B|=m$.
+
+\subsection{Just Numbers}
+
+To create a function $h: \{1, \cdots, n\} \to \{1, \cdots, m\}$, we need outputs for $n$ inputs.
+Each input can have one of $m$ possible outputs, so we have a total of $m^n$ possible functions.
+
+\subsection{Back to Sets}
+
+To see that there's $m^n$ functions from $A$ to $B$,
+notice that we can create any function from $A$ to $B$ by composing
+it with $f$ and $g$.
+Now we need to show that
+\[\{\text{all functions defined above}\} \sim \{\text{set of all functions from $A$ to $B$}\}\]
+so we know that there's exactly $m^n$ possible functions.
+
+We can do this by making an injective function from the LHS to the RHS and vice versa.
+
+\subsubsection{Left to Right}
+
+Let the mapping take an $h$ and return $g \circ h \circ f$, which goes from $A$ to $B$ by construction.
+
+It STP that if $\exists x: h_1(x) \ne h_2(x)$ (i.e. $h_1 \ne h_2$),
+then their compositions are different too.
+
+Take $a=f^{-1}(x)$, since $f$ is a bijection.
+Then $(g \circ h_1 \circ f)(a)=g(h_1(x))$ while $(g \circ h_2 \circ f)(a)=g(h_2(x))$.
+Since $h_1(x) \ne h_2(x)$ and $g$ is injective, these two values should be different as well.
+
+\subsubsection{Right to Left}
+
+We define an $h$ from every $t: A \to B$ like so:
+\[h\left(f^{-1}(a)\right)=g(t(a))\]
+$f$ is bijective, so every element in the domain of $h$ is covered by exactly one $a \in A$.
+
+If $\exists a \in A: t_1(a) \ne t_2(a)$, then
+$g(t_1(a)) \ne g(t_2(a))$ since $g$ is, again, injective.
+Then, by construction this means that $h\left(f^{-1}(a)\right)$
+gives a different output depending on if we use $t_1$ or $t_2$ for the output,
+so this mapping is indeed injective. $\square$
+
+\pagebreak
+
+\section{Problem 2}
+
+\subsection{Equivalence Relation}
+
+\subsubsection{Reflexity}
+
+$x-x=0 \in \Z\ \forall x$. Yeah.
+
+\subsubsection{Symmetricity}
+
+$x-y=z \in \Z \therefore y-x=-z \in \Z$, so symmetricity holds.
+
+\subsubsection{Transitivity}
+
+If $x-y=a \in \Z$ and $y-z=b \in \Z$, we have
+\[x-z=(x-y)+(y-z)=a+b \in \Z\quad\square\]
+
+\subsection{Representatives}
+
+\subsubsection{Injectivity}
+
+For this, we NTS $\forall x, y \in [0, 1)\ x-y \in \Z \implies x=y$,
+or in other words $x \ne y \implies x-y \notin \Z$.
+
+BWOC say $x-y \in \Z$.
+WLOG assume $x > y$.
+Then $x-y>0$, and the smallest it can be is $1$,
+so this really means $x-y \ge 1$.
+Since $x \in [0, 1)$,
+\begin{align*}
+               & x < 1     \\
+  \therefore{} & x-y < 1-y \\
+  \therefore{} & 1 < 1-y   \\
+  \therefore{} & y < 0
+\end{align*}
+which contradicts that $y$ is also in $[0, 1)$.
+
+\subsubsection{Surjectivity}
+
+It suffices to show that every real number is equivalent to some $x \in [0, 1)$.
+
+We previously proved by the Archimedean Principle that any $y \in \R$.
+can be placed in $[n, n+1)$ where $n \in \Z$.
+I'll show that $x=y-n$ is both similar to $y$ and in $[0, 1)$.
+\begin{gather*}
+  n \le y \therefore n-n=0 \le y-n=x \\
+  y < n+1 \therefore y-n=x < n+1-n=1 \\
+  x-y=n \in \Z\text{ by construction}\quad\square
+\end{gather*}
+
+\section{Problem 3}
+
+\subsection{Injectivity}
+
+Suppose $f(n, m)=f(a, b)$.
+
+We first show $n+m=a+b$ by contradiction.
+WLOG let $n+m > a+b$, and let's assign $x=a+b$ and $y=n+m-x$ for convenience.
+Then we do some omega-long, omega-nasty algebraic manipulation to find that
+\begin{align*}
+  & \frac{(y+x-1)(y+x-2)}{2}+n=\frac{(x-1)(x-2)}{2}+a \\
+  \implies{} & \frac{1}{2}((y+x-1)(y+x-2)-(x-1)(x-2))=a-n \\
+  \implies{} & \frac{y}{2}(2x+y-3)=a-n
+\end{align*}
+Then we do some inequalities to have
+\begin{align*}
+  a-n
+  &= \frac{y}{2}(2x+y-3) \\
+  &= xy+\frac{y^2}{2}-\frac{3y}{2} \\
+  &\ge x-1 \\
+  &= a+b-1
+\end{align*}
+$a-n \ge a+b-1 \implies 1 \ge b+n$, which is a contradiction since $b, n \ge 1$.
+
+So with that out of the way, the fractions must be equal
+(since they only use $n+m$ and $a+b$ respectively) and $a=n$ as well.
+Now we have
+\begin{align*}
+               & (n+m-1)(n+m-2)=(a+b-1)(a+b-2)   \\
+  \implies{} & (n+m)^2-3(n+m)=(a+b)^2-3a-3b    \\
+  \implies{} & (n+m)^2-3(n+m)-(a+b)^2+3(a+b)=0 \\
+  \implies{} & (n+m-a-b)(n+m+a+b)-3(n+m-a-b)=0 \\
+  \implies{} & (n+m-a-b)(n+m+a+b-3)=0
+\end{align*}
+Since $n, m, a, b \ge 1$, the second coefficient can't be $0$.
+This forces the first coefficient to be $0$, so $n+m=a+b$ and by extension $m=b$.
+
+So with all this, we've shown $f(n, m)=f(a, b) \implies (n, m)=(a, b)$. $\square$
+
+\pagebreak
+
+\subsection{Surjectivity}
+
+We proceed by induction.
+$f(1, 1)=1$, so that's the base case.
+
+We now assume $\exists n, m \in \N: f(n, m)=k$
+and try to find another pair that goes to $k+1$.
+For this, we have
+\begin{align*}
+  k+1
+   & = f(n, m)+1                                      \\
+   & = \frac{(n+m-2)(n+m-1)}{2}+n+1                   \\
+   & = \frac{((n+1)+(m-1)-2)((n+1)+(m-1)-1)}{2}+(n+1) \\
+   & = f(n+1, m-1)
+\end{align*}
+so as long as $m > 1$, we can get $k+1=f(n+1, m-1)$.
+
+For the case where $m=1$ and can't be subtracted from, we have
+\begin{align*}
+  k+1
+   & = f(n, 1)+1            \\
+   & = \frac{n(n-1)}{2}+n+1 \\
+   & = \frac{n(n+1)}{2}+1   \\
+   & = f(1, n+1)
+\end{align*}
+The last part works if you plug it into $f$, I swear.
+
+But anyways, that's both parts shown, so we have a bijection! $\square$
+
+\pagebreak
+
+\section{Problem 4}
+
+BWOC say there existed a bijection $f: A \to B$.
+
+Since $B \subsetneq A$, $\exists a_0 \in A: a_0 \notin B$.
+Let this be the starting element for a sequence where $a_i=f(a_{i-1})$,
+so $a_1=f(a_0)$, $a_2=f(a_1)$, so on and so forth.
+
+Notice that $a_i \ne a_j\ \forall j < i$.
+We prove this by induction.
+$a_1 \ne a_0$ since $a_1 \in B$ and $a_0 \notin B$.
+Again, $a_i \ne a_0$ since one's in $B$ while the other isn't.
+Now for any $a_i$, $a_{i-1} \ne a_j\ \forall j < i-1$,
+so $a_i=f(a_{i-1}) \ne f(a_j)=a_{j+1}\ \forall j < i-1$,
+which is exactly what we wanted to prove.
+This implies that all elements in the sequence of $a_n$ are distcint.
+
+We can apply $f$ however many times we want to get a countably
+infinite number of elements that are all in $A$,
+which contradicts that $A$ is a finite set. $\square$
+
+\section{Problem 5}
+
+Any infinite set minus a single element is still infinite.
+
+To get a countable subset, can keep on taking elements out of it
+and map them to $1$, $2$, and eventually all the natural numbers.
+
+\end{document}
