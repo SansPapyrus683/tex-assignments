@@ -22,48 +22,39 @@
 
 \section{Problem 1}
 
-If $|A|=n$, we can create a bijection $f: A \to \{1, \cdots, n\}$
-and we can have a similar bijection $g: \{1, \cdots, m\} \to B$ as $|B|=m$.
+The proof is by induction on the size of $A$.
 
-\subsection{Just Numbers}
+The base case is trivial; if we have to map one element to $m$
+other elements, there's only one possible function.
+Now we assume that there's $m^n$ functions mapping $A$ to $B$
+with $|A|=n$ and $|B|=m$, and prove that it works for $A \cup \{a\}$ with $a \notin A$.
 
-To create a function $h: \{1, \cdots, n\} \to \{1, \cdots, m\}$, we need outputs for $n$ inputs.
-Each input can have one of $m$ possible outputs, so we have a total of $m^n$ possible functions.
+We first show that $\left|B^{A \cup \{a\}}\right|=\left|B^A \times B^{\{a\}}\right|$.
+Given a function $f$ from $A \cup \{a\}$ to $B$, we can make $f_A: A \to B$ and $f_a: \{a\} \to B$, where
+\begin{align*}
+  f_A(x)=f(x) && f_a(x)=f(x)
+\end{align*}
 
-\subsection{Back to Sets}
+This mapping is clearly injective, since if two $f$s give different outputs
+for some $x$ the change will be reflected in either $f_A$ or $f_a$.
+$x \in A \cup \{a\}$, so not being in the domain of either function isn't an option.
 
-To see that there's $m^n$ functions from $A$ to $B$,
-notice that we can create any function from $A$ to $B$ by composing
-it with $f$ and $g$.
-Now we need to show that
-\[\{\text{all functions defined above}\} \sim \{\text{set of all functions from $A$ to $B$}\}\]
-so we know that there's exactly $m^n$ possible functions.
+It's also surjective.
+For any $f_A$ and $f_a$, we can get the original $f$ like so:
+\[f(x)=\begin{cases}
+  f_A(x) & x \in A \\
+  f_a(x) & x \in \{a\}
+\end{cases}\]
+By construction, our mapping does map this back to the $f_A$ and $f_a$ we desire.
 
-We can do this by making an injective function from the LHS to the RHS and vice versa.
-
-\subsubsection{Left to Right}
-
-Let the mapping take an $h$ and return $g \circ h \circ f$, which goes from $A$ to $B$ by construction.
-
-It STP that if $\exists x: h_1(x) \ne h_2(x)$ (i.e. $h_1 \ne h_2$),
-then their compositions are different too.
-
-Take $a=f^{-1}(x)$, since $f$ is a bijection.
-Then $(g \circ h_1 \circ f)(a)=g(h_1(x))$ while $(g \circ h_2 \circ f)(a)=g(h_2(x))$.
-Since $h_1(x) \ne h_2(x)$ and $g$ is injective, these two values should be different as well.
-
-\subsubsection{Right to Left}
-
-We define an $h$ from every $t: A \to B$ like so:
-\[h\left(f^{-1}(a)\right)=g(t(a))\]
-$f$ is bijective, so every element in the domain of $h$ is covered by exactly one $a \in A$.
-
-If $\exists a \in A: t_1(a) \ne t_2(a)$, then
-$g(t_1(a)) \ne g(t_2(a))$ since $g$ is, again, injective.
-Then, by construction this means that $h\left(f^{-1}(a)\right)$
-gives a different output depending on if we use $t_1$ or $t_2$ for the output,
-so this mapping is indeed injective. $\square$
-
+With cardinality equality shown, we can say:
+\begin{align*}
+  \left|B^{A \cup \{a\}}\right|
+   & =\left|B^A \times B^{\{a\}}\right| \\
+   & =\left|B^A\right| \cdot \left|B^{\{a\}}\right|    \\
+   & = m^n \cdot m                      \\
+   & = m^{n+1}\quad\square
+\end{align*}
 \pagebreak
 
 \section{Problem 2}
@@ -126,17 +117,17 @@ We first show $n+m=a+b$ by contradiction.
 WLOG let $n+m > a+b$, and let's assign $x=a+b$ and $y=n+m-x$ for convenience.
 Then we do some omega-long, omega-nasty algebraic manipulation to find that
 \begin{align*}
-  & \frac{(y+x-1)(y+x-2)}{2}+n=\frac{(x-1)(x-2)}{2}+a \\
-  \implies{} & \frac{1}{2}((y+x-1)(y+x-2)-(x-1)(x-2))=a-n \\
+             & \frac{(y+x-1)(y+x-2)}{2}+n=\frac{(x-1)(x-2)}{2}+a \\
+  \implies{} & \frac{1}{2}((y+x-1)(y+x-2)-(x-1)(x-2))=a-n        \\
   \implies{} & \frac{y}{2}(2x+y-3)=a-n
 \end{align*}
 Then we do some inequalities to have
 \begin{align*}
   a-n
-  &= \frac{y}{2}(2x+y-3) \\
-  &= xy+\frac{y^2}{2}-\frac{3y}{2} \\
-  &\ge x-1 \\
-  &= a+b-1
+   & = \frac{y}{2}(2x+y-3)           \\
+   & = xy+\frac{y^2}{2}-\frac{3y}{2} \\
+   & \ge x-1                         \\
+   & = a+b-1
 \end{align*}
 $a-n \ge a+b-1 \implies 1 \ge b+n$, which is a contradiction since $b, n \ge 1$.
 
@@ -144,7 +135,7 @@ So with that out of the way, the fractions must be equal
 (since they only use $n+m$ and $a+b$ respectively) and $a=n$ as well.
 Now we have
 \begin{align*}
-               & (n+m-1)(n+m-2)=(a+b-1)(a+b-2)   \\
+             & (n+m-1)(n+m-2)=(a+b-1)(a+b-2)   \\
   \implies{} & (n+m)^2-3(n+m)=(a+b)^2-3a-3b    \\
   \implies{} & (n+m)^2-3(n+m)-(a+b)^2+3(a+b)=0 \\
   \implies{} & (n+m-a-b)(n+m+a+b)-3(n+m-a-b)=0 \\
@@ -211,9 +202,16 @@ which contradicts that $A$ is a finite set. $\square$
 
 \section{Problem 5}
 
-Any infinite set minus a single element is still infinite.
+Any infinite set $A$ minus a single element is still infinite.
+In fact, we can take $A \setminus B$ and it'll still be infinite
+as long as $B$ is finite.
 
-To get a countable subset, can keep on taking elements out of it
-and map them to $1$, $2$, and eventually all the natural numbers.
+Thus, we can construct the following sequence:
+\begin{enumerate}[nolistsep]
+  \item $a_1$ is any element in $A$
+  \item $a_n$ is any element in $A \setminus \{a_1, \cdots, a_{n-1}\}$
+\end{enumerate}
+By construction, there's countably many elements in this sequence,
+so we can indeed find some countable subset within $A$.
 
 \end{document}
