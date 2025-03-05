@@ -1,0 +1,253 @@
+\documentclass[12pt]{article}
+
+\input{../kz}
+
+\rhead{Math 131AH}
+
+\makeatletter
+\def\@seccntformat#1{%
+  \expandafter\ifx\csname c@#1\endcsname\c@section\else
+  \csname the#1\endcsname\quad
+  \fi}
+\makeatother
+
+\newcommand{\lra}{\xLeftrightarrow}
+\newcommand{\ra}{\xRightarrow}
+\newcommand{\N}{\mathbb{N}}
+\newcommand{\R}{\mathbb{R}}
+\newcommand{\Z}{\mathbb{Z}}
+\newcommand{\Q}{\mathbb{Q}}
+
+\begin{document}
+
+\section{Problem 1}
+
+We proceed by induction on $n$.
+The base case $n=1$ is free, since $A_1$ is known to be countable.
+
+Now, assuming $A_1 \times \cdots \times A_n$ is countable,
+we prove that $A_1 \times \cdots \times A_{n+1}$ is also countable.
+Notice that everything in that product can be uniquely represented
+by an $n$-tuple taking elements from $A_1$ to $A_n$ along with
+another element from $A_{n+1}$.
+To get to $A_1 \times \cdots \times A_{n+1}$, we just
+tack on the lone element to the end of the tuple and call it a day.
+
+By our inductive hypothesis and the premise,
+both the $n$-tuple and the element can be bijectively mapped to $\N$.
+This allows us to construct the following bijection:
+\begin{center}
+  \begin{tabular}{c|cccc}
+               & \textbf{1} & \textbf{2} & \textbf{3} & \textbf{4} \\ \hline
+    \textbf{1} & 1          & 2          & 4          & 7          \\
+    \textbf{2} & 3          & 5          & 8          & \ldots     \\
+    \textbf{3} & 6          & 9          & \ldots     & \ldots     \\
+    \textbf{4} & 10         & \ldots     & \ldots     & \ldots     \\
+  \end{tabular}
+\end{center}
+Each row represents an element in $A_1 \times \cdots \times A_n$
+and each column something in $A_{n+1}$, but that doesn't really matter.
+
+We go along each top-right to bottom-left diagonal, assigning the next
+natural number to each new element and creating a bijection. $\square$
+
+\pagebreak
+
+\section{Problem 2}
+
+$A \sim B \implies \exists$ a bijection $f: A \to B$.
+I propose the bijection $g: \mathcal{P}(A) \to \mathcal{P}(B)$ where
+\[g(s)=\{f(a) \mid a \in s\}\]
+
+\subsection{Injective}
+
+If $X, Y \subseteq A$, $\exists a \in X: a \notin Y$.
+$a \ne a'\ \forall a' \in Y$, and since $f$ is injective, $f(a) \ne f(a')\ \forall a' \in Y$.
+
+By how we defined $g$, this means $f(a) \in g(X)$ while $f(a) \notin g(Y)$, so $g(X) \ne g(Y)$.
+
+\subsection{Surjective}
+
+Consider any $X \subseteq B$.
+
+I'm not sure if this edge case is needed, but if $X \subseteq B$ is the null set we have $f(\varnothing)=X$.
+
+Regardless, if it isn't, we'll have that
+\[Y=\left\{f^{-1}(b) \mid b \in X\right\}\]
+maps to $X$.
+This is because $f$ is invertible, so $f^{-1}$ exists where $f\left(f^{-1}(b)\right)=b\ \forall b \in B$.
+
+Anyways, that's both bijection properties proven. $\square$
+
+\section{Problem 3}
+
+I'll make the bijection from $2^\N$ to $\mathcal{P}(\N)$, since notation is a little easier:
+\[g(f)=\{x \in \N: f(x)=1\}\]
+This just maps $f$ to a set of all natural numbers that make it return $1$.
+
+\subsection{Injectivity}
+
+Suppose $\exists n \in \N: f(n) \ne f'(n)$.
+WLOG assume $f(n)=1$, so $n \in g(f)$.
+Since the range is $\{0, 1\}$, $f'(n)=0$ and $n \notin g(f')$.
+This by definition implies $g(f) \ne  g(f')$.
+
+\subsection{Surjectivity}
+
+For any subset $N \subseteq \N$, we can define a function $f: \N \to \{0, 1\}$:
+\[f(x)=\begin{cases}
+    1 & x \in N          \\
+    0 & \text{otherwise}
+  \end{cases}\]
+$f$ returns $1$ iff $x$ is in $N$, so $g(f)=N$. $\square$
+
+\pagebreak
+
+\section{Problem 4}
+
+By Schroder-Bernstein it suffices to show an injective function in both directions.
+
+\subsection{\texorpdfstring{$\N^\N \to 2^\N$}{N\^N to 2\^N}}
+
+Turn each $a_n$ into its unary representation of $a_n$ $1$s in a row.
+Then, we can concatenate all of them together with $0$s separating adjacent numbers.
+
+To show that this is injective, let $i$ be the lowest number s.t. $a_i \ne a'_i$.
+Before that, the two are equal, so by construction the two are at the same index before $i$.
+
+WLOG let $a_i > a'_i$.
+We add $a_i$ $1$s onto the first sequence.
+However, since $a'_i < a_i$, when we finish adding all the $1$s for $a'_i$ onto
+the second sequence the $0$ we put on at the end is going to be different
+from the $1$ on the first sequence.
+
+\subsection{\texorpdfstring{$2^\N \to \N^\N$}{2\^N to N\^N}}
+
+This one is pretty simple- we just have the new sequence $b_n$ be defined like
+\[b_n=a_n+1\]
+$0$ turns to $1$ and $1$ turns to $2$, so everything's a natural number no problem.
+If two sequences are different, i.e. $\exists i, j: a_i \ne a'_i$,
+adding $1$ to both sides won't change that they're different. $\square$
+
+\pagebreak
+
+\section{Problem 5}
+
+We again do an injective thing both ways.
+
+\subsection{Naturals to Roots}
+
+The ID function works, since any natural number $n$ is the root of the polynomial $x-n$.
+
+\subsection{Roots to Naturals}
+
+Each polynomial can be represented by a finite sequence of natural numbers;
+using the bijection between $\N$ and $\Z$ given in the notes,
+we can just list the coefficients from lowest power to highest.
+
+All polynomials have a finite number of roots, so for each
+polynomial we can map their roots to $\{1, \cdots, n\}$ for some $n \in \N$.
+With this, we're now able to map the $i$-th real root of some polynomial to some finite sequence.
+As for the order, sorting the roots suffices.
+
+Consider $x^2-5x+6$, for example.
+To map its first root to a natural number sequence, we can have the sequence
+\[1, f(6), f(-5), f(1)\]
+where $f$ is a bijective mapping from $\Z$ to $\N$.
+
+If a number is the root of multiple polynomials, we take the lexicograhpically lowest one.
+
+It was previously proven that all finite natural number sequences can be
+injectively mapped to $\N$ by raising the $n$th prime number to the $n$th
+element in the sequence and multiplying them all together,
+so we can indeed injectively map all roots to the naturals. $\square$
+
+\pagebreak
+
+\section{Problem 6}
+
+Another injective mapping both ways; yippee.
+
+\subsection{Naturals to Subsets}
+
+Each $i \in \N$ can be mapped to the following subset:
+\[\{i + j \mid 0 \le j < n\}\]
+If $a \ne b$, assuming WLOG $a < b$, by construction $a$ isn't in $b$'s set.
+This is because $b$'s set only has elements equal to or greater than $b$.
+
+\subsection{Subsets to Naturals}
+
+We can use the following function:
+\[f(S)=\sum_{i \in S} 2^{i-1}\]
+The key reason this works is because all subsets are finite, so this sum will always exist.
+
+This function is equivalent to a binary number representing $S$,
+where the $i$-th least significant digit encodes whether or not $i \in S$.
+Thus, if two sets are different, they would have different binary representations,
+and $f$ would output different numbers. $\square$
+
+\section{Problem 7}
+
+Since $(0, 1) \sim 2^{\aleph_0}$, it suffices to show
+a bijective mapping between $(0, 1)$ and $\R$.
+
+Let the mapping be
+\[f(x)=\tan\left(\pi x - \frac{\pi}{2}\right)\]
+From trig, we know the OG tangent function provides a bijection from
+$\left(-\frac{\pi}{2}, \frac{\pi}{2}\right)$ to all of $\R$.
+
+Given this, we shift by $\frac{\pi}{2}$ then scale by $\pi$ to get that
+this interval becomes
+\[\left(-\frac{\pi}{2}, \frac{\pi}{2}\right) \to (0, \pi) \to \left(0, 1\right)\]
+so this new $f$ does bijectively map $(0, 1)$ to $\R$. $\square$
+
+\pagebreak
+
+\section{Problem 8}
+
+Injection both ways; you know how it is.
+
+\subsection{Irrationals to Reals}
+
+The identity function works.
+
+\subsection{Reals to Irrationals}
+
+The function is as follows:
+\[f(x)=\begin{cases}
+    a+\sqrt{2}(b+1) & \text{if $\exists a \in \Q, b \in \N_0: x=a+b\sqrt{2}$} \\
+    x               & \text{otherwise}
+  \end{cases}\]
+This keeps most irrationals as is.
+However, it adds $\sqrt{2}$ to all rationals and moves
+all irrationsl of the form $a+\sqrt{2}b$ "up" one step to make room.
+
+\subsubsection{Well-Defined}
+
+To make sure this function is well-defined, we first have to make
+sure there's only one way to represent $x$ as $a+b\sqrt{2}$.
+Consider $a$, $b$, $a'$, and $b'$ s.t.
+\[a+b\sqrt{2}=a'+b'\sqrt{2}=x\]
+Then $a-a'=\sqrt{2}(b-b')$.
+$a-a' \in \Q$, while $\sqrt{2}$ times any nonzero integer is still irrational.
+Thus, the only way for this equality to hold is if $b-b'=a-a'=0$,
+which also means $a=a'$ and $b=b'$.
+
+Also, the range of this function is indeed all irrationals,
+since we add $\sqrt{2}$ to every rational and anything in $\Q$ plus $\sqrt{2}$
+is irrational.
+
+\subsubsection{Actual Injectivity}
+
+Consider $x, y \in \R$.
+
+If $x$ falls in the first case and the $y$ in the second case,
+adding $\sqrt{2}$ to $x$ won't make change its representability by $a+\sqrt{2}b$,
+while $y$ doesn't change, so the two remain unequal.
+
+If both are in the first or second case, adding $\sqrt{2}$ or $0$
+to both numbers also preserves inequality. $\square$
+
+(actually i'm p sure this is a bijection but too lazy to prove surjectivity lol)
+
+\end{document}
