@@ -1,0 +1,164 @@
+\documentclass[12pt]{article}
+
+\input{../kz}
+
+\lhead{406-196-414}
+\rhead{CS 181}
+
+\newcommand{\N}{\mathbb{N}}
+
+\begin{document}
+
+\section{Complementary Languages}
+
+I'll show that the complement of this language is
+recognizable and undecidable, since two recognizers imply a decider.
+
+\subsection{Recognizability}
+
+The complement of $\text{COMPL}_\text{TM}$ is
+\[\{\Braket{M_1, M_2} \mid L(M_1) \ne \overline{L(M_2)}\}\]
+A recognizer for this machine could go as follows:
+\begin{algorithmic}[1]
+    \Procedure{\texttt{NOT\_COMPL}}{$M_1$, $M_2$}
+        \State Run $M_1$ and $M_2$ on all inputs in a triangular fashion
+        \If{$\exists x: x \in L(M_1), L(M_2) \lor x \notin L_(M_1), L(M_2)$}
+            \State Accept $\braket{M_1, M_2}$
+        \Else
+            \State The machine's going to loop forever
+        \EndIf
+    \EndProcedure
+\end{algorithmic}
+
+If $L(M_1) \ne \overline{L(M_2)}$, then there exists an input
+that's in either both or neither of the languages, and this recognizer
+will eventually detect it.
+
+OTOH, if one is indeed the complement of the other, the machine's going
+to keep on running the two for every single input until the heat death of the universe.
+
+\subsection{Undecidability}
+
+Suppose there existed a decider $D$ for $\text{COMPL}_\text{TM}$.
+
+Then we can construct the following TM:
+\begin{algorithmic}[1]
+    \Procedure{M}{$x$}
+        \State $\alpha \gets \braket{M}$
+        \State $\beta \gets \braket{ACCEPT}$
+        \Comment{Description of a TM that always accepts}
+        \If{$D(\alpha, \beta)$}
+            \State Accept $x$
+            \Comment{$L(M)=L(ACCEPT)$ $\implies$ $D$ got it wrong.}
+        \Else
+            \State Reject $x$
+            \Comment{$L(M)=L(REJECT)=\overline{L(ACCEPT)}$ $\implies$ $D$ got it wrong.}
+        \EndIf
+    \EndProcedure
+\end{algorithmic}
+whose behavior will always prove $D$ wrong no matter what it outputs. $\square$
+
+\pagebreak
+
+\section{Subset Languages}
+
+Like always, we suppose the existence of a decider $D$.
+\begin{algorithmic}[1]
+    \Procedure{M}{$x$}
+        \State $\alpha \gets \braket{M}$
+        \State $\beta \gets \braket{ONLY\_\epsilon}$
+        \Comment{This only accepts $\epsilon$}
+        \If{$D(\alpha, \beta)$}
+            \State Accept
+            \Comment{$M$ accepts everything $\implies$ $L(M) \nsubseteq L(ONLY\_\epsilon)$}
+        \Else
+            \State Accept iff $x=\epsilon$
+            \Comment{$L(M)=L(ONLY\_\epsilon) \implies \braket{M, ONLY\_\epsilon} \in \text{SUBSET}_\text{TM}$}
+        \EndIf
+    \EndProcedure
+\end{algorithmic}
+This $M$, no matter what, will contradict the behavior prescripted to it by $D$. $\square$
+
+\section{Certified Languages}
+
+\subsection{\texorpdfstring{$\text{Halt}_\epsilon$}{Halt\_e} Certifiability}
+
+Consder the following certifier (or whatever idk what it's called):
+\begin{algorithmic}[1]
+    \Procedure{\texttt{HALT\_EPS\_CERT}}{$M$, $y$}
+        \If{$M$ isnt' a valid TM}
+            \State Reject
+        \EndIf
+
+        \item[]
+        \State Run $M$ on $\epsilon$ for the amount of steps represented by $y$ in binary
+        \If{$M$ is in an accepting state}
+            \State Accept
+        \Else
+            \State Reject
+        \EndIf
+    \EndProcedure
+\end{algorithmic}
+
+If a TM $M$ is in $\text{Halt}_\epsilon$, then it will halt on $\epsilon$ after some
+number of steps and $\exists y \in \{0, 1\}^*$ that makes the procedure above accept.
+We can give the number of steps in binary to the procedure above to gurantee an acceptance. $\square$
+
+\subsection{Screwed for \texorpdfstring{$\text{Halt}_\text{all}$}{Halt\_all}, Though...}
+
+This sort of certifier won't work for $\text{Halt}_\text{all}$ though,
+since we can't run the TM for $y$ steps on all inputs; that would take infinitely long.
+
+\pagebreak
+
+\subsection{Not Certifiable, BTW}
+
+Obviously assume at the start that there exists a certifier $C$ for sake of contradiction.
+
+\subsubsection{Implied Recognizability}
+
+Notice that the existence of $C$ implies the existence of a recognizer $R$:
+\begin{algorithmic}[1]
+    \Procedure{R}{$M$}
+        \State Run $C(x, y)$ on all $y \in \{0, 1\}^*$ with triangular scheduling
+        
+        \If{$\exists y: C(x, y)$ accepts}
+            \State Accept
+        \Else
+            \LComment{If no $y$ works, $R$ will loop as it runs on all $y$ for infinitely long.}
+        \EndIf
+    \EndProcedure
+\end{algorithmic}
+
+\subsubsection{Unrecognizable!}
+
+So certifiability implies recognizability.
+Now we construct a bad $M$ which shows that $\text{Halt}_\text{all}$ is
+unrecognizable, finally giving us our contradiction:
+\begin{algorithmic}[1]
+    \Procedure{M}{$x$}
+        \State $\alpha \gets \Braket{M}$
+        \State Run $R(\alpha)$ for $|x|$ steps
+        \If{$R(\alpha)$ accepts}
+            \State Loop forever :3
+        \ElsIf{$R(\alpha)$ rejects}
+            \State Accept
+        \ElsIf{$R(\alpha)$'s still running}
+            \State Accept
+        \EndIf
+    \EndProcedure
+\end{algorithmic}
+
+There's three cases for what can happen when we run $R(\alpha)$.
+For convenience, let $y$ be the number of steps it finishes in.
+\begin{itemize}[nolistsep]
+    \item If $R(\alpha)$ accepts, $M(x)$ will loop on any $x$ s.t. $|x| \ge y$ will loop.
+    \item If it rejects, we'll accept both all $x$ with $|x| < y$ and $|x| \ge y$:
+          that is, we will halt and accept all possible $x$s.
+    \item If it loops, for any $x$ $M$ will hit the third else-if and accept, so again
+          we halt on all inputs.
+\end{itemize}
+
+In all three cases, we have a contradiction. $\square$
+
+\end{document}
