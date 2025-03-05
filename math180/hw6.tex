@@ -1,0 +1,131 @@
+\documentclass[12pt]{article}
+
+\input{../kz}
+
+\rhead{Math 180}
+
+\makeatletter
+\def\@seccntformat#1{%
+  \expandafter\ifx\csname c@#1\endcsname\c@section\else
+  \csname the#1\endcsname\quad
+  \fi}
+\makeatother
+
+\DeclareMathOperator{\E}{E}
+
+\begin{document}
+
+\section{Chapter 10.1}
+
+\begin{enumerate}
+    \item[2a] We do casework on the size of $|X|$.
+
+        \textbf{Case 1: $|X| \le 14$} \\
+        Like in lecture, we add enough dummy points to get $|X|=14$.
+
+
+        Consider a random coloring where we pick some $7$ points to be black and the rest to be white.
+        For a specific $4$-tuple, there's $2 \cdot \binom{10}{7}$ configs where
+        it's monochromatic, so the chance this is the case is $\frac{2 \cdot \binom{10}{7}}{\binom{14}{7}}=\frac{240}{3432}$.
+
+        Then we use the union bound to see that
+        \begin{align*}
+            P(\text{any tuple is MC})
+             & \le \sum_{\text{all tuples}} P(\text{specific tuple is MC}) \\
+             & = 14 \cdot \frac{240}{3432}                                 \\
+             & = \frac{3360}{3432}                                         \\
+             & < 1
+        \end{align*}
+        so there does indeed exist a 2-coloring that satisfies all tuples.
+
+        \textbf{Case 2: $|X| > 14$} \\
+        If there's at least $15$ elements, we can always find a disconnected pair.
+        This is because each tuple can contribute $\binom{4}{2}=6$ pairings,
+        while there's at least $\binom{15}{2}=105$ in total.
+
+        We only have $14$ tuples, so the input can cover at most $6 \cdot 14=84$ of them.
+        By the Pigeonhole Principle, then, there must exist some disconnected pair
+        of elements which we can then reduce to a single element
+        by a process identical to the one used in lecture.
+
+    \item[4] Before we start, let a "move" be defined as moving a specific car from
+        A to I, I to II, and so on and so forth.
+        There's only 5 relevant tracks: A, I, II, III, and B.
+
+        Each car can be moved at most $4$ times.
+        Moving it any more would imply it going on I, II, or III more than once.
+        Thus, any train order must be achieved in at most $4n$ moves.
+
+        Also, given any track config, there's only $10$ moves we can make,
+        since we can only touch the "top" of tracks.
+        Cars on track A can be moved to 4 others,
+        those on track I have 3 options, you get the idea.
+
+        Point is, there's at most $10^{4n}$ move sequences we can make.
+        However, there are $n!$ total car orders, and since
+        factorial dominates exponential, $\exists n: n! > 10^{4n}$ and at that point
+        there literally aren't enough move sequences to cover all orders,
+        again by the Pigeonhole Principle. $\square$
+\end{enumerate}
+
+\section{Chapter 10.2}
+
+\begin{enumerate}
+    \item[3] Consider any three vertices.
+        Each edge has an independent $\frac{1}{2}$ chance of being there or not,
+        so the chance that these three edges \textit{don't} form a triangle is $\frac{7}{8}$.
+
+        Any graph has $\left\lfloor \frac{n}{3} \right\rfloor$ disjoint
+        sets of $3$ vertices, and since they're disjoint the event that
+        any one of them form a triangle is independent from the others.
+
+        Then we have
+        \begin{align*}
+            P(\text{no triangles})
+             & \le P(\text{no triangles within the selected disjoint sets})                              \\
+             & = P(\text{three vertices don't form a triangle})^{\left\lfloor \frac{n}{3} \right\rfloor} \\
+             & = \left(\frac{7}{8}\right)\left\lfloor \frac{n}{3} \right\rfloor
+        \end{align*}
+        which pretty clearly goes to $0$ as $n \to \infty$. $\square$
+
+    \item[9] Don't you love it when textbooks assign problems
+        \href{https://en.wikipedia.org/wiki/Boy_or_girl_paradox}{with their own Wikipedia pages}?
+
+        Anyways, we have
+        \begin{align*}
+            P(\text{two boys} \mid \text{at least one boy})
+             & = \frac{P(\text{two boys} \cap \text{at least one boy})}{P(\text{at least one boy})} \\
+             & = \frac{\frac{1}{4}}{1-P(\text{no boys})}                                            \\
+             & = \frac{\frac{1}{4}}{1-\frac{1}{4}}                                                  \\
+             & = \boxed{\frac{1}{3}}
+        \end{align*}
+\end{enumerate}
+
+\pagebreak
+
+\section{Chapter 10.3}
+
+\begin{enumerate}
+    \item[1] It's counterexample time!
+
+        \textbf{$\E \left[f^2\right] = \left(E f\right)^2$:} \\
+        Note that disproving this one implies  $\E [fg] \ne \E f \cdot \E g$.
+
+        Let $f$ take on values $0$ and $1$, each with probability $\frac{1}{2}$.
+        $\E \left[f^2\right]=1$, while $\left(E f\right)^2=\left(\frac{1}{2}\right)^2=\frac{1}{4}$,
+        so this property doesn't hold.
+
+        \textbf{$\E [1/f] = \frac{1}{\E f}$:} \\
+        Let $f$ take on values $1$ and $2$, each with probability $\frac{1}{2}$.
+        While $\E [1/f]=\frac{3}{4}$, $\frac{1}{\E f}=\frac{2}{3}$,
+        so this property doesn't hold either.
+
+    \item[3] We'll compute $\sum_{i=1}^{n} \E \mathbbm{1}[\pi_i=i]$ which is
+        equivalent to what we want by linearity of expectation.
+
+        Among all permutations, $(n-1)!$ of them map $i$ to itself, so
+        \[P(\pi_i=i)=\frac{(n-1)!}{n!}=\frac{1}{n} \implies \E \mathbbm{1}[\pi_i=i]=\frac{1}{n}\]
+        Summing over the $n$ $i$s gets us that $\E f=\boxed{1}$.
+\end{enumerate}
+
+\end{document}
