@@ -1,0 +1,297 @@
+\documentclass[12pt]{article}
+
+\input{../kz}
+
+\rhead{Math 131AH}
+
+\makeatletter
+\def\@seccntformat#1{%
+  \expandafter\ifx\csname c@#1\endcsname\c@section\else
+  \csname the#1\endcsname\quad
+  \fi}
+\makeatother
+
+\DeclareMathOperator{\Fr}{Fr}
+\newcommand{\lra}{\xLeftrightarrow}
+\newcommand{\ra}{\xRightarrow}
+\newcommand{\N}{\mathbb{N}}
+\newcommand{\R}{\mathbb{R}}
+\newcommand{\Z}{\mathbb{Z}}
+\newcommand{\Q}{\mathbb{Q}}
+\newcommand{\norm}[1]{\left\lVert#1\right\rVert}
+
+\begin{document}
+
+\section{Problem 1}
+
+Every set is open (so everything's closed too).
+For any $A \subseteq X$ and $a \in A$, we find that
+$a \in \mathring{A}$ since $B_{0.5}(a)=\{a\} \subseteq A\ \forall a$.
+
+\section{Problem 2}\label{sec:p2}
+
+\subsection{Forwards}
+
+If $A$'s open, for all $x \in X\ \exists r > 0: B_r(x) \subseteq A$.
+
+By construction, $y \in B_r(x) \implies d_1(x, y) < r$ and $\frac{d_1(x, y)}{1+d_1(x, y)} < \frac{r}{1+r}$,
+as $f(x)=\frac{x}{1+x}$ is monotonically increasing as long as $x \ge 0$.
+
+Thus, we can choose $r'=\frac{r}{1+r}>0$ so that $B_{r'}(x) \subseteq B_r(x) \subseteq A$ under $d_2$.
+
+\subsection{Backwards}
+
+We do a similar sort of radius transformation from $r'$ back to $r$.
+This way, if $B_{r'}(x) \subseteq A$ under $d_2$, $B_r(x) \subseteq A$ under $d_1$.
+
+If $d_2(x,y) < r'$, we can set $r=\frac{r'}{1-r'}$.
+$0 \le r' < 1$ so this expression doesn't become invalid.
+
+Setting this, we the following for any $y \in B_r(x)$ (i.e. $d_1(x, y) < r$):
+\begin{align*}
+  d_2(x,y)
+   & = \frac{d_1(x,y)}{1+d_1(x,y)}               \\
+   & < \frac{\frac{r'}{1-r'}}{1+\frac{r'}{1-r'}} \\
+   & = \frac{r'}{1-r'+r'}                        \\
+   & = r'
+\end{align*}
+so $B_r(x) \subseteq B_{r'}(x) \subseteq A$. $\square$
+
+\pagebreak
+
+\section{Problem 3}
+
+Like in \ref{sec:p2}, we try to construct another ball under the new metric
+such that anything in the new ball is in the old ball.
+
+In all the following subsections, we'll pick some $x \in A$ and an $r > 0$
+s.t. $B_r(x) \subseteq A$, i.e. $\norm{y-x}_p < r \implies y \in A$.
+Then it suffices to give an $r'$ s.t. $\norm{y-x}_q < r' \implies \norm{y-x}_p < r$.
+
+\subsection{\texorpdfstring{$p < \infty$}{p < inf} and \texorpdfstring{$q = \infty$}{q = inf}}
+
+Consider $r'=\frac{r}{\sqrt[p]{n}}$ under the new metric.
+
+Now for any $y \in B_{r'}(x)$ under $l_\infty$, $\norm{x-y}_\infty < \frac{r}{\sqrt[p]{n}}$,
+or in other words $\max |x_i-y_i| < \frac{r}{\sqrt[p]{n}}$.
+
+This means
+\begin{align*}
+  &\sum_{i=1}^{n} |x_i-y_i|^p < \left(\frac{r}{\sqrt[p]{n}}\right)^p \cdot n \\
+  \implies{} & \sum_{i=1}^{n} |x_i-y_i|^q < r^p \\
+  \implies{} & \norm{x-y}_p < r
+\end{align*}
+
+\subsection{\texorpdfstring{$p = \infty$}{p = inf} and \texorpdfstring{$q < \infty$}{q < inf}}
+
+For the other way round, we can actually keep the radius the same.
+
+If $\norm{x-y}_q < r$,
+\begin{align*}
+  & \sum_{i=1}^{n} |x_i-y_i|^q < r^q \\
+  \implies{} & \max_{i=1, \cdots, n} |x_i-y_i|^q < r^q \\
+  \implies{} & \max_{i=1, \cdots, n} |x_i-y_i| < r 
+\end{align*}
+so anything in $B_r(x)$ under $l_\infty$ will also be in the same ball under $l_p$,
+which we know is a subset or $A$.
+
+\pagebreak
+
+\subsection{Both Finite}
+
+Consider $r'=\sqrt[p]{\frac{r}{n}}$.
+Then, if $\norm{x-y}_q < r$, we have
+\begin{align*}
+  & \sum_{i=1}^{n} |x_i-y_i|^q < \left(\frac{r}{n}\right)^{q/p} \\
+  \implies{} & |x_i-y_i|^q < \left(\frac{r}{n}\right)^{q/p}\ \forall i=1, \cdots, n \\
+  \implies{} & |x_i-y_i| < \sqrt[p]{\frac{r}{n}} \\
+  \implies{} & |x_i-y_i|^p < \frac{r}{n} \\
+  \implies{} & \norm{x-y}_p < r\quad\square
+\end{align*}
+
+\section{Problem 4}
+
+We know from the notes that the union of open sets is still open and that all balls are open,
+so the reverse direction is free; the hard part is the forward direction.
+
+For the forwards direction, if we know a set $A$ is open, we can write it like so:
+\[A=\bigcup_{a \in A} B_{r_a}(a)\]
+where $r_a$ is chosen for each $a$ s.t. $B_{r_a}(a) \subseteq A$.
+
+By definition, the LHS is a subset of the RHS.
+OTOH, if we have some $x \in A$, we know its ball will be somewhere in the union by construction,
+so $x$ is certainly in the LHS as well. $\square$
+
+\pagebreak
+
+\section{Problem 5}
+
+$A \subseteq \overline{A}$, so $\delta(A) \le \delta(\overline{A})$
+and it suffices to just show the inequality in the other direction.
+
+Let $d$ and $\overline{d}$ be the distance sets for $A$ and $\overline{A}$ respectively.
+I'll show $\forall \epsilon > 0, x \in \overline{d}\ \exists y \in d: x \le y + \epsilon$.
+
+$x \in \overline{d}$ implies an $a, b \in \overline{A}: d(a, b)=x$.
+Take a ball of radius $\frac{\epsilon}{2}$ around both $a$ and $b$.
+Both must intersect with $A$ at some point since they're in the closure of $A$,
+so $\exists c, d \in A: d(a, c) < \frac{\epsilon}{2}, d(b, d) < \frac{\epsilon}{2}$.
+
+By the triangle inequality, we have
+\begin{align*}
+    d(c, d)
+    &\le d(a, c) + d(c, d) + d(d, b) \\
+    &< \frac{\epsilon}{2} + d(c, d) + \frac{\epsilon}{2} \\
+    &= \epsilon + d(c, d)
+\end{align*}
+so there does exist a $d(c, d) \in A$ s.t. $x \le y+\epsilon$. $\square$
+
+\section{Problem 6}
+
+By the assumptions given, we can take $x \in A: d(x, a) < r$.
+Then for any $b \in A$,
+\begin{align*}
+    d(b, a)
+    &\le d(b, x) + d(x, a) \\
+    &\le \delta(A) + r \\
+    &\le 2r
+\end{align*}
+so anything in $A$ is at most $2r$ away from $a$. $\square$
+
+\pagebreak
+
+\section{Problem 7}
+
+Any set is contained in its closure, so proving the second implies the first.
+
+Also, $O \cap A \subseteq O \cap \overline{A}$, so $\overline{O \cap A} \subseteq \overline{O \cap \overline{A}}$.
+We just have to prove the other direction for things to work out.
+
+Say $x \in \overline{O \cap \overline{A}}$,
+or in other words $\forall r > 0\ \exists a: d(a, x) < r \land x \in O, \overline{A}$.
+$O$ is open, so $\exists R: B_R(x) \subseteq O$.
+Any radius less than $R$ will also work, so take $r'=\min\left(R, r\right)$.
+
+Not only is $B_{r'}(x) \subseteq O$, $B_{r'}(x) \cap A \ne \varnothing$ since $x \in \overline{A}$.
+This means $\exists y \in A: d(x, y) < r$.
+So for all $r$, we've shown the existence of a $y \in A \cap O$ that's less than $r$ away from $x$,
+which implies $x \in \overline{A \cap O}$. $\square$
+
+If $O \cap A = \varnothing$, $\overline{O \cap A}=\varnothing$ too and by the equality
+we just proved $\overline{O \cap A}=\varnothing$ as well.
+
+\section{Problem 8}
+
+The forward direction's pretty easy.
+If $A$'s closed, $A=\overline{A}$ and $\overline{A} \cap \overline{A^C}=A \cap \overline{A^C} \subseteq A$.
+
+For the backward direction, BWOC let there be an $a \in \overline{A}: a \notin A$.
+Since $a \notin A$, $a \in \overline{A^C}$ and combined with our earlier condition this makes $a \in \Fr(A)$.
+This shows the existence of something in $\Fr(A)$ that's not in $A$, which is a contradiction. $\square$
+
+\section{Problem 9}
+
+Again we have a simple forward direction:
+\[A=\mathring{A}
+\implies A \cap \overline{A} \cap \overline{A^C}
+=\mathring{A} \cap \overline{\mathring{A}} \cap \left(\mathring{A}\right)^C
+=\varnothing\]
+
+For the backwards direction, again for a contradiction assume $\exists a \in A: a \notin \mathring{A}$.
+$a$ is obviously both in $A$ and $\overline{A}$, and since it's not in the interior, $a \in \left(\mathring{A}\right)^C$ as well.
+This means the intersection of $A$ and its frontier is nonempty, which is a contradiction. $\square$
+
+\pagebreak
+
+\section{Problem 10}
+
+\subsection{General Subset}
+
+If something's in $\Fr(A \cup B)=\overline{A \cup B} \cap \overline{(A \cup B)^C}$,
+for any $x$ in the set and positive radius $r$:
+\begin{enumerate}
+    \item $B_r(x) \cap (A \cup B) \ne \varnothing$- something's in $A$ or $B$.
+    \item $B_r(x) \cap (A \cup B)^C \ne \varnothing$- something's in neither $A$ nor $B$.
+\end{enumerate}
+
+Take any $x \in \Fr(A \cup B)$.
+By the second statement, we know $x \in \overline{B^C}, \overline{A^C}$.
+
+Now we just NTS $x$ is in at least one of $\overline{A}$ and $\overline{B}$.
+FSOC say $x \notin \overline{A} \land x \notin \overline{B}$, which means
+\begin{enumerate}
+    \item $\exists r_a: B_{r_a} \cap A = \varnothing$
+    \item $\exists r_b: B_{r_b} \cap B = \varnothing$
+\end{enumerate}
+If we assume WLOG $r_a < r_b$, this means $B_{r_a} \cap B = \varnothing$ as well,
+which gets us
+\[B_{r_a}(x) \cap B \cup B_{r_a}(x) \cap A = B_{r_a}(x) \cap (A \cup B) = \varnothing\]
+which is a contradiction.
+
+So if $x \in \Fr(A \cup B)$, it's in $\overline{A^C}$, $\overline{B^C}$,
+and at least one of $\overline{A}$ and $\overline{B}$.
+
+This automatically puts it in
+\[\Fr(A) \cup \Fr(B)=\left(\overline{A} \cap \overline{A^C}\right) \cup \left(\overline{B} \cap \overline{B^C}\right)\quad\square\]
+
+\subsection{Disjoint Case}
+
+Since $\overline{A}$ and $\overline{B}$ are disjoint,
+$\overline{A} \cap \overline{A^C}$ and $\overline{B} \cap \overline{B^C}$ are disjoint as well.
+
+Take any $x \in \overline{A} \cap \overline{A^C}$.
+To prove that this is in the LHS, we need to find within any distance $r$
+an element that's in either $A$ or $B$ as well as one that's in neither.
+
+Because of the set we chose $x$ from, any ball will certainly have an element from $A$.
+As $x \notin \overline{B}$, $\exists r_b: B_{r_b}(x) \cap B = \varnothing$.
+For any $r \le r_b$, we can take the element in $B_r(x) \cap A^C$.
+Since $B_r(x) \subseteq B_{r_b}(x)$ has nothing in common with $B$,
+this element is guaranteed to be in $B^C$ as well.
+
+Also, if $r > r_b$, then we can just use the old element we already found,
+since expanding the ball only increases our options.
+With that, we've found our two needed elements and proven $x \in \Fr(A \cup B)$.
+
+The argument for it $x \in \overline{B} \cap \overline{B^C}$ goes
+exactly the same way; I don't think it needs to be mentioned. $\square$
+
+\section{Problem 11}
+
+I'm assuming in this problem $d(x, y)=|x-y|$.
+
+If $F$ is closed, $\overline{F}=F$.
+For any $\epsilon$, $\exists f \in F: f > \sup F - \epsilon$,
+which means $B_\epsilon(\sup F) \cap F \ne \varnothing$
+(as we've just found an $f$ in there).
+
+This is precisely the condition that needs to be met for $\sup F \in \overline{F}=F$,
+so the maximum of the set does exist. $\square$
+
+\section{Problem 12}
+
+I'll denote let $X$ denote $\R^n$ for convenience.
+
+\subsection{Part 1}
+
+This is equivalent to asking if $B^S_r(x)$ is open,
+since if that's open the set in the question is the complement of that
+so it's closed by definition.
+
+Since $B^S_r(x)=B^X_r(x) \cap S$ and $B^X_r(x)$ is open,
+by that proposition we proved in lecture $B^S_r(x)$ is open as well.
+
+\subsection{Part 2}
+
+I don't think so.
+
+If $n=2$, consider the subset $S=\{(a, b) \mid a \in \{0, 2\}\}$, $x=(0, 0)$, and $r=2$.
+
+The set $\{y \in S \mid d(x, y) \ge 2\}$ has all points
+on the y-axis where the absolute value of the y-coordinate is at least $2$,
+but it also has $(2, 0)$, which is also $2$ away from $x$.
+
+However, nothing in $B_1((2, 0))$ is within the set $\{y \in S \mid d(x, y) > 2\}$,
+so the first set isn't necessarily within the closure of the second.
+
+\end{document}
