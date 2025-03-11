@@ -285,13 +285,12 @@ by that proposition we proved in lecture $B^S_r(x)$ is open as well.
 
 I don't think so.
 
-If $n=2$, consider the subset $S=\{(a, b) \mid a \in \{0, 2\}\}$, $x=(0, 0)$, and $r=2$.
-
-The set $\{y \in S \mid d(x, y) \ge 2\}$ has all points
-on the y-axis where the absolute value of the y-coordinate is at least $2$,
-but it also has $(2, 0)$, which is also $2$ away from $x$.
-
-However, nothing in $B_1((2, 0))$ is within the set $\{y \in S \mid d(x, y) > 2\}$,
-so the first set isn't necessarily within the closure of the second.
+Consider the set $Y=\Z^2$ and $x=(0, 0)$.
+Then let
+\begin{gather*}
+  A=\{y \in Y \mid d(x, y) \ge 1\}=\Z^2 \setminus \{(0, 0)\} \\
+  B=\{y \in Y \mid d(x, y) > 1\} = \Z^2 \setminus \{(0, 0), (0, 1), (1, 0), (0, -1), (-1, 0)\}
+\end{gather*}
+$(0, 1)$ isn't in the closure of the second set, since $B_{0.5}((0, 1)) \cap B = \varnothing$.
 
 \end{document}
