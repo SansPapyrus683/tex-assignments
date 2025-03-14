@@ -1,0 +1,153 @@
+\documentclass[12pt]{article}
+
+\input{../kz}
+
+\rhead{Math 131AH}
+
+\makeatletter
+\def\@seccntformat#1{%
+  \expandafter\ifx\csname c@#1\endcsname\c@section\else
+  \csname the#1\endcsname\quad
+  \fi}
+\makeatother
+
+\DeclareMathOperator{\Fr}{Fr}
+\newcommand{\lra}{\xLeftrightarrow}
+\newcommand{\ra}{\xRightarrow}
+\newcommand{\N}{\mathbb{N}}
+\newcommand{\R}{\mathbb{R}}
+\newcommand{\Z}{\mathbb{Z}}
+\newcommand{\Q}{\mathbb{Q}}
+\newcommand{\norm}[1]{\left\lVert#1\right\rVert}
+
+\begin{document}
+
+\section{Problem 1}
+
+If $A \subseteq X$ is complete, then any Cauchy sequence in $A$ also converges in $A$.
+Convergent sequences are Cauchy, so they must also converge in $A$. $\square$
+
+\section{Problem 2}
+
+If we have a Cauchy sequence in $F$, it must converge to something in $X$.
+However, since $F$ is closed, the limit of all convergent sequences in it are in $F$,
+so all Cauchy sequences must converge to some point in $F$. $\square$
+
+\section{Problem 3}
+
+\subsection{Subspace 1}
+
+$\Q$ is neither open nor closed, since you can't go any radius $r$
+out from a rational without hitting an irrational, and $\overline{\Q}=\R$.
+
+By what we'll show in \ref{sec:p4}, it's disconnected too.
+
+$A'=\R$, since the rationals are dense.
+
+\subsection{Subspace 2}
+
+$\Q \cap [0, 1]$ isn't open nor closed for the same reasons $\Q$ isn't.
+
+It's also disconnected.
+To show this, we can consider the cut at $\frac{\sqrt{2}}{2}$ instead of $\sqrt{2}$.
+
+$A'=[0, 1]$ since the rationals are dense in this interval regardless.
+
+\subsection{Subspace 3}
+
+The set isn't open since $-2 \in A$ and there aren't really any "adjacent" elements to allow a ball for it.
+$-1$ and $1$ are in $\overline{A}$, but they aren't in the actual sequence,
+which prevents $A$ from being closed too.
+
+This set is pretty clearly disconnected: take $A=(-\infty, 0)$ and $B=(0, \infty)$ and you're done.
+
+$A'=\{-1, 1\}$, since every other point in $\overline{A}$ is isolated.
+For these two points, no matter what $r$ you take, $A$ will have either
+$-1-\frac{1}{2n+1}$ or $1+\frac{1}{2n}$ s.t. the fractional part is less than $r$.
+
+\subsection{Subspace 4}
+
+The complement of this set can be written as an infinite union of open intervals:
+\[A^C=(-\infty, 0) \cup \bigcup_{n \in \N} \left(n+\frac{1}{n}, n + 1\right)\]
+which is open, so this set must be closed.
+It's disconnected though- just take $A=\left(-\infty, \frac{5}{2}\right)$ and $B=\left(\frac{5}{2}, \infty\right)$.
+
+$A'=A$ since it's just a union of closed intervals.
+
+\subsection{Subspace 5}
+
+This union is the interval $\left(0, \frac{1}{2}\right]$, so it's neither open nor closed.
+However, it \textit{is} connected.
+
+Since it's an interval, its set of accumulation points is just its closure, i.e. $\left[0, \frac{1}{2}\right]$.
+
+\section{Problem 4}\label{sec:p4}
+
+The cut at $\sqrt{2}$ is both open and closed in $\Q$.
+For any rational number less than $\sqrt{2}$, we can always find
+a greater than that's still less than it, so the set is open.
+
+This set's complement, every rational \textit{greater} than $\sqrt{2}$,
+is also open, since given a rational greater than $\sqrt{2}$
+we can always find another smaller rational that's still greater than $\sqrt{2}$.
+
+This set and its complement are both open, so the set has to be both open and closed.
+
+\section{Problem 5}\label{sec:p5}
+
+We prove that they're separated straight from the definition:
+\begin{gather*}
+  \overline{A} \cap (B \cup C) = \left(\overline{A} \cap B\right) \cup \left(\overline{A} \cap C\right) = \varnothing \\
+  A \cap \overline{(B \cup C)} \subseteq A \cap \left(\overline{B} \cup \overline{C}\right) = \left(A \cap \overline{B}\right) \cup \left(A \cap \overline{C}\right) = \varnothing
+  \quad\square
+\end{gather*}
+
+\pagebreak
+
+\section{Problem 6}
+
+\subsection{Connectedness of Unions}
+
+I'll just show that $A \cup B$ is connected- by symmetry, $A \cup C$ must be too.
+
+BWOC say $A \cup B$ is disconnected, so we can write $A \cup B = C \cup D$ where $C$ and $D$ are separated.
+
+$A$ has to be a subset of either $C$ or $D$- let's just say $A \subseteq C$.
+This means $D \subseteq B$, and so $D$ and $C$ are separated.
+$D$ and $A$ also have to be separated.
+
+But then by \ref{sec:p4} $D$ and $C \cup C$ are separated while
+\[D \cup (C \cup C)=(C \cup D) \cup C = A \cup B \cup C = C\]
+so we've split $X$, a connected subspace, into two separated sets.
+Contradiction. $\square$
+
+\subsection{Closedness of Unions}
+
+Again I'll just show it for $A \cup B$; it STP $\overline{A \cup B} \subseteq A \cup B$.
+
+Since $B$ and $C$ are separated, $\overline{B} \cap C = \varnothing$
+and anything that's in $\overline{B} \setminus B$ must be in $A$.
+Thus,
+\begin{align*}
+  & A \cup \overline{B} \subseteq A \cup B \\
+  \implies{} & \overline{A} \cup \overline{B} \subseteq A \cup B \\
+  \implies{} & \overline{A \cup B} \subseteq \overline{A} \cup \overline{B} \subseteq A \cup B\quad\square
+\end{align*}
+
+\section{Problem 7}
+
+BWOC say $A=C \cup D$ where $C$ and $D$ are separated.
+By the notes, we know $C$ and $D$ have to both be closed.
+
+Then $(C \cup D) \cap B$ must be connected.
+Since it's a subset of $C \cup D$, this means $(C \cup D) \cap B$ is a subset of either $C$ or $D$.
+It doesn't really matter which one we pick; say it's $C$.
+
+This then means $D \cap B =\varnothing$.
+Both are closed, so the two must be separated.
+But then we get that
+\[A \cup B = D \cup (C \cup B)\]
+Since $D$ and $C \cup B$ are separated by \ref{sec:p5}, this means that $A \cup B$
+is disconnected, which is a contradiction. $\square$
+
+\end{document}
