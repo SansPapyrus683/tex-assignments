@@ -55,8 +55,6 @@ so the language is unrecognizable. $\square$
 
 \subsection{Infinite Singer}
 
-A lot of this was copied straight from \ref{sec:ordsinger}; it is what it is.
-
 BWOC say there existed a recognizer $R$ for InfiniteSinger.
 
 Then consider the following program:
@@ -128,6 +126,7 @@ So here we've seen that the problem of whether an MMTM rejects itself is undecid
 Here's an MMTM that solves Co-HALT:
 \begin{algorithmic}[1]
     \Procedure{\texttt{CoHALT}}{$M$}
+        \LComment{This procedure doesn't read what's on the work tape.}
         \Procedure{N}{}
             \State Run $M(\epsilon)$
         \EndProcedure
@@ -152,12 +151,13 @@ Here's an MMTM that solves Co-HALT:
 Here's an MMTM that solves EMPTY:
 \begin{algorithmic}[1]
     \Procedure{\texttt{EMPTY}}{$M$}
+        \LComment{This procedure doesn't read what's on the work tape.}
         \Procedure{N}{}
             \State Run $M$ on all input strings with triangular scheduling
             \If{$\exists x \in \Sigma^*: M(x)$ accepts}
                 \State \Return
             \Else
-                \LComment{If no such $x$ exists, $N$ will loop until the heat death of the universe.}
+                \LComment{If no such $x$ exists, $N$ will infinitely loop.}
             \EndIf
         \EndProcedure
 
@@ -183,7 +183,7 @@ In other words, we define a bijection $s(n): \N \to \Sigma^*$.
 WIth that, we can write our MMTM like so:
 \begin{algorithmic}[1]
     \Procedure{\texttt{SINGLETON}}{$M$}
-        \LComment{\texttt{end} can be $\infty$! Indicate it with a special symbol or something.}
+        \LComment{\texttt{end} can be $\infty$; it can be indicated with a special character in $\Gamma$.}
         \Procedure{N}{\texttt{start}, \texttt{end}}
             \State Run $M$ on all $s(n)$ s.t. $\texttt{start} < n < \texttt{end}$ with triangular scheduling
             \If{$\exists n: M(s(n))$ accepts}
@@ -269,8 +269,8 @@ If $M$ halts on all inputs, then this MMTM will loop forever.
 
 \subsection{FINITE Recognizability}
 
-This MMTM uses a procedure that was already defined in \ref{sec:singleton}.
-Redundancy be damned, I'm copy-pasting it here again:
+This MMTM uses a procedure that was mostly defined in \ref{sec:singleton}.
+I'm putting it here again for sake of completeness.
 \begin{algorithmic}[1]
     \Procedure{\texttt{FINITE}}{$M$}
         \Procedure{N}{\texttt{start}}
@@ -279,7 +279,7 @@ Redundancy be damned, I'm copy-pasting it here again:
                 \State Write $n$ onto the work tape
                 \State \Return
             \Else
-                \LComment{If no such $n$ exists, $N$ will loop until the heat death of the universe.}
+                \LComment{If no such $n$ exists, $N$ will loop forever.}
             \EndIf
         \EndProcedure
 
