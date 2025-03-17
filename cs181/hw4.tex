@@ -67,14 +67,14 @@ and let $s_j$ denote the $j$th string as well.
 
 \subsection{Another \texorpdfstring{$L^{DIAG}$}{L\^DIAG}}\label{sec:onemore}
 
-Notice that $\exists i \in \N: M_{11} \ne M_{j1}$.
+Notice that $\exists i \in \N: M_{11} \ne M_{i1}$.
 This is because there must exist an infinite number
 of languages that accept $s_1$ (and the same can be said for rejecting $s_1$).
 
-This allows us to construct $L_2^{DIAG}$ as follows:
+To construct $L_2^{DIAG}$, we do the following for each input $x$:
 \begin{enumerate}[nolistsep]
-    \item Accept $s_1$ if and only if $M_{i1}=0$.
-    \item Accept $s_i$ if and only if $M_{1i}=0$.
+    \item If $x=1$, accept $s_1$ if and only if $M_{i1}=0$.
+    \item If $x=i$, accept $s_i$ if and only if $M_{1i}=0$.
     \item For all other $x \ne 1, i$, we do the standard diagonalization.
 \end{enumerate}
 We just swap the order in which we go along all the strings and languages,
