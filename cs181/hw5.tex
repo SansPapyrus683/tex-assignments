@@ -120,9 +120,9 @@ Obviously assume at the start that there exists a certifier $C$ for sake of cont
 Notice that the existence of $C$ implies the existence of a recognizer $R$:
 \begin{algorithmic}[1]
     \Procedure{R}{$M$}
-        \State Run $C(x, y)$ on all $y \in \{0, 1\}^*$ with triangular scheduling
+        \State Run $C(M, y)$ on all $y \in \{0, 1\}^*$ with triangular scheduling
         
-        \If{$\exists y: C(x, y)$ accepts}
+        \If{$\exists y: C(M, y)$ accepts}
             \State Accept
         \Else
             \LComment{If no $y$ works, $R$ will loop as it runs on all $y$ for infinitely long.}
