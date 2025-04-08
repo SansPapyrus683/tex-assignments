@@ -1,0 +1,161 @@
+\documentclass[12pt]{article}
+
+\input{../kz}
+
+\rhead{Math 131BH}
+
+\makeatletter
+\def\@seccntformat#1{%
+  \expandafter\ifx\csname c@#1\endcsname\c@section\else
+  \csname the#1\endcsname\quad
+  \fi}
+\makeatother
+
+\DeclareMathOperator{\Fr}{Fr}
+\newcommand{\lra}{\xLeftrightarrow}
+\newcommand{\ra}{\xRightarrow}
+\newcommand{\N}{\mathbb{N}}
+\newcommand{\R}{\mathbb{R}}
+\newcommand{\Z}{\mathbb{Z}}
+\newcommand{\Q}{\mathbb{Q}}
+\newcommand{\norm}[1]{\left\lVert#1\right\rVert}
+
+\begin{document}
+
+\section{Problem 1}
+
+\section{Problem 2}
+
+\subsection{Countable Base}
+
+First consider the set $\{B_r(x) \mid x \in K\}$.
+
+\subsection{Countable Subcover}
+
+Consider any open cover $\{O_\alpha\}$ and countable base $\{B_n\}$.
+
+For any $O_\alpha$ and $k \in K$, $\exists n \in \N: k \in B_n \subseteq O_\alpha$,
+so the base itself covers $K$.
+
+With this, we can define a subcover $\{Q_n\}$ like so:
+\[Q_n = \text{any } O_\alpha: B_n \subseteq O_\alpha\]
+Any $k \in K$ must be in some $B_n$ which is then contained in some $O_n$,
+so this is indeed a countable subcover. $\square$
+
+\section{Problem 3}
+
+\subsection{SC Implies Limit Points}
+
+\subsection{Limit Points Imply SC}
+
+\pagebreak
+
+\section{Problem 4}
+
+\subsection{\texorpdfstring{$K$}{K} Compact}
+
+BWOC say $\forall c > 0\ \exists x \in K: d(x, E) < c$.
+
+Construct a sequence $x_n$ where the $n$th element is any $y \in K$ s.t. $d(y, E) < \frac{1}{n}$.
+
+$K$ is compact, so there's some convergent subsequence $x_{k_n}$ that converges to a $k \in K$.
+
+Now we need to prove a lemma which is that $d(k, E)=0$.
+BWOC say $d(k, E)=\epsilon > 0$.
+By construction, $\exists N \in \N: d(x_{k_n}, E) < \frac{\epsilon}{4}\ \forall n \ge N$.
+
+By how we defined distance, this then means $\forall n \ge N\ \exists e \in E: d(x_{k_n}, e) < \frac{\epsilon}{2}$.
+Then by the triangle inequality, across all $n \ge N$ we have
+\begin{align*}
+  & d(k, x_n) + d(x_n, e) \ge d(k, e) \\
+  \implies{} & d(k, x_n) \ge d(k, e) - d(x_n, e) \\
+  \implies{} & d(k, x_n) \ge \frac{\epsilon}{2} > 0
+\end{align*}
+which contradicts that $k=\lim_{n \to \infty} x_{k_n}$, so $d(k, E)=0$.
+
+Now with this implication and the definition of the infimum, we have:
+\begin{align*}
+             & \forall r > 0\ \exists e \in E: d(k, e) < r \\
+  \implies{} & B_r(k) \cap E \ne \varnothing               \\
+  \implies{} & k \in \overline{E}=E
+\end{align*}
+which is a contradiction since $K \cap E = \varnothing$. $\square$
+
+\subsection{\texorpdfstring{$K$}{K} Only Closed}
+
+This statement isn't true if $K$ is just closed.
+
+Consider $\R$ with the standard metric as well as the sets $A=\N$ and $B=\left\{n+\frac{1}{2n} \mid n \in \N\right\}$.
+
+Though $A$ and $B$ are both closed and $A \cap B = \varnothing$, the distance
+between them is $0$ since $B$ gets arbitrarily close to $A$ as $n \to \infty$.
+
+\pagebreak
+
+\section{Problem 5}
+
+\section{Problem 6}
+
+Consider the following set:
+\[A=\{0\} \cup
+  \bigcup_{n \in \N \setminus \{1\}}
+  \left(\left\{\frac{1}{n} + \frac{1}{x}\left(\frac{1}{n-1}-\frac{1}{n}\right)
+  \mid x \in \N \setminus \{1\}\right\}
+  \cup \left\{\frac{1}{n}\right\}\right)\]
+
+For each $n$, the values in the parenthesis lie in the range $\left[\frac{1}{n}, \frac{1}{2}\left(\frac{1}{n-1}+\frac{1}{n}\right)\right]$.
+The ranges go like $\left[\frac{1}{2}, \frac{3}{4}\right], \left[\frac{1}{3}, \frac{5}{12}\right], \cdots$
+and by construction they're disjoint.
+
+This set is bounded and closed in $\R$, so it's compact.
+
+$A'=\left\{\frac{1}{n} \mid n \in \N \setminus \{1\}\right\} \cup \{0\}$,
+so there's a countably infinite number of limit points as well.
+
+\pagebreak
+
+\section{Problem 7}
+
+\subsection{Bounded}
+
+For any $p_1, p_2 \in E$ we have
+\begin{align*}
+  2 < p_1^2 < 3 &  & -3 < -p_2^2 < -2
+\end{align*}
+so $-1 < p_1^2-p_2^2 < 1$ and the distance between any two elements is indeed bounded.
+
+\subsection{Closed and open}
+
+I'll just first only consider the positive portion of $E$.
+
+$E$ is closed.
+This is because its negation is the union of all rationals less than $\sqrt{2}$ and all rationals greater than $\sqrt{3}$.
+Both these sets are open.
+For the first one, if $p < \sqrt{2}$,
+by the density of $\Q$ in $\R$ $\exists q: p < q < \sqrt{2}$ so we can take
+$r=d(p, q)$ for everything in $B_r(p)$ to still be less than $\sqrt{2}$.
+
+The second one with $\sqrt{3}$ is open for similar reasons.
+The union of open sets is still open, so $E^C$ is open and $E$ must be closed.
+
+$E$ is also open.
+First assume $p > 0$.
+Again by density, we can find:
+\begin{itemize}[nolistsep]
+  \item A $q_1$ s.t. $p^2 < q_1^2 < 3$
+  \item A $q_2$ s.t. $2 < q_2^2 < p^2$
+\end{itemize}
+Taking $r=\min(d(p, q_1), d(p, q_2))$, we see that $B_r(p) \subseteq E$.
+
+The case for the negatives goes the same as the positive case for both open/closed.
+Closedness/openness stays the same under union, so we're fine.
+
+\subsection{Not Compact}
+
+Consider the sequence defined by $a_1=\frac{3}{2}$ and $a_{n+1}=\frac{1}{2}\left(a_n+\frac{2}{a_n}\right)$.
+
+This sequence converges in the reals to $\sqrt{2}$.
+Any subsequence must also converge to this same value, which isn't in $\Q$ and by extension $E$.
+Thus, $E$ can't be compact.
+
+\end{document}

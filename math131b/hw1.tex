@@ -1,0 +1,283 @@
+\documentclass[12pt]{article}
+
+\input{../kz}
+
+\rhead{Math 131B}
+
+\makeatletter
+\def\@seccntformat#1{%
+  \expandafter\ifx\csname c@#1\endcsname\c@section\else
+  \csname the#1\endcsname\quad
+  \fi}
+\makeatother
+
+\DeclareMathOperator{\Fr}{Fr}
+\newcommand{\lra}{\xLeftrightarrow}
+\newcommand{\ra}{\xRightarrow}
+\newcommand{\N}{\mathbb{N}}
+\newcommand{\R}{\mathbb{R}}
+\newcommand{\Z}{\mathbb{Z}}
+\newcommand{\Q}{\mathbb{Q}}
+\newcommand{\norm}[1]{\left\lVert#1\right\rVert}
+
+\begin{document}
+
+\section{Problem 1}
+
+\subsection{\texorpdfstring{$l_1$}{L1} Conv. Implies \texorpdfstring{$l_2$}{L1} Conv.}
+
+Consider any sequence $x_n$ that converges in $(\R, l_1)$.
+For any $\epsilon > 0$ we need to find an $N \in \N: d_{l_2}(x_n, x) < \epsilon\ \forall n \ge N$.
+
+Take $N$ s.t. $d_{l_1}(x_n, x) < \frac{\epsilon}{\sqrt{n}}$.
+For all $n \ge N$, we have
+\begin{align*}
+    & \sum_{i=1}^{n} |(x_n)_i-x_i| < \frac{\epsilon}{\sqrt{n}} \\
+    \implies{} & |(x_n)_i-x_i| < \frac{\epsilon}{\sqrt{n}}\ \forall i=1, \cdots, n \\
+    \implies{} & ((x_n)_i-x_i)^2 < \frac{\epsilon^2}{n} \\
+    \implies{} & \sum_{i=1}^{n} ((x_n)_i-x_i)^2 < \epsilon^2 \\
+    \implies{} & \sqrt{\sum_{i=1}^{n} (x_n)_i-x_i)^2} < \epsilon \\
+    \implies{} & d_{l_2}(x_n, x_i) < \epsilon\ \forall n \ge N\quad\square
+\end{align*}
+
+\subsection{\texorpdfstring{$l_\infty$}{L\_inf} Conv. Implies \texorpdfstring{$l_1$}{L1} Conv.}
+
+Now we start with a sequence that converges in $(\R, l_\infty)$
+and need to find the relevant $N$ in $(\R, l_1)$.
+
+Take $N$ s.t. $d_{l_\infty}(x_n, x) < \frac{\epsilon}{n}$.
+Then for all $n \ge N$
+\begin{align*}
+    & |(x_n)_i-x_i| < \frac{\epsilon}{n}\ \forall i=1, \cdots, n \\
+    \implies{} & \sum_{i=1}^{n} |(x_n)_i-x_i| < \frac{\epsilon}{n} \cdot n = \epsilon \\
+    \implies{} & d_{l_1}(x_n, x) < \epsilon\quad\square
+\end{align*}
+
+\subsection{And Vice Versa}
+
+I propose that $d_{l_1}(x_n, x) < \epsilon \implies d_{l_\infty}(x_n, x) < \epsilon$.
+
+It STP the contrapositive.
+Suppose $d_{l_\infty}(x_n, x) \ge \epsilon$, so $\exists j: |(x_n)_j - x_j| \ge \epsilon$.
+All the terms in the $l_1$ distance are positive, so
+\begin{align*}
+    d_{l_1}(x_n, x)
+    &= \sum_{i=1}^{n} |(x_n)_i-x_i| \\
+    &= |(x_n)_j-x_j| + \sum_{i=1, i \ne j}^{n} |(x_n)_i-x_i| \\
+    &\ge \epsilon + \sum_{i=1, i \ne j}^{n} |(x_n)_i-x_i| \\
+    &> \epsilon
+\end{align*}
+
+So if $d_{l_1}(x_n, x) < \epsilon\ \forall n \ge N$, then the same must be true for $l_\infty$ as well. $\square$
+
+\section{Problem 2}
+
+BWOC say $d(x', x) > 0$- let this quantity be $\epsilon$.
+
+Since the sequences converges to both $x'$ and $x$, we can find:
+\begin{itemize}[nolistsep]
+    \item $\exists N_1: d(x_n, x) < \frac{\epsilon}{2}\ \forall n \ge N_1$
+    \item $\exists N_2: d(x_n, x') < \frac{\epsilon}{2}\ \forall n \ge N_2$
+\end{itemize}
+Then, for any $n \ge \max(N_1, N_2)$, by the Triangle Inequality
+\begin{align*}
+    d(x, x')
+    &< d(x, x_n)+d(x_n, x') \\
+    &< \frac{\epsilon}{2}+\frac{\epsilon}{2} \\
+    &< \epsilon
+\end{align*}
+which is a contradiction since we defined $d(x, x')=\epsilon$.
+
+\section{Problem 3}\label{sec:int_bound_union}
+
+I'll number the statements as follows:
+\begin{gather}
+    x_0 \in \overline{E} \\
+    x_0 \in \mathring{E} \cup \partial E \\
+    \exists (x_n) \subseteq E: \lim_{n \to \infty} x_n = x_0
+\end{gather}
+
+\subsection{2 Implies 1}
+
+We proceed by casework.
+
+If $x_0 \in \mathring{E}$, $x_0 \in E$ so for any $r > 0$
+we get $B_r(x) \cap E \ne \varnothing$ since $x \in B_r(x)$ always.
+
+If $x_0 \in \partial E$, it \textit{isn't} in the exterior.
+Negating the definition for that we get $\forall r > 0\ B_r(x_0, r) \cap E \ne \varnothing$
+which is precisely the definition for $x_0 \in \overline{E}$
+
+\subsection{1 Implies 3}
+
+We can construct a sequence by letting $x_n$ be anything in $B_{\frac{1}{n}}(x_0) \cap E$,
+which is guaranteed to be nonempty since $x_0 \in \overline{E}$.
+
+Then for any $\epsilon$ it suffices to choose $N$ s.t. $\frac{1}{N} < \epsilon$,
+because then for all $n \ge N$
+\[x_n \in B_{\frac{1}{n}}(x_0) \subseteq B_{\frac{1}{N}}(x_0)\subseteq B_{\epsilon}(x_0)\]
+
+\subsection{3 Implies 2}
+
+I'll show the contrapositive.
+
+If $x_0 \notin \mathring{E} \cup \partial E$, then it's in the exterior.
+This means $\exists r: B_r(x_0) \cap E = \varnothing$.
+
+BWOC say there existed an $(x_n) \subseteq E: \liminf{n \to \infty} x_n=x_0$.
+
+Choose $\epsilon = r$.
+The sequence converges, so $\exists N: d(x_n, x_0) < \epsilon\ \forall n \ge N$.
+The thing is, this implies the existence of an $x_n \in E: d(x_n, x_0) < \epsilon$
+which contradicts that $B_r(x_0) \cap E = \varnothing$. $\square$
+
+\section{Problem 4}
+
+\subsection{Openness Definitions}
+
+I'll number the statements as follows:
+\begin{gather}
+    E\text{ open} \\
+    E = \mathring{E} \\
+    E^C\text{ closed}
+\end{gather}
+
+\subsubsection{1 implies 2}
+
+$\mathring{E} \subseteq E$; it STP the reverse direction.
+
+Consider any $e \in E$.
+Every point is either in $\partial E$, the exterior, or $\mathring{E}$.
+$e \in E$ eliminates the first two options since $\partial E \cap E = \varnothing$
+and being in the exterior would imply $e \notin E$.
+Thus, $e \in \mathring{E}$.
+
+\subsubsection{2 implies 3}
+
+First lemme prove that $\partial E = \partial E^C$.
+Only one direction is needed- the other follows by symmetry.
+
+If $e \in \partial E$, then the following two are true:
+\begin{itemize}
+    \item $\forall r > 0\ B_r(e) \nsubseteq E \implies \exists x \in B_r(x): x \notin E \implies B_r(x) \cap E^C \ne \varnothing$
+    \item $\forall r > 0\ B_r(e) \cap E \ne \varnothing$
+\end{itemize}
+The second condition prevents $e$ from being in the interior of $E^C$,
+while the first stops it from being in the exterior.
+
+If $E=\mathring{E}$, $\partial E \cap E = \partial E \cap \mathring{E}=\varnothing$.
+
+Thus, $\partial E^C = \partial E \subseteq \left(\mathring{E}\right)^C=E^C$,
+which automatically makes $E^C$ closed.
+
+\subsubsection{3 implies 1}
+
+If $E^C$ is closed, $\partial E^C = \partial E \subseteq E^C$,
+so $\partial E \cup E = \varnothing$ and $E$ is open. $\square$
+
+\subsection{Closedness Definitions}
+
+\subsubsection{Forward Direction}
+
+$E \subseteq \overline{E}$ always; it STP $\overline{E} \subseteq E$.
+
+If $e \in \overline{E}$, by \ref{sec:int_bound_union} $e \in \mathring{E} \cup \partial E$,
+both of which are subsets of $E$ since it's closed so $e \in E$ as well.
+
+\subsubsection{Backwards Direction}
+
+If $\overline{E}=E$, $\partial E \subseteq \overline{E}=E$, making it closed. $\square$
+
+\subsection{Altered Ball}
+
+\subsubsection{Closedness}
+
+It STP that the complement, $B^C=\{x \in X \mid d(x_0, x) > r\}$ is open.
+This means we need to show that $B^C \subseteq \mathring{B^C}$.
+
+Consider any $x \in B^C$ and let $d(x_0, x)-r=\epsilon > 0$.
+Notice that $B_{\epsilon}(x) \subseteq B^C$.
+This is because for any $y \in B_{\epsilon}(x)$,
+\begin{align*}
+    & d(x, x_0) < d(x_0, y) + d(x, y) \\
+    \implies{} & d(y, x_0) > d(x, x_0) - d(x, y) > (r+\epsilon)-\epsilon = r \\
+\end{align*}
+Thus, $B^C$ is open and $B$ is closed. $\square$
+
+\subsubsection{Subset-ness}
+
+I'll let $C=\overline{B(x_0, r)}$ for convenience.
+
+Take any $x \in C$.
+It STP $d(x_0, x) \le r+\epsilon\ \forall \epsilon > 0$.
+
+Since $x$ is in the closure, $B_\epsilon(x, C) \ne \varnothing$.
+Take any $y$ in that ball to see that
+\[d(x, x_0) < d(x, y) + d(y, x_0) < \epsilon + r\quad\square\]
+
+\subsection{Finite Intersection of Open Sets}\label{sec:open_inter}
+
+If $e \in \bigcap_{i=1}^{n} E_i$, then it must be*-+* in each of the individual $E_i$s.
+Each $E_i$ has an $r_i: B_{r_i}(e) \subseteq E_i$.
+
+If we take $r=\min_{i=1, \cdots, n} r_i$, then $B_r(e) \subseteq B_{r_i}(e)\ \forall i=1, \cdots, n$,
+so $B_r(e) \subseteq \bigcap_{i=1}^{n} E_i$ as well. $\square$
+
+This doesn't hold for infinite intersections, however.
+Consider the intersection of all open intervals. $(a, b)$ s.t. $a < 0$ and $b > 1$.
+Although all of these sets are individually open, their intersection is the closed set $[0, 1]$.
+
+\subsection{Union of Open Sets}
+
+If $e \in \bigcup_{\alpha \in I} E_\alpha$, then $\exists \alpha \in I: e \in E_\alpha$.
+
+$E_\alpha$ is open, so
+\[\exists r > 0: B_r(e) \subseteq E_\alpha \subseteq \bigcup_{\alpha \in I} E_\alpha\quad\square\]
+
+\subsection{Finite Union of Closed Sets}
+
+If all $E_i$s are closed, all $E_i^C$s are open.
+Then, by \ref{sec:open_inter},
+\[\bigcap_{i=1}^{n} E_i^C=\left(\bigcup_{i=1}^{n} E_i\right)^C\]
+is open, so its complement, $\bigcup_{i=1}^{n} E_i$, must be closed. $\square$
+
+This breaks down when we consider infinite unions.
+Consider the union of all closed sets $[0, a]$ s.t. $a < 1$.
+Even though these sets are individually closed, their union is $[0, 1)$, which isn't.
+
+\subsection{Intersection of Closed Sets}
+
+If $E_\alpha$ is closed for all $\alpha \in I$, $E_\alpha^C$ must be open for all $\alpha$ as well.
+
+Then
+\[\bigcup_{\alpha \in I} E_\alpha^C=\left(\bigcap_{\alpha \in I} E_\alpha\right)^C\]
+is open, so it's complement, $\bigcap_{\alpha \in I} E_\alpha$, must be closed. $\square$
+
+\section{Problem 5}
+
+\subsection{Relatively Closed Implies a \texorpdfstring{$K$}{K}}
+
+If $E$ is closed in $Y$, then $E'=Y \setminus E$ must be open in $Y$.
+
+By statement (a) in the proposition, there exists an open set $V$ in $X$ s.t. $E'=V \cap Y$.
+Since $V$ is open, $V^C$ must be closed.
+
+I propose that $E=V^C \cap Y$.
+It STP subset-ness in both directions.
+
+If we have an $e \in E$, then $e \in Y$ by definition.
+$e \notin E'$ by construction, so $e \notin V \cap Y \therefore e \notin V$
+since we already know $e \in Y$.
+If $e$ isn't in $V$, then it must be in $V^C$.
+
+OTOH, if we have an $e \in V^C \cap Y$, then again $e \in Y$ by definition.
+Since $e \in V^C$, $e \notin V$ and $e \notin E'$.
+However, $e \in Y$, so $e \in Y \setminus E' = E$. $\square$
+
+\subsection{\texorpdfstring{$K$}{K}'s Existence Implies Relative Closedness}
+
+Consider any sequence in $E$ that converges in $Y$.
+Since $E \subseteq K$ and $K$ is closed, this sequence must converge in $K$.
+The limit is both in $Y$ and $K$, so it must be in $E$, implying that $E$ is closed. $\square$
+
+\end{document}
