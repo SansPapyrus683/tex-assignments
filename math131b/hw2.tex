@@ -1,0 +1,208 @@
+\documentclass[12pt]{article}
+
+\input{../kz}
+
+\rhead{Math 131B}
+
+\makeatletter
+\def\@seccntformat#1{%
+  \expandafter\ifx\csname c@#1\endcsname\c@section\else
+  \csname the#1\endcsname\quad
+  \fi}
+\makeatother
+
+\DeclareMathOperator{\Fr}{Fr}
+\newcommand{\lra}{\xLeftrightarrow}
+\newcommand{\ra}{\xRightarrow}
+\newcommand{\N}{\mathbb{N}}
+\newcommand{\R}{\mathbb{R}}
+\newcommand{\Z}{\mathbb{Z}}
+\newcommand{\Q}{\mathbb{Q}}
+\newcommand{\norm}[1]{\left\lVert#1\right\rVert}
+
+\begin{document}
+
+\section{Problem 1}
+
+\subsection{Limit Point Implies Subsequence}
+
+Consider the subsequence $x_{k_n}$ where
+$k_n$ is any $n$ s.t. $d(x_{k_n}, L) < \frac{1}{n}$ and $k_n > k_{n-1}$.
+If $n=1$, the second constraint doesn't apply.
+
+By construction, this is both a valid subsequence and converges to $L$.
+
+\subsection{Subsequence Implies Limit Point}
+
+Fix $N \in \N$ and $\epsilon > 0$.
+
+Since $k_n$ is a subsequence, $\exists M_1: k_n \ge M_1\ \forall n \ge M_1$.
+$x_{k_n}$ also converges, so $\exists M_2: d(x_{k_m}, L) < \epsilon\ \forall m \ge M_2$.
+
+Taking $n = \max(M_1, M_2)$, we see that this number is both greater than $N$
+and its distance from $L$ is less than $\epsilon$. $\square$
+
+\section{Problem 2}
+
+\subsection{Complete Implies Closed}
+
+Consider any convergent sequence in $Y$.
+All convergent sequences are Cauchy, and since $Y$ is complete
+this sequence must converge in itself, making $Y$ closed. $\square$
+
+\subsection{Closed In Complete}
+
+Consider any Cauchy sequence in $Y$.
+Since $X$ is complete and $Y \subseteq X$, this must converge in $X$.
+Also, $Y$ is closed, so any convergent sequence (including this one) in it
+must converge in itself as well. $\square$
+
+\pagebreak
+
+\section{Problem 3}
+
+BWOC say $\bigcap_{n \in N} K_n = \varnothing$.
+
+Then $K_1 \cap \bigcap_{n=2}^\infty K_n = \varnothing$, so
+$K_1$ is contained in the complement of the big cap.
+
+All $K_n$s are compact and therefore closed, so their negation must be open.
+Also,
+\[\left(\bigcap_{n=2}^\infty K_n\right)^C=\bigcup_{n=2}^\infty K_n^C\]
+so the complements of the $K_n$s must form an open cover of $K_1$.
+
+This then implies a finite subcover $S \subseteq \N \setminus \{1\}$, so
+\[K_1 \subseteq \bigcup_{n \in S} K_n^C = \left(\bigcap_{n \in S} K_n\right)^C
+\implies K_1 \cap \bigcap_{n \in S} K_n = \varnothing\]
+However, the finite number of sets are all nonempty and nested within each other,
+which is a contradiction. $\square$
+
+\pagebreak
+
+\section{Problem 4}
+
+\subsection{Part A}
+
+The forward direction comes for free since compactness always implies closedness.
+
+For the backward direction, assume $Z$ is closed and fix any sequence within $Z$.
+This sequence is also in $Y$, so there's a subsequence within that converges in $Y$.
+However, since $Z$ is closed, any sequence in it that converges in $Y$ must also converge in itself.
+Thus, this convergent subsequence also converges in $Z$, so $Z$ is compact. $\square$
+
+\subsection{Part B}
+
+Consider any open cover of $\bigcup_{i=1}^n Y_i$.
+
+This also covers each $Y_i$ individually, so there exists a finite subcover for each of them.
+
+Notice that we can take the union of all these to get a finite subcover for $\bigcup_{i=1}^n Y_i$.
+A finite union of finite subcovers is still finite,
+so the overall union of $Y_i$s is compact too. $\square$
+
+\subsection{Part C}
+
+Let $Y$ be our finite set and $\{X_\alpha\}$ be any open cover of it.
+
+Since $Y$ is finite, lemme just enumerate them from $y_1$ to $y_n$, where $n=|Y|$.
+
+We can always construct a finite subcover by letting
+$Y \subseteq \bigcup_{i=1}^n X_i$, where $X_i$ is any set in the cover that has $y_i$.
+
+Any $y_i$ is accounted for in the corresponding $X_i$ and there's obviously a finite amount.
+Also, each $X_i$ is guaranteed to exist because if no $X_\alpha$ contained $y_i$,
+then $\{X_\alpha\}$ wouldn't be considered a valid cover. $\square$
+
+\pagebreak
+
+\section{Problem 5}
+
+I'll prove the contrapositive.
+If $X$ wasn't compact, there's a sequence $x_n$ in it with no convergent subsequence i.e. no limit point.
+
+Lemme first prove that this means
+\[\forall x \in X\ \exists r > 0: |B_r(x) \cap (x_n)| \le 1\]
+by showing the contrapositive.
+
+Assume $\exists x \in X: \forall r > 0: |B_r(x) \cap (x_n)| > 1$.
+
+Fix $\epsilon > 0$ and $N \in \N$.
+Take $\epsilon' = \min_{i=1, \cdots, n} d(x, x_i)$ and $r=\min(\epsilon, \epsilon')$.
+
+Then by our initial assumption $\exists n: d(x, x_n) < r$ and since $r \le \epsilon'$ $n \ge N$ as well,
+which means $x$ is indeed a limit point of $(x_n)$.
+
+With this, we can construct a cover $\{Y_\alpha\} = \{B_r(x) \mid x \in X\}$ where $r$
+is the radius that we just proved always exists.
+Each ball can has at most one element from $(x_n)$,
+so any finite subfamily will always miss an element in $(x_n)$.$\square$
+
+\section{Problem 6}
+
+Let $R = \inf(\{d(x_0, y) \mid y \in E\})$.
+By definition of the infimum, $\forall \epsilon > 0\ \exists y \in E: d(x_0, y) < R + \epsilon$.
+
+Thus, we can construct a sequence $(x_n)$ where $x_n$ is any $y \in E: d(x_0, y) < R + \frac{1}{n}$.
+
+$E$ is compact, so there must exist some subsequence $x_{k_n}$ that converges in $E$ as well.
+It remains to prove that this limit point $x$ satisfies $d(x_0, x) = R$.
+
+BWOC let $d(x_0, x) - R = \epsilon > 0$.
+By construction, $\exists N \in \N: d(x_{k_n}, x_0) < R+\frac{\epsilon}{2}\ \forall n \ge N$.
+
+Then by the triangle inequality we have
+\begin{align*}
+  & d(x, x_0) < d(x, x_{k_n}) + d(x_{k_n}, x_0) \\
+  \implies{} & d(x, x_{k_n}) > d(x, x_0) - d(x_{k_n}, x_0) \\
+  \implies{} & d(x, x_{k_n}) > (R + \epsilon) - \left(R + \frac{\epsilon}{2}\right) > 0
+\end{align*}
+which contradicts that $\lim_{n \to \infty} x_{k_n} = x$. $\square$
+
+\pagebreak
+
+\section{Problem 7}
+
+\subsection{Openness Preservation Implies Continuity}
+
+Fix $x \in X$ and $\epsilon > 0$.
+
+$B_\epsilon(f(x))$ is open, so $I=f^{-1}(B_\epsilon(f(x)))$ is too.
+
+$x$ is actually in that set since $f(x) \in I$, so $\exists \delta: B_\delta(x) \subseteq I$.
+
+For all $x': d_X(x, x') < \delta$, $x' \in B_\delta(x) \subseteq I$
+which means $d_Y(f(x'), f(x)) < \epsilon$. $\square$
+
+\subsection{Also Closedness Preservation}
+
+First lemme prove the following lemma for all $S \subseteq Y$:
+\[\left(f^{-1}(S^C)\right)^C = f^{-1}(S)\]
+As always, it STP subset-ness in both directions.
+
+If $x \notin f^{-1}(S^C)$, $f(x) \notin S^C \implies f(x) \in S \implies x \in f^{-1}(S)$.
+
+OTOH, if $x \in f^{-1}(S)$, $f(x) \in S \implies f(x) \notin S^C \implies x \notin f^{-1}(S^C) \implies x \notin \left(f^{-1}(S^C)\right)^C$.
+
+Now consider any closed set $F \subseteq Y$.
+$F^C \subseteq Y$ is open, so $f^{-1}(F^C)$ is open
+and $\left(f^{-1}(F^C)\right)^C = f^{-1}(F)$ is closed. $\square$
+
+\subsection{And Vice Versa}
+
+Consider any open set $V \subseteq Y$.
+$V^C$ is closed, so $f^{-1}\left(V^C\right)$ is also closed
+and $\left(f^{-1}\left(V^C\right)\right)^C = f^{-1}(V)$ is open. $\square$
+
+\subsection{Open Set to Nonopen Set}
+
+Consider $f: \R \to \R$ where $f(x) = |x|$ and take $U = \R$ itself.
+
+Though $U$ is open, $f(U) = [0, \infty)$, which isn't.
+
+\subsection{Closed Set to Nonclosed Set}
+
+Consider $f: \R \to \R$ where $f(x)=e^{-x}$ and take $K = [0, \infty)$.
+
+Though $K$ is closed, $f$ maps it to $(0, 1]$, which isn't.
+
+\end{document}
