@@ -22,18 +22,109 @@
 
 \begin{document}
 
-{
-  \color{red}
-  dropped bh, this probably isn't gonna be finished anytime soon
-}
-
 \section{Problem 1}
+
+\subsection{Construction}
+
+Consider any sequence $((x_m)_n)$ of sequences in $E$.
+Since $\sum_{i=1}^{\infty} n|x_n|^2 \le 1$, $|x_n| \le 1$
+and the first terms of all the sequences must be bounded.
+
+Let $k_n$ be the indices of the sequences we choose for our overall convergent subsequence.
+
+We take a subsequence of this initial sequence s.t. their first terms converge.
+Let $k_1$ be the first element of this subsequence.
+
+Within this subsequence, there has to be another subsequence whose second terms converge as well.
+Let $k_2$ be the second element of this subsequence to make it greater than $k_1$.
+
+We can repeat this ad infinitum to get a value of $k_n$ for every $n$.
+Each element of this sequence must converge- let this new sequence
+of the limits of each of the invididual elements be $x^{(\infty)}$.
+
+For convenience, I'll call the $n$th sequence in the subsequence $x^{(n)}$.
+
+\subsection{Limit in \texorpdfstring{$E$}{E}}
+
+We need to show that $x^{(\infty)}$ is actually in $E$.
+Notice that for all $N, m \in \N$,
+\begin{align*}
+             & \sum_{n=1}^{N} n\left|x^{(m)}_n\right|^2 \le \sum_{n=1}^{\infty} n\left|x^{(m)}_n\right|^2 \le 1 \\
+  \implies{} & \lim_{m \to \infty} \sum_{n=1}^{N} n\left|x^{(m)}_n\right|^2 \le 1                               \\
+  \implies{} & \sum_{n=1}^{N} n\left|x^{(\infty)}_n\right|^2 \le 1                                              \\
+  \implies{} & \sum_{n=1}^{\infty} n\left|x^{(\infty)}_n\right|^2 \le 1                                         \\
+  \implies{} & x^{(\infty)} \in E
+\end{align*}
+
+\pagebreak
+
+\subsection{Actual Convergence}
+
+It STP
+\[\lim_{n \to \infty} \sum_{i=1}^{\infty} \left(x^{(n)}_i-x^{(\infty)}_i\right)^2 = 0\]
+which means for any $\epsilon$ we need to find an $N$ s.t. the distance is less than $\epsilon$ past $0$.
+
+We can break down the summation into a head and tail:
+\begin{align*}
+  \sum_{i=1}^{\infty} \left(x^{(n)}_i-x^{(\infty)}_i\right)^2
+   & = \sum_{i=1}^{M} \left(x^{(n)}_i-x^{(\infty)}_i\right)^2
+  + \sum_{i=M+1}^{\infty} \left(x^{(n)}_i-x^{(\infty)}_i\right)^2                          \\
+   & \le \sum_{i=1}^{M} \left(x^{(n)}_i-x^{(\infty)}_i\right)^2
+  + \sum_{i=M+1}^{\infty} \left(x^{(n)}\right)^2+\left(x^{(\infty)}\right)^2               \\
+   & \le \sum_{i=1}^{M} \left(x^{(n)}_i-x^{(\infty)}_i\right)^2
+  + \frac{1}{M} \sum_{i=M+1}^{\infty} i\left(x^{(n)}\right)^2+i\left(x^{(\infty)}\right)^2 \\
+   & \le \sum_{i=1}^{M} \left(x^{(n)}_i-x^{(\infty)}_i\right)^2 + \frac{1}{M}
+\end{align*}
+
+So if we're given an $\epsilon$, we first pick $M \in \N: \frac{1}{M} < \frac{\epsilon}{2}$.
+
+Then, since $\lim_{n \to \infty} x^{(n)}_i = x^{(\infty)}_i$,
+we can pick $N$ s.t. $\left(x^{(n)}_i-x^{(\infty)}_i\right)^2 < \frac{\epsilon}{2M}\ \forall n \ge N$.
+
+Then for all $n \ge N$ we have
+\begin{align*}
+  \sum_{i=1}^{M} \left(x^{(n)}_i-x^{(\infty)}_i\right)^2 + \frac{1}{M}
+   & < \sum_{i=1}^{M} \frac{\epsilon}{2M} + \frac{\epsilon}{2} \\
+   & < \epsilon\quad\square
+\end{align*}
+
+\pagebreak
 
 \section{Problem 2}
 
 \subsection{Countable Base}
 
-First consider the set $\{B_r(x) \mid x \in K\}$.
+Consider any $r > 0$ and the set $C=\{B_r(k) \mid k \in K\}$.
+
+I'll prove that there's a countable subcover in this set.
+BWOC suppose there wasn't, so any countable subset of $C$ would be missing some elements.
+
+Consider countable subset $S=\{B_r(x_1), B_r(k_2), \cdots\}$.
+
+Take any point $x_1$ that's not covered by $S$ and add its ball to $S$.
+A countable set with one more element is still countable, so by our assumption
+there must still be some element $x_2$ that's missing.
+Adding the ball of $x_2$, we can get an $x_3$, so on and so forth.
+
+Notice that $\forall n, m \in \N: n < m$ we have $d(x_n, x_m) \ge r$.
+When we added $x_m$ to $S$, $B_r(x_n)$ was already in there by construction,
+so this means $x_m$ must be at least $r$ away from $x_n$. 
+
+This contradicts sequential compactness, since any convergent subsequence must be Cauchy.
+As we've just seen, all elements are at least $r$ away from each other, so
+no Cauchy subsequence can exist.
+
+With this, we can construct a countable base.
+For all $r \in \Q^+$, add the countable subcover of $\{B_r(k) \mid k \in K\}$.
+This works since the countable union of countable sets is still countable.
+
+This set is also a base.
+For any $k \in K$ and an open set $O$ s.t. $k \in O$,
+we take the $\epsilon: B_\epsilon(k) \subseteq O$.
+
+Taking any $r \in \Q$ s.t. $r < \frac{\epsilon}{2}$,
+we know there's some set $B_r(k')$ in our base s.t. $k \in B_r(k')$.
+$B_r(k') \subseteq B_\epsilon(k) \subseteq O$, so this set is indeed a base. $\square$
 
 \subsection{Countable Subcover}
 
@@ -47,11 +138,46 @@ With this, we can define a subcover $\{Q_n\}$ like so:
 Any $k \in K$ must be in some $B_n$ which is then contained in some $O_n$,
 so this is indeed a countable subcover. $\square$
 
+\pagebreak
+
 \section{Problem 3}
 
-\subsection{SC Implies Limit Points}
+\subsection{Seq. Cpt. Implies Limit Points}
 
-\subsection{Limit Points Imply SC}
+Consider any infinite subset of $S \subseteq K$.
+This set is nonempty, so we can construct an injection $f: \N \to S$
+and define a sequence $x_n = f(n)$.
+
+Since $K$ is sequentially compact, this sequence must have a subsequence
+that converges to some $x \in K$.
+
+This then implies
+\[\forall \epsilon > 0, N \in \N\ \exists n > N: d(x_{k_n}, x) < \epsilon\]
+Since $f$ is injective, $x$ itself occurs at most once in the sequence.
+
+Let $N$ be s.t. $x_{k_N} = x$ if $x$ is in the sequence and $1$ otherwise.
+Then, $\forall \epsilon > 0$ we can always find some other $x_{k_n}$
+where $d(x_{k_n}, x) < \epsilon$ and $x \ne x_{k_n}$,
+which satisfies the conditions for a limit point.
+
+\subsection{Limit Points Imply Seq. Cpt.}
+
+For any sequence $(x_n)$, consider the set $S=\{x_n \mid n \in \N\}$.
+
+If there's only a finite number of distinct elements in the set,
+there's definitely a convergent subsequence since some single
+element must occur an infinite number of times.
+
+If not, it's infinite and has a limit point $x$ in $K$, which implies
+$\exists x \in K: \forall \epsilon > 0\ B_r(x) \cap S \ne \varnothing$.
+
+We can then construct a subsequence $x_{k_n}$ like so:
+\begin{itemize}
+  \item $k_1$ is chosen s.t. $d(x_{k_1}, x) < 1$.
+  \item $k_n$ is chosen s.t. $d(x_{k_n}, x) < \min\left(\min_{i=1, \cdots, k_n - 1} d(x_i, x), \frac{1}{n}\right)$.
+\end{itemize}
+This sequence pretty clearly converges to $x$
+and by construction $k_n > k_{n-1}$ as well. $\square$
 
 \pagebreak
 
@@ -72,8 +198,8 @@ By construction, $\exists N \in \N: d(x_{k_n}, E) < \frac{\epsilon}{4}\ \forall 
 By how we defined distance, this then means $\forall n \ge N\ \exists e \in E: d(x_{k_n}, e) < \frac{\epsilon}{2}$.
 Then by the triangle inequality, across all $n \ge N$ we have
 \begin{align*}
-  & d(k, x_n) + d(x_n, e) \ge d(k, e) \\
-  \implies{} & d(k, x_n) \ge d(k, e) - d(x_n, e) \\
+             & d(k, x_n) + d(x_n, e) \ge d(k, e)    \\
+  \implies{} & d(k, x_n) \ge d(k, e) - d(x_n, e)    \\
   \implies{} & d(k, x_n) \ge \frac{\epsilon}{2} > 0
 \end{align*}
 which contradicts that $k=\lim_{n \to \infty} x_{k_n}$, so $d(k, E)=0$.
@@ -98,6 +224,60 @@ between them is $0$ since $B$ gets arbitrarily close to $A$ as $n \to \infty$.
 \pagebreak
 
 \section{Problem 5}
+
+\subsection{A Quick Tangent}
+
+Consider any $\epsilon$ and an associated $A_{\frac{\epsilon}{3}}$, which we'll call $A'$ here.
+
+The set $\{B_{\frac{\epsilon}{3}}(a) \mid a \in A'\}$ is an open cover.
+$A'$ is compact, so we can take a finiste set $S \subseteq A'$
+s.t. $\forall a \in A'\ \exists s \in S: d(a, s) < \frac{\epsilon}{3}$.
+
+By our assumptions, $\forall a \in A\ \exists a' \in A': d(a, a') < \frac{\epsilon}{3}$.
+
+This combined with the triangle inequality gives us
+$\forall a \in A\ \exists s \in S: d(a, s) < \frac{2\epsilon}{3}$.
+
+We can actually extend this to all $a \in \overline{A}$.
+If $a \in \overline{A}$, $\exists b \in A: d(a, b) < \frac{\epsilon}{3}$.
+The distance between $b$ and its associated $s$ is less than $\frac{2\epsilon}{3}$, so $d(a, s) < \epsilon$.
+
+Thus, for any $\epsilon$ we can find a finite set of $\epsilon$-balls that cover the entirety of $\overline{A}$.
+
+\subsection{Constructing the Subsequence}
+
+Consider any sequence $(x_n) \subseteq \overline{A}$.
+
+Start with $\epsilon=1$.
+By the above section, there's a finite set of points in $A$ that cover all of $\overline{A}$,
+so some point $y_1$'s ball must contain an infinite number of elements in $(x_n)$.
+Call the subsequence these points form $(x_{k^{(1)}_n})$.
+
+$d\left(x_{k^{(1)}_n}, y_1\right) < 1\ \forall n \in \N$, so by the triangle inequality we have
+$d\left(x_{k^{(1)}_n}, x_{k^{(1)}_m}\right) < 2\ \forall n, m \in \N$.
+
+Now consider $\epsilon=\frac{1}{2}$ and \textit{its} finite set of points
+whose balls cover all of $\overline{A}$.
+There must be some point $y_\frac{1}{2}$ within this
+s.t. $d\left(x_{k^{(1)}_n}, y_\frac{1}{2}\right) < \frac{1}{2}$ for an infinite number of $n$.
+Call the subsequence this infinite set forms $(x_{k^{(2)}_n})$.
+
+Here, by similar logic, we see that
+$d\left(x_{k^{(2)}_n}, x_{k^{(2)}_m}\right) < 1\ \forall n, m \in \N$.
+
+We can then repeat this process indefinitely to get $(x_{k^{(3)}_n})$, $(x_{k^{(4)}_n})$, until infinity.
+
+What we have here is a series of nested subsequences in $\overline{A}$
+whose diameter keeps on decreasing.
+Since $\overline{A}$ is closed in a complete metric space, it's complete,
+and by something we proved in AH the infinite intersection of these subsequences
+must be have one (1) element which we'll call $x$.
+
+By this process, we see that for any $\epsilon > 0$ we have an
+infinite number of elements in $(x_n)$ s.t. $d(x_n, x) < \epsilon$,
+making $x$ a limit point of $(x_n)$. $\square$
+
+\pagebreak
 
 \section{Problem 6}
 
