@@ -1,0 +1,155 @@
+\documentclass[12pt]{article}
+
+\input{../kz}
+
+\rhead{Math 131B}
+
+\makeatletter
+\def\@seccntformat#1{%
+  \expandafter\ifx\csname c@#1\endcsname\c@section\else
+  \csname the#1\endcsname\quad
+  \fi}
+\makeatother
+
+\DeclareMathOperator{\Fr}{Fr}
+\newcommand{\lra}{\xLeftrightarrow}
+\newcommand{\ra}{\xRightarrow}
+\newcommand{\N}{\mathbb{N}}
+\newcommand{\R}{\mathbb{R}}
+\newcommand{\Z}{\mathbb{Z}}
+\newcommand{\Q}{\mathbb{Q}}
+\newcommand{\norm}[1]{\left\lVert#1\right\rVert}
+
+\begin{document}
+
+\section{Problem 1}
+
+\subsection{Openness Preservation Implies Continuity}
+
+Fix $x \in X$ and $\epsilon > 0$.
+
+$B_\epsilon(f(x))$ is open, so $I=f^{-1}(B_\epsilon(f(x)))$ is too.
+
+$x$ is actually in that set since $f(x) \in I$, so $\exists \delta: B_\delta(x) \subseteq I$.
+
+For all $x': d_X(x, x') < \delta$, $x' \in B_\delta(x) \subseteq I$
+which means $d_Y(f(x'), f(x)) < \epsilon$. $\square$
+
+\subsection{Also Closedness Preservation}
+
+First lemme prove the following lemma for all $S \subseteq Y$:
+\[\left(f^{-1}(S^C)\right)^C = f^{-1}(S)\]
+As always, it STP subset-ness in both directions.
+
+If $x \notin f^{-1}(S^C)$, $f(x) \notin S^C \implies f(x) \in S \implies x \in f^{-1}(S)$.
+
+OTOH, if $x \in f^{-1}(S)$, $f(x) \in S \implies f(x) \notin S^C \implies x \notin f^{-1}(S^C) \implies x \notin \left(f^{-1}(S^C)\right)^C$.
+
+Now consider any closed set $F \subseteq Y$.
+$F^C \subseteq Y$ is open, so $f^{-1}(F^C)$ is open
+and $\left(f^{-1}(F^C)\right)^C = f^{-1}(F)$ is closed. $\square$
+
+\subsection{And Vice Versa}
+
+Consider any open set $V \subseteq Y$.
+$V^C$ is closed, so $f^{-1}\left(V^C\right)$ is also closed
+and $\left(f^{-1}\left(V^C\right)\right)^C = f^{-1}(V)$ is open. $\square$
+
+\subsection{Open Set to Nonopen Set}
+
+Consider $f: \R \to \R$ where $f(x) = |x|$ and take $U = \R$ itself.
+
+Though $U$ is open, $f(U) = [0, \infty)$, which isn't.
+
+\subsection{Closed Set to Nonclosed Set}
+
+Consider $f: \R \to \R$ where $f(x)=e^{-x}$ and take $K = [0, \infty)$.
+
+Though $K$ is closed, $f$ maps it to $(0, 1]$, which isn't.
+
+\pagebreak
+
+\section{Problem 2}
+
+Fix $\epsilon > 0$ and let $\epsilon' = \frac{\epsilon}{\sqrt{2}}$.
+
+Choose $\delta_f$ s.t. $|x-x_0| < \delta_f \implies |f(x)-f(x_0)| < \epsilon'$, and an analagous $\delta_g$.
+
+Then,
+\begin{align*}
+  d_{l_2}((f(x_0), g(x_0)), (f(x), g(x)))
+   & = \sqrt{(f(x_0)-f(x))^2+(g(x_0)-g(x))^2} \\
+   & < \sqrt{2 \cdot (\epsilon')^2}           \\
+   & = \epsilon\quad\square
+\end{align*}
+
+\section{Problem 3}
+
+\subsection{\texorpdfstring{$f$}{f} is Bounded}
+
+It STP $f(X)$ is compact; consider any open cover $\{O_\alpha\}$ of $f(X)$.
+
+Since $f$ is continuous, $f^{-1}(O_\alpha)$ is also open for all $\alpha$.
+
+Notice that $\left\{f^{-1}(O_\alpha)\right\}$ forms an open cover of $X$
+since the inverse image of continuous functions map open sets to open sets.
+Also, $\forall x \in X\ f(x) \in f(X) \implies \exists \alpha: f(x) \in O_\alpha$.
+Thus, it must have a finite subcover $f^{-1}(O_1), \cdots, f^{-1}(O_n)$.
+
+$O_1$ through $O_n$ form a finite subcover of $f(X)$.
+This is because for all $y \in f(X)$,
+\begin{align*}
+             & \exists x \in X: f(x)=y      \\
+  \implies{} & \exists i: x \in f^{-1}(O_i) \\
+  \implies{} & f(x)=y \in O_i\quad\square
+\end{align*}
+
+\subsection{Max and Min}
+
+Our codomain is $\R$, so $f(X)$ certainly has a sup; it remains to show that $\sup f(X) \in f(X)$.
+
+BWOC say $\sup f(X) \notin X$.
+
+We then construct $(a_n)$ where $a_n$ is any $y \in f(X): y > \sup f(X) - \frac{1}{n}$.
+Such a $y$ is guaranteed to exist by the definition of the supremum.
+
+Though this sequence converges to $\sup f(X)$, the limit isn't actually in $f(X)$.
+This contradicts the fact that $f(X)$ is compact (which we just proved), so
+\[\sup f(X) \in f(X) \implies \exists x \in X: f(x) = \sup f(X)\quad\square\]
+The proof for the existence of the minimum goes basically the same way as the proof for the maximum.
+
+\pagebreak
+
+\section{Problem 4}
+
+Fix an $\epsilon > 0$. We know the following since $f$ and $g$ are both UC:
+\begin{itemize}
+  \item $\exists \delta_Y:\ \forall a, b \in Y\ d_Y(a, b) < \delta_Y \implies d_Z(g(a), g(b)) < \epsilon$
+  \item $\forall \epsilon_Y > 0\ \exists \delta_X: \forall a, b \in X\ d_X(a, b) < \delta_X \implies d_Y(f(a), f(b)) < \epsilon_Y$
+\end{itemize}
+With this, take $\delta_Y$ and its corresponding $\delta_X$ if we set $\epsilon_Y=\delta_Y$.
+
+Now, $d_X(a, b) < \delta_X \implies d_Y(f(a), f(b)) < \delta_Y \implies d_Z(g(f(a)), g(f(b))) < \epsilon$. $\square$
+
+\section{Problem 5}
+
+\subsection{Continuous Across One}
+
+Since the function is symmetric w.r.t. $x$ and $y$, I'll just show
+that it's continuous if we fix $x$.
+
+So, fixing $x \ne 0$, we have $f(y)=\frac{xy}{x^2+y^2}$ all the way through.
+Since $x \ne 0$, we just have to show that $\frac{y}{x^2+y^2}$ is continuous.
+Both the numerator and denominator are continuous, and since the denominator
+is nonzero, the quotient of the two must be as well.
+
+In the case where $x=0$, $f(y)=0$, which is obviously continuous.
+
+\subsection{Not Jointly Continuous}
+
+Consider the sequence $a_n = \left(\frac{1}{n}, \frac{1}{n}\right)$ which converges to $(0, 0)$.
+
+Though $f((0, 0)) = 0$, $f(a_n)=\frac{1/n^2}{2/n^2}=\frac{1}{2}$ for all $n$,
+so $(f(a_n))$ doesn't converge to the same value that $(a_n)$ does.
+
+\end{document}
