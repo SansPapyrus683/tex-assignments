@@ -1,0 +1,371 @@
+\documentclass[12pt]{article}
+
+\input{../kz}
+
+\rhead{Math 131BH}
+
+\makeatletter
+\def\@seccntformat#1{%
+  \expandafter\ifx\csname c@#1\endcsname\c@section\else
+  \csname the#1\endcsname\quad
+  \fi}
+\makeatother
+
+\DeclareMathOperator{\Fr}{Fr}
+\newcommand{\lra}{\xLeftrightarrow}
+\newcommand{\ra}{\xRightarrow}
+\newcommand{\N}{\mathbb{N}}
+\newcommand{\R}{\mathbb{R}}
+\newcommand{\Z}{\mathbb{Z}}
+\newcommand{\Q}{\mathbb{Q}}
+\newcommand{\norm}[1]{\left\lVert#1\right\rVert}
+
+\begin{document}
+
+\section{Problem 1}
+
+Let $x$ be any real and $\epsilon > 0$.
+I'll prove that $\lim_{t \to x} f(t) = 0$.
+
+Fix $\epsilon > 0$ and choose $N \in \N: \frac{1}{N} < \epsilon$.
+
+For any $m < N$, by the Archimedean property $\exists n \in \Z: \frac{n}{m} \le x < \frac{n+1}{m}$.
+
+Now we can choose $\delta$ like so:
+\[\delta = \min_{1 \le m < N} \min\left(x-\frac{n}{m}, \frac{n+1}{m}-x\right)\]
+With an edge case that if $x - \frac{n}{m} = 0$ we only consider the right term in the minimum.
+
+Now consider any $y \ne x$ where $|x-y| < \delta$.
+Suppose FSOC $y=\frac{a}{b}$ where $\frac{1}{b} \ge \epsilon$.
+This means $b < N$ and going back to our construction we have an
+$n \in \Z: \frac{n}{b} \le x < \frac{n+1}{b}$.
+By our choice of $\delta$, this forces $\frac{n}{b} < \frac{a}{b} < \frac{n+1}{b} \implies a \notin \Z$,
+which is a contradiction.
+
+If $x \in \R \setminus \Q$, $f(x)=0$ so $f$ is continuous on all irrationals.
+If not, $f(x) \ne 0$ even though the limit still exists, so there's a simple
+discontinuity at all rationals. $\square$
+
+\pagebreak
+
+\section{Problem 2}
+
+\subsection{Convexity Implies Continuous}
+
+Fix $x \in (a, b)$ and $\epsilon > 0$.
+We first take any $d$ s.t. $f(x+d)$ and $f(x-d)$ are both defined.
+This is possible since $(a, b)$ is an open interval.
+
+Now by the inequality that's proved in \ref{sec:prob2p3}, for any $y \in (x-d, x)$
+\begin{align*}
+  \frac{f(x)-f(x-d)}{d} \le \frac{f(x)-f(y)}{x-y} \le \frac{f(x+d)-f(y)}{x+d-y}
+\end{align*}
+
+The left side inequality simplies like so:
+\begin{align*}
+             & \frac{f(x)-f(x-d)}{d} \le \frac{f(x)-f(y)}{x-y}    \\
+  \implies{} & (f(x)-f(x-d))(x-y) \le d(f(x)-f(y))                \\
+  \implies{} & d \cdot f(y) \le d \cdot f(x) - (f(x)-f(x-d))(x-y) \\
+  \implies{} & f(y) \le f(x) - \frac{(f(x)-f(x-d))(x-y)}{d}
+\end{align*}
+Notice that everything here except $y$ is constant.
+Thus, we can choose a $y$ close enough to $x$ s.t. the expression on the RHS is less than $x+\epsilon$.
+
+We do some similar manipulation for the right inequality:
+\begin{align*}
+             & \frac{f(x)-f(y)}{x-y} \le \frac{f(x+d)-f(y)}{x+d-y}         \\
+  \implies{} & f(x)(x+d-y)-f(y)(x+d)+f(y)y \le f(x+d)(x-y) - f(y)x + f(y)y \\
+  \implies{} & f(x)(x+d-y)-d \cdot f(y) \le f(x+d)(x-y)                    \\
+  \implies{} & f(y) \ge \frac{f(x)(x+d-y)-f(x+d)(x-y)}{d}                  \\
+  \implies{} & f(y) \ge f(x)+(x-y) \cdot \frac{f(x)-f(x+d)}{d}
+\end{align*}
+where this time, if we choose an appropriate $y$, we can make the RHS greater than $x-\epsilon$.
+
+Taking the max of the two $y$s will get us a $y_\text{left}$
+where any $y \in (y_\text{left}, x)$ satsifies $|f(x)-f(y)| < \epsilon$.
+
+We can do something similar for any $y \in (x, x+d)$ to get a range
+in which $f(y)$ has to be within $x \pm \epsilon$ as well,
+but that's just a butt-ton more algebraic manipulation.
+
+This means we can set $\delta=\min(x-y_\text{left}, y_\text{right}-x)$ for everything to work out. $\square$
+
+\pagebreak
+
+\subsection{Convexity of Compositions}
+
+\[\begin{aligned}
+          & g(f(\lambda x (1-\lambda)y))                                                                \\
+    \le{} & g(\lambda f(x) + (1 - \lambda) f(y))              &  & \text{$f$ convex and $g$ increasing} \\
+    \le{} & \lambda g(f(x)) + (1-\lambda) g(f(y))\quad\square &  & \text{$g$ increasing}
+  \end{aligned}\]
+
+\subsection{Convex Inequality}\label{sec:prob2p3}
+
+Since $s < t < u$, $\exists \lambda \in [0, 1]: t = \lambda s + (1 - \lambda)u$.
+
+With some algebraic manipulation, we get
+\begin{align*}
+             & t = \lambda s + (1 - \lambda)u               \\
+  \implies{} & t = \lambda(s-u)+u                           \\
+  \implies{} & \frac{t-u}{s-u} = \frac{u-t}{u-s}= \lambda   \\
+  \implies{} & 1-\frac{u-t}{u-s}=\frac{t-s}{u-s}= 1-\lambda
+\end{align*}
+
+Now, with the inequality $f(t) \le \lambda f(s) + (1 - \lambda)f(u)$, we have
+\begin{align*}
+             & f(t) \le \frac{u-t}{u-s}f(s) + \frac{t-s}{u-s}f(u)                                                      \\
+  \implies{} & f(t)(u-s) \le f(s)(u-t) + f(u)(t-s)                                                                     \\
+  \implies{} & f(t)u - f(t)s - f(s)u \le f(u)t - f(u)s - f(s)t \stepcounter{equation}\tag{\theequation}\label{checkpt} \\
+  \implies{} & f(t)u - f(t)s - f(s)u + f(s)s \le f(u)t - f(u)s - f(s)t + f(s)s                                         \\
+  \implies{} & (f(t)-f(s))(u-s) \le (f(u)-f(s))(t-s)                                                                   \\
+  \implies{} & \frac{f(t)-f(s)}{t-s} \le \frac{f(u)-f(s)}{u-s}
+\end{align*}
+which is the first inequality we wanted to prove.
+
+Starting from \ref{checkpt} again, we also have
+\begin{align*}
+             & f(s)t - f(s)u- f(u)t \le f(u)t + f(t)s - f(t)u                  \\
+  \implies{} & f(s)t - f(s)u- f(u)t + f(u)u \le f(u)t + f(t)s - f(t)u  + f(u)u \\
+  \implies{} & (f(u)-f(s))(u-t) \le (f(u)-f(t))(u-s)                           \\
+  \implies{} & \frac{f(u)-f(s)}{u-s} \le \frac{f(u)-f(t)}{u-t}\quad\square
+\end{align*}
+
+\pagebreak
+
+\section{Problem 3}
+
+\subsection{True for a Certain Subset of \texorpdfstring{$[0, 1]$}{[0, 1]}}
+
+I'll first show that $f(\lambda x + (1-\lambda)y) \le \lambda f(x) + (1-\lambda) f(y)$
+for all $\lambda$ that can be expressed in the form of $\frac{m}{2^n}$, where $m, n \in \N$ and $0 \le m \le 2^n$.
+Basically, any number that has a finite binary decimal expansion.
+
+The cases where $m=0$ or $2^n$ are trivial.
+
+For all other $m$ we proceed by induction on $n$.
+The base case where $n=\frac{1}{2}$ and $m=1$ is already given by the inequality.
+
+Before we do the inductive step, I'll just let
+$g(\lambda)=f(\lambda x + (1-\lambda)y)$ for convenience.
+
+For $n+1$ there's two cases:
+\begin{enumerate}
+  \item If $m$ is even, then the fraction simplifies to $\frac{m/2}{2^n}$ and that's covered by the hypothesis.
+  \item If not, then we can take $a=\frac{m-1}{2^n}$ and $b=\frac{m+1}{2^n}$.
+        The numerators in both are even, so they're also covered by the hypothesis.
+        Now by the midpoint inequaltiy we have
+        \begin{align*}
+          g\left(\frac{m}{2^n}\right)
+           & \le \frac{g\left(\frac{m-1}{2^n}\right)+g\left(\frac{m+1}{2^n}\right)}{2} \\
+           & \le \frac{\frac{m-1}{2^n}f(x)+\left(1-\frac{m-1}{2^n}\right)f(y)
+          +\frac{m+1}{2^n}f(x)+\left(1-\frac{m+1}{2^n}\right)f(y)}{2}                  \\
+           & \le \frac{\frac{2m}{2^n}f(x)+2\left(1-\frac{m}{2^n}\right)f(y)}{2}        \\
+           & = \frac{m}{2^n}f(x)+\left(1-\frac{m}{2^n}\right)f(y)\quad\square
+        \end{align*}
+\end{enumerate}
+
+\subsection{True for Everything in There}
+
+Let all the $\lambda \in [0, 1]$ we just proved that work in the inequality be in a set $B$.
+
+Any $\lambda \notin B$ at least has an infinite binary deimcal expansion, so
+for any $\lambda$ we can define a sequence $(a_n) \subseteq B$ that converges to it.
+\begin{align*}
+             & g(a_n) \le a_n \cdot f(x) + (1-a_n)f(y)                                                              \\
+  \implies{} & \lim_{n \to \infty} g(a_n) \le a_n \cdot f(x) + (1-a_n)f(y)                                          \\
+  \implies{} & g\left(\lim_{n \to \infty} a_n\right) \le a_n \cdot f(x) + (1-a_n)f(y) &  & \text{since $f$'s cont.} \\
+  \implies{} & g(\lambda) \le a_n \cdot f(x) + (1-a_n)f(y)                            &  & \square
+\end{align*}
+
+\pagebreak
+
+\section{Problem 4}
+
+\subsection{Composition of UC Functions has to be UC}\label{sec:prob4lemma}
+
+Consider two uniformly continuous functions $f: X \to Y$ and $g: Y \to Z$.
+
+Fix an $\epsilon > 0$. We know the following since $f$ and $g$ are both UC:
+\begin{itemize}
+  \item $\exists \delta_Y:\ \forall a, b \in Y\ d_Y(a, b) < \delta_Y \implies d_Z(g(a), g(b)) < \epsilon$
+  \item $\forall \epsilon_Y > 0\ \exists \delta_X: \forall a, b \in X\ d_X(a, b) < \delta_X \implies d_Y(f(a), f(b)) < \epsilon_Y$
+\end{itemize}
+With this, take $\delta_Y$ and its corresponding $\delta_X$ if we set $\epsilon_Y=\delta_Y$.
+
+Now, $d_X(a, b) < \delta_X \implies d_Y(f(a), f(b)) < \delta_Y \implies d_Z(g(f(a)), g(f(b))) < \epsilon$.
+
+\subsection{\texorpdfstring{$h$}{h} UC Implies \texorpdfstring{$f$}{f} UC}
+
+In accordance with the hint, notice that $g^{-1}$ has a compact domain $g(Y)$
+since continuous functions map compact sets to compact sets.
+Also, since $g$ is one-to-one, $f=g^{-1} \circ h$.
+
+Notice that $g^{-1}$ is continuous.
+This is because its inverse, $g$, has a compact domain $Y$.
+Any closed set in $Y$ must be compact, so $g(Y)$ has to be compact and therefore closed,
+implying the continuity of $g^{-1}$.
+This also means it's uniformly continuous, since its domain is compact.
+
+But with this, we see that since $f=g^{-1} \circ h$, by \ref{sec:prob4lemma}
+it must be uniformly continuous. $\square$
+
+\subsection{\texorpdfstring{$h$}{h} Continuous Implies \texorpdfstring{$f$}{f} Continuous}
+
+The composition of two continuous functions is continuous.
+
+$g^{-1}$ and $h$ are only continuous here, but that's all we need to say that $f$ is too. $\square$
+
+\subsection{\texorpdfstring{$Y$}{Y} Has to be Compact}
+
+Let $X$ and $Z$ be the set of all points on the unit circle, and $Y$ be the interval $[0, 2\pi)$.
+
+As for the functions, let $g(t)=(\sin t, \cos t)$ and $f(t)=g^{-1}(t)$.
+
+As established in the example given in Rudin, $g$ is both one-to-one and onto.
+Though $h=g \circ f$ is the identity function and continuous, $f$ isn't,
+as demonstrated in the book.
+
+\pagebreak
+
+\section{Problem 5}
+
+\subsection{Bounded to Bounded in \texorpdfstring{$\R^k$}{R\^k}}
+
+BWOC let $f(E)$ be unbounded.
+
+This means we can construct $(e_n) \subseteq E$ s.t. $d_Y(f(e_n), f(e_m)) > 1\ \forall n \ne m$.
+
+Since $E \subseteq \R^k$, there must exist some Cauchy subsequence $\left(e_{k_n}\right)$.
+
+$f$ is also uniformly continuous, so
+\[\exists \delta > 0: d(e_{k_n}, e_{k_m}) < \delta \implies d_Y(f(e_{k_n}), f(e_{k_m})) < 1\]
+
+Since $\left(e_{k_n}\right)$ is Cauchy, we can also find an
+$N \in \N: d(d_{k_n}, e_{k_m}) < \delta\ \forall n, m \ge N$.
+
+This should imply $d_Y(f(e_{k_n}), f(e_{k_m})) < 1$, but
+by our construction of $(e_n)$ the distance between any two elements has
+to be at least $1$, which is a contradiction. $\square$
+
+\subsection{In General}
+
+If we replace Euclidean distance with the discrete metric $d_\text{diff}$, the statement doesn't hold.
+
+Consider $f: (\R, d_\text{diff}) \to \R_{|\cdot|}$ defined by $f(x)=x$.
+Though the domain is bounded (since the maximum distance between any two points is $1$),
+the range certainly isn't.
+
+\pagebreak
+
+\section{Problem 6}
+
+I'll abbreviate "pathwise connected" as PC.
+
+\subsection{Balls are PC}\label{sec:prob6lemma}
+
+I'll first show that any ball in $\R^d$ is PC.
+
+Fix $c \in \R^d$ and $r > 0$, as well as $x, y \in B_r(c)$.
+I'll write $x$ as $(x_1, x_2, \cdots, x_d)$ and $y$ similarly.
+
+I propose that $\forall \lambda \in [0, 1]$
+\[z=(\lambda x_1 + (1-\lambda) y_1, \lambda x_2 + (1-\lambda) y_2, \cdots, \lambda x_d + (1-\lambda) y_d)\]
+is in $B_r(c)$ as well.
+
+This is because
+\begin{align*}
+  \sum_{i=1}^{d} (z_i-c_i)^2
+  &= \sum_{i=1}^{d} (\lambda x_i + (1-\lambda) y_i - c_i)^2 \\
+  &= \sum_{i=1}^{d} (\lambda (x_i - c_i) + (1-\lambda)(y_i-c_i))^2 \\
+  &= \lambda \sum_{i=1}^{d} (x_i-c_i)^2 + (1-\lambda) \sum_{i=1}^{d} (y_i-c_i)^2 \\
+  &< \lambda r^2 + (1-\lambda) r^2 \\
+  &= r^2
+\end{align*}
+and taking the square root of both sides gives us
+\[\sqrt{\sum_{i=1}^{d} (z_i-c_i)^2} < r \implies z \in B_r(c)\]
+
+Thus, we can use
+\[f(t)=\text{the $z$ associated with $\lambda=t$}\]
+as a continuous path from $x$ to $y$.
+
+\pagebreak
+
+\subsection{Actual Proof}
+
+Fix a point $x_0$.
+It STP any point can be connected to $x_0$ with a continuous path.
+
+Let $S$ be the set of all points in $E$ that satisfy the above condition.
+$S \ne \varnothing$, as $x_0 \in S$.
+
+Consider any $s \in S$ and its associated $B_r(s) \subseteq E$.
+$x_0$ and $s$ are PC, and by \ref{sec:prob6lemma}
+$s$ and any $x \in B_r(s)$ are connected too,
+which means we can pathwise connect $x_0$ and $x$.
+Thus, $B_r(s) \subseteq S$ and $S$ is open in $E$.
+
+Now we shift our attention to $S' = E \setminus S$, which is
+all the points that \textit{can't} be connected to $x_0$ with a continuous path.
+For any $s \in S' \subseteq E$, there's still an $r > 0: B_r(s) \subseteq E$.
+
+Notice that $B_r(s) \subseteq S'$ as well, which implies $S'$ is open.
+To prove this, suppose FSOC $\exists e \in B_r(s): e \notin S' \implies e \in S$.
+$e$ and $x_0$ are PC, and by \ref{sec:prob6lemma}
+$e$ and $s$ are PC as well.
+This is a contradiction, since it means $x_0$ and $s$ are PC.
+
+If $S'$ is open in $E$, then $S=E \setminus S'$ must be closed in $E$ as well.
+
+Since $S \subseteq E$ is nonempty, open, and closed, and $E$ is connected, $S=E$. $\square$
+
+\pagebreak
+
+\section{Problem 7}
+
+\subsection{A Quick Tangent}
+
+I'll first prove that if $X$ is a compact set, $f: X \to \R$
+must attain a global minimum at some point.
+We're in $\R$, so we just have to show $\inf f(X) \in f(X)$.
+
+BWOC say $\inf f(X) \notin X$.
+
+We then construct $(a_n)$ where $a_n$ is any $y \in f(X): y < \inf f(X) + \frac{1}{n}$.
+Such a $y$ is guaranteed to exist by the definition of the supremum.
+
+Though this sequence converges to $\inf f(X)$, the limit isn't actually in $f(X)$.
+This contradicts the fact that $f(X)$ is compact, so
+\[\inf f(X) \in f(X) \implies \exists x \in X: f(x) = \inf f(X)\]
+
+\subsection{The Actual Proof}
+
+By our assumptions, $\exists r_1, r_2$ s.t.
+$f(x_1)=\max \{f(x) \mid x \in B_{r_1}(x_1)\}$ and similarly for $f(x_2)$.
+Make sure to choose them so that $x_1+r_1 < x_2-r_2$,
+which is possible since if a certain $r$ works any smaller $r$ is guaranteed to work as well.
+
+For $x_1$, there's two cases.
+\begin{enumerate}
+  \item Everything in $(x_1, x_1+r_1)$ is equal to $f(x_1)$, in which case
+        we can just pick anything in the interval as our local minimum since the function is constant.
+  \item The function is nonconstant, in which case we can pick $y_1 \in (x_1, x_1+r_1]$
+        s.t. $f(y_1)=\inf \{f(x) \mid x_1 < x \le x_1+r_1\}$.
+        Such a $y_1$ is guaranteed to exist because $[x_1, x_1+r_1]$ is compact
+        and the only way the global minimum is $x_1$ is if the function is constant.
+\end{enumerate}
+
+We can pick a similar $y_2 \in [x_2-r_2, x_2)$.
+It suffices to find a local minimum in $[y_1, y_2] \subset (x_1, x_2)$.
+
+Let $Y=[y_1, y_2]$ and $y \in Y$ be the location of the global minimum.
+
+Here, again we have two cases:
+\begin{enumerate}
+  \item $y \in (y_1, y_2)$, which means it's a local minimum in $[a, b]$ as well.
+  \item $y=y_1$ or $y_2$, which is still fine as we defined them to be
+        lesser than everything on the left/right side of the interval as well.
+\end{enumerate}
+Either way, we have a local minimum. $\square$
+
+\end{document}
