@@ -70,13 +70,13 @@ We can break down the summation into a head and tail:
    & = \sum_{i=1}^{M} \left(x^{(n)}_i-x^{(\infty)}_i\right)^2
   + \sum_{i=M+1}^{\infty} \left(x^{(n)}_i-x^{(\infty)}_i\right)^2                          \\
    & \le \sum_{i=1}^{M} \left(x^{(n)}_i-x^{(\infty)}_i\right)^2
-  + \sum_{i=M+1}^{\infty} \left(x^{(n)}\right)^2+\left(x^{(\infty)}\right)^2               \\
+  + 2\sum_{i=M+1}^{\infty} \left(x^{(n)}_i\right)^2+\left(x^{(\infty)}_i\right)^2               \\
    & \le \sum_{i=1}^{M} \left(x^{(n)}_i-x^{(\infty)}_i\right)^2
-  + \frac{1}{M} \sum_{i=M+1}^{\infty} i\left(x^{(n)}\right)^2+i\left(x^{(\infty)}\right)^2 \\
-   & \le \sum_{i=1}^{M} \left(x^{(n)}_i-x^{(\infty)}_i\right)^2 + \frac{1}{M}
+  + \frac{2}{M} \sum_{i=M+1}^{\infty} i\left(x^{(n)}\right)^2+i\left(x^{(\infty)}\right)^2 \\
+   & \le \sum_{i=1}^{M} \left(x^{(n)}_i-x^{(\infty)}_i\right)^2 + \frac{4}{M}
 \end{align*}
 
-So if we're given an $\epsilon$, we first pick $M \in \N: \frac{1}{M} < \frac{\epsilon}{2}$.
+So if we're given an $\epsilon$, we first pick $M \in \N: \frac{4}{M} < \frac{\epsilon}{2}$.
 
 Then, since $\lim_{n \to \infty} x^{(n)}_i = x^{(\infty)}_i$,
 we can pick $N$ s.t. $\left(x^{(n)}_i-x^{(\infty)}_i\right)^2 < \frac{\epsilon}{2M}\ \forall n \ge N$.
