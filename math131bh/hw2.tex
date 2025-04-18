@@ -95,9 +95,9 @@ This means we can set $\delta=\min(x-y_\text{left}, y_\text{right}-x)$ for every
 \subsection{Convexity of Compositions}
 
 \[\begin{aligned}
-          & g(f(\lambda x (1-\lambda)y))                                                                \\
-    \le{} & g(\lambda f(x) + (1 - \lambda) f(y))              &  & \text{$f$ convex and $g$ increasing} \\
-    \le{} & \lambda g(f(x)) + (1-\lambda) g(f(y))\quad\square &  & \text{$g$ increasing}
+          & g(f(\lambda x (1-\lambda)y))                                                    \\
+    \le{} & g(\lambda f(x) + (1 - \lambda) f(y))  &  & \text{$f$ convex and $g$ increasing} \\
+    \le{} & \lambda g(f(x)) + (1-\lambda) g(f(y)) &  & \text{$g$ convex}\quad\square
   \end{aligned}\]
 
 \subsection{Convex Inequality}\label{sec:prob2p3}
@@ -276,11 +276,11 @@ is in $B_r(c)$ as well.
 This is because
 \begin{align*}
   \sum_{i=1}^{d} (z_i-c_i)^2
-  &= \sum_{i=1}^{d} (\lambda x_i + (1-\lambda) y_i - c_i)^2 \\
-  &= \sum_{i=1}^{d} (\lambda (x_i - c_i) + (1-\lambda)(y_i-c_i))^2 \\
-  &= \lambda \sum_{i=1}^{d} (x_i-c_i)^2 + (1-\lambda) \sum_{i=1}^{d} (y_i-c_i)^2 \\
-  &< \lambda r^2 + (1-\lambda) r^2 \\
-  &= r^2
+   & = \sum_{i=1}^{d} (\lambda x_i + (1-\lambda) y_i - c_i)^2                      \\
+   & = \sum_{i=1}^{d} (\lambda (x_i - c_i) + (1-\lambda)(y_i-c_i))^2               \\
+   & = \lambda \sum_{i=1}^{d} (x_i-c_i)^2 + (1-\lambda) \sum_{i=1}^{d} (y_i-c_i)^2 \\
+   & < \lambda r^2 + (1-\lambda) r^2                                               \\
+   & = r^2
 \end{align*}
 and taking the square root of both sides gives us
 \[\sqrt{\sum_{i=1}^{d} (z_i-c_i)^2} < r \implies z \in B_r(c)\]
