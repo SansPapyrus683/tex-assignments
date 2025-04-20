@@ -1,0 +1,52 @@
+\documentclass[12pt]{article}
+
+\input{../kz}
+
+\rhead{ECE 239AS - Kao}
+
+\DeclareMathOperator{\Cov}{Cov}
+\DeclareMathOperator{\Var}{Var}
+\DeclareMathOperator{\E}{E}
+\DeclareMathOperator{\Tr}{Tr}
+\DeclareMathOperator{\softmax}{softmax}
+\DeclareMathOperator{\swish}{swish}
+\newcommand{\norm}[1]{\left\lVert#1\right\rVert}
+\newcommand{\loss}{\mathcal{L}}
+\newcommand{\real}{\mathbb{R}}
+
+
+\begin{document}
+
+\section{Graphical Probability}
+
+\subsection{Part A}
+
+\[P(x_1, x_2, x_3, x_4)=
+    P(x_1) \cdot P(x_2 \mid x_1) \cdot P(x_3 \mid x_2) \cdot P(x_4 \mid x_3)\]
+
+\subsection{Part B}
+
+The covariance
+\[\begin{bmatrix}
+        1 & 1 & 1 & 1 \\
+        1 & 2 & 2 & 2 \\
+        1 & 2 & 3 & 3 \\
+        1 & 2 & 3 & 4
+    \end{bmatrix} \cdot \sigma^2\]
+
+\subsection{Part C}
+
+The inverse of the above matrix is
+\[\begin{bmatrix}
+        2  & -1 & 0  & 0  \\
+        -1 & 2  & -1 & 0  \\
+        0  & -1 & 2  & -1 \\
+        0  & 0  & -1 & 1
+    \end{bmatrix}\]
+
+\subsection{Part D}
+
+Notice that there's a zero in the matrix iff the variables
+corresponding to the entries are different and not connected by an edge.
+
+\end{document}
