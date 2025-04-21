@@ -1,0 +1,198 @@
+\documentclass[12pt]{article}
+
+\input{../kz}
+
+\rhead{Math 131B}
+
+\makeatletter
+\def\@seccntformat#1{%
+  \expandafter\ifx\csname c@#1\endcsname\c@section\else
+  \csname the#1\endcsname\quad
+  \fi}
+\makeatother
+
+\DeclareMathOperator{\Fr}{Fr}
+\newcommand{\lra}{\xLeftrightarrow}
+\newcommand{\ra}{\xRightarrow}
+\newcommand{\N}{\mathbb{N}}
+\newcommand{\R}{\mathbb{R}}
+\newcommand{\Z}{\mathbb{Z}}
+\newcommand{\Q}{\mathbb{Q}}
+\newcommand{\norm}[1]{\left\lVert#1\right\rVert}
+
+\begin{document}
+
+\section{Problem 1}
+
+It STP that $[1, 2]$ and $[3, 4]$ are open in the metric space $X=[1, 2] \cup [3, 4]$.
+
+For $[1, 2]$ notice that $B^X_{1/2}(x) \subseteq X\ \forall x \in [1, 2]$.
+This is because $B^\R_{1/2}(x)=\left(x-\frac{1}{2}, x+\frac{1}{2}\right)$,
+and the intersection of that with $X$ can never have something in $[3, 4]$.
+
+By similar reasoning, $[3, 4]$ is also open in $X$.
+
+\section{Problem 2}
+
+131AH taught me that a set $Y \subseteq X$ is connected iff
+there exists open sets $O_1$ and $O_2$ s.t.:
+\begin{enumerate}[nolistsep]
+  \item $Y \subseteq O_1 \cup O_2$
+  \item $Y \cap O_1, Y \cap O_2 \ne \varnothing$
+  \item $Y \cap O_1 \cap O_2 = \varnothing$
+\end{enumerate}
+
+I'll prove the contrapositive: if $f(E)$ is disconnected, then $E$ must be disconnected as well.
+
+Let $O_1$ and $O_2$ be the two open sets in $Y$ that satisfy the listed conditions above.
+The continuous preimage of open sets is open, so I propose that $f^{-1}(O_1)$ and $f^{-1}(O_2)$
+satisfy similar conditions to make $E$ disconnected:
+\begin{enumerate}
+  \item If $e \in E$, $f(e) \in O_1 \cup O_2$ which means it has to be in the preimage of one of these.
+  \item $f(E) \cap O_1 \ne \varnothing \implies f^{-1}(f(E)) \cap f^{-1}(O_1) \ne \varnothing$, similarly for $O_2$.
+  \item If $\exists e \in E \cap f^{-1}(O_1) \cap f^{-1}(O_2)$, then $e \in f(E) \cap O_1 \cap O_2$, so that can't happen.
+\end{enumerate}
+
+Yeah, as we see, $E$ itself also has to be disconnected. $\square$
+
+\pagebreak
+
+\section{Problem 3}
+
+\subsection{Definition to (c)}
+
+Fix $x_0$ and $L$.
+
+If $V$ is an open set with $L$, $\exists \epsilon: B_\epsilon^Y(L) \subseteq V$.
+
+Pick $\delta > 0$ s.t. $x \in E \land d_X(x_0, x) < \delta \implies d_Y(f(x_0), f(x)) < \epsilon$.
+
+$B_\delta^X(x_0)$ is our $U$.
+By what we just said, any $x$ in $U \cap E$ satisfies $d_Y(f(x_0), f(x)) < \epsilon$,
+so $f(U \cap E) \subseteq B_\epsilon^Y(L) \subseteq Y$.
+
+\subsection{And Vice Versa}
+
+Now we also fix $\epsilon$ and try to find a $\delta$.
+
+$B_\epsilon^Y(L)$ is open and contains $L$, so there exists an open $U$ in line with
+the conditions given in (c) and $\exists \delta > 0: B_\delta^X(x_0) \subseteq U$.
+
+I propose that this $\delta$ is the one we want.
+\begin{align*}
+             & d_X(x, x_0) < \delta \land x \in E              \\
+  \implies{} & x \in B_\delta^X(x_0) \cap E \subseteq U \cap E \\
+  \implies{} & f(x) \in B_\epsilon^Y(L)                        \\
+  \implies{} & d_Y(f(x), L) < \epsilon\quad\square
+\end{align*}
+
+\pagebreak
+
+\section{Problem 4}
+
+\subsection{Continuity Condition}
+
+\subsubsection{Forward Direction}\label{sec:prob4p1}
+
+Fix $x$ and $\epsilon$.
+
+Since $f$ is continuous, $\exists \delta: |x'-x| < \delta \implies |f(x')-f(x)| < \epsilon$.
+
+$a_n$ converges to $0$; pick $N$ s.t. $|a_n| < \delta\ \forall n \ge N$.
+
+Since $x-a_n$ is less than $\delta$ away from $x$ for all $n \ge N$,
+$|f_{a_n}(x)-f(x)| < \epsilon$ as well.
+
+\subsubsection{Reverse Direction}
+
+We know $\lim_{n \to \infty} |f(x-a_n)-f(x)|=0 \implies \lim_{n \to \infty} f(x-a_n)=f(x)$.
+
+Fix any sequence $(b_n)_{n=0}^\infty$ that converges to $x$.
+
+Let $a_n = x - b_n$.
+This sequences clearly converges to $0$, and we can also write $b_n=x-a_n$.
+
+Then, $\lim_{n \to \infty} f(x-a_n)=\lim_{n \to \infty} f(b_n)=f(x)$.
+
+The image of any sequence that converges to $x$ converges to $f(x)$, so $f$ is continuous. $\square$
+
+\subsection{UC Condition}
+
+\subsubsection{Forward Direction}
+
+Now we just fix $\epsilon$.
+
+$f$ is UC, so pick a $\delta: |x-y| < \delta \implies |f(x)-f(y)| < \epsilon$.
+
+Like in \ref{sec:prob4p1}, pick $N$ s.t. $|a_n| < \delta\ \forall n \ge N$.
+
+Thus, $|x-(x-a_n)| < \delta \implies |f(x-a_n) - f(x)| < \epsilon$.
+
+\subsubsection{Reverse Direction}
+
+BWOC say $f$ wasn't UC, so $\exists \epsilon: \forall \delta > 0\ \exists x, y: |x-y| < \delta \land |f(x)-f(y)| \ge \epsilon$.
+
+Let $x_n$ and $y_n$ be s.t. $|x_n-y_n| < \frac{1}{n}$ but $|f(x_n)-f(y_n)| \ge \epsilon$.
+
+Also, let $a_n=y_n-x_n$ which pretty clearly converges to $0$.
+
+Thus, we should be able to find an $N$ s.t. $|f(x-a_n)-f(x)| < \epsilon\ \forall n \ge N, x \in \R$.
+
+However, across all $N \in \N$ we have $|f(x_N)-f(x_N-a_N)|=|f(x_n)-f(y_n)| \ge \epsilon$,
+so no such $N$ can exist. Contradiction. $\square$
+
+\pagebreak
+
+\section{Problem 6}
+
+I'll refer to $x_0$ as $x$ for convenience.
+But anyways, we just need to find a $\delta$ given an $\epsilon$.
+
+By the uniform convergence of $\left(f^{(n)}\right)_{n=1}^\infty$ to $f$,
+\[\exists N: \left|d_Y\left(f^{(n)}(t), f(t)\right)\right| < \frac{\epsilon}{3}\ \forall t \in X, n \ge N\]
+
+Take any $n \ge N$.
+Since $f^{(n)}$ is continuous,
+\[\exists \delta > 0: d_X(x, x') < \delta \implies d_Y\left(f^{(n)}(x), f^{(n)}(x')\right) < \frac{\epsilon}{3}\]
+
+Then, by the triangle inequality we have for all $x'$ s.t. $|x-x'| < \delta$,
+\begin{align*}
+        & d_Y(f(x), f(x'))                                                                                                \\
+  \le{} & d_Y\left(f(x), f^{(n)}(x)\right) + d_Y\left(f^{(n)}(x), f^{(n)}(x')\right) + d_Y\left(f(x'), f^{(n)}(x')\right) \\
+  \le{} & \frac{\epsilon}{3} + \frac{\epsilon}{3} + \frac{\epsilon}{3}                                                    \\
+  ={}   & \epsilon\quad\square
+\end{align*}
+
+\pagebreak
+
+\section{Problem 7}
+
+By uniform convergence, again we have
+\[\exists N: \left|d_Y\left(f^{(n)}(x), f(x)\right)\right| < 1\ \forall x \in X, n \ge N\]
+
+Take any $n \ge N$.
+$f^{(n)}$ is bounded, so $\exists M: d_Y\left(f^{(n)}(x), f^{(n)}(y)\right) \le M\ \forall x, y \in X$.
+
+(I know the "official" definition is different, but this should be an equivalent formulation, surely.)
+
+Then, we have for any $x$ and $y$ in $X$
+\begin{align*}
+        & d_Y(f(x), f(y))                                                                                              \\
+  \le{} & d_Y\left(f(x), f^{(n)}(x)\right) + d_Y\left(f^{(n)}(x), f^{(n)}(y)\right) + d_Y\left(f(y), f^{(n)}(y)\right) \\
+  \le{} & 1 + M + 1                                                                                                    \\
+  ={}   & M+2
+\end{align*}
+so the image of $f$ is bounded by $M+2$. $\square$
+
+This is different from 3.2.4 in that that one asks the other direction.
+
+\section{Problem 8}
+
+Consider the sequence of functions $f_n(x)=\frac{n}{1+nx}$ on the interval $(0, \infty)$.
+
+Each function is bounded, as at $x=0$ it takes the value $n$ and decreases to $0$ as $x \to \infty$.
+
+However, this function pointwise to $\frac{1}{x}$ by LHopital's Rule,
+which is clearly unbounded.
+
+\end{document}
