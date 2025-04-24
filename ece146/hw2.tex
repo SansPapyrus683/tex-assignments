@@ -1,0 +1,142 @@
+\documentclass[11pt]{article}
+
+\input{stupid}
+
+\begin{document}
+\ctitle{2}{Decision Trees, KNN, etc.}{Kevin Sheng}{406 196 414}
+\date{}
+\maketitle
+
+\section{Problem 1}
+
+\subsection{Problem 1a}
+
+\solution{
+      For convenience, I'll represent a sample of $a$ $0$s and $b$ $1$s as $[a, b]$.
+
+      If we split on $U$, we get a $[2, 1]$ and a $[0, 2]$.
+      The first branch's entropy is
+      \[-\left(\frac{0}{0+2}\log\frac{0}{0+2}+\frac{2}{0+2}\log\frac{2}{0+2}\right)=0\]
+      while the second's is
+      \[-\left(\frac{1}{1+2}\log\frac{1}{1+2}+\frac{2}{1+2}\log\frac{2}{1+2}\right) \approx 0.918\]
+      making the conditional entropy $\frac{3}{5} \cdot H[Y \mid U = 1] \approx 0.55$.
+
+      If we split on $V$, we get a $[1, 1]$ and a $[1, 2]$.
+      The entropy of the first is $1$ and the second is the same as the value
+      we got for $H[Y \mid U = 1]$, so our entropy for this variable is
+      \[\frac{2}{5} \cdot 1 + \frac{3}{5} \cdot H[Y \mid V = 0] \approx 0.951\]
+
+      Finally, if we split on $W$ we get a $[2, 2]$ and a $[0, 1]$, so the total entropy is
+      \[\frac{4}{5} \cdot 1 + \frac{1}{5} \cdot 0 = 0.8\]
+
+      Splitting on $\boxed{U}$ gives the lowest entropy, so ID3 is gonna pick that one.
+}
+
+\pagebreak
+
+\subsection{Problem 1b}
+
+\solution{
+      After splitting on $U$, we have two nodes, one of which already has entropy $0$.
+
+      We just need to split the $[2, 1]$ branch on instances where $U=0$.
+      Luckily, choosing $W$ as our next feature properly classifies the remaining instances.
+
+      Here's the decision tree in the form of a bunch of if-else statements:
+      \begin{algorithmic}
+            \If{$U=0$}
+            \If{$W=0$}
+            \State \Return $Y=0$
+            \ElsIf{$W=1$}
+            \State \Return $Y=1$
+            \EndIf
+            \ElsIf{$U=1$}
+            \State \Return $Y=1$
+            \EndIf
+      \end{algorithmic}
+}
+
+\subsection{Problem 1c}
+
+\solution{
+      The initial entropy is $-\frac{2}{5}\log\frac{2}{5}-\frac{3}{5}\log\frac{3}{5} \approx 0.971$.
+      Splitting on $U$ reduced that to around $0.55$, so we gained around $0.42$ bits of information.
+
+      To force a decision tree of depth $0$, we would need an $\epsilon$ value of at least $0.42$.
+      Since the training data has more $1$s than it does $0$s,
+      this tree would predict $Y=1$ on the new sample.
+}
+
+\section{Problem 2}
+
+\subsection{Problem 2a}
+
+\solution{
+      Points 2, 3, and 5 are misclassified, so the test error is $\boxed{0.6}$.
+}
+
+\subsection{Problem 2b}
+
+\solution{
+      The smaller the angle between two points, the greater their cosine similarity.
+
+      Now, just points $1$ and $3$ are misclassified, resulting in a test error of $\boxed{0.4}$.
+}
+
+\subsection{Problem 2c}
+
+\solution{
+      If $k$ is too large, the algorithm might underfit,
+      while if $k$ is too small, it might overfit.
+}
+
+\pagebreak
+
+\section{Problem 3}
+
+\subsection{Problem 3a}
+
+\solution{
+      If $k$ was a valid kernel function, then
+      \[\begin{bmatrix}
+                  k(x_1, x_1) & k(x_1, x_2) \\
+                  k(x_2, x_1) & k(x_2, x_2)
+            \end{bmatrix}\]
+      must be PSD for across all $x_1$ and $x_2$.
+
+      Consider $x_1=\begin{bmatrix}0 \\ 0\end{bmatrix}$ and $x_2=\begin{bmatrix}0 \\ 1\end{bmatrix}$.
+      For them, the matrix is
+      \[\begin{bmatrix}
+                  0 & 1 \\
+                  1 & 0
+            \end{bmatrix}\]
+      which isn't PSD, as
+      \[\begin{bmatrix}1 & -1\end{bmatrix}
+      \begin{bmatrix}
+            0 & 1 \\
+            1 & 0
+      \end{bmatrix}
+      \begin{bmatrix}1 \\ -1\end{bmatrix}=-2\]
+      which is negative.
+
+      Thus, $k$ cannot be a valid kernel function.
+}
+
+\subsection{Problem 3b}
+
+\solution{
+      It suffices to find an inner product representation.
+
+      Since $k_0$ is a valid kernel, $\exists \phi_0: \R^D \to \R$ s.t. $k_0(x, x')=\phi_0(x)^T\phi_0(x)$.
+
+      Consider $\phi(x)=f(x)\phi(Ax)$.
+      Then we have
+      \begin{align*}
+            k(x, x') & =f(x)k_0(Ax, Ax')f(x')                       \\
+                     & = f(x)\phi_0(Ax)^T\phi_0(Ax)f(x')            \\
+                     & = (\phi_0(x)f(Ax))^T \cdot (\phi_0(Ax)f(x')) \\
+                     & = \phi(x)^T\phi(x)\quad\square
+      \end{align*}
+}
+
+\end{document}
