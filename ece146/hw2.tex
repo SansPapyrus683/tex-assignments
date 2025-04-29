@@ -67,18 +67,37 @@
       this tree would predict $Y=1$ on the new sample.
 }
 
+\pagebreak
+
 \section{Problem 2}
 
 \subsection{Problem 2a}
 
 \solution{
+      I'll go through the points in the order they're numbered.
+      \begin{enumerate}[label=\arabic*.]
+            \item The closest is $(2, 6)$, a negative instance- correct.
+            \item The closest is $(3, 7)$, a negative instance- incorrect.
+            \item The closest is $(7, 2)$, a negative instance- incorrect.
+            \item The closest is $(8, 4)$, a positive instance- correct.
+            \item The closest is $(5, 4)$, a positive instance- incorrect.
+      \end{enumerate}
       Points 2, 3, and 5 are misclassified, so the test error is $\boxed{0.6}$.
 }
+
 
 \subsection{Problem 2b}
 
 \solution{
       The smaller the angle between two points, the greater their cosine similarity.
+      I'll go through the points in the same order as in 2a:
+      \begin{enumerate}[label=\arabic*.]
+            \item The closest is $(2, 7)$, a positve instance- incorrect.
+            \item The closest is $(5, 9)$, a positive instance- correct. 
+            \item The closest is $(8, 3)$, a negative instance- incorrect.
+            \item The closest is $(8, 4)$, a positive instance- correct.
+            \item The closest is $(8, 8)$, a negative instance- correct.
+      \end{enumerate}
 
       Now, just points $1$ and $3$ are misclassified, resulting in a test error of $\boxed{0.4}$.
 }
@@ -112,11 +131,11 @@
             \end{bmatrix}\]
       which isn't PSD, as
       \[\begin{bmatrix}1 & -1\end{bmatrix}
-      \begin{bmatrix}
-            0 & 1 \\
-            1 & 0
-      \end{bmatrix}
-      \begin{bmatrix}1 \\ -1\end{bmatrix}=-2\]
+            \begin{bmatrix}
+                  0 & 1 \\
+                  1 & 0
+            \end{bmatrix}
+            \begin{bmatrix}1 \\ -1\end{bmatrix}=-2\]
       which is negative.
 
       Thus, $k$ cannot be a valid kernel function.
