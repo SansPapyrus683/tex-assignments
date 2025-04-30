@@ -1,0 +1,180 @@
+\documentclass[12pt]{article}
+
+\input{../kz}
+
+\rhead{Math 131B}
+
+\makeatletter
+\def\@seccntformat#1{%
+  \expandafter\ifx\csname c@#1\endcsname\c@section\else
+  \csname the#1\endcsname\quad
+  \fi}
+\makeatother
+
+\DeclareMathOperator{\Fr}{Fr}
+\newcommand{\lra}{\xLeftrightarrow}
+\newcommand{\ra}{\xRightarrow}
+\newcommand{\N}{\mathbb{N}}
+\newcommand{\R}{\mathbb{R}}
+\newcommand{\Z}{\mathbb{Z}}
+\newcommand{\Q}{\mathbb{Q}}
+\newcommand{\norm}[1]{\left\lVert#1\right\rVert}
+
+\begin{document}
+
+\section{Problem 2}\label{sec:p2}
+
+Consider any Cauchy sequence of functions $\left(f^{(n)}\right)$ from $X$ to $Y$.
+
+I propose that they uniformly converge to the function $f$ defined by
+\[f(x)=\lim_{n \to \infty} f^{(n)}(x)\]
+
+\subsection{Limit Existence}
+
+First, though, we need to show that this sequence of limits actually exists.
+
+As $Y$ is complete, it STP the sequence is Cauchy, so let's fix an $\epsilon$ and
+the $x_0$ on which we're applying $f$.
+
+By our assumptions, $\left(f^{(n)}\right)$ is Cauchy and
+\[\forall \epsilon > 0\ \exists N: d_\infty\left(f^{(n)}, f^{(m)}\right) < \epsilon\ \forall n, m \ge N\]
+Notice that this is the same $N$ we need for our original sequence.
+
+This is because
+\begin{align*}
+    & d_\infty\left(f^{(n)}, f^{(m)}\right) < \epsilon \\
+    \implies{} & \sup_{x \in X} d_Y\left(f^{(n)}(x), f^{(m)}(x)\right) < \epsilon \\
+    \implies{} & d_Y\left(f^{(n)}(x_0), f^{(m)}(x_0)\right) < \epsilon\ \forall n, m \ge N
+\end{align*}
+
+\subsection{Function Convergence}
+
+Fix an $\epsilon$ and choose $N$ s.t.
+$d_\infty\left(f^{(n)}, f^{(m)}\right) < \frac{\epsilon}{2}\ \forall n, m \ge N$.
+
+I'm pretty sure this $N$ will work for our uniform convergence.
+At any point $x$, $\exists N': d_Y\left(f^{(n)}(x), f(x)\right) < \frac{\epsilon}{2}\ \forall n \ge N'$.
+
+If we let $m=\max(N, N')$, then for all $n \ge N$ we have
+\begin{align*}
+    d_Y\left(f^{(n)}(x), f(x)\right)
+    &\le d_Y\left(f^{(n)}(x), f^{(m)}(x)\right) + d_Y\left(f^{(m)}(x), f(x)\right) \\
+    &< \frac{\epsilon}{2} + \frac{\epsilon}{2} \\
+    &= \epsilon
+\end{align*}
+which implies $d_\infty\left(f^{(n)}, f\right) < \epsilon$.
+
+Since uniform convergence preserves boundedness and continuity, $f \in C(X, Y)$.
+Thus, we've shown that $C(X, Y)$ is complete. $\square$
+
+\pagebreak
+
+\section{Problem 3}
+
+First off, notice that for any two functions $f$ and $g$ $d_\infty(f, f+g) = \norm{g}_\infty$.
+This is because at any point $f(x)$ and $f(x)+g(x)$ differ by exactly $g(x)$.
+
+But anyways, it STP $\sum_{n=1}^\infty f^{(n)}$ is Cauchy by what we've just shown in \ref{sec:p2}.
+In other words, for any $\epsilon > 0$ we need an $N$ s.t. for all $m > n \ge N$
+\[d_\infty\left(\sum_{i=1}^n f^{(i)}, \sum_{i=1}^m f^{(i)}\right) < \epsilon
+\implies \norm{\sum_{i=n+1}^m f^{(i)}}_\infty < \epsilon\]
+
+Since $\sum_{i=1}^\infty \norm{f^{(i)}}_\infty$ converges,
+it satisfies the Cauchy criterion, so we can find an $N$ s.t. for all $m > n \ge N$
+\[\sum_{i=n+1}^m \norm{f^{(i)}}_\infty < \epsilon\]
+
+This is the $N$ that we want, since
+\begin{align*}
+    \epsilon 
+    &> \sum_{i=n+1}^m \sup_{x \in X} |f^{(i)}(x)| \\
+    &\ge \sup_{x \in X} \sum_{i=n+1}^m |f^{(i)}(x)| \\
+    &= \norm{\sum_{i=n+1}^m f^{(i)}}_\infty \quad\square
+\end{align*}
+
+\section{Problem 4}
+
+This is just chasing some definitions.
+\begin{align*}
+    \sum_{n=1}^\infty \int_a^b f^{(n)}
+    &= \lim_{N \to \infty} \sum_{n=1}^N \int_a^b f^{(n)} \\
+    &= \lim_{N \to \infty} \int_a^b \sum_{n=1}^N f^{(n)} & \text{finite sum of integrals is integral of sums} \\
+    &= \int_a^b \lim_{N \to \infty} \sum_{n=1}^N f^{(n)} & \text{by the theorem we were told to use} \\
+    &= \int_a^b \sum_{n=1}^\infty f^{(n)}\quad\square
+\end{align*}
+
+\pagebreak
+
+\section{Problem 5}
+
+\subsection{Differentiable}
+
+Applying differentiation rules gives us
+\[\frac{d}{dx} \sqrt{\frac{1}{n^2}+x^2}=\frac{1}{2\sqrt{\frac{1}{n^2}+x^2}} \cdot 2x=\boxed{\frac{1}{\sqrt{\frac{1}{n^2}+x^2}}}\]
+
+\subsection{Bounded}
+
+Indeed, for the left inequality we see that
+\begin{align*}
+    & x^2 \le \frac{1}{n^2}+x^2 && \text{$n$ is positive} \\
+    \implies{} & \sqrt{x^2} \le f^{(n)}(x) && \text{square root is monotonic} \\
+    \implies{} & |x| \le f^{(n)}(x)
+\end{align*}
+and for the right side we similarly have
+\begin{align*}
+    & \frac{1}{n^2}+x^2 \le \left(|x|+\frac{1}{n}\right)^2 \\
+    \implies{} & f^{(n)}(x) \le |x|+\frac{1}{n}
+\end{align*}
+
+\subsection{Limit Not Differentiable}
+
+If $h > 0$, $\frac{|h|-|0|}{h}=\frac{h}{h}=1$..
+However, if $h < 0$, $\frac{|h|-|0|}{h}=\frac{-h}{h}=-1$.
+Since the left hand and right hand limits aren't equivalent, $f(x)=|x|$ isn't differentiable at $0$.
+
+\pagebreak
+
+\section{Problem 6}
+
+I'll just write $f(x)=L-\int_{a}^{x_0} g(t)\,dt+\int_{a}^{x} g(t)\,dt$ instead of what Tao does.
+
+\subsection{Uniform Convergence}
+
+Fix an $\epsilon$ and choose $N$ large enough s.t. the following hold true for any $n \ge N$:
+\begin{itemize}[nolistsep]
+    \item $d_\infty(f_n, g) < \epsilon$
+    \item $|f_n(x_0)-L| < \epsilon$
+\end{itemize}
+
+Now, consider $|f_n(x)-f(x)|$ across all $x$:
+\begin{align*}
+    |f_n(x)-f(x)|
+    &= \left|\left(L-\int_{a}^{x_0} g(t)\,dt\right)+\int_{a}^{x} g(t)\,dt-f_n(x)\right| \\
+    &= \left|\left(L-\int_{a}^{x_0} g(t)\,dt\right)+\int_{a}^{x} g(t)\,dt-\int_{a}^{x} f_n'(t)\,dt-f_n(a)\right| \\
+    &\le \left|L-\int_{a}^{x_0} g(t)\,dt-f_n(a)\right|+\left|\int_{a}^{x} g(t)\,dt-\int_{a}^{x} f_n'(t)\,dt\right| \\
+    &\le \left|L-\int_{a}^{x_0} g(t)\,dt-f_n(a)\right|+\left|\int_{a}^{x} g(t)-f_n'(t)\,dt\right| \\
+    &\le \left|L-\int_{a}^{x_0} g(t)\,dt-f_n(a)\right|+\epsilon(b-a)
+\end{align*}
+
+The first term requires a bit more work.
+Notice that by the triangle inequality,
+\begin{align*}
+    &\left|L-\int_{a}^{x_0} g(t)\,dt-f_n(a)\right| \\
+    \le{} & |(L-f_n(a))-(f_n(x_0)-f_n(a))|+\left|(f_n(x_0)-f_n(a))-\int_{a}^{x_0} g(t)\,dt\right| \\
+    \le{} & |L-f_n(a)|+\left|(f_n(x_0)-f_n(a))-\int_{a}^{x_0} g(t)\,dt\right| \\
+    \le{} & \epsilon+\left|\int_{a}^{x_0} f_n'(t)\,dt-\int_{a}^{x_0} g(t)\,dt\right| \\
+    \le{} & \epsilon + (b-a)\epsilon
+\end{align*}
+
+So we see that for $n$ chosen wisely $|f_n(x)-f(x)|<(2b-2a+1)\epsilon$ for all $x$.
+The left coefficient is constant, so as $\epsilon \to 0$ the distance should to.
+Thus, $f_n$ uniformly converges to $f$.
+
+\subsection{Derivative is \texorpdfstring{$g$}{g}}
+
+Thankfully, this part is pretty simple by the FTC.
+
+Since both of the first two terms are constant w.r.t $x$, their derivative becomes $0$.
+That just leaves
+\[\frac{d}{dx} \int_{a}^{x} g(t)\,dt = g(x)\quad\square\]
+
+\end{document}
