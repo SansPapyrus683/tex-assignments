@@ -1,0 +1,319 @@
+\documentclass[12pt]{article}
+
+\input{../kz}
+
+\rhead{Math 131BH}
+
+\makeatletter
+\def\@seccntformat#1{%
+  \expandafter\ifx\csname c@#1\endcsname\c@section\else
+  \csname the#1\endcsname\quad
+  \fi}
+\makeatother
+
+\DeclareMathOperator{\Fr}{Fr}
+\newcommand{\lra}{\xLeftrightarrow}
+\newcommand{\ra}{\xRightarrow}
+\newcommand{\N}{\mathbb{N}}
+\newcommand{\R}{\mathbb{R}}
+\newcommand{\Z}{\mathbb{Z}}
+\newcommand{\Q}{\mathbb{Q}}
+\newcommand{\norm}[1]{\left\lVert#1\right\rVert}
+
+\begin{document}
+
+\section{Problem 1}
+
+\subsection{Limits are Continuous}
+
+Consider any sequence $(x_n)$ that tends to $x$ but doesn't contain $x$.
+By the definition of the limit, $\lim_{n \to \infty} f(x_n) = L(x)$.
+It STP $\lim_{n \to \infty} L(x_n) = L(x)$.
+
+Now let's construct a sequence $y_n$ as follows:
+\begin{itemize}[nolistsep]
+  \item $d_n$ chosen s.t. $|x-x_n| < d_n \land x \ne x_n \implies |f(x)-L(x_n)| < \frac{1}{n}$
+  \item $\delta_n=\min\left(\frac{1}{n}, d_n\right)$
+  \item $y_n$ is anything in $(x_n-\delta_n, x_n+\delta_n) \setminus \{x_n, x\}$.
+\end{itemize}
+
+Now, for the actual limit we want to show, fix an $\epsilon$.
+
+By definition of the limit, $\exists \delta: |y-x| < \delta \land y \ne x \implies |f(y)-f(x)| < \frac{\epsilon}{2}$.
+
+Choose $N_1 \in \N$ s.t. $|y_n-x| < \delta\ \forall n \ge N_1$.
+
+Also choose $N_2 \in \N$ s.t. $|f(y_n)|-L(x_n)| < \frac{\epsilon}{2}\ \forall n \ge N_2$.
+
+Now, taking $N$ as the larger of the two, we have for all $n \ge N$
+\[|L(x_n)-L(x)| \le |L(x_n)-f(y_n)|+|f(y_n)-f(x)| \le \epsilon\quad\square\]
+
+actually there's an edge case for if $x_n$ contains $x$ itself, uh,
+in that case $L(x_n)=L(x)$ so like just omit the construction of $y_n$ for those terms ig lol
+
+\subsection{Countable Discontinuities}
+
+The set given in the question is just the set of all \textit{removable} discontinuities, right?
+
+In that case, let $E_n$ be all RDs s.t. $|f(x)-L(x)| > \frac{1}{n}$.
+We can get the actual set from taking $\bigcup_{n=1}^\infty E_n$,
+so it STP that $E_n$ is countable.
+
+Consider any $x$ where $|f(x)-L(x)| > \frac{1}{n}$.
+By definition of the limit, we can take a $B_\delta(x)$
+where $|f(y)-L(x)| < \frac{1}{4n}$ for all $y$ in the area that aren't $x$.
+
+This means all the $y$ are at most $\frac{1}{2n}$ from each other.
+Notice that none of these $y$ are in $E_n$, since $|L(y)-L(x)| < \frac{1}{4n}$
+and $|f(y)-L(y)| < \frac{1}{2n}$, so $|L(y)-f(y)| < \frac{1}{n}$.
+
+Now we can map $E_n$ to a set of disjoint open intervals
+and then take a distinct rational from each of them.
+Thus, each $E_n$ is at most countable. $\square$
+
+\pagebreak
+
+\section{Problem 2}
+
+BWOC $\exists x: f(x) > 0$.
+Take a $\delta$ s.t. $|x-y| < \delta \implies |f(x)-f(y)| < \frac{f(x)}{2} \implies f(y) > \frac{f(x)}{2}$.
+With this, we have an interval $[c, d]$ where $f$ is at least $\frac{\epsilon}{2}$ on.
+
+Then, no matter what partition $\{p_0, p_1, \cdots, p_n\}$
+we pick, there's always $p_i < p_j$ s.t.:
+\begin{itemize}[nolistsep]
+  \item $p_i \le c < d \le p_j$
+  \item $c < p_{i+1}$ and $p_{j-1} < d$
+\end{itemize}
+so
+\begin{align*}
+  \sum_{k=1}^{n} M_k \Delta x_k
+   & \ge \sum_{k=i+1}^{j} M_k \Delta x_k                \\
+   & \ge \sum_{k=i+1}^{j} \frac{\epsilon}{2} \Delta x_k \\
+   & \ge (c-d) \cdot \frac{\epsilon}{2}                 \\
+   & > (c-d) \cdot \frac{\epsilon}{4}
+\end{align*}
+and yeah, the infimum across all upper sums has to be strictly positive,
+which contradicts that $\int_{a}^{b} f(x)\,dx=0$. $\square$
+
+\pagebreak
+
+\section{Problem 3}
+
+\subsection{Not True for Squares}
+
+No, $f(x)^2 \in \mathcal{R}$ doesn't imply $f(x) \in \mathcal{R}$.
+Consider the following $f: [0, 1] \to \R$:
+\[f(x)=\begin{cases}
+    1  & x \in \Q    \\
+    -1 & x \notin \Q
+  \end{cases}\]
+Although $f(x)^2=1$ is trivially integrable, $f(x)$ itself is not.
+
+\subsection{But True for Cubes}
+
+However, $f(x)^3 \in \mathcal{R} \implies f(x) \in \mathcal{R}$.
+
+To show this, notice that $f(x)^3$ is bounded, so $\exists M: -M < f(x)^3 < M$.
+The cube root function is defined on all of $\R$ and is continuous on the
+closed interval $[-M, M]$ so it must also be UC on this interval.
+
+For this problem, I'll take $C_i$/$c_i$ as the range sup/infs of $f(x)^3$,
+and $F_i$/$f_i$ as the same thing but with $\sqrt[3]{f(x)^3}=f(x)$.
+
+Fix $\epsilon$ and take $\delta$ s.t. $\delta < \epsilon$
+and $|x-y| < \delta \implies \left|\sqrt[3]{x}-\sqrt[3]{y}\right| < \epsilon$.
+
+$f(x)^3$ is integrable, so $\exists P$ s.t.
+\[\sum_{i=1}^{n} (C_i-c_i)\Delta x_i < \delta^2\]
+where $C_i$ and $c_i$ are the range sup/range infs of $f(x)^3$.
+
+Let $i \in A$ if $C_i-c_i < \delta$ and $i \in B$ otherwise.
+If $i \in A$, $F_i-f_i < \epsilon$.
+For the bad ones in $B$, notice that
+\[\delta\sum_{i \in B} \Delta x_i \le \sum_{i \in B} (C_i-c_i)\Delta x_i \le \delta^2
+  \implies \sum_{i \in B} \Delta x_i \le \delta\]
+
+Now, we have
+\begin{align*}
+  \sum_{i=1}^{n} (F_i-f_i)\Delta x_i
+   & = \sum_{i \in A} (F_i-f_i) \Delta x_i + \sum_{i \in B} (F_i-f_i) \Delta x_i \\
+   & < \sum_{i \in A} \epsilon \Delta x_i + \delta(\sup f - \inf f)              \\
+   & \le \epsilon((b-a) + (\sup f - \inf f))
+\end{align*}
+so as long as we pick $\epsilon$ to be small enough initially,
+$U(P, f) - L(P, f)$ will get tiny as well. $\square$
+
+\pagebreak
+
+\section{Problem 4}
+
+\subsection{Integral to Series}
+
+Notice that if $b \in \N \setminus \{1\}$,
+\[\int_{1}^{b} f(x)\,dx = \sum_{i=1}^{b-1} \int_{i}^{i+1} f(x)\,dx\]
+
+With that, since $f$ is monotnonically decreasing, we have
+\begin{align*}
+             & f(n+1) \le \int_{n}^{n+1} f(x)\,dx\ \forall n \in \N                        \\
+  \implies{} & \sum_{i=1}^{N} f(i+1) \le \sum_{i=1}^{N} \int_{i}^{i+1} f(x)\,dx            \\
+  \implies{} & \sum_{i=2}^{N} f(i) \le \int_{1}^{N} f(x)\,dx                               \\
+  \implies{} & \sum_{i=2}^{\infty} f(i) \le \int_{1}^{\infty} f(x)\,dx                     \\
+  \implies{} & \sum_{i=1}^{\infty} f(i) \le f(1) + \int_{1}^{\infty} f(x)\,dx \quad\square
+\end{align*}
+
+\subsection{Series to Integral}
+
+We do basically the same thing except with the left end of each interval.
+\begin{align*}
+             & \int_{n}^{n+1} f(x)\,dx \le f(n)\ \forall n \in \N                  \\
+  \implies{} & \sum_{i=1}^{N} \int_{i}^{i+1} f(x)\,dx \le \sum_{i=1}^{N} f(i)      \\
+  \implies{} & \int_{1}^{N+1} f(x)\,dx \le \sum_{i=1}^{N} f(i)                     \\
+  \implies{} & \int_{1}^{\infty} f(x)\,dx \le \sum_{i=1}^{\infty} f(i)\quad\square
+\end{align*}
+
+\pagebreak
+
+\section{Problem 5}
+
+It STP $\int_{a}^{b} f(x) \,dx-\int_{a}^{b} g(x)\,dx=\int_{a}^{b} f(x)-g(x)\,dx=0$.
+$f$ and $g$ are both integrable, so $f-g$ should be too, surely.
+
+Notice that the set where $f(x)-g(x)=0$ is dense in $\R$ as well.
+
+Thus, $L(P, f-g)=0\ \forall P$ since $\forall u < v \in [a, b]\ \exists x \in [u, v]: f(x)-g(x)=0$.
+
+With that,
+\[\int_{a}^{b} f(x)-g(x)\,dx=\sup_{\text{all }P} L(P, f-g)=0\quad\square\]
+
+\section{Problem 6}
+
+\subsection{Continuity of \texorpdfstring{$f^{-1}$}{f inverse}}
+
+It's given that $f$ attains every value in $\R$, so $f^{-1}$ certainly is well-defined.
+
+Anyways, fix an $x$ and $\delta > 0$ (yeah, i'm reversing variables too).
+
+If we let $f(x-\delta)=f(x)-\epsilon_1$, $f(x+\delta)=f(x)+\epsilon_2$.
+Since $f$ is \textit{strictly} increasing, both $\epsilon$s are positive.
+If $\epsilon$ is the smaller of the two, I propose that
+$|f(x')-f(x)| < \epsilon \implies|x'-x| < \delta$.
+
+I'll show the contrapositive.
+If $|x-x'| \ge \delta$, then either:
+\begin{enumerate}[nolistsep]
+  \item $x-x' \ge \delta \implies x' \le x-\delta \implies f(x)-f(x') \ge \epsilon_1$
+  \item $x'-x \ge \delta \implies x+\delta \le x' \implies f(x')-f(x) \ge \epsilon_2$
+\end{enumerate}
+so in either case $|f(x)-f(x')| \ge \epsilon$. $\square$
+
+\pagebreak
+
+\subsection{Weird Integral Thing}
+
+I'm pretty sure $f^{-1}$ has the same properties $f$ does (strictly increasing, hits all the reals, etc.),
+so WLOG let $b \le f(a)$.
+
+It STP
+\begin{gather}
+  \label{inteq} \int_{0}^{a} f(x)\,dx + \int_{0}^{f(a)} f^{-1}(x)\,dx = af(a)
+\end{gather}
+since if $b < f(a)$ the integral will only be less than what it is now.
+
+Conside any partition $P$ for on $[0, a]$.
+Since $f$ is strictly increasing, we can map this to a partition $P^{-1}$ where $x_i=f(x_i)$.
+
+First, we see that
+\begin{align*}
+  U(P, f)
+   & =\sum_{i=1}^{n} F_i \Delta x_i         \\
+   & = \sum_{i=1}^{n} f(x_i)(x_i - x_{i-1})
+\end{align*}
+since $f$ increases and thus achieves the supremum on the right end.
+
+Second, we have (if you'll excuse the abuse of notation)
+\begin{align*}
+  L\left(P^{-1}, f^{-1}\right)
+   & = \sum_{i=1}^{n} f^{-1}_i \Delta x_i                   \\
+   & = \sum_{i=1}^{n} f^{-1}(f(x_{i-1}))(f(x_i)-f(x_{i-1})) \\
+   & = \sum_{i=1}^{n} x_{i-1}(f(x_i)-f(x_{i-1}))
+\end{align*}
+
+Adding these two together gives
+\begin{align*}
+      & \sum_{n=1}^{n} f(x_i)(x_i-x_{i-1})+x_{i-1}(f(x_i)-f(x_{i-1})) \\
+  ={} & \sum_{n=1}^{n} x_i f(x_i) - x_{i-1} f(x_{i-1})                \\
+  ={} & x_n f(x_n)                                                    \\
+  ={} & a f(a)
+\end{align*}
+Since both $f$ and $f^{-1}$ are integrable, the sum of these
+two sums must approach the sums of the actual integrals.
+As we see, the sum is a constant $a f(a)$, so yeah. $\square$
+
+\pagebreak
+
+\subsection{That Solves a Rudin Problem??}
+
+\subsubsection{Raw Inequality}
+
+Let $f(x)=x^{p-1}$.
+Notice that $f^{-1}(x)=x^{\frac{1}{p-1}}=x^{q-1}$.
+These functions are obviously continuous, and they're increasing as well due to that $p, q > 1$.
+
+Now for some integrals:
+\begin{align*}
+  \int_{0}^{u} f(x)\,dx = \left.\left(\frac{x^p}{p}\right)\right|^u_0=\frac{u^p}{p} &  &
+  \int_{0}^{v} f(x)\,dx = \left.\left(\frac{x^q}{q}\right)\right|^v_0=\frac{v^q}{q}
+\end{align*}
+so by what we just proved, $\frac{u^p}{p}+\frac{v^q}{q} \ge uv$.
+
+\subsubsection{When Equality is Achieved}
+
+If $u^p=v^q$, then
+\[f(u)=u^{p-1}=\frac{v^q}{u}=\frac{v^q}{\left(v^q\right)^{1/p}}=v^{q-\frac{q}{p}}=v\]
+which by the equality in \eqref{inteq} means $\frac{u^p}{p}+\frac{v^q}{q} = uv$.
+
+OTOH, if $u^p \ne v^q$, WLOG assume $u^p > v^q$.
+
+Since we earlier had that $f(u)=v$ if $u^p=v^q$, $u$ being a greater value
+combined with the monotonicity of $f$ imply that $f(u) > v$ in this scenario.
+
+This forces $\frac{u^p}{p}+\frac{v^q}{q} < uv$ now, again since
+equality is achieved only when \eqref{inteq} happens. $\square$
+
+\pagebreak
+
+\section{Problem 7}
+
+Let $F_i$/$f_i$ indicate the range sup/infs for $f$,
+and $A_i$/$a_i$ be the same for $\alpha$.
+
+Since both are monotnonically increasing, the max and mins must occur
+at the right and left endpoints respectively.
+
+\subsection{Actually Integrable}
+
+Since $f \in \mathcal{R}(\alpha)$, $\forall \epsilon\ \exists P$ s.t.
+\begin{align*}
+  \epsilon & > \sum_{i=1}^{n} (F_i-f_i)\Delta \alpha_i                         \\
+           & = \sum_{i=1}^{n} (f(x_i)-f(x_{i-1}))(\alpha(x_i)-\alpha(x_{i-1})) \\
+           & = \sum_{i=1}^{n} \Delta f_i \cdot (A_i-a_{i-1})                   \\
+           & = U(P, \alpha, f) - L(P, \alpha, f)
+\end{align*}
+and, wow, just like that, we've found a partition that implies $\alpha \in \mathcal{R}(f)$.
+
+\subsection{But to What Value?}
+
+Take $U(P, f, \alpha) + L(P, \alpha, f)$.
+As $P$ gets finer, it should go to the sum of the intergrals.
+
+\begin{align*}
+  U(P, f, \alpha) + L(P, \alpha, f)
+  &= \sum_{i=1}^{n} F_i \Delta \alpha_i + \sum_{i=1}^{n} a_i \Delta f_i \\
+  &= \sum_{i=1}^{n} f(x_i)(\alpha(x_i)-\alpha(x_{i-1}))+\alpha(x_{i-1})(f(x_i)-f(x_{i-1})) \\
+  &= \sum_{i=1}^{n} f(x_i)\alpha(x_i) - f(x_{i-1})\alpha(x_{i-1}) \\
+  &= f(x_n)\alpha(x_n) - f(x_0)\alpha(x_0) \\
+  &= f(b)\alpha(b)-f(a)\alpha(a)\quad\square
+\end{align*}
+
+\end{document}
