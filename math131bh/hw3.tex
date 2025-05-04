@@ -207,12 +207,12 @@ Since $h(x+\delta_0) > h(x_0)$,
 the slope between these two points $m=\frac{h(x+\delta_0)-h(x_0)}{\delta_0}=\frac{h(x+\delta_0)}{\delta_0} > 0$.
 
 Since $h'(x_0)=0$, the slope, difference quotient, whatever you wanna call it tends to $0$,
-there has to be some smallest $\delta_1 \le \delta_0$ s.t. $\frac{h(x+\delta_1)}{\delta_1}=m$.
+there has to be some smallest $0 < \delta_1 \le \delta_0$ s.t. $\frac{h(x+\delta_1)}{\delta_1}=m$.
 Oh yeah, this thing does have to exist in the first place, and that's because $\delta_0$
 itself also satisfies the conditions- we can always pick that if need be.
 
 By the MVT, $\exists \delta_2 \in (0, \delta_1): h'(x+\delta_2)=\frac{h(x+\delta_1)}{\delta_1} = m$.
-Notice that $(x + \delta_2, h(x + \delta_2))$ has to be below the line from point $(x_0, 0)$ to $(\delta_1, m \cdot \delta_1)$.
+Notice that $(x + \delta_2, h(x + \delta_2))$ has to be below the line from point $(x_0, 0)$ to $(x_0+\delta_1, m \cdot \delta_1)$.
 If it were above, its slope would be greater than $m$
 and $\delta_1$ wouldn't be the smallest value satisfying its specified conditions.
 
