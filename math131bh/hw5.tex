@@ -1,0 +1,151 @@
+\documentclass[12pt]{article}
+
+\input{../kz}
+
+\rhead{Math 131BH}
+
+\makeatletter
+\def\@seccntformat#1{%
+  \expandafter\ifx\csname c@#1\endcsname\c@section\else
+  \csname the#1\endcsname\quad
+  \fi}
+\makeatother
+
+\DeclareMathOperator{\Fr}{Fr}
+\newcommand{\lra}{\xLeftrightarrow}
+\newcommand{\ra}{\xRightarrow}
+\newcommand{\N}{\mathbb{N}}
+\newcommand{\R}{\mathbb{R}}
+\newcommand{\Z}{\mathbb{Z}}
+\newcommand{\Q}{\mathbb{Q}}
+\newcommand{\norm}[1]{\left\lVert#1\right\rVert}
+
+\begin{document}
+
+\section{Problem 1}
+
+BWOC say $f$ wasn't continuous at $0$,
+so $\exists \epsilon$ s.t. any $(-\delta, \delta)$ always has some violation.
+
+Among any partition, there's always some interval $[x_i, x_{i+1}]$ that contains $0$.
+In this interval, $\Delta \alpha_i$ is guaranteed to equal $1$.
+
+By what we've just said,
+\[\sup_{[x_i, x_{i+1}]} f(x)-\inf_{[x_i, x_{i+1}]} f(x) \ge \epsilon\]
+since we can always find an element that's at least $\epsilon$ away from $f(0)$,
+which the interval is guaranteed to contain.
+
+This means $U(P, f) - L(P, f) \ge \epsilon$ as well, which contradicts that $f \in \mathcal{R}(\alpha)$. $\square$
+
+\section{Problem 2}
+
+$\R \setminus \mathcal{C}$ should be dense in $\mathcal{C}$, so $L(P, f)=0$ for any partition.
+
+Now we just have find a $P$ for any $\epsilon$ s.t. $U(P, f) < \epsilon$.
+
+To start, we can have $P_0=\left\{0, \frac{1}{3}, \frac{2}{3}, 1\right\}$.
+I'll find "sub-partitions" for each third, and now we just need:
+\begin{itemize}
+  \item The left and right halves to be less than $\frac{3\epsilon}{7}$
+  \item The middle half to be less than $\frac{\epsilon}{1}$
+\end{itemize}
+
+While we can't really say anything about the left and right halves, $f$ on the middle half is just
+\[f(x)=\begin{cases}
+    0 & \frac{1}{3} < x < \frac{2}{3} \\
+    1 & \text{otherwise}
+  \end{cases}\]
+so the sub-partition $\left\{\frac{1}{3}, \frac{1+0.1\epsilon}{3}, \frac{2-0.1\epsilon}{3}, \frac{2}{3}\right\}$
+has an upper sum of at most $\frac{\epsilon}{7}$.
+
+This leaves the left and right halves.
+Notice that both are equivalent to $f$ shrunk horizontally by a factor of $3$, so we can do recursion, basically.
+
+To show that this process will terminate, notice that while $f$ shrinks by a factor of $\frac{1}{3}$ each time,
+$\epsilon$ shrinks by a factor of $\frac{3}{7} > \frac{1}{3}$.
+Eventually the length of the entire interval we're considering will be less than the current $\epsilon$,
+and our subpartition will just be the entire interval.
+
+Recursively applying this process should yield a partition whose upper sum is less than $\epsilon$. $\square$
+
+\pagebreak
+
+\section{Problem 3}
+
+\subsection{Part B}\label{sec:p3pb}
+
+It STP $\int_{a}^{b} (fg)(x)\,dx < 1+\epsilon\ \forall \epsilon > 0$.
+
+Take a partition $P_f$ s.t. $U(P_f, f, \alpha) < 1+\epsilon$.
+Take a similar $P_g$ and let $P=P_f \cup P_g$.
+
+Let $FP_i$ and $GQ_i$ indicate the range sups of $f^p$ and $g^q$ respectively.
+If two-letter variable names work for physics, who's to say they won't work for math?
+
+Given that we have
+\begin{align*}
+  \sum_{i=1}^{n} FP_i \Delta \alpha_i < 1+\epsilon &  &
+  \sum_{i=1}^{n} GQ_i \Delta \alpha_i < 1+\epsilon
+\end{align*}
+we can add scalar multiples of the two to get
+\[\sum_{i=1}^{n} \left(\frac{FP_i}{p}+\frac{GQ_i}{q}\right)\Delta\alpha_i < \frac{1+\epsilon}{p}+\frac{1+\epsilon}{q}=1+\epsilon\]
+
+Also, since by what was proven in part A last week,
+\[f(x) \cdot g(x) \le \frac{f(x)^p}{p}+\frac{g(x)^q}{q}\]
+$f$ and $g$ are both nonnegative, so the range sup of their product is
+equal to the product of their sups.
+This allows us to write
+\begin{align*}
+  \sum_{i=1}^{n} (FG_i) \Delta\alpha_i
+  &=  \sum_{i=1}^{n} (F_i \cdot G_i) \Delta\alpha_i \\
+  &\le\sum_{i=1}^{n} \left(\frac{FP_i}{p}+\frac{GQ_i}{q}\right)\Delta\alpha_i  \\
+  &< 1+\epsilon\quad\square
+\end{align*}
+
+\pagebreak
+
+\subsection{Part C}
+
+WLOG assume $f$ and $g$ are nonnegative; everything's wrapped up in absolute values anyways.
+
+Let $A_f=\int_{a}^{b} f(x)^p\,dx$ and $A_g$ be defined similarly but with $q$.
+
+Consider the functions $F(x)=\frac{f(x)}{A_f^{1/p}}$ and $G(x)=\frac{g(x)}{A_g^{1/q}}$
+Notice that
+\[\int_{a}^{b} F(x)^p\,dx=\int_{a}^{b} \frac{f(x)^p}{A_f}\,dx=1\]
+and the same holds true for $G$, so we can apply the results in \ref{sec:p3pb}:
+\begin{align*}
+  & \int_{a}^{b} (FG)(x)\,dx \le 1 \\
+  \implies{} & \int_{a}^{b} \frac{f(x)g(x)}{A_f^{1/p}A_g^{1/q}} \le 1 \\
+  \implies{} & \int_{a}^{b} (fg)(x) \le A_f^{1/p}A_g^{1/q} \\
+  \implies{} & \int_{a}^{b} (fg)(x) \le \left(\int_{a}^{b} f(x)^p\,dx\right)^{1/p}\left(\int_{a}^{b} g(x)^q\,dx\right)^{1/q}
+\end{align*}
+We already assumed everything was nonnegative, so the $|\cdot|$s don't do anything. $\square$
+
+\pagebreak
+
+\section{Problem 4}
+
+\subsection{What the Heck}
+
+Lemme pull \textit{another} deus ex machina and write $g(x)=xf(x)^2$.
+Its derivative is
+\[g'(x)=f(x)^2+2xf(x)f'(x)\]
+so by the FTC we have
+\begin{align*}
+  & \int_{a}^{b} f(x)^2+2xf(x)f'(x)\,dx = g(b)-g(a) \\
+  \implies{} & \int_{a}^{b} f(x)^2\,dx+2\int_{a}^{b} xf(x)f'(x)\,dx = 0 \\
+  \implies{} & \int_{a}^{b} xf(x)f'(x)\,dx=-\frac{\int_{a}^{b} f(x)^2\,dx}{2} \\
+  \implies{} & \int_{a}^{b} xf(x)f'(x)\,dx=-\frac{1}{2}\quad\square
+\end{align*}
+
+\subsection{WHAT THE HE - Actually Hold On}
+
+Apply Holder's with $xf(x)$, $f'(x)$, and $p=q=2$:
+\begin{align*}
+  & \left|\int_{b}^{a} xf(x) \cdot f'(x)\,dx\right| \le \sqrt{\int_{b}^{a} (xf(x))^2\,dx}\sqrt{\int_{b}^{a} f'(x)^2\,dx} \\
+  \implies{} & \frac{1}{2} \le \sqrt{\int_{b}^{a} (xf(x))^2\,dx \cdot \int_{b}^{a} f'(x)^2\,dx} \\
+  \implies{} & \frac{1}{4} \le \int_{b}^{a} (xf(x))^2\,dx \cdot \int_{b}^{a} f'(x)^2\,dx\quad\square
+\end{align*}
+
+\end{document}
