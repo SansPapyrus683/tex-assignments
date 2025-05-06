@@ -1,0 +1,207 @@
+\documentclass[12pt]{article}
+
+\input{../kz}
+
+\rhead{Math 131B}
+
+\makeatletter
+\def\@seccntformat#1{%
+  \expandafter\ifx\csname c@#1\endcsname\c@section\else
+  \csname the#1\endcsname\quad
+  \fi}
+\makeatother
+
+\DeclareMathOperator{\Fr}{Fr}
+\newcommand{\lra}{\xLeftrightarrow}
+\newcommand{\ra}{\xRightarrow}
+\newcommand{\N}{\mathbb{N}}
+\newcommand{\R}{\mathbb{R}}
+\newcommand{\Z}{\mathbb{Z}}
+\newcommand{\Q}{\mathbb{Q}}
+\newcommand{\norm}[1]{\left\lVert#1\right\rVert}
+
+\begin{document}
+
+\section{Problem 1}
+
+\subsection{Series Convergence}
+
+Let $F_n(x)=\sum_{i=1}^n f_i(x)$.
+Each of the finitely many $f_i$s are differentiable, so $F_n'(x)=\sum_{i=1}^n f_i'(x)$.
+
+We're given that $\sum_{i=n}^\infty \norm{f_n'}$ converges,
+so by the M-Test $F_n'$ must converge uniformly to some $D$.
+
+Also by assumptions, $\lim_{n \to \infty} F_n(x_0)$ exists.
+
+Now we see that the \textit{sequence} of functions and their associated derivatives
+satisfy the conditions for Theorem 3.7.1.
+This means $F_n$ converges to some $F$ and by extension $\sum_{n=1}^\infty f_n$ exists.
+
+\subsection{Limit Swapping}
+
+Again by the theorem we just used,
+\begin{align*}
+    \frac{d}{dx} \sum_{n=1}^\infty f_n(x)
+    &=\frac{d}{dx} \lim_{n \to \infty} F_n(x) \\
+    &=\frac{d}{dx} F(x) \\
+    &= D(x) \\
+    &= \lim_{n \to \infty} \frac{d}{dx} F_n(x) \\
+    &= \sum_{n=1}^\infty \frac{d}{dx} f_n(x)\quad\square
+\end{align*}
+
+\pagebreak
+
+\section{Problem 2}
+
+% yes, this is basically ripped straight from the bh version. sue me.
+
+Let $f_n(x)=4^{-n} \cos\left(32^n\pi x\right)$ for convenience.
+
+$|\cos x| \le 1$, so $|f_n(x)| \le 4^{-n}$ and the series does indeed converge for all $x$.
+Denote the limit of the series of functions as $f$.
+
+To show that it \textit{uniformly} converges, fix an $\epsilon$.
+Since $f_n$ is bounded by a geometric series, we have
+\begin{align*}
+    \left|f(x)-\sum_{i=1}^n f_i(x)\right|
+    &= \left|\sum_{i=n+1}^\infty f_i(x)\right| \\
+    &\le \sum_{i=n+1}^\infty 4^{-n} \\
+    &= \frac{4^{-n-1}}{1-\frac{1}{4}}
+\end{align*}
+
+We can certainly choose an $n$ s.t. the bound above is less than $\epsilon$, so there we go. $\square$
+
+\section{Problem 3}
+
+\subsection{Divergence and Abs. Convergence}\label{sec:p3p1}
+
+If $|x-a| > R$, then $|x-a| \cdot \limsup_{n \to \infty} |c_n|^{1/n} > 1$.
+
+Applying the root test to the series requires us to compute
+\[\limsup_{n \to \infty} \left|c_n|x-a|^n\right|^{1/n}
+=\limsup_{n \to \infty} |c_n|^{1/n}|x-a|\]
+Notice that this is precisely the value above that was greater
+than $1$ by our assumptions, so the series must diverge. $\square$
+
+The proof goes much the same for absolute convergence,
+except we see that the limsup of the roots is less than $1$.
+
+\subsection{Uniform Convergence on Compact Sets}
+
+Consider $\norm{c_n |x-a|^n}_\infty$.
+The largest magnitude the function within achieves is if $|x-a|=r$, so the norm must be $|c_n|r^n$.
+
+By the same reasoning as in \ref{sec:p3p1}, $\sum_{n=0}^\infty |c_n|r^n$ converges absolutely,
+so by the M-Test the series of functions itself converges to $f$ uniformly. $\square$
+
+\pagebreak
+
+\section{Problem 4}
+
+\subsection{Differentiation}\label{sec:p4p1}
+
+Let $f_n(x)=c_n|x-a|^n$ for convenience.
+
+The series of $f_n$s already uniformly converge, so they certainly pointwise converge as well.
+All we need to do is prove the convergence of the derivatives.
+
+By the M-Test, it STP the convergence of
+\[\sum_{n=0}^\infty \norm{f_n'}_\infty = \sum_{n=0}^\infty nc_nr^{n-1}\]
+
+Then applying the root test, we see that we then NTS that this limit:
+\begin{align*}
+    \limsup_{n \to \infty} \left|nc_nr^{n-1}\right|^{1/n}
+    &= \limsup_{n \to \infty} r\left|\frac{nc_n}{r}\right|^{1/n} \\
+    &= \limsup_{n \to \infty} r |c_n|^{1/n} \cdot \limsup_{n \to \infty} \left(\frac{n}{r}\right)^{1/n}
+\end{align*}
+is less than $1$.
+The first term is already less than $1$, so as long as the second one isn't greater than that we're golden.
+
+\subsubsection{Limit Derivation}
+
+The second limit actually does converge exactly to $1$, so I'll be using that limit from here on out:
+\begin{align*}
+    \lim_{n \to \infty} \left(\frac{n}{r}\right)^{1/n}
+    &= \lim_{n \to \infty} \exp \frac{\ln \left(\frac{n}{r}\right)}{n} \\
+    &= \exp \lim_{n \to \infty} \frac{\ln \left(\frac{n}{r}\right)}{n} & \text{$\exp$ is continuous} \\
+    &= \exp \lim_{n \to \infty} \frac{\frac{r}{n}}{1} & \text{LHopital's} \\
+    &= \exp 0 \\
+    &= 1
+\end{align*}
+
+With all that, we see that the sequence of derivatives does indeed uniformly converge,
+satisfying all the conditions needed to apply Theorem 3.7.1.
+Thus, the series $\sum_{n=0}^\infty f_n'(x)$ indeed converges to $f'$. $\square$
+
+\subsection{Integration}
+
+This is just chasing some definitions:
+\begin{align*}
+    \int_y^z f(x)\,dx
+    &= \int_y^z \sum_{n=0}^\infty f_n(x)\,dx \\
+    &= \sum_{n=0}^\infty \int_y^z f_n(x)\,dx & \text{by 3.6.2} \\
+    &= \sum_{n=0}^\infty \left.\left(\frac{c_n}{n+1}(a-x)^{n+1}\right)\right|^y_z \\
+    &= \sum_{n=0}^\infty \frac{c_n}{n+1}\left((a-x)^{n+1}-(a-y)^{n+1}\right)\quad\square
+\end{align*}
+
+\pagebreak
+
+\section{Problem 5}\label{sec:p5}
+
+\subsection{Base Case}
+
+$k=0$ is pretty easy, since $f^{(0)}(x)=f(x)$
+\[f^{(0)}=\sum_{n=0}^\infty c_{n+0}\frac{(n+0)!}{n!}(x-a)^n=\sum_{n=0}^\infty c_n(x-a)^n\]
+
+\subsection{Inductive Step}
+
+Assume the statement holds for $k$; now we need to show it holds for $k+1$ as well.
+
+We have
+\[f^{(k)}(x)=\sum_{n=0}^\infty c_{n+k}\frac{(n+k)!}{n!}(x-a)^n\]
+which converges on $(a-r, a+r)$.
+
+By \ref{sec:p4p1}, we can take $c'_n=c_{n+k}\frac{(n+k)!}{n!}$ to see that
+\begin{align*}
+    f^{(k+1)}(x)
+    &=\sum_{n=0}^\infty nc'_n(x-a)^{n-1} \\
+    &=\sum_{n=1}^\infty nc_{n+k}\frac{(n+k)!}{n!}(x-a)^{n-1} \\
+    &=\sum_{n=0}^\infty (n+1)c_{n+k+1}\frac{(n+k+1)!}{(n+1)!}(x-a)^n
+\end{align*}
+where we take out the first term in the summation since it's equal to $0$.
+
+The theorem also states that it converges on $(a-r, a+r)$ as well,
+so this is indeed the $k+1$th derivative. $\square$
+
+\pagebreak
+
+\section{Problem 6}
+
+Plugging in $a$ to the formula we proved in \ref{sec:p5},
+\begin{align*}
+    f^{(k)}(a)
+    &=\sum_{n=0}^\infty c_{n+k}\frac{(n+k)!}{n!}(a-a)^n \\
+    &=c_k \cdot k! \cdot 0^0 \\
+    &= c_k \cdot k!
+\end{align*}
+
+Which then implies
+\begin{align*}
+    f(x)
+    &=\sum_{n=0}^\infty c_n(x-a)^n \\
+    &=\sum_{n=0}^\infty \frac{c_n \cdot n!}{n!}(x-a)^n \\
+    &=\sum_{n=0}^\infty \frac{f^{(n)}(a)}{n!}(x-a)^n\quad\square
+\end{align*}
+
+\section{Problem 7}
+
+By the binomial formula, we have
+\begin{align*}
+    (x-a)^n
+    &= (x-b+b-a)^n \\
+    &= ((x-b)+(b-a))^n \\
+    &= \sum_{m=0}^n \frac{n!}{(n-m)!m!} (x-b)^m(b-a)^{n-m}\quad\square
+\end{align*}
+
+\end{document}
