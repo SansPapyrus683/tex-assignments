@@ -39,14 +39,14 @@ Now let's construct a sequence $y_n$ as follows:
 
 Now, for the actual limit we want to show, fix an $\epsilon$.
 
-By definition of the limit, $\exists \delta: |y-x| < \delta \land y \ne x \implies |f(y)-f(x)| < \frac{\epsilon}{2}$.
+By definition of the limit, $\exists \delta: |y-x| < \delta \land y \ne x \implies |f(y)-L(x)| < \frac{\epsilon}{2}$.
 
 Choose $N_1 \in \N$ s.t. $|y_n-x| < \delta\ \forall n \ge N_1$.
 
 Also choose $N_2 \in \N$ s.t. $|f(y_n)|-L(x_n)| < \frac{\epsilon}{2}\ \forall n \ge N_2$.
 
 Now, taking $N$ as the larger of the two, we have for all $n \ge N$
-\[|L(x_n)-L(x)| \le |L(x_n)-f(y_n)|+|f(y_n)-f(x)| \le \epsilon\quad\square\]
+\[|L(x_n)-L(x)| \le |L(x_n)-f(y_n)|+|f(y_n)-L(x)| \le \epsilon\quad\square\]
 
 actually there's an edge case for if $x_n$ contains $x$ itself, uh,
 in that case $L(x_n)=L(x)$ so like just omit the construction of $y_n$ for those terms ig lol
@@ -65,7 +65,7 @@ where $|f(y)-L(x)| < \frac{1}{4n}$ for all $y$ in the area that aren't $x$.
 
 This means all the $y$ are at most $\frac{1}{2n}$ from each other.
 Notice that none of these $y$ are in $E_n$, since $|L(y)-L(x)| < \frac{1}{4n}$
-and $|f(y)-L(y)| < \frac{1}{2n}$, so $|L(y)-f(y)| < \frac{1}{n}$.
+and $|f(y)-L(x)| < \frac{1}{2n}$, so $|L(y)-f(y)| < \frac{1}{n}$.
 
 Now we can map $E_n$ to a set of disjoint open intervals
 and then take a distinct rational from each of them.
@@ -181,10 +181,17 @@ $f$ and $g$ are both integrable, so $f-g$ should be too, surely.
 
 Notice that the set where $f(x)-g(x)=0$ is dense in $\R$ as well.
 
-Thus, $L(P, f-g)=0\ \forall P$ since $\forall u < v \in [a, b]\ \exists x \in [u, v]: f(x)-g(x)=0$.
+Thus, $L(P, f-g) \le 0\ \forall P$ since $\forall u < v \in [a, b]\ \exists x \in [u, v]: f(x)-g(x)=0$.
 
-With that,
-\[\int_{a}^{b} f(x)-g(x)\,dx=\sup_{\text{all }P} L(P, f-g)=0\quad\square\]
+By the same reasoning, we have $U(P, f-g) \ge 0\ \forall P$ as well.
+
+$f-g$ is integrable, so let $A=\sup_{P} L(P, f-g) = \inf_{P} U(P, f-g)$.
+
+$A$ can't be strictly greater than $0$, since that would mean
+$\exists P: L(P, f-g) > 0$ which contradicts our other inequality.
+Symmetrically, $A$ can't be strictly less than $0$ either.
+
+Thus, the only possible value for $A=\int_{a}^{b} f(x)-g(x)\,dx$ is $0$. $\square$
 
 \section{Problem 6}
 
@@ -211,24 +218,23 @@ so in either case $|f(x)-f(x')| \ge \epsilon$. $\square$
 
 \subsection{Weird Integral Thing}
 
-I'm pretty sure $f^{-1}$ has the same properties $f$ does (strictly increasing, hits all the reals, etc.),
-so WLOG let $b \le f(a)$.
-
+WLOG let $b \le f(a)$.
 It STP
 \begin{gather}
   \label{inteq} \int_{0}^{a} f(x)\,dx + \int_{0}^{f(a)} f^{-1}(x)\,dx = af(a)
 \end{gather}
-since if $b < f(a)$ the integral will only be less than what it is now.
+
+With this formula, if $b < f(a)$ then
+\[\int_{b}^{f(a)} f^{-1}(x)\,dx \le a(f(a)-b)\]
+and subtracting that from both sides of \eqref{inteq} gives the desired result.
 
 Conside any partition $P$ for on $[0, a]$.
 Since $f$ is strictly increasing, we can map this to a partition $P^{-1}$ where $x_i=f(x_i)$.
 
 First, we see that
-\begin{align*}
-  U(P, f)
-   & =\sum_{i=1}^{n} F_i \Delta x_i         \\
-   & = \sum_{i=1}^{n} f(x_i)(x_i - x_{i-1})
-\end{align*}
+\[U(P, f)
+  =\sum_{i=1}^{n} F_i \Delta x_i
+  = \sum_{i=1}^{n} f(x_i)(x_i - x_{i-1})\]
 since $f$ increases and thus achieves the supremum on the right end.
 
 Second, we have (if you'll excuse the abuse of notation)
@@ -246,7 +252,7 @@ Adding these two together gives
   ={} & x_n f(x_n)                                                    \\
   ={} & a f(a)
 \end{align*}
-Since both $f$ and $f^{-1}$ are integrable, the sum of these
+Since $f$ and $f^{-1}$ are integrable, the sum of these
 two sums must approach the sums of the actual integrals.
 As we see, the sum is a constant $a f(a)$, so yeah. $\square$
 
@@ -305,15 +311,14 @@ and, wow, just like that, we've found a partition that implies $\alpha \in \math
 \subsection{But to What Value?}
 
 Take $U(P, f, \alpha) + L(P, \alpha, f)$.
-As $P$ gets finer, it should go to the sum of the intergrals.
-
+As $P$ gets finer, it should go to the sum of the integrals.
 \begin{align*}
   U(P, f, \alpha) + L(P, \alpha, f)
-  &= \sum_{i=1}^{n} F_i \Delta \alpha_i + \sum_{i=1}^{n} a_i \Delta f_i \\
-  &= \sum_{i=1}^{n} f(x_i)(\alpha(x_i)-\alpha(x_{i-1}))+\alpha(x_{i-1})(f(x_i)-f(x_{i-1})) \\
-  &= \sum_{i=1}^{n} f(x_i)\alpha(x_i) - f(x_{i-1})\alpha(x_{i-1}) \\
-  &= f(x_n)\alpha(x_n) - f(x_0)\alpha(x_0) \\
-  &= f(b)\alpha(b)-f(a)\alpha(a)\quad\square
+   & = \sum_{i=1}^{n} F_i \Delta \alpha_i + \sum_{i=1}^{n} a_i \Delta f_i                    \\
+   & = \sum_{i=1}^{n} f(x_i)(\alpha(x_i)-\alpha(x_{i-1}))+\alpha(x_{i-1})(f(x_i)-f(x_{i-1})) \\
+   & = \sum_{i=1}^{n} f(x_i)\alpha(x_i) - f(x_{i-1})\alpha(x_{i-1})                          \\
+   & = f(x_n)\alpha(x_n) - f(x_0)\alpha(x_0)                                                 \\
+   & = f(b)\alpha(b)-f(a)\alpha(a)\quad\square
 \end{align*}
 
 \end{document}
