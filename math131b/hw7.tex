@@ -1,0 +1,107 @@
+\documentclass[12pt]{article}
+
+\input{../kz}
+
+\rhead{Math 131B}
+
+\makeatletter
+\def\@seccntformat#1{%
+  \expandafter\ifx\csname c@#1\endcsname\c@section\else
+  \csname the#1\endcsname\quad
+  \fi}
+\makeatother
+
+\DeclareMathOperator{\Fr}{Fr}
+\newcommand{\lra}{\xLeftrightarrow}
+\newcommand{\ra}{\xRightarrow}
+\newcommand{\N}{\mathbb{N}}
+\newcommand{\R}{\mathbb{R}}
+\newcommand{\Z}{\mathbb{Z}}
+\newcommand{\Q}{\mathbb{Q}}
+\newcommand{\norm}[1]{\left\lVert#1\right\rVert}
+
+\begin{document}
+
+\setcounter{section}{3}
+
+\section{Problem 4}
+
+Fix an $a \in (0, \infty)$.
+We just have to find a power series with a nonzero radius of convergence.
+
+Using Taylor's formula, we can get the following power series:
+\begin{align*}
+        & \ln a \cdot (x-a) + \sum_{n=1}^{\infty} \frac{(n-1)! a^{-n} (-1)^{n+1}}{n!}(x-a)^n \\
+    ={} & \ln a \cdot (x-a) + \sum_{n=1}^{\infty} \frac{(-1)^{n+1}}{n a^n}(x-a)^n
+\end{align*}
+where the $n=0$ term is taken out for convenience.
+
+To get the radius of convergence we just have to consider the tail:
+\begin{align*}
+    \limsup_{n \to \infty} \sqrt[n]{|c_n|}
+     & = \limsup_{n \to \infty} \sqrt[n]{\frac{1}{n a^n}} \\
+     & = \limsup_{n \to \infty} \frac{1}{a\sqrt[n]{n}}    \\
+     & = \frac{1}{a}
+\end{align*}
+
+This means the radius of convergence is $a$, which is clearly nonzero.
+With a power series found for arbitrary $a$, we see that the
+natural logarithm is indeed analytic. $\square$
+
+\pagebreak
+
+\section{Problem 5}
+
+$f$ is analytic at $0$, so there's a $c_n$ s.t. the power series
+\[\sum_{n=0}^{\infty} c_n(x-0)^n\]
+has a positive radius of convergence.
+
+By Taylor's formula, for any $x$ within this radius
+\begin{align*}
+    f(x)
+     & = \sum_{n=0}^{\infty} c_n x^n                   \\
+     & = \sum_{n=0}^{\infty} \frac{f^{(n)}(0)}{n!} x^n \\
+     & = \sum_{n=0}^{\infty} \frac{f(0)}{n!}x^n        \\
+     & = f(0) \sum_{n=0}^{\infty} \frac{x^n}{n!}       \\
+     & = f(0) e^x
+\end{align*}
+We wind up seeing that the radius of convergence is actually $\infty$
+since $c_n=\frac{f(0)}{n!}$, so this formula must be true for all $x$.
+
+Thus, $f(x)=Ce^x$, where $C=f(0)$. $\square$
+
+\pagebreak
+
+\section{Problem 6}
+
+First off, notice that
+\begin{align*}
+    \frac{d}{dx} \frac{e^x}{x^m}
+    &= \frac{e^x x^m - mx^{m-1}e^x}{x^{2m}} \\
+    &= \frac{e^x x^{m-1}\left(x - m\right)}{x^{2m}}
+\end{align*}
+so as long as $x \ge m$, the derivative is nonnegative and the function is increasing.
+
+Consider the sequence $a_n=\frac{e^n}{n^m}$.
+The ratio between consecutive elements is
+\begin{align*}
+    \frac{a_{n+1}}{a_n}
+     & = \frac{e^{n+1} / (n+1)^m}{e^n / n^m}  \\
+     & = e \cdot \left(\frac{n}{n+1}\right)^m
+\end{align*}
+
+Choosing $n$ s.t. $n > m$ and $2^{1/m}n > n+1$
+(which is always possible since $2^{1/m} > 1$),
+\begin{align*}
+    e \cdot \left(\frac{n}{n+1}\right)^m
+    &> e \cdot \left(\frac{1}{2^{1/m}}\right)^m \\
+    &> e \cdot \frac{1}{2} \\
+    &> 1
+\end{align*}
+
+Since the sequence is nonnegative and past a certain point
+has a common ratio greater than $1$ past a certain point, it must be unbounded.
+The actual function itself is increasing past this point as well,
+so it too must be unbounded. $\square$
+
+\end{document}
