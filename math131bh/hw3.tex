@@ -114,7 +114,7 @@ $|\sin(x)-\sin(y)| \le 2$, so for the tail
   \left|\sum_{n=k+1}^{\infty} \frac{g_n(x)}{2^n}\right|
    & \le \sum_{n=k+1}^{\infty} \left|\frac{2}{2^n h_k}\right| \\
    & \le \left|\frac{1}{2^{k-1}h_k}\right|                    \\
-   & \le \frac{1}{\pi} \cdot 5^k
+   & \le \frac{4}{\pi} \cdot 5^k
 \end{align*}
 
 As for the first half, since $|\sin x - \sin y| \le |x-y|$,
@@ -122,18 +122,16 @@ As for the first half, since $|\sin x - \sin y| \le |x-y|$,
 which bounds the head with
 \[\sum_{n=0}^{k-1} \frac{g_n(x)}{2^n} \le \sum_{n=0}^{k-1} \frac{10^n}{2^n}=\frac{1}{4} \cdot 5^k - \frac{1}{4}\]
 
-With these bounds, we have
-\begin{align*}
-  \text{$k$th diff. quotient}
-   & = |\text{divergent} + \text{head} + \text{tail}|                                            \\
-   & \ge \frac{2}{\pi} \cdot 5^k - \frac{1}{\pi} \cdot 5^k - \frac{1}{4} \cdot 5^k - \frac{1}{4} \\
-   & \ge c \cdot 5^k - \frac{1}{4}
-\end{align*}
-for some $c > 0$, it doesn't really matter what it is.
-The point is that this is a divergent series as $k \to \infty$,
-so the limit can't exist! YEEEEEAAAAAA LET'S GOOOOO $\square$ $\square$ $\square$
-
-\small{ok but how the heck does this work when it's just $3$ inside i swear it's literally impossible}
+With these bounds, we have a bound that LITERALLY DOESN'T WORK IT'S SO COOKED
+% \begin{align*}
+%   \text{$k$th diff. quotient}
+%    & = |\text{divergent} + \text{head} + \text{tail}|                                            \\
+%    & \ge \frac{2}{\pi} \cdot 5^k - \frac{1}{\pi} \cdot 5^k - \frac{1}{4} \cdot 5^k - \frac{1}{4} \\
+%    & \ge c \cdot 5^k - \frac{1}{4}
+% \end{align*}
+% for some $c > 0$, it doesn't really matter what it is.
+% The point is that this is a divergent series as $k \to \infty$,
+% so the limit can't exist.
 
 \pagebreak
 
