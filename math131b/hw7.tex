@@ -29,24 +29,50 @@
 Fix an $a \in (0, \infty)$.
 We just have to find a power series with a nonzero radius of convergence.
 
-Using Taylor's formula, we can get the following power series:
-\begin{align*}
-        & \ln a \cdot (x-a) + \sum_{n=1}^{\infty} \frac{(n-1)! a^{-n} (-1)^{n+1}}{n!}(x-a)^n \\
-    ={} & \ln a \cdot (x-a) + \sum_{n=1}^{\infty} \frac{(-1)^{n+1}}{n a^n}(x-a)^n
-\end{align*}
-where the $n=0$ term is taken out for convenience.
+\subsection{Initial Equality}
 
-To get the radius of convergence we just have to consider the tail:
+Differentiating $\ln (a-x)$, we see that
 \begin{align*}
-    \limsup_{n \to \infty} \sqrt[n]{|c_n|}
-     & = \limsup_{n \to \infty} \sqrt[n]{\frac{1}{n a^n}} \\
-     & = \limsup_{n \to \infty} \frac{1}{a\sqrt[n]{n}}    \\
-     & = \frac{1}{a}
+    \frac{d}{dx} \ln (a-x)
+     & = -\frac{1}{a-x}                                             \\
+     & = \frac{1/a}{1-x/a}                                          \\
+     & = -\sum_{n=0}^{\infty} \frac{1}{a}\left(\frac{x}{a}\right)^n
 \end{align*}
+with the final equality only being true if $\left|\frac{x}{a}\right| < 1 \implies |x| < a$.
 
-This means the radius of convergence is $a$, which is clearly nonzero.
-With a power series found for arbitrary $a$, we see that the
-natural logarithm is indeed analytic. $\square$
+Notice that the series of functions $f_n(x)=\frac{1}{a}\left(\frac{x}{a}\right)^n$ converges
+uniformly on $[-b, b]$ where $0 < b < a$ by the M-Test, since $\norm{f_n}_\infty=\frac{b^n}{a^{n+1}}$ and
+\[\sum_{n=0}^{\infty} \frac{b^n}{a^{n+1}}=\frac{1}{a} \sum_{n=0}^{\infty} \left(\frac{b}{a}\right)^n\]
+which conveges as $b < a$.
+
+Fix an $x_0 \in (-a, a)$ and WLOG assume it's positive.
+Integrating both sides gives us
+\begin{align*}
+    \left.\left(\ln(a-x)\right)\right|^{x_0}_0
+     & = \int_{0}^{x_0} -\sum_{n=0}^{\infty} \frac{1}{a}\left(\frac{x}{a}\right)^n\,dx                 \\
+     & = -\frac{1}{a} \int_{0}^{x_0} \sum_{n=0}^{\infty} \left(\frac{x}{a}\right)^n\,dx                \\
+     & = -\frac{1}{a} \sum_{n=0}^{\infty} \int_{0}^{x_0} \left(\frac{x}{a}\right)^n\,dx                \\
+     & = -\frac{1}{a} \sum_{n=0}^{\infty} \left.\left(\frac{x^{n+1}}{(n+1)a^n}\right)\right|^{x_0}_{0} \\
+     & = - \sum_{n=0}^{\infty} \frac{x_0^{n+1}}{(n+1)(a+1)^n}                                          \\
+     & = -\sum_{n=1}^{\infty} \frac{x_0}{n a^n}
+\end{align*}
+where we can swap the integral and the summation by uniform convergence.
+
+\subsection{Actually Using It}
+
+The previous section showed for all $x \in (-a, a)$ that
+\[\ln(a-x) = \ln a -\sum_{n=1}^{\infty} \frac{x^n}{na^n}\]
+(I implicitly evaluated the LHS over there and moved a log over, my bad).
+
+If we let $x'=a-x$, we see that across all $x' \in (0, 2a)$
+\begin{align*}
+    \ln x'
+    &= \ln a - \sum_{n=1}^{\infty} \frac{(a-x')^n}{na^n} \\
+    &= \ln a - \sum_{n=1}^{\infty} \frac{(-1)^n(x'-a)^n}{na^n} \\
+    &= \ln a + \sum_{n=1}^{\infty} \frac{(-1)^{n+1}}{na^n}(x'-a)^n
+\end{align*}
+finally giving us our power series.
+The random log in the front is just $c_0$. $\square$
 
 \pagebreak
 
@@ -77,8 +103,8 @@ Thus, $f(x)=Ce^x$, where $C=f(0)$. $\square$
 First off, notice that
 \begin{align*}
     \frac{d}{dx} \frac{e^x}{x^m}
-    &= \frac{e^x x^m - mx^{m-1}e^x}{x^{2m}} \\
-    &= \frac{e^x x^{m-1}\left(x - m\right)}{x^{2m}}
+     & = \frac{e^x x^m - mx^{m-1}e^x}{x^{2m}}         \\
+     & = \frac{e^x x^{m-1}\left(x - m\right)}{x^{2m}}
 \end{align*}
 so as long as $x \ge m$, the derivative is nonnegative and the function is increasing.
 
@@ -94,9 +120,9 @@ Choosing $n$ s.t. $n > m$ and $2^{1/m}n > n+1$
 (which is always possible since $2^{1/m} > 1$),
 \begin{align*}
     e \cdot \left(\frac{n}{n+1}\right)^m
-    &> e \cdot \left(\frac{1}{2^{1/m}}\right)^m \\
-    &> e \cdot \frac{1}{2} \\
-    &> 1
+     & > e \cdot \left(\frac{1}{2^{1/m}}\right)^m \\
+     & > e \cdot \frac{1}{2}                      \\
+     & > 1
 \end{align*}
 
 Since the sequence is nonnegative and past a certain point
