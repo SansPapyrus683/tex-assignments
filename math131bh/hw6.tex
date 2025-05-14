@@ -1,0 +1,253 @@
+\documentclass[12pt]{article}
+
+\input{../kz}
+
+\rhead{Math 131BH}
+
+\makeatletter
+\def\@seccntformat#1{%
+  \expandafter\ifx\csname c@#1\endcsname\c@section\else
+  \csname the#1\endcsname\quad
+  \fi}
+\makeatother
+
+\DeclareMathOperator{\Fr}{Fr}
+\newcommand{\lra}{\xLeftrightarrow}
+\newcommand{\ra}{\xRightarrow}
+\newcommand{\N}{\mathbb{N}}
+\newcommand{\R}{\mathbb{R}}
+\newcommand{\Z}{\mathbb{Z}}
+\newcommand{\Q}{\mathbb{Q}}
+\newcommand{\norm}[1]{\left\lVert#1\right\rVert}
+
+\begin{document}
+
+\section{Problem 1}
+
+Consider these two sequences on $(0, 1)$:
+\begin{gather*}
+  f_n(x)=x\left(1+\frac{1}{n}\right) \\
+  g_n(x)=\frac{1}{x^2}
+\end{gather*}
+
+$f_n$ converges to $f(x)=x$, since $\left|x-\left(x\left(1+\frac{1}{n}\right)\right)\right|=x\left|\frac{1}{n}\right|$ on the domain,
+and the largest this can get is $\frac{1}{n}$.
+$g_n$ is constant so there's not much to say there.
+
+However, $h_n(x)=g_n(x) \cdot f_n(x)=\frac{1+\frac{1}{n}}{x}$ \textit{doesn't} uniformly converge,
+even though it pointwise converges to $h(x)=\frac{1}{x}$.
+
+To show this, let $\epsilon=1$.
+As cross all $n \in \N$, we have that as long as $x < \frac{1}{n}$,
+\begin{align*}
+  |h_n(x)-h(x)|
+   & = \left|\frac{1+\frac{1}{n}}{x}-\frac{1}{x}\right| \\
+   & = \frac{1}{nx}                                     \\
+   & > 1
+\end{align*}
+so $d_\infty(h_n, h) > 1$ and thus the product of the two uniformly convergent
+sequences is not uniformly convergent itself.
+
+\pagebreak
+
+\section{Problem 2}
+
+I propose that $f_n$ pointwise converges to $f(x)=0$.
+
+Fix an $x$.
+If $x \le 0$ or $x > 1$, $f_n(x)=0$ across all $n$.
+For the case where $0 < x \le 1$, pick $N$ s.t. $\frac{1}{N} < x$.
+Since $n \ge N \implies \frac{1}{n} \le \frac{1}{N} < x$, every $f_n$
+past $N$ gives $0$.
+
+However, across all $f_n$ $\exists x: f_n(x) = 1$.
+If we let $x=\frac{1}{n+\frac{1}{2}}$, then $\frac{1}{n+1} \le \frac{1}{n+\frac{1}{2}} \le \frac{1}{n}$ and
+\begin{align*}
+  f_n(x)
+   & = \sin^2 \frac{\pi}{\frac{1}{n+\frac{1}{2}}}        \\
+   & = \sin^2 \left(\pi\left(n+\frac{1}{2}\right)\right) \\
+   & = (\pm 1)^2                                         \\
+   & = 1
+\end{align*}
+so any $f_n$ will always have a point that's $1$ away from $f$.
+
+It should be noted that the series $F(x)=\sum_{n=1}^{\infty} f_n(x)$ absolutely converges as well.
+
+This is because across all $x$, as we've seen above $\exists N: f_n(x)=0\ \forall n \ge N$ and so
+\begin{align*}
+  F(x)
+   & = \sum_{n=1}^{N} f_n(x) \\
+   & < \infty
+\end{align*}
+as a finite sum of finite terms will never do anything bad.
+
+\pagebreak
+
+\section{Problem 3}
+
+\subsection{Uniform Convergence}
+
+If $F_n(x)=\sum_{n=1}^{n} c_n I(x-x_n)$, we need to show that this sequence
+of functions uniformly converges.
+I guess a way we can do that is to prove that it's Cauchy, so fix an $\epsilon$.
+
+By the convergence of $\sum |c_n|$,
+$\exists N: \sum_{i=n}^{m} |c_n| < \epsilon\ \forall N \le n \le m$
+
+This then implies that
+\begin{align*}
+  d_\infty(F_n, F_m)
+  &= \sup \left|\sum_{i=1}^{n} c_i I(x'-x_i) - \sum_{i=1}^{m} c_iI(x'-x_i)\right| \\
+  &= \sup \left|\sum_{i=n+1}^{m} c_i I(x'-x_i)\right| \\
+  &\le \sup \sum_{i=n+1}^{m} |c_i I(x'-x_i)| \\
+  &\le \sum_{i=n+1}^{m} |c_i| \\
+  &< \epsilon\quad\square
+\end{align*}
+
+\subsection{Continuity}
+
+Fix an $x \notin \{x_n\}$ and an $\epsilon > 0$.
+
+Since $\sum c_n$ absolutely converges, $\exists N: \sum_{n=N}^{\infty} < \epsilon$.
+
+Take $\delta=\min_{i=1, \cdots, N-1} |x-x_i|$, which is guaranteed to be positive.
+
+Then, for any $x' \in (x-\delta, x+\delta)$,
+\begin{align*}
+  |f(x')-f(x)|
+   & = \left|\sum_{n=1}^{\infty} c_nI(x'-x_n) - \sum_{n=1}^{\infty} c_nI(x'-x_n)\right| \\
+   & = \left|\sum_{n=N}^{\infty} c_n(I(x'-x_n) - I(x-x_n))\right|                       \\
+   & = \sum_{n=N}^{\infty} |c_n|                                                        \\
+   & < \epsilon\quad\square
+\end{align*}
+
+\pagebreak
+
+\section{Problem 4}
+
+The sequence converges uniformly, so the resulting function
+\[g(x)=\lim_{n \to \infty} f_n(x)\]
+is continuous, with $g(0)=0$ and $g(1)=1$.
+
+Thus we have
+\begin{align*}
+  g(x)
+   & = \lim_{n \to \infty} f_n(x)                                                                         \\
+   & = \lim_{n \to \infty} f(f_{n-1}(x))                          & \text{let $f_0(x)=x$ for convenience} \\
+   & = f\left(\lim_{n \to \infty} f_{n-1}(x)\right) & \text{since $f$ is continuous} \\
+   &= f(g(x))
+\end{align*}
+
+By the IVT, $\forall y \in [0, 1]\ \exists x: g(x)=y$,
+and so $g(x)=f(g(x)) \implies y=f(y)$. $\square$
+
+\pagebreak
+
+\section{Problem 5}
+
+Consider the Dirichlet function on $[0, 1]$.
+
+$\Q$ is countably infinite, so define enumerate them like $\{q_1, q_2, \cdots\}$ and let $f_n$ be
+\[f_n(x)=\begin{cases}
+    0 & x \in \{q_1, q_2, \cdots, q_n\} \cup \R \\
+    1 & \text{otherwise}
+  \end{cases}\]
+Every $x \in [0, 1]$ will become $0$ eventually, so $f_n$ pointwise converges to $f(x)=0$.
+
+However, $|f_n(x)-f(x)|^2=f_n(x)^2$ isn't even integrable no matter what $n$ is,
+so such a limit wouldn't even make sense.
+
+\section{Problem 6}
+
+For convenience I'll let $F_i$, $G_i$, and $FG_i$ denote the range sups of $f_n$, $g$, and $f_n \cdot g$.
+Surely it'll be clear what I'm talking about when messing with partitions :clueless:.
+
+Pick an $\epsilon$.
+We need an $N$ s.t. the expression is in $g(0) \pm \epsilon$ for everything past $N$.
+
+\subsection{Middle Part}
+
+WLOG assume $g(0) > \epsilon$.
+$g$ is continuous, so take $c$ s.t. $|x| < c \implies |g(x)-g(0)| < \epsilon$.
+
+For any partition $P$ of $[-c, c]$, notice that since everything in the
+interal can be at most $\epsilon$ away from $g(0)$ and that $f$ is nonnegative,
+\[\sup_{x \in [x_i, x_{i+1}]} F_i(g(0)-\epsilon) \le \sup_{x \in [x_i, x_{i+1}]} FG_i \le \sup_{x \in [x_i, x_{i+1}]} F_i(g(0)+\epsilon)\]
+giving us
+\begin{align*}
+             & \sum_{i=1}^{n} F_i(g(0)-\epsilon)\Delta x_i \le \sum_{i=1}^{n} FG_i \Delta x_i \le \sum_{i=1}^{n} F_i(g(0)+\epsilon)\Delta x_i \\
+  \implies{} & (g(0)-\epsilon) \int_{-c}^{c} f(x)\,dx \le \int_{-c}^{c} f(x)g(x)\,dx \le (g(0)+\epsilon) \int_{-c}^{c} f(x)\,dx
+\end{align*}
+
+\pagebreak
+
+\subsection{Ending Parts}
+
+Now we can only mess with $n$.
+Let $G=\sup_{x \in [-1, 1]} |g(x)|$ and choose $N$ s.t.
+\[|f_n(x)| < \min\left(\frac{\epsilon}{2G}, \frac{\epsilon}{2}\right)\ \forall n \ge N, x \in [-1, -c] \cup [c, 1]\]
+Taking the integral of $f_n \cdot g$ from $c$ to $1$, we see
+\begin{align*}
+  \left|\int_{c}^{1} f_n(x)g(x)\,dx\right|
+   & \le \int_{c}^{1} |f_n(x)g(x)|\,dx                                      \\
+   & = \inf_P \sum_{i=1}^{n} |FG_i| \Delta x_i                              \\
+   & \le \inf_P \sum_{i=1}^{n} |F_i||G_i| \Delta x_i                        \\
+   & \le \inf_P \sum_{i=1}^{n} \frac{\epsilon}{2G} \cdot G \cdot \Delta x_i \\
+   & \le \frac{\epsilon}{2}
+\end{align*}
+and by similar logic $\left|\int_{-1}^{-c} f_n(x)g(x)\,dx\right| < \frac{\epsilon}{2}$.
+
+Also, since $f_n$ is nonnegative, $\int_{-c}^{c} f(x)\,dx \le 1$ and
+\begin{align*}
+  \int_{-c}^{c} f(x)\,dx
+   & = \int_{-1}^{1} f(x)\,dx - \left(\int_{-1}^{-c} f(x)\,dx + \int_{c}^{1} f(x)\,dx\right) \\
+   & \ge 1 - 2 \cdot \frac{\epsilon}{2}                                                      \\
+   & = 1-\epsilon
+\end{align*}
+
+\pagebreak
+
+\subsection{Putting it Together}
+
+With that, we can actually have a good bound on the middle term.
+On the left,
+\begin{align*}
+  \int_{-c}^{c} f_n(x)g(x)\,dx
+   & \ge (g(0)-\epsilon)\int_{-c}^{c} f_n(x)\,dx \\
+   & \ge (g(0)-\epsilon)(1-\epsilon)             \\
+   & = g(0) - \epsilon(\epsilon+g(0)+1)
+\end{align*}
+and on the right,
+\begin{align*}
+  \int_{-c}^{c} f_n(x)g(x)\,dx
+   & \le (g(0)+\epsilon)\int_{-c}^{c} f_n(x)\,dx \\
+   & \le g(0)+\epsilon
+\end{align*}
+so the middle term can't be too far away from $g(0)$.
+
+As we've shown previously,
+\[\left|\int_{-c}^{1} f_n(x)g(x)\,dx + \int_{c}^{1} f_n(x)g(x)\,dx \right|\le \epsilon\]
+and thus
+\[g(0)-\epsilon(\epsilon+g(0)+2) \le \int_{-1}^{1} f_n(x)g(x) \le g(0)+2\epsilon\]
+and uh, oops, this is not the interval we (or at least I) was looking for,
+but it's close enough.
+$\epsilon$ going to $0$ makes these bounds squeeze the middle to $g(0)$
+and that's what were were trying to show regardless. $\square$
+
+\pagebreak
+
+\section{Problem 7}
+
+Take a convergent sequence $f_n$ in $\mathcal{F}$, so
+\[\exists f: \forall \epsilon > 0\ \exists N: d_\infty(f_n, f) < \epsilon\ \forall n \ge N\]
+It STP $f \in \mathcal{F}$ as well.
+
+To do that, fix an $\epsilon$.
+Take the big $N$ in the above statement corresponding to $\frac{\epsilon}{2}$.
+
+$f_N \in \mathcal{F}$, so $\exists R: |x| > R \implies |f_N(x)| < \frac{\epsilon}{2}$.
+$d_\infty(f_N, f) < \frac{\epsilon}{2}$, so
+\[|f(x)| \le |f(x)-f_N(x)|+|f_N(x)-0| \le \epsilon\]
+and just like that, we see that this $R$ works for $f$ itself as well. $\square$
+
+\end{document}
