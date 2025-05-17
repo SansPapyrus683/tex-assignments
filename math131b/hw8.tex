@@ -1,0 +1,242 @@
+\documentclass[12pt]{article}
+
+\input{../kz}
+
+\rhead{Math 131B}
+
+\makeatletter
+\def\@seccntformat#1{%
+  \expandafter\ifx\csname c@#1\endcsname\c@section\else
+  \csname the#1\endcsname\quad
+  \fi}
+\makeatother
+
+\DeclareMathOperator{\Fr}{Fr}
+\newcommand{\lra}{\xLeftrightarrow}
+\newcommand{\ra}{\xRightarrow}
+\newcommand{\N}{\mathbb{N}}
+\newcommand{\R}{\mathbb{R}}
+\newcommand{\Z}{\mathbb{Z}}
+\newcommand{\Q}{\mathbb{Q}}
+\newcommand{\C}{\mathbb{C}}
+\newcommand{\norm}[1]{\left\lVert#1\right\rVert}
+
+\begin{document}
+
+\setcounter{section}{2}
+
+\section{Problem 3}
+
+\subsection{Periodicity}\label{sec:p3p1}
+
+We apply the addition formula:
+\begin{align*}
+  \sin(x+\pi)
+   & = \sin(x)\cos(\pi) + \sin(\pi)\cos(x) \\
+   & = -\sin(x) + 0                        \\
+   & = -\sin(x)                            \\ \\
+  \cos(x+\pi)
+   & = \cos(x)\cos(\pi)-\sin(x)\sin(\pi)   \\
+   & = -\cos(x) - 0                        \\
+   & = -\cos(x)\quad\square
+\end{align*}
+Periodicity is quite straightforward given this, as
+\[\sin(x+2\pi)=\sin((x+\pi)+\pi)=-\sin(x+\pi)=\sin(x)\]
+
+\subsection{Zeroes of Sine}
+
+I'll prove that $\sin(n\pi)=0\ \forall n \in \N$ by induction.
+The base case where $n=1$ is true since we straight up defined $\sin(\pi)=0$.
+
+Then, if the statement is true for $n$, it must be true for $n+1$ since
+\[\sin((n+1)\pi)=\sin(n\pi+\pi)=-\sin(n\pi)=0\]
+By similar reasoning, the same must be true if we extend to the negative integers.
+
+For the other direction, we start off with that $\sin(x) \ne 0\ \forall x \in (0, \pi)$.
+With this being the case, then, for any $x \in (\pi, 2\pi)$
+\[\exists y \in (0, \pi): x=y+\pi \implies \sin(x)=\sin(y+\pi)=-\sin(y) \ne 0\]
+and we repeat until we get all the non-integer multiples of $\pi$. $\square$
+
+\pagebreak
+
+\subsection{And Cosine}\label{sec:p3p3}
+
+We again proceed by induction, but now with
+$\cos\left(\left(n-\frac{1}{2}\right)\pi\right)=0\ \forall n \in \N$.
+
+For the base case, notice that
+\begin{align*}
+             & \cos\left(\pi-\frac{\pi}{2}\right)
+  = \cos(\pi)\cos\left(\frac{\pi}{2}\right) + \sin(\pi)\sin\left(\frac{\pi}{2}\right) \\
+  \implies{} & \cos\left(\frac{\pi}{2}\right) = -\cos\left(\frac{\pi}{2}\right) + 0   \\
+  \implies{} & \cos\left(\frac{\pi}{2}\right) = -\cos\left(\frac{\pi}{2}\right)       \\
+  \implies{} & \cos\left(\frac{\pi}{2}\right) = 0
+\end{align*}
+Then we do the exact same thing with regards to the application of \ref{sec:p3p1}
+to see that the statement for cosine also holds true.
+
+As for the other direction, notice that $\cos(x) > 0\ \forall x \in \left(0, \frac{\pi}{2}\right)$.
+
+This is because if there was such an $x$ s.t. $\cos(x) \le 0$, then
+by the MVT there would exist some $y \in \left(x, \frac{\pi}{2}\right)$
+with nonnegative derivative, which contradicts that $\frac{d}{dx} \cos(x)=-\sin(x)$
+is strictly positive on the specified interval.
+
+But with this interval proven,
+the rest goes the exact same as the previous section. $\square$
+
+\pagebreak
+
+\setcounter{section}{4}
+
+\section{Problem 5}
+
+ (i'm assuming we don't have to prove 4.7.4 and can just use it)
+
+Fix $a+bi \in \C$.
+
+Letting $r=|a+bi|$, we see that
+\[\left(\frac{a}{r}\right)^2+\left(\frac{b}{r}\right)^2=1\]
+allowing us to apply the result from Exercise 4.7.4 to $\left(\frac{a}{r}, \frac{b}{r}\right) \in \R^2$.
+
+There's exactly one (1) $\theta$ s.t. $\frac{a}{r}=\cos(\theta)$ and $\frac{b}{r}=\sin(\theta)$.
+Multiplying both sides by $r$ gets us $a=r\cos(\theta)$ and $b=r\sin(\theta)$.
+
+Thus,
+\begin{align*}
+  re^{i\theta}
+   & = r(\cos(\theta)+i\sin(\theta)) \\
+   & = r\cos(\theta)+ir\sin(\theta)  \\
+   & = a+bi
+\end{align*}
+
+Notice that if $r \ne |a+bi|$, no matter what $\theta$ we choose
+\begin{align*}
+  \left|re^{i\theta}\right|
+   & = \left|r\cos(\theta)+ir\sin(\theta)\right|
+   & = \sqrt{r^2\sin^2(\theta)+r^2\cos^2(\theta)} \\
+   & = r                                          \\
+   & \ne |a+bi|
+\end{align*}
+so no value of $\theta$ could rectify the difference in $r$.
+
+Thus, there's one and only one pair of $r$ and $\theta$ that work.
+
+\pagebreak
+
+\section{Problem 6}
+
+Let $I=\left(-\frac{\pi}{2}, \frac{\pi}{2}\right)$ for convenience.
+
+By a step in \ref{sec:p3p3}, $\cos(x)$ is nonzero on $I$, so
+$\tan$ is indeed differetiable on $i$ with derivative
+\begin{align*}
+  \tan'(x)
+   & = \frac{\sin'(x)\cos(x)-\cos'(x)\sin(x)}{\cos^2(x)}       \\
+   & = \frac{\cos^2(x)+\sin^2(x)}{\cos^2(x)}                   \\
+   & = \frac{\cos^2(x)}{\cos^2(x)}+\frac{\sin^2(x)}{\cos^2(x)} \\
+   & = 1+\tan^2(x)
+\end{align*}
+As this is strictly positive, $\tan$ is indeed strictly increasing on $I$.
+
+Since $\cos\left(\frac{\pi}{2}\right)=1$
+and sine is positive on $(0, \pi)$, $\sin\left(\frac{\pi}{2}\right)=1$.
+and as sine is continuous $\lim_{n \to \frac{\pi}{2}} \sin(x) = 1$ as well.
+However, the same limit for cosine goes to $0$, so $\lim_{n \to \frac{\pi}{2}} \tan(x)=+\infty$.
+By similar logic we have $\lim_{n \to -\frac{\pi}{2}} \tan(x)=-\infty$.
+
+$\tan$ is increasing and therefore injective, which means it's a bijection onto its range,
+which as we've just shown is $(-\infty, \infty)=\R$.
+Thus, we can create an inverse function $\arctan(x): \R \to I$.
+
+Since $\tan'(x) \ne 0$, $\arctan$ is differetiable with derivative
+\begin{align*}
+  \arctan'(x)
+   & =\frac{1}{\tan'(\arctan(x))}    \\
+   & =\frac{1}{1+\tan^2(\arctan(x))} \\
+   & =\frac{1}{1+x^2}
+\end{align*}
+
+\pagebreak
+
+\section{Problem 7}
+
+\subsection{Bounded}
+
+Consider any function $f \in C(\R/\Z, \C)$
+
+I'll first show that $f$ is bounded on $[0, 1]$.
+
+Since the interval is compact, its image $f([0, 1]) \subseteq \C$ must be compact and therefore bounded.
+This means $\exists M \in \R: |x-y| < M\ \forall x, y \in f([0, 1])$
+
+Then, if we fix any $y$ in the image, by the triangle inequality
+\[|x| < |x-y| + |y| < M + |y|\]
+so indeed $\exists M' \in \R: |x| < M'$ across all $x$ and $f([0, 1])$ is bounded.
+
+(i'm not sure if all this was actually needed but better safe than sorry)
+
+Now, since $f$ is $\Z$-periodic, for all $x$ $\exists y \in [0, 1]: f(x)=f(y) < M'$.
+Thus, $f$ on the entirety of $\R$ is bounded as well. $\square$
+
+\subsection{Vector Space/Algebra Properties}
+
+For addition we have that
+\begin{align*}
+  (f+g)(x+1)
+   & = f(x+1)+g(x+1) \\
+   & = f(x)+g(x)     \\
+   & = (f+g)(x)
+\end{align*}
+so $f+g$ is still $\Z$-periodic.
+
+For multiplication, you can replace the addition with multiplication
+and nothing would change.
+
+Also, since all constant functions are $\Z$-periodic,
+constant multiplcation is just a special case of function multiplcation. $\square$
+
+\subsection{Closed in \texorpdfstring{$C(\R/\Z, \C)$}{C(R, C)}}
+
+Fix a sequence $f_n \subseteq C(\R/\Z, \C)$ and let its limit be $f$.
+
+It STP $f(x)=f(x+1)$ for any $x$, so fix an $x$ as well.
+
+Since $f_n$ uniformly converges to $f$, we have
+\begin{align*}
+  \lim_{n \to \infty} f_n(x)=f(x) && \lim_{n \to \infty} f_n(x+1)=f(x+1)
+\end{align*}
+However, since all the $f_n$s are $\Z$-periodic,
+the two sequences are identical and their limits must be too, making $f(x)=f(x+1)$. $\square$
+
+\section{Problem 8}
+
+\subsection{Is Metric Space}
+
+This proof works for $C(\R, \C)$ too actually!
+
+But anyways, $d_\infty$ is clearly nonnegative.
+
+If $f=g$ then $|f(x)-g(x)|=0\ \forall x \in \R$ and $d_\infty(f, g)=0$.
+
+OTOH, if $f \ne g$ then $\exists x: f(x) \ne g(x) \implies |f(x)-g(x)| > 0$, so $d_\infty(f, g) > 0$.
+
+As for the triangle inequality, fix $f$, $g$, and $h$.
+Then
+\begin{align*}
+  d_\infty(f, g)
+  &= \sup_{x \in \R} |f(x)-g(x)| \\
+  &\le \sup_{x \in \R} |f(x)-h(x)|+|h(x)-g(x)| \\
+  &\le \sup_{x \in \R} |f(x)-h(x)| + \sup_{x \in \R} |h(x)-g(x)| \\
+  &= d_\infty(f, h) + d_\infty(h, g)\quad\square
+\end{align*}
+
+\subsection{And Complete}
+
+Didn't we show this earlier?
+$\C$ is complete, so $C(\R, \C)$ is complete under $d_\infty$.
+
+$C(\R/\Z, \C)$ is closed within a complete set,
+so it must be complete itself. $\square$
+
+\end{document}
