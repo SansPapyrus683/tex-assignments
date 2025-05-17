@@ -78,12 +78,22 @@ to see that the statement for cosine also holds true.
 As for the other direction, notice that $\cos(x) > 0\ \forall x \in \left(0, \frac{\pi}{2}\right)$.
 
 This is because if there was such an $x$ s.t. $\cos(x) \le 0$, then
-by the MVT there would exist some $y \in \left(x, \frac{\pi}{2}\right)$
-with nonnegative derivative, which contradicts that $\frac{d}{dx} \cos(x)=-\sin(x)$
-is strictly positive on the specified interval.
+by the MVT there would exist some $y \in \left(x, \frac{\pi}{2}\right)$ s.t.
+\[\cos'(y) = \frac{\cos\left(\frac{\pi}{2}\right)-\cos(x)}{\frac{\pi}{2}-x} \ge 0\]
+which is a contradiction since $\cos'(y)=-\sin(y)<0$.
 
-But with this interval proven,
-the rest goes the exact same as the previous section. $\square$
+Similarly, $\cos(x) > 0\ \forall x \in \left(-\frac{\pi}{2}, 0\right)$.
+
+But since $\cos(x) \ne 0\ \forall x \in \left(-\frac{\pi}{2}, \frac{\pi}{2}\right)$,
+we can proceed by induction to prove that
+\[\forall n \in \Z^+\ \cos(x) \ne 0\ \forall x \in \left(n\pi-\frac{\pi}{2}, n\pi+\frac{\pi}{2}\right)\]
+The base case where $n=0$ is already proven, so assume it's true for some fixed $n$.
+
+Then, for any $x \in \left((n+1)\pi-\frac{\pi}{2}, (n+1)\pi+\frac{\pi}{2}\right)$,
+\[\exists y \in \left(n\pi-\frac{\pi}{2}, n\pi+\frac{\pi}{2}\right): x=y+\pi \implies \cos(x)=\cos(y+\pi)=-\cos(y) \ne 0\]
+If we induct in the reverse direction we can show the same is true for any $n \in \Z^-$ as well.
+
+Thus, anything that can't be expressed in the form $n\pi-\frac{\pi}{2}$ can't be a zero of cosine. $\square$
 
 \pagebreak
 
@@ -190,13 +200,20 @@ For addition we have that
 \end{align*}
 so $f+g$ is still $\Z$-periodic.
 
-For multiplication, you can replace the addition with multiplication
-and nothing would change.
+For multiplication, we can play the same game:
+\begin{align*}
+  (fg)(x+1)
+   & = f(x+1)g(x+1) \\
+   & = f(x)g(x)     \\
+   & = (fg)(x)
+\end{align*}
 
 Also, since all constant functions are $\Z$-periodic,
 constant multiplcation is just a special case of function multiplcation. $\square$
 
-\subsection{Closed in \texorpdfstring{$C(\R/\Z, \C)$}{C(R, C)}}
+\pagebreak
+
+\subsection{Closed in \texorpdfstring{$C(\R, \C)$}{C(R, C)}}
 
 Fix a sequence $f_n \subseteq C(\R/\Z, \C)$ and let its limit be $f$.
 
