@@ -46,13 +46,14 @@ Periodicity is quite straightforward given this, as
 \subsection{Zeroes of Sine}
 
 I'll prove that $\sin(n\pi)=0\ \forall n \in \N$ by induction.
-The base case where $n=1$ is true since we straight up defined $\sin(\pi)=0$.
+The base case where $n=0$ is true since $\sin(0)=0$ trivially.
 
 Then, if the statement is true for $n$, it must be true for $n+1$ since
 \[\sin((n+1)\pi)=\sin(n\pi+\pi)=-\sin(n\pi)=0\]
-By similar reasoning, the same must be true if we extend to the negative integers.
+We have an analagous equality going from $n$ to $n-1$ as well:
+\[\sin((n-1)\pi)=\sin(n\pi-\pi)=-\sin(n\pi)=0\]
 
-For the other direction, we start off with that $\sin(x) \ne 0\ \forall x \in (0, \pi)$.
+For the reverse direction, we start off with that $\sin(x) \ne 0\ \forall x \in (0, \pi)$.
 With this being the case, then, for any $x \in (\pi, 2\pi)$
 \[\exists y \in (0, \pi): x=y+\pi \implies \sin(x)=\sin(y+\pi)=-\sin(y) \ne 0\]
 and we repeat until we get all the non-integer multiples of $\pi$. $\square$
@@ -61,39 +62,18 @@ and we repeat until we get all the non-integer multiples of $\pi$. $\square$
 
 \subsection{And Cosine}\label{sec:p3p3}
 
-We again proceed by induction, but now with
-$\cos\left(\left(n-\frac{1}{2}\right)\pi\right)=0\ \forall n \in \N$.
-
-For the base case, notice that
+We have the identity
 \begin{align*}
-             & \cos\left(\pi-\frac{\pi}{2}\right)
-  = \cos(\pi)\cos\left(\frac{\pi}{2}\right) + \sin(\pi)\sin\left(\frac{\pi}{2}\right) \\
-  \implies{} & \cos\left(\frac{\pi}{2}\right) = -\cos\left(\frac{\pi}{2}\right) + 0   \\
-  \implies{} & \cos\left(\frac{\pi}{2}\right) = -\cos\left(\frac{\pi}{2}\right)       \\
-  \implies{} & \cos\left(\frac{\pi}{2}\right) = 0
+  \sin\left(x+\frac{\pi}{2}\right)
+  &= \sin(x)\cos\left(\frac{\pi}{2}\right)+\sin\left(\frac{\pi}{2}\right)\cos(x) \\
+  &= \sin(x) \cdot 0 + 1 \cdot \cos(x) \\
+  &= \cos(x)
 \end{align*}
-Then we do the exact same thing with regards to the application of \ref{sec:p3p1}
-to see that the statement for cosine also holds true.
+So if $x=n\pi+\frac{\pi}{2}$ for some $n \in \Z$,
+$\cos(x)=\sin((n+1)\pi)=0$ by what we proved in the previous section.
 
-As for the other direction, notice that $\cos(x) > 0\ \forall x \in \left(0, \frac{\pi}{2}\right)$.
-
-This is because if there was such an $x$ s.t. $\cos(x) \le 0$, then
-by the MVT there would exist some $y \in \left(x, \frac{\pi}{2}\right)$ s.t.
-\[\cos'(y) = \frac{\cos\left(\frac{\pi}{2}\right)-\cos(x)}{\frac{\pi}{2}-x} \ge 0\]
-which is a contradiction since $\cos'(y)=-\sin(y)<0$.
-
-Similarly, $\cos(x) > 0\ \forall x \in \left(-\frac{\pi}{2}, 0\right)$.
-
-But since $\cos(x) \ne 0\ \forall x \in \left(-\frac{\pi}{2}, \frac{\pi}{2}\right)$,
-we can proceed by induction to prove that
-\[\forall n \in \Z^+\ \cos(x) \ne 0\ \forall x \in \left(n\pi-\frac{\pi}{2}, n\pi+\frac{\pi}{2}\right)\]
-The base case where $n=0$ is already proven, so assume it's true for some fixed $n$.
-
-Then, for any $x \in \left((n+1)\pi-\frac{\pi}{2}, (n+1)\pi+\frac{\pi}{2}\right)$,
-\[\exists y \in \left(n\pi-\frac{\pi}{2}, n\pi+\frac{\pi}{2}\right): x=y+\pi \implies \cos(x)=\cos(y+\pi)=-\cos(y) \ne 0\]
-If we induct in the reverse direction we can show the same is true for any $n \in \Z^-$ as well.
-
-Thus, anything that can't be expressed in the form $n\pi-\frac{\pi}{2}$ can't be a zero of cosine. $\square$
+OTOH, if $x$ couldn't be expressed in such a form, then $x+\frac{\pi}{2}$
+wouldn't be an integer multiple of $\pi$ and $\cos(x) \ne 0$. $\square$
 
 \pagebreak
 
