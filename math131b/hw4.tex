@@ -155,7 +155,7 @@ Take any $n \ge N$.
 Since $f^{(n)}$ is continuous,
 \[\exists \delta > 0: d_X(x, x') < \delta \implies d_Y\left(f^{(n)}(x), f^{(n)}(x')\right) < \frac{\epsilon}{3}\]
 
-Then, by the triangle inequality we have for all $x'$ s.t. $|x-x'| < \delta$,
+Then, by the triangle inequality we have for all $x'$ s.t. $d_X(x, x') < \delta$,
 \begin{align*}
         & d_Y(f(x), f(x'))                                                                                                \\
   \le{} & d_Y\left(f(x), f^{(n)}(x)\right) + d_Y\left(f^{(n)}(x), f^{(n)}(x')\right) + d_Y\left(f(x'), f^{(n)}(x')\right) \\
