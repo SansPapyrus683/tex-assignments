@@ -24,18 +24,21 @@
 
 \section{Problem 1}
 
-BWOC say $f$ wasn't continuous at $0$,
-so $\exists \epsilon$ s.t. any $(-\delta, \delta)$ always has some violation.
+\textcolor{red}{BRO I WASN'T ENROLLED SO I DIDN'T KNOW ABOUT THE CORRECTION GGS}
 
-Among any partition, there's always some interval $[x_i, x_{i+1}]$ that contains $0$.
+BWOC say $f(0-)$ didn't exist,,
+so $\exists \epsilon: \forall \delta > 0\ \exists x \in (-\delta, 0): |f(x)-f(0)| \ge \epsilon$.
+
+Among any partition, there's always some interval $[x_i, x_{i+1}]$ s.t. $0 \in (x_i, x_{i+1}]$.
 In this interval, $\Delta \alpha_i$ is guaranteed to equal $1$.
 
 By what we've just said,
 \[\sup_{[x_i, x_{i+1}]} f(x)-\inf_{[x_i, x_{i+1}]} f(x) \ge \epsilon\]
-since we can always find an element that's at least $\epsilon$ away from $f(0)$,
+since we can always find an element to the left that's at least $\epsilon$ away from $f(0)$,
 which the interval is guaranteed to contain.
 
-This means $U(P, f) - L(P, f) \ge \epsilon$ as well, which contradicts that $f \in \mathcal{R}(\alpha)$. $\square$
+This means $U(P, f) - L(P, f) \ge \epsilon$ as well,
+which contradicts that $f \in \mathcal{R}(\alpha)$. $\square$
 
 \section{Problem 2}
 
@@ -46,11 +49,11 @@ Now we just have find a $P$ for any $\epsilon$ s.t. $U(P, f) < \epsilon$.
 To start, we can have $P_0=\left\{0, \frac{1}{3}, \frac{2}{3}, 1\right\}$.
 I'll find "sub-partitions" for each third, and now we just need:
 \begin{itemize}
-  \item The left and right halves to be less than $\frac{3\epsilon}{7}$
-  \item The middle half to be less than $\frac{\epsilon}{1}$
+  \item The left and right parts to be less than $\frac{3\epsilon}{7}$
+  \item The middle part to be less than $\frac{\epsilon}{7}$
 \end{itemize}
 
-While we can't really say anything about the left and right halves, $f$ on the middle half is just
+While we can't really say anything about the left and right parts, $f$ on the middle part is just
 \[f(x)=\begin{cases}
     0 & \frac{1}{3} < x < \frac{2}{3} \\
     1 & \text{otherwise}
@@ -58,7 +61,7 @@ While we can't really say anything about the left and right halves, $f$ on the m
 so the sub-partition $\left\{\frac{1}{3}, \frac{1+0.1\epsilon}{3}, \frac{2-0.1\epsilon}{3}, \frac{2}{3}\right\}$
 has an upper sum of at most $\frac{\epsilon}{7}$.
 
-This leaves the left and right halves.
+This leaves the left and right parts.
 Notice that both are equivalent to $f$ shrunk horizontally by a factor of $3$, so we can do recursion, basically.
 
 To show that this process will terminate, notice that while $f$ shrinks by a factor of $\frac{1}{3}$ each time,
