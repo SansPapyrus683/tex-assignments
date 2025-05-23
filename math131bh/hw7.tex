@@ -1,0 +1,334 @@
+\documentclass[12pt]{article}
+
+\input{../kz}
+
+\rhead{Math 131BH}
+
+\makeatletter
+\def\@seccntformat#1{%
+  \expandafter\ifx\csname c@#1\endcsname\c@section\else
+  \csname the#1\endcsname\quad
+  \fi}
+\makeatother
+
+\DeclareMathOperator{\Fr}{Fr}
+\newcommand{\lra}{\xLeftrightarrow}
+\newcommand{\ra}{\xRightarrow}
+\newcommand{\N}{\mathbb{N}}
+\newcommand{\R}{\mathbb{R}}
+\newcommand{\Z}{\mathbb{Z}}
+\newcommand{\Q}{\mathbb{Q}}
+\newcommand{\norm}[1]{\left\lVert#1\right\rVert}
+\newcommand*{\ditto}{---''---}
+
+\begin{document}
+
+\section{Problem 1}
+
+\subsection{Uniformly Converges Fine}
+
+I propose that $f_n \ra{d_\infty} f$ where $f(x)=0$.
+
+To prove this, fix an $\epsilon$.
+
+Since $f_n$ is odd, only consider positive $x$ ($f_n(0)=0$, so we're fine there).
+
+For our value of $n$ to work, we need
+\begin{align*}
+         & \left|\frac{x}{1+nx^2}\right| < \epsilon \\
+  \iff{} & \frac{|x|}{|1+nx^2|} < \epsilon          \\
+  \iff{} & x < \epsilon + \epsilon nx^2             \\
+  \iff{} & \frac{x-\epsilon}{\epsilon x^2} < n
+\end{align*}
+
+If $x \le \epsilon$ the LHS is nonpositive, so now restrict our $x$s to those greater than $\epsilon$:
+\[\frac{x-\epsilon}{\epsilon x^2} < \frac{x}{\epsilon x^2} < \frac{1}{x \epsilon} < \frac{1}{\epsilon^2}\]
+so choosing $n$ greater than that should make $|f_n(x)| < 0$. $\square$
+
+\pagebreak
+
+\subsection{Derivatives Not So Much}
+
+$f$ is constant, so its derivative is $0$ everywhere.
+
+For the sequence itself,
+\[f_n'(x) = \frac{1-nx^2}{\left(1+nx^2\right)^2}\]
+and for nonzero $x$
+\begin{align*}
+  |f_n'(x)|
+   & \le \left|\frac{1}{(1+nx^2)^2}\right| + \left|\frac{nx^2}{\left(1+nx^2\right)^2}\right|   \\
+   & \le \left|\frac{1}{(1+nx^2)^2}\right| + \left|\frac{1+nx^2}{\left(1+nx^2\right)^2}\right| \\
+   & \le \left|\frac{1}{(1+nx^2)^2}\right| + \left|\frac{1}{1+nx^2}\right|
+\end{align*}
+As long as $x$ is nonzero, this bound and limit tends to $0$ as $n \to \infty$,
+but if $x=0$ it stays a constant $1$ no matter how big $n$ is.
+
+\section{Problem 2}
+
+As always, fix an $\epsilon$ (jeez how many have i fixed at this point).
+
+$f_n$ is equicontinuous so $\exists \delta: d_K(x, y) < \delta \implies |f_n(x)-f_n(y)| < \frac{\epsilon}{2}\ \forall n \in \N$.
+
+$K$ is compact, so there's a finite subcover among $\{B_\delta(x) \mid x \in K\}$.
+Let the centers of the finite amount of balls chosen be $x_1$ through $x_n$.
+
+$f_n$ pointwise converges to some $f$,
+so for each of these $x_i$ $\exists N_i: |f_n(x_i)-f(x)| < \frac{\epsilon}{2}\ \forall n \ge N_i$.
+Take the largest $N_i$ among these and make that our overall $N$.
+
+This $N$ should work, since for all $x \in K$ $\exists x_i: d_K(x_i, x) < \delta$ and
+\begin{align*}
+  |f_n(x)-f(x)|
+   & \le |f_n(x)-f_n(x_i)|+|f_n(x_i)-f(x)|       \\
+   & \le \frac{\epsilon}{2} + \frac{\epsilon}{2} \\
+   & = \epsilon\quad\square
+\end{align*}
+
+\pagebreak
+
+\section{Problem 3}
+
+$f_n$ is uniformly bounded, so $\exists M: f_n(x) < M\ \forall n, x$ and
+\[|F_n(x)|=\left|\int_{a}^{x} f_n(t)\,dt\right| \le \int_{a}^{b} |f_n(t)|\,dt \le M(b-a)\]
+so the new sequence is also uniformly bounded.
+
+Now let's prove $F_n$ is also equicontinuous- fix an $\epsilon$.
+
+If we let $\delta$ be $\frac{\epsilon}{M}$,
+for all $x < y$ in $[a, b]$ s.t. $y-x < \delta$ and $n$ we've
+\begin{align*}
+  |F_n(x)-F_n(y)|
+   & = \left|\int_{x}^{y} f_n(t)\,dt\right| \\
+   & \le \int_{x}^{y} |f_n(t)|\,dt          \\
+   & \le M(y-x)                             \\
+   & \le \frac{M\epsilon}{M}                \\
+   & = \epsilon
+\end{align*}
+with these two things proven, by Arzela-Ascoli there does exist a uniformly convergent subsequence. $\square$
+
+\pagebreak
+
+\section{Problem 4}
+
+We were asked to solve this problem, not Exercise 12 in Chap. 6 so I'm just gonna use the results from that without proof.
+
+It STP $\forall \epsilon > 0\ \exists P$ s.t. the integral is less than $\epsilon$.
+
+By that exercise, $\exists g \in C([a, b]): \norm{f-g}_2 < \epsilon^2$, so
+\[\int_{a}^{b} |f(x)-g(x)|^2\,dx < \epsilon\]
+Since polynomials are dense in $C([a, b])$ $\exists P: |g(x)-P(x)| < \epsilon$, so
+\begin{align*}
+        & \int_{a}^{b} |f(x)-P(x)|^2\,dx \\
+  \le{} & \int_{a}^{b} (|f(x)-g(x)| + |g(x)-P(x)|)^2\,dx                                                   \\
+  =     & \int_{a}^{b} |f(x)-g(x)|^2\,dx + \int_{a}^{b} |f(x)-g(x)||g(x)-P(x)|\,dx + \int_{a}^{b} |g(x)-P(x)|^2\,dx \\
+  \le{} & \epsilon + \epsilon^2(b-a) + \int_{a}^{b} |f(x)-g(x)||g(x)-P(x)|\,dx \\
+  \le{} & \epsilon + \epsilon^2(b-a) + \epsilon\int_{a}^{b} |f(x)-g(x)|\,dx
+\end{align*}
+The first two terms obviously to go $0$.
+As for the third one, since $0 \le |a| \le |a|^2+1$
+\begin{align*}
+  \epsilon\int_{a}^{b} |f(x)-g(x)|
+  &\le \epsilon\int_{a}^{b} |f(x)-g(x)|^2+1\,dx \\
+  &\le \epsilon(\epsilon + (b-a))
+\end{align*}
+so our overall error still goes to $0$. $\square$
+
+\pagebreak
+
+\section{Problem 5}
+
+\subsection{In \texorpdfstring{$C^1$}{C1}}
+
+\subsubsection{Actually Differentiable}
+
+I'm kinda, somewhat, probably sure the derivative is equal to
+\[d_n(x)=\int_{-2}^{2} f_n'(x-y)g(y)\,dy\]
+but let's start straight from the definition.
+It suffices to find for any $\epsilon$ a $\delta$ s.t.
+\[\left|\frac{h_n(x+\delta)-h_n(x)}{\delta}-d_n(x)\right| < \epsilon\]
+
+$f_n'$ is continuous and constant outside of a compact domain, so it's uniformly continuous.
+Make $\delta$ s.t. $|x-y| < \delta \implies |f'(x)-f'(y)| <\epsilon$.
+
+Now, for any $0 < \delta' < \delta$ we have
+\begin{align*}
+        & \left|\frac{h_n(x+\delta')-h_n(x)}{\delta'}-d_n(x)\right|                                           \\
+  ={}   & \left|\int_{-2}^{2} g(y)\left(\frac{f_n(x-y+\delta')-f_n(x-y)}{\delta'}-f'_n(x-y)\right)\,dy\right| \\
+  \le{} & \int_{-2}^{2} \left|g(y)\left(\frac{f_n(x-y+\delta')-f_n(x-y)}{\delta'}-f'_n(x-y)\right)\right|\,dy \\
+  \le{} & \int_{-2}^{2} |g(y)|\left|\frac{f_n(x-y+\delta')-f_n(x-y)}{\delta'}-f'_n(x-y)\right|\,dy
+\end{align*}
+By the MVT, $\forall y\ \exists z \in (x-y+\delta', x-y): f'(z)=\frac{f_n(x-y+\delta')-f_n(x-y)}{\delta'}$.
+
+$|(x-y)-z| < \delta' < \delta$, so that fraction is at most $\epsilon$ away from $f_n'(x-y)$ and
+\begin{align*}
+  \text{\ditto}
+   & \le \int_{-2}^{2} |g(y)|\epsilon\,dy \\
+   & = \epsilon \int_{-2}^{2} |g(y)|\,dy
+\end{align*}
+so we've got within a constant factor of $\epsilon$ with this $\delta$,
+which is basically what we want. $\square$
+
+\pagebreak
+
+\subsubsection{And Continuously So!}
+
+So now we know $h_n'(x)=\int_{-2}^{2} f_n'(x-y)g(y)\,dy$.
+
+Fix an $\epsilon$, and choose $\delta$ s.t. $|a-b| < \delta \implies |f'_n(a)-f'_n(b)| < \epsilon$.
+
+Then, for any $x$ and $x'$ s.t. $|x-x'| < \delta$,
+\begin{align*}
+  |h_n'(x)-h_n'(x')|
+   & \le \left|\int_{-2}^{2} g(y)(f_n'(x-y)-f_n'(x'-y))\,dy\right| \\
+   & \le \int_{-2}^{2} |g(y)||f_n'(x-y)-f_n'(x'-y)|                \\
+   & \le \epsilon \int_{-2}^{2} |g(y)|
+\end{align*}
+and we have the bound we want off by just a constant factor. $\square$
+
+\pagebreak
+
+\subsection{Converges to \texorpdfstring{$g$}{g}}
+
+First, notice that since $f_n$ is $0$ outside of $[-1, 1]$, for all $x \in [-1, 1]$
+\[\int_{-2}^{2} f(y)\,dy = \int_{-2}^{2} f_n(x-y)\,dy\]
+
+For any $\epsilon$, we need an $n$ big enough s.t.
+\begin{align*}
+  h_n(x)-g(x)
+   & = \int_{-2}^{2} f_n(x-y)g(y)\,dy - g(x) \int_{-2}^{2} f_n(x-y)\,dy \\
+   & = \int_{-2}^{2} f_n(x-y)(g(y)-g(x))\,dy
+\end{align*}
+tends to $0$ across all $x \in [-1, 1]$.
+
+Since we're only considering $g$ on the domain $[-2, 2]$, it's uniformly continuous there.
+Choose a $\delta$ s.t. $|x-y| < \delta \implies |g(x)-g(y)| < \epsilon$
+and then an $n$ s.t. $|f_n(t)| < \epsilon$ when $t \notin (-\delta, \delta)$.
+
+With these parameters chosen, when $y \le x-\delta$ or $y \ge x+\delta$,
+$|x-y| \ge \delta$ and $|f_n(x-y)| < \epsilon$.
+
+Now we can split this integral like so:
+\begin{align*}
+  ={} & \left|\int_{-2}^{2} f_n(x-y)(g(y)-g(x))\,dx\right|                                                                                      \\
+  ={} & \int_{-2}^{x-\delta} |\text{\ditto}| \, dy+\int_{x-\delta}^{x+\delta} |\text{\ditto}| \,dy+\int_{x+\delta}^{2} |\text{\ditto}| \,dy     \\
+  \le & \int_{-2}^{x-\delta} \epsilon|g(y)-g(x)| + \int_{x-\delta}^{x+\delta} |\text{\ditto}|\,dy + \int_{x+\delta}^{2} \epsilon|g(y)-g(x)|\,dy \\
+  \le & \int_{-2}^{2} \epsilon|g(y)-g(x)|\,dy + \int_{x-\delta}^{x+\delta} |\text{\ditto}|\,dy                                                  \\
+  \le & C\epsilon + \int_{x-\delta}^{x+\delta} |f_n(x-y)(g(y)-g(x))|\,dy \quad \text{$C$ is the bounded integral}                               \\
+  \le & C\epsilon + \int_{x-\delta}^{x+\delta} |f_n(x-y)| \cdot \epsilon\,dy                                                                    \\
+  \le & C\epsilon + \epsilon\int_{x-\delta}^{x+\delta} |f_n(x-y)|\,dy                                                                           \\
+  \le & (C+1)\epsilon
+\end{align*}
+so with small enough $\delta$ and large enough $n$, the error term becomes small. $\square$
+
+\pagebreak
+
+\section{Problem 6}
+
+\subsection{No Restrictions}
+
+\subsubsection{Splitting Up the Square}
+
+$f$ is continuous on a compact domain, so it's UC and we can choose $\delta' > 0$ s.t.
+\[d((x_1, y_1), (x_2, y_2)) < \delta' \implies |f(x_1, y_1)-f(x_2, y_2)| < \epsilon\]
+Then choose $n \in \N$ s.t. $\frac{1}{n} < \frac{\delta'}{\sqrt{2}}$ so
+\[(x_1, y_1), (x_2, y_2) \in \left[x, x + \frac{1}{n}\right] \times \left[y, y + \frac{1}{n}\right] \implies |f(x_1, y_1)-f(x_2, y_2)| < \epsilon\]
+We're basically splitting up $[0, 1] \times [0, 1]$ into a very fine $n \times n$
+grid so $f$ maps any two points within the same grid cell to values that are within $\epsilon$ of each other.
+
+\subsubsection{Making the Functions}
+
+For convenience, now I'll make $\delta=\frac{1}{n}$.
+Anyways, if $x_i=\frac{i}{n}$ where $i$ goes from $0$ to $n$, then
+\begin{gather*}
+  g_i(x)=\max\left(0, 1-\frac{|x-x_i|}{\delta}\right) \\
+  h_i(y)=f(x_i, y)
+\end{gather*}
+
+For any $x$, $\exists i: x_i \le x \le x_{i+1}$.
+For $j \ne i, i+1$ we've $\frac{|x-x_j|}{\delta} > 1$, so any other $g_j$s is irrelevant.
+
+Only $g_i$ and $g_{i+1}$ take on nonzero values, and
+\begin{align*}
+  g_i(x)+g_{i+1}(x)
+  &=\left(1-\frac{x-x_i}{\delta}\right)+\left(1-\frac{x_{i+1}-x}{\delta}\right) \\
+  &= 2 - \frac{x_{i+1}-x_i}{\delta} = 1
+\end{align*}
+By construction, $|h_i(y)-f(x, y)| < \epsilon$ and $|h_{i+1}(y)-f(x, y)| < \epsilon$.
+
+Letting $G=g_i(x)$, we have by the above equation $g_{i+1}(x)=1-G$ and
+\begin{align*}
+  \left|f(x, y) - \sum_{i=0}^{n} g_i(x)h_i(y)\right|
+  &= |f(x, y) - Gh_i(y) - (1-G)h_{i+1}(y)| \\
+  &\le |f(x, y) - h_{i+1}(y)| + G|h_{i+1}(y)-h_i(y)| \\
+  &\le \epsilon + G\epsilon \\
+  &\le 2\epsilon
+\end{align*}
+\textit{sigh}, off by a constant factor again\dots I suppose it's good enough. $\square$
+
+\subsection{Symmetric Hell}
+
+After thinking about it for an entire day, I'm pretty sure it isn't.
+
+If $g_i=h_i$, then across all points $(x, x)$
+\[\sum_{i=1}^{n} g_i(x)h_i(x)=\sum_{i=1}^{n} g_i(x)^2 \ge 0\]
+
+If $f(x, y)=-1$ then it's cooked, since our approximation would never
+be able to achieve negative values on the diagonal. $\square$
+
+(if we allowed things to be complex then it should be fine tho)
+
+\pagebreak
+
+\section{Problem 7}
+
+\subsection{Rational Polynomials are Dense}
+
+Trust me, I need this later on.
+
+Since the set of polynomials with real coefficients are dense in $C([0, 1])$,
+to prove that the set of polynomials with \textit{rational} coefficients
+are also dense we just need to find for everything in the former set
+a uniformly convergent sequence of functions in the latter set.
+
+So if our real-coefficient polynomial is $p(x)=\sum_{i=0}^{d} a_ix^i$
+I propose that the sequence
+\[p_n(x)=\sum_{i=0}^{d} R\left(a_i, \frac{1}{n}\right) x^i\]
+uniformly converges to $p(x)$, where $R(a, r)$ returns any rational in $B_r(a)$.
+
+By construction, $\left|R(a, r) - a\right| < r$, so
+\begin{align*}
+  |p(x)-p_n(x)|
+   & = \left|\sum_{i=0}^{d} x^i\left(R\left(a_i, \frac{1}{n}\right) - a_i\right)\right| \\
+   & \le \sum_{i=0}^{d} x^i \left|R\left(a_i, \frac{1}{n}\right) - a_i\right|           \\
+   & \le \sum_{i=0}^{d} \frac{x^i}{n}                                                   \\
+   & \le \frac{d}{n}
+\end{align*}
+$d$ is fixed so as $n \to \infty$ $d_\infty(p(x), p_n(x)) \to 0$.
+
+\pagebreak
+
+\subsection{Actual Proof}
+
+So the set of polynomials with rational coefficients is dense in $C([0, 1])$.
+This set is also countable, so we can enumerate them like $p_0, p_1, \cdots$.
+For convenience, let $p_0$ be assigned so that $p_0(0)=0$.
+
+Now we can let $u: \R \to \R$ be defined like so:
+\[u(x)=\begin{cases}
+    0                                             & x < 2                                 \\
+    p_c(x-2c)                                     & \exists c \in \N: 2c \le x \le 2c + 1 \\
+    L_{(2c + 1, p_c(1)), (2c + 2, p_{c+1}(0))}(x) & \exists c \in \N: 2c + 1 < x < 2c + 2
+  \end{cases}\]
+where $L_{(a, b), (c, d)}$ gives a function of the unique line that goes between $(a, b)$ and $(c, d)$.
+
+By density, $\forall f \in C([0, 1])$ and $\epsilon > 0$, $\exists c: d_\infty(p_c, f) < \epsilon$.
+Thus, by construction
+\[\sup_{x \in [0, 1]} |f(x)-u(x+2c)| = \sup_{x \in [0, 1]} |f(x)-p_c(x)| < \epsilon\]
+
+As for continuity, each piecewise part of $u$ is continuous in itself,
+since everything's a polynomial.
+For the integer points at $2$ or greater, the respective $p_c$
+and the line segment both approach $p_c(0)$ or $p_c(1)$ depending
+on if it's even or odd, so $u$ is continuous there too. $\square$
+
+\end{document}
