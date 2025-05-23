@@ -1,0 +1,320 @@
+\documentclass[12pt]{article}
+
+\input{../kz}
+
+\rhead{Math 131B}
+
+\makeatletter
+\def\@seccntformat#1{%
+  \expandafter\ifx\csname c@#1\endcsname\c@section\else
+  \csname the#1\endcsname\quad
+  \fi}
+\makeatother
+
+\DeclareMathOperator{\Fr}{Fr}
+\newcommand{\lra}{\xLeftrightarrow}
+\newcommand{\ra}{\xRightarrow}
+\newcommand{\N}{\mathbb{N}}
+\newcommand{\R}{\mathbb{R}}
+\newcommand{\Z}{\mathbb{Z}}
+\newcommand{\Q}{\mathbb{Q}}
+\newcommand{\C}{\mathbb{C}}
+\newcommand{\norm}[1]{\left\lVert#1\right\rVert}
+
+\begin{document}
+
+\setcounter{section}{1}
+
+\section{Problem 2}
+
+I'll assume Lemmas 5.2.5 and 5.2.7 without proof.
+(5.2.7 is proved in \ref{sec:p4} anyways, so\dots)
+
+The metric's range is a subset of the square root function, which is nonnegative.
+
+\subsection{0 Iff the Same}
+
+Pretty straightforward:
+\[\norm{f-g}_2=0 \iff f(x)-g(x)=0\ \forall x \iff f(x)-g(x)\ \forall x\]
+
+\subsection{Triangle Inequality}
+
+Suppose we've three functions in $C(\R/\Z, \C)$ $f$, $g$, and $h$.
+Then
+\begin{align*}
+  \norm{f-g}_2
+   & = \norm{f+(-g)}_2                     \\
+   & \le \norm{f}_2+\norm{-g}_2            \\
+   & = \norm{f}_2 + \norm{g}_2\quad\square
+\end{align*}
+
+\section{Problem 3}
+
+Since $|f(x)|^2$ is nonnegative,
+\[\int_{0}^{1} |f(x)|^2\,dx \le (1-0)\sup_{x \in [0, 1]} |f(x)|^2 = \sup_{x \in [0, 1]} |f(x)|^2\]
+This then implies
+\[\norm{f}_2^2 \le \sup_{x \in [0, 1]} |f(x)|^2\]
+Taking square roots of both sides preserves the inequality since everything's positive
+and gives us $\norm{f}_2$ on the LHS.
+
+On the RHS, notice that
+$\sqrt{\sup_{x \in [0, 1]} |f(x)|^2} = \sup_{x \in [0, 1]} |f(x)| = \norm{f}_\infty$
+since the square root is monotonic and everything within the set we're taking the
+supremum of is positive.
+
+Thus, we get $\norm{f}_2 \le \norm{f}_\infty$. $\square$
+
+\pagebreak
+
+\section{Problem 4}\label{sec:p4}
+
+\subsection{Non-degeneracy}
+
+For the forwards direction, we have
+\begin{align*}
+             & \norm{f}_2 = 0                                                                   \\
+  \implies{} & \int_{0}^{1} |f(x)|^2\,dx = 0 & \text{unpack defn \& square both sides}          \\
+  \implies{} & |f(x)|^2 = 0                  & \text{integrand is positive so it has to be $0$} \\
+  \implies{} & f(x)=0                        & \text{magnitude is $0$}
+\end{align*}
+The backwards direction is trivial; $\int_{0}^{1} 0\,dx = 0$. $\square$
+
+\subsection{Cauchy-Schwarz}\label{sec:p4p2}
+
+Funny, in 131BH a homework problem was to prove Holder's, a more general version.
+Unfortunately the proof was scattered across like three pages and was only for reals, so\dots
+
+Only consider situations where $\norm{g} > 0$;
+if it's $0$ $f+g=f$ and the inequality holds trivially.
+
+Consider the function $h=f\norm{g}_2^2 - \braket{f, g}g$.
+
+By some stuff in Lemma 5.2.5 and the fact that $\norm{g} \in \R$
+\begin{align*}
+             & \Braket{h, h} \ge 0                                                                \\
+  \implies{} & \Braket{f\norm{g}_2^2 - \braket{f, g}g, h} \ge 0                                   \\
+  \implies{} & \Braket{f\norm{g}_2^2, h} \ge \Braket{\braket{f, g}g, h}                           \\
+  \implies{} & \Braket{f\norm{g}_2^2, f\norm{g}_2^2} - \Braket{f\norm{g}_2^2, \braket{f, g}g}
+  \ge \Braket{\braket{f, g}g, f\norm{g}_2^2} - \Braket{\braket{f, g}g, \braket{f, g}g}            \\
+  \implies{} & \norm{g}_2^4 \Braket{f, f} - \norm{g}_2^2\overline{\braket{f, g}}\braket{f, g}
+  \ge \braket{f, g}\norm{g}_2^2\Braket{g, f} - \braket{f, g}\overline{\braket{f, g}}\Braket{g, g} \\
+  \implies{} & \norm{g}_2^4\norm{f}_2^2 \ge |\braket{f, g}|^2\norm{g}_2^2                         \\
+  \implies{} & \norm{g}_2\norm{f}_2 \ge |\braket{f, g}|\quad\square
+\end{align*}
+
+\pagebreak
+
+\subsection{Triangle Inequality}
+
+Since $\Re(\braket{f, g}) \le |\braket{f, g}|$, we have by what we just showed in \ref{sec:p4p2}
+\begin{align*}
+             & 2\Re(\braket{f, g}) \le 2\norm{f}_2\norm{g}_2                                          \\
+  \implies{} & \braket{f, g} + \overline{\braket{f, g}} \le 2\sqrt{\braket{f, f}}\sqrt{\braket{g, g}} \\
+  \implies{} & \braket{f, g} + \braket{g, f} \le 2\sqrt{\braket{f, f}\braket{g, g}}                   \\
+  \implies{} & \braket{f, f} + \braket{f, g} + \braket{g, f} + \braket{g, g}
+  \le \braket{f, f} + 2\sqrt{\braket{f, f}\braket{g, g}} + \braket{g, g}                              \\
+  \implies{} & \braket{f + g, f + g} \le \left(\sqrt{\braket{f, f}} + \sqrt{\braket{g, g}}\right)     \\
+  \implies{} & \sqrt{\braket{f + g, f + g}} \le \norm{f}_2 + \norm{g}_2                               \\
+  \implies{} & \norm{f+g}_2 \le \norm{f}_2+\norm{g}_2\quad\square
+\end{align*}
+
+\subsection{Pythagoras' Theorem}
+
+Unlucky, a lot of this is copy paste from the last part:
+\begin{align*}
+  \norm{f}_2^2 + \norm{g}_2^2
+   & = \braket{f, f} + \braket{g, g}                                 \\
+   & = \braket{f, f} + \braket{f, g} + \braket{g, f} + \braket{g, g} \\
+   & = \braket{f + g, f + g}                                         \\
+   & = \norm{f+g}_2^2\quad\square
+\end{align*}
+
+\subsection{Homogeneity}
+
+Finally, an easy one to finish off:
+\begin{align*}
+  \norm{cf}_2
+   & = \sqrt{\braket{cf, cf}}    \\
+   & = \sqrt{|c|^2\braket{f, f}} \\
+   & = |c|\sqrt{\braket{f, f}}   \\
+   & = |c|\norm{f}_2\quad\square
+\end{align*}
+
+\pagebreak
+
+\section{Problem 5}\label{sec:p5}
+
+I mean, just evaluate everything directly; if $n=m$,
+\begin{align*}
+  \Braket{e_n, e_m}
+   & = \braket{e_n, e_n}                                \\
+   & = \int_{0}^{1} \left|e^{2\pi inx}\right|^2\,dx     \\
+   & = \int_{0}^{1} \cos(2\pi nx)^2+\sin(2\pi nx)^2\,dx \\
+   & = \int_{0}^{1} 1\,dx                               \\
+   & = 1
+\end{align*}
+while if $n \ne m$, we can let $k=n-m$ where $k \ne 0$ and
+\begin{align*}
+  \int_{0}^{1} e^{2\pi inx}\overline{e^{2\pi imx}}\,dx
+   & = \int_{0}^{1} e^{2\pi inx-2\pi imx}\,dx                                                       \\
+   & = \int_{0}^{1} e^{i(2\pi(n-m))}                                                                \\
+   & = \int_{0}^{1} \cos(2\pi kx)+i\sin(2\pi kx)\,dx                                                \\
+   & = \left.\left(\frac{1}{2\pi kx}\sin(2\pi kx) - \frac{i}{2\pi k}\cos(2\pi kx)\right)\right|^1_0 \\
+   & = 0\quad\square
+\end{align*}
+
+\pagebreak
+
+\section{Problem 6}
+
+\subsection{Coefficient Extraction Formula}
+
+We have
+\begin{align*}
+  \Braket{f, e_n}
+   & = \Braket{\sum_{n'=-N}^{N} c_n'e_n', e_n} \\
+   & = \sum_{n=-N}^{N} \Braket{c_n'e_n', e_n}  \\
+   & = \sum_{n=-N}^{N} c_n'\Braket{e_n', e_n}  \\
+   & = c_n\Braket{e_n, e_n}                    \\
+   & = c_n
+\end{align*}
+
+\subsection{Norm Identity}
+
+\subsubsection{Some Random Equality}
+
+I'll first prove
+\[\norm{\sum_{n=-N}^{N} c_ne_n}_2^2 = \sum_{n=-N}^{N} \norm{c_ne_n}_2^2\]
+by induction; the base case where $N=0$ is trivial.
+
+Then, assuming the validity of the statement for $N$, for $N+1$ we've
+\[\norm{\sum_{n=-N-1}^{N+1} c_ne_n}_2^2
+  = \norm{c_{-N-1}e_{-N-1}+\sum_{n=-N}^{N+1} c_ne_n}_2^2\]
+and by \ref{sec:p5}
+\begin{align*}
+  \Braket{c_{N-1}e_{N-1}, \sum_{n=-N}^{N+1} c_ne_n}
+   & = c_{N-1}\Braket{e_{N-1}, \sum_{n=-N}^{N+1} c_ne_n}            \\
+   & = c_{N-1}\sum_{n=-N}^{N+1} \Braket{e_{N-1}, c_ne_n}            \\
+   & = c_{N-1}\sum_{n=-N}^{N+1} \overline{c_n}\Braket{e_{N-1}, e_n} \\
+   & = 0
+\end{align*}
+so we can apply Pythagoras' Theorem like so:
+\[\norm{c_{-N-1}e_{-N-1}+\sum_{n=-N}^{N+1} c_ne_n}_2^2
+  =\norm{c_{-N-1}e_{-N-1}}_2^2+\norm{\sum_{n=-N}^{N+1} c_ne_n}_2^2\]
+By identical reasoning we can conclude
+\[\Braket{c_{N+1}e_{N+1}, \sum_{n=-N}^{N} c_ne_n}=0\]
+so
+\begin{align*}
+      & \norm{c_{-N-1}c_{-N-1}}_2^2+\norm{\sum_{n=-N}^{N+1} c_ne_n}_2^2                         \\
+  ={} & \norm{c_{-N-1}c_{-N-1}}_2^2+\norm{c_{N+1}e_{N+1} + \sum_{n=-N}^{N} c_ne_n}_2^2          \\
+  ={} & \norm{c_{-N-1}c_{-N-1}}_2^2+\norm{c_{N+1}e_{N+1}}_2^2+\norm{\sum_{n=-N}^{N} c_ne_n}_2^2 \\
+  ={} & \sum_{n=-N-1}^{N+1} \norm{c_ne_n}_2^2
+\end{align*}
+
+\subsubsection{Actual Proof}
+
+We can then apply this identity like so:
+\begin{align*}
+  \norm{f}_2^2
+   & = \norm{\sum_{n=-N}^{N} c_ne_n}_2^2     \\
+   & = \sum_{n=-N}^{N} \norm{c_ne_n}_2^2     \\
+   & = \sum_{n=-N}^{N} |c_n|^2\norm{e_n}_2^2 \\
+   & = \sum_{n=-N}^{N} |c_n|^2\quad\square
+\end{align*}
+
+\pagebreak
+
+\section{Problem 7}
+
+Wow, a lot of this stuff was shown in ECE 102\dots
+
+\subsection{Closure}
+
+\subsubsection{\texorpdfstring{$\Z$}{Z}-Periodic}
+
+Just plug in the numbers like so:
+\begin{align*}
+  (f * g)(x+1)
+   & = \int_{0}^{1} f(y)g((x+1)-y)\,dx \\
+   & = \int_{0}^{1} f(y)g(x-y)\,dx     \\
+   & = (f*g)(x)
+\end{align*}
+
+\subsubsection{Continuous}
+
+Fix an $\epsilon$.
+Since $g$ is uniformly continuous, choose $\delta$ s.t. $|x-y| < \delta \implies |g(x)-g(y)| < \epsilon$.
+
+Then, for any $|d| < \delta$ we've
+\begin{align*}
+  |(f*g)(x+d)-(f*g)(x)|
+   & = \left|\int_{0}^{1} f(y)(g(x-y)-g(x+d-y))\,dy\right| \\
+   & \le \int_{0}^{1} |f(y)||g(x-y)-g(x+d-y)|\,dy          \\
+   & \le \int_{0}^{1} \epsilon|f(y)|\,dy                   \\
+   & \le \epsilon \int_{0}^{1} |f(y)|\,dy
+\end{align*}
+Notice that the integral doesn't depend on $\epsilon$ at all and is bounded,
+so with sufficiently small $\epsilon$ the error term goes to $0$. $\square$
+
+\pagebreak
+
+\subsection{Commutativity}
+
+I'll assume we can do changes of variables.
+
+Let $u=x-y$, so $y=x-u$ and $\frac{dy}{du}=-1$.
+
+Then
+\begin{align*}
+  (f*g)(x)
+   & = \int_{0}^{1} f(y)g(x-y)\,dy    \\
+   & = \int_{x}^{x-1} -f(x-u)g(u)\,du \\
+   & = \int_{x-1}^{x} f(x-u)g(u)\,du
+\end{align*}
+If $x \in \Z$, then this integral by periodicity is equal to $(g * f)(x)$.
+
+If it isn't, then $\exists z \in \Z: x-1 < z < x$ and
+\begin{align*}
+  \int_{x-1}^{x} f(x-u)g(u)\,du
+  &= \int_{x-1}^{z} f(x-u)g(u)\,du + \int_{z}^{x} f(x-u)g(u)\,du \\
+  &= \int_{x}^{z+1} f(x-u)g(u)\,du + \int_{z}^{x} f(x-u)g(u)\,du \\
+  &= \int_{z}^{z+1} f(x-u)g(u)\,du \\
+  &= (g * f)(x)\quad\square
+\end{align*}
+
+\pagebreak
+
+\subsection{Bilinearity}
+
+For addition, we have
+\begin{align*}
+  (f * (g + h))(x)
+   & = \int_{0}^{1} f(y)(g(x-y)+h(x-y))\,dy                      \\
+   & = \int_{0}^{1} f(y)g(x-y)\,dy + \int_{0}^{1} f(y)h(x-y)\,dy \\
+   & = (f * g)(x) + (f * h)(x)
+\end{align*}
+and for the other way
+\begin{align*}
+  (f + g) * h
+   & = h * (f + g)   \\
+   & = h * f + h * g \\
+   & = f * h + f * g
+\end{align*}
+
+For constant multiplication, we've
+\begin{align*}
+  c(f * g)
+   & = c\int_{0}^{1} f(y)g(x-y)\,dy   \\
+   & = \int_{0}^{1} (cf(y))g(x-y)\,dy \\
+   & = (cf) * g
+\end{align*}
+and by commutativity
+\begin{align*}
+  c(f * g)
+   & = c(g *f)  \\
+   & = (cg) * f \\
+   & = f * (cg)
+\end{align*}
+so yeah, that's every property proven! $\square$
+
+\end{document}
