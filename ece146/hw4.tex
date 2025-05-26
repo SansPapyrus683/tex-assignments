@@ -1,0 +1,116 @@
+\documentclass[11pt]{article}
+
+\input{stupid}
+
+\begin{document}
+\ctitle{4}{K-Means and PCA}{Kevin Sheng}{406 196 414}
+\date{}
+\maketitle
+
+\section{Problem 1}
+
+\subsection{Problem 1a}
+
+\solution{
+      If $K=n$, then the optimal assignment is $C_i=\{x_i\}$.
+      Each sample would be its own cluster's center, and
+      so the best objective value would be \boxed{0}.
+}
+
+\subsection{Problem 1b}
+
+\solution{
+      I'll remove the subscripts from $\mu_i$ and $C_i$
+      since we're only talking about a single cluster.
+
+      Anyways, we take gradients and get
+      \begin{align*}
+            \nabla_\mu \lambda\norm{\mu}_2^2 + \sum_{x \in C} \norm{x-\mu}_2^2
+             & = \nabla_\mu \lambda\norm{\mu_2}^2 + \sum_{x \in C} \nabla_\mu \norm{x-\mu}_2^2 \\
+             & = 2\lambda\mu + \sum_{x \in C} -2(x - \mu)                                      \\
+             & = 2(\lambda + |C|)\mu - 2 \sum_{x \in C} x
+      \end{align*}
+
+      And setting this equal to $\mathbf{0}$ gives
+      \[ \mu(\lambda + |C|) = \sum_{x \in C} x
+            \implies \boxed{\mu^* = \frac{\sum_{x \in C} x}{\lambda + |C|}}\]
+}
+
+\subsection{Problem 1c}
+
+\solution{
+      Since we have to include the distance the TAs walk,
+      we have to do regularized K-Means with $\lambda=1$.
+
+      Applying the formula for the optima we just derived makes the problem
+      \begin{gather*}
+            \min_{C_1, C_2, \cdots, C_K}
+            \sum_{i=1}^{K} \left(\norm{\mu_i}_2^2 + \sum_{x \in C_i} \norm{x-\mu_i}_2^2\right)
+            \text{ where} \\
+            \mu_i=\frac{\sum_{x \in C_i} x}{1 + |C|}
+      \end{gather*}
+}
+
+\pagebreak
+
+\section{Problem 2}
+
+\subsection{Problem 2a}
+
+\solution{
+      I take it we already assume the stuff in Claim 1 is true?
+
+      Anyways, if so, we can change the objective function like so:
+      \begin{align*}
+            \sum_{i=1}^{N} p_i\norm{x_i-\tilde{x}_i}_2^2
+             & = \sum_{i=1}^{N} p_i\norm{x_i - UWx_i}_2^2                                                 \\
+             & = \sum_{i=1}^{N} p_i\norm{x_i - UU^Tx_i}_2^2                                               \\
+             & = \sum_{i=1}^{N} p_i\left(\norm{x_i}_2^2 - \Tr\left(x_i^TUU^Tx_i\right)\right)\quad\square
+      \end{align*}
+}
+
+\subsection{Problem 2b}
+
+\solution{
+      We have
+      \begin{align*}
+            \Tr\left(x_i^TUU^Tx_i\right)
+             & = \Tr\left(\left(x_i^TU\right)\left(U^Tx_i\right)\right) \\
+             & = \Tr\left(\left(U^Tx_i\right)\left(x_i^TU\right)\right) \\
+             & = \Tr\left(U^Tx_ix_i^TU\right)\quad\square
+      \end{align*}
+      ($U^Tx_i \in \R^{l \times 1}$ and $x_i^TU \in \R^{1 \times l}$, so the dimensions check out just fine.)
+}
+
+\subsection{Problem 2c}
+
+\solution{
+      Minimizing the current objective is the same as maximizing its negative;
+      that makes our new objective
+      \[\max_{U \in \R^{d \times l}, UU^T=I_l}
+            \sum_{i=1}^N p_i\left(\Tr\left(x_i^TUU^Tx_i\right)-\norm{x_i}_2^2\right)\]
+      The second part of the summation doesn't change no matter how we pick $U$, so we can remove it.
+      After that, our objective function is
+      \begin{align*}
+            \sum_{i=1}^N p_i\Tr\left(x_i^TUU^Tx_i\right)
+             & = \sum_{i=1}^N p_i\Tr\left(U^Tx_ix_i^TU\right)                          \\
+             & = \sum_{i=1}^N \Tr\left(p_iU^Tx_ix_i^TU\right)                          \\
+             & = \Tr\left(\sum_{i=1}^N p_iU^Tx_ix_i^TU\right)                          \\
+             & = \Tr\left(U^T\left(\sum_{i=1}^N p_ix_ix_i^T\right)U\right)\quad\square
+      \end{align*}
+}
+
+\subsection{Problem 2d}
+
+\solution{
+      Now that the summation in the middle is neatly wrapped up
+      in a matrix $\tilde{A}$ with eigendecomposition $\tilde{A}=V\Lambda V^T$.
+
+      Assuming $l \le d$, we take the eigenvalues $\lambda_1$ through $\lambda_l$ and let
+      \[W=\begin{bmatrix}v_1 & v_2 & \cdots & v_l\end{bmatrix}\]
+      where $v_i$ is the eigenvector corresponding to the eigenvalue $\lambda_i$.
+
+      The only difference between this solution and the one derived in class is $\tilde{A}$.
+}
+
+\end{document}
