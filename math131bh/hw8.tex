@@ -1,0 +1,435 @@
+\documentclass[12pt]{article}
+
+\input{../kz}
+
+\rhead{Math 131BH}
+
+\makeatletter
+\def\@seccntformat#1{%
+  \expandafter\ifx\csname c@#1\endcsname\c@section\else
+  \csname the#1\endcsname\quad
+  \fi}
+\makeatother
+
+\DeclareMathOperator{\Fr}{Fr}
+\newcommand{\lra}{\xLeftrightarrow}
+\newcommand{\ra}{\xRightarrow}
+\newcommand{\N}{\mathbb{N}}
+\newcommand{\R}{\mathbb{R}}
+\newcommand{\Z}{\mathbb{Z}}
+\newcommand{\Q}{\mathbb{Q}}
+\newcommand{\norm}[1]{\left\lVert#1\right\rVert}
+\newcommand*{\ditto}{---''---}
+
+\begin{document}
+
+\section{Problem 1}
+
+> hint \\
+> look inside \\
+> sketch of entire proof \\
+> mfw
+
+\subsection{Continuous}
+
+Lemme first just prove that $x(t)$ is continuous; fix a $t$ and $\epsilon > 0$.
+
+Since $x(t)$ is bounded by a geometric series,
+\[\exists N \in \N: \sum_{n=N+1}^{\infty} 2^{-n}f\left(3^{2n-1}t\right) < \epsilon\]
+Now let's only consider the first $N$ terms of the series.
+
+$f$ is continuous, so pick $\delta'$ s.t. $|x-y| < \delta' \implies |f(x)-f(y)| < \frac{\epsilon}{N}$.
+
+Now let our actual $\delta=\frac{\delta'}{3^{2N-1}}$.
+Now, for any $1 \le n \le N$ and $t' \in B_\delta'(t)$,
+\begin{align*}
+  \left|3^{2n-1}t' - 3^{2n-1}t\right|
+   & = 3^{2n-1}\left|t'-t\right|               \\
+   & < 3^{2n-1} \cdot \frac{\delta'}{3^{2N-1}} \\
+   & < \delta
+\end{align*}
+which means $\left|f\left(3^{2n-1}t'\right)-f\left(3^{2n-1}t\right)\right| < \frac{\epsilon}{N}$ and
+\begin{align*}
+        & |x(t)-x(t')|                                                                                           \\
+  ={}   & \left|\left(\sum_{n=1}^{N} 2^{-n}\left(f\left(3^{2n-1}t\right)-f\left(3^{2n-1}t'\right)\right)\right)
+  +\left(\sum_{n=N+1}^{\infty} 2^{-n}\left(f\left(3^{2n-1}t\right)-f\left(3^{2n-1}t'\right)\right)\right)\right| \\
+  ={}   & \left|\sum_{n=1}^{N} 2^{-n}\left(f\left(3^{2n-1}t\right)-f\left(3^{2n-1}t'\right)\right)\right|
+  +\left|\sum_{n=N+1}^{\infty} 2^{-n}\left(f\left(3^{2n-1}t\right)-f\left(3^{2n-1}t'\right)\right)\right|        \\
+  \le{} & \sum_{n=1}^{N} 2^{-n}\frac{\epsilon}{N} + 2\epsilon                                                    \\
+  \le{} & 3\epsilon\quad\square
+\end{align*}
+
+\pagebreak
+
+\subsection{Onto}
+
+Fix $x_0$ and $y_0$; we'll try to find a $t_0$ s.t. $x(t_0)=x_0$ and $y(t_0)=y_0$.
+
+Since all numbers have a binary expansion, any $x \in [0, 1]$ can be written as
+\[x=\sum_{n=1}^{\infty} 2^{-n}x_n\]
+If we let $x_n$ be the sequence for $x_0$ and $y_n$ be the same for $y_0$, then
+we can interleave the two sequences into a new sequence $a_n$ like so:
+\[a_n=\begin{cases}
+    x_{(n+1)/2} & \text{$n$ is odd}  \\
+    y_{n/2}     & \text{$n$ is even}
+  \end{cases}\]
+and we can then write $x_0$ and $y_0$ like so:
+\begin{align*}
+  x_0=\sum_{n=1}^{\infty} 2^{-n}a_{2n-1} &  &
+  y_0=\sum_{n=1}^{\infty} 2^{-n}a_{2n}
+\end{align*}
+
+Rudin told me that letting $t_0=\sum_{t=1}^{\infty} 3^{-t-1}(2a_t)$, should work, so let's prove it.
+
+First off, I should say that $t_0$ is actually in the Cantor set,
+since it's ternary expansion has only $0$s and $2$s.
+By proving this we're also proving that $f$ maps both this set and $[0, 1]$ onto $[0, 1]^2$.
+
+Notice that if $k \in \N$, then
+\begin{align*}
+  f\left(3^kt_0\right)
+   & = f\left(3^k\sum_{t=1}^{\infty} 3^{-t-1}(2a_t)\right)                              \\
+   & = f\left(\sum_{t=1}^{\infty} 3^{k-t-1}(2a_t)\right)                                \\
+   & = f\left(2\sum_{t=1}^{k-1} 3^{k-t-1}a_t+\sum_{t=k}^{\infty} 3^{k-t-1}(2a_t)\right) \\
+   & = f\left(\sum_{t=k}^{\infty} 3^{k-t-1}(2a_t)\right)                                \\
+   & = f\left(\frac{2a_k}{3}+\sum_{t=k+1}^{\infty} 3^{k-t-1}(2a_t)\right)               \\
+   & = a_k
+\end{align*}
+We can remove the first $k-1$ terms of the summation because
+those add integer multiples of $2$ to the argument and $f$ is $2$-periodic.
+
+Also, since the rest of the summation can't exceed $\frac{\frac{1}{9}}{1-\frac{1}{3}}=\frac{1}{6}$,
+the only part that matters is $\frac{2a_k}{3}$, which is $0$ if $a_k=0$ and $\frac{2}{3}$ otherwise.
+
+With this identity, we have for $x$
+\begin{align*}
+  x(t_0)
+   & = \sum_{n=1}^{\infty} 2^{-n}f\left(3^{2n-1}t_0\right) \\
+   & = \sum_{n=1}^{\infty} 2^{-n}a_{2n-1}                  \\
+   & = x_0
+\end{align*}
+and for $y$
+\begin{align*}
+  y(t_0)
+   & = \sum_{n=1}^{\infty} 2^{-n}f\left(3^{2n}t_0\right) \\
+   & = \sum_{n=1}^{\infty} 2^{-n}a_{2n}                  \\
+   & = y_0\quad\square
+\end{align*}
+
+\pagebreak
+
+\section{Problem 2}
+
+\subsection{Bound on \texorpdfstring{$f_p$}{f\_p}}
+
+Since everything's the output of $d$, all numbers here are nonnegative.
+
+Anyways, if $d(x, p) \ge d(x, a)$ then $|f_p(x)|=d(x, p)-d(x, a)$ and
+$d(x, p)-d(x, a) \le d(a, p)$ by the triangle inequality.
+
+Similarly, if $d(x, p) < d(x, a)$ then $|f_p(x)|=d(x, a)-d(x, p)$ and
+we get the same thing with $d(x,a)-d(x,p) \le d(a, p)$ by the triangle inequality.
+
+\subsection{Continuity}
+
+Fix an $\epsilon$ and $x \in X$.
+If we force $x' \in B_{\frac{\epsilon}{2}}(x)$, then
+\begin{align*}
+  |f_p(x)-f_p(x')|
+   & = |d(x, p) - d(x, a) - d(x', p) + d(x', a)|     \\
+   & \le |d(x, p) - d(x', p)| + |d(x', a) - d(x, a)| \\
+   & \le d(x, x') + d(x, x')                         \\
+   & \le \epsilon
+\end{align*}
+
+\subsection{Distance Between Functions}
+
+We have for all $x \in X$
+\begin{align*}
+  |f_p(x) - f_q(x)|
+   & = |d(x, p) - d(x, a) - d(x, q) + d(x, a)| \\
+   & = |d(x, p) - d(x, q)|                     \\
+   & \le d(p, q)
+\end{align*}
+so $\norm{f_p-f_q} \le d(p, q)$.
+Equality can be achieved if we choose $x=p$ or $x=q$,
+so this means $\norm{f_p-f_q} = d(p, q)$ and not an $\epsilon$ greater.
+
+I'm not really sure why we need to show that $Y$ is complete,
+since it's closed in a complete metric space.
+
+\pagebreak
+
+\section{Problem 3}
+
+\subsection{LTs are Pointwise Bounded}
+
+I'm NGL there's probably a more elegant way to do this with bases or whatever,
+but no one said I was an elegant person.
+
+Choose the standard basis and let $A$ be the matrix associated with the basis and LT.
+
+$A$ is finite, so $\exists M: |A_{ij}| < M\ \forall i, j$.
+Also, let $X=\max_{i=1, \cdots, n} x_i$.
+
+For each $1 \le i \le m$, we've
+\begin{align*}
+  |(Ax)_i|
+   & = \left|\sum_{j=1}^{n} A_{ij}x_j\right| \\
+   & < M\sum_{j=1}^{n} |x_j|                 \\
+   & \le MXn
+\end{align*}
+
+Then to actually bound the magnitude we have
+\begin{align*}
+  \norm{Ax}
+   & = \sqrt{\sum_{i=1}^{m} (Ax)_i^2}  \\
+   & < \sqrt{\sum_{i=1}^{m} M^2X^2n^2} \\
+   & = Mn\sqrt{mX^2}                   \\
+   & = Mn\sqrt{m} \cdot X              \\
+   & \le Mn\sqrt{m} \cdot \norm{x}
+\end{align*}
+so our actual bound is \boxed{Mn\sqrt{m}}. $\square$
+
+\pagebreak
+
+\subsection{Differentiability Implies Continuity}
+
+Really quick tangent- I'm not sure if this needs to be proven,
+but for any vectors $x$ and $y$ we have by the triangle inequality
+\[\norm{x} \le \norm{x-y}+\norm{-y} \implies \norm{x}-\norm{y} \le \norm{x-y}\]
+
+But anyways, for continuity, for any $\epsilon > 0$ we need a $\delta$ s.t.
+\[\norm{\vec{h}} < \delta \implies \norm{f\left(x_0+\vec{h}\right)-f(x_0)} < \epsilon\]
+
+Since $f$'s differentiable at $x_0$, $\exists A \in \R^{m \times n}$
+s.t. $\exists \delta'$ s.t.
+\[\norm{\vec{h}} < \delta' \implies
+  \frac{\norm{f\left(x_0+\vec{h}\right)-f(x_0)-A\vec{h}}}{\norm{\vec{h}}} < \epsilon\]
+
+By what we just proved in the earlier part, $\exists M: \norm{A\vec{x}} < M\norm{\vec{x}}$.
+
+Taking $\delta = \min(\delta', \epsilon)$ (kinda cursed but it is what it is),
+we have for all $\norm{\vec{h}} < \delta$
+\begin{align*}
+             & \norm{f\left(x_0+\vec{h}\right)-f(x_0)-A\vec{h}} < \epsilon\norm{\vec{h}}        \\
+  \implies{} & \norm{f\left(x_0+\vec{h}\right)-f(x_0)}-\norm{A\vec{h}} < \epsilon\norm{\vec{h}}
+\end{align*}
+so we can then bound the term we want like so:
+\begin{align*}
+  \norm{f\left(x_0+\vec{h}\right)-f(x_0)}
+   & < \epsilon\norm{\vec{h}} + \norm{A\vec{h}} \\
+   & < \epsilon\delta + M\delta                 \\
+   & \le \epsilon^2 + M\epsilon\quad\square
+\end{align*}
+
+\pagebreak
+
+\section{Problem 4}
+
+\subsection{Not Partially Differentiable}
+
+If there were a partial derivative, it'd have to be
+\[\begin{bmatrix}\frac{\partial f}{\partial x} & \frac{\partial f}{\partial y}\end{bmatrix}\]
+To calculate this, we take the limit of the difference quotient first holding $y$ constant:
+\begin{align*}
+  \lim_{h \to 0} \frac{f(0 + h, 0)-f(0, 0)}{h}
+   & = \lim_{h \to 0} \frac{f(h, 0)}{h}         \\
+   & = \lim_{h \to 0} \frac{\frac{h^3}{h}}{h^2} \\
+   & = 1
+\end{align*}
+and then do the same but hold $x$ constant instead:
+\begin{align*}
+  \lim_{h \to 0} \frac{f(0, h)}{h}
+   & = \lim_{h \to 0} \frac{\frac{0}{h^2}}{h} \\
+   & = 0
+\end{align*}
+so if $Df$ existed it'd have to be $\begin{bmatrix}1 & 0\end{bmatrix}$.
+
+However, if we let $\vec{h}=\braket{d, d}$ and send that to $0$,
+\begin{align*}
+  \lim_{d \to 0} \frac{\norm{f(d, d)-f(0, 0)-(1 \cdot d + 0 \cdot d)}}{\norm{d}}
+   & = \lim_{d \to 0} \frac{\norm{\frac{d^3}{2d^2}-d}}{\sqrt{d^2 + d^2}} \\
+   & = \lim_{d \to 0} \frac{\left|\frac{d}{2}\right|}{\sqrt{2}|d|}       \\
+   & = \frac{1}{2\sqrt{2}}                                               \\
+   & \ne 0
+\end{align*}
+which contradicts that the given matrix specified a valid linear transformation. $\square$
+
+\pagebreak
+
+\subsection{But OK in Any One Direction}
+
+If we let $\hat{h}=\braket{h_1, h_2}$ be a unit vector,
+we just have to take directional derivatives like so:
+\begin{align*}
+  \lim_{d \to 0} \frac{\braket{0, 0} + f\left(d\hat{h}\right)-f(\braket{0, 0})}{d}
+   & = \lim_{d \to 0} \frac{1}{d} \cdot \frac{d^3h_1^3}{d^2h_1^2+d^2h_2^2} \\
+   & = \lim_{d \to 0} \frac{d^2h_1^3}{d^2h_1^2+d^2h_2^2}                   \\
+   & = \frac{h_1^3}{h_1^2+h_2^2}
+\end{align*}
+I mean yeah, the limit exists, not much else to say here.
+
+\pagebreak
+
+\section{Problem 5}
+
+\subsection{Differentiable}
+
+I propose that the derivative is $\begin{bmatrix}0 & 0\end{bmatrix}$ at $(0, 0)$.
+
+So if we go from the definition, we need to show that
+\begin{align*}
+  ={} & \lim_{\norm{h} \to 0} \frac{\norm{0 + h_1, 0 + h_2}-f(0, 0) - (0 \cdot h_1 + 0 \cdot h_2)}{\norm{h}} \\
+  ={} & \lim_{\norm{h} \to 0} \frac{\frac{h_1^3h_2}{h_1^2+h_2^2}}{\sqrt{h_1^2+h_2^2}}                        \\
+  ={} & \lim_{\norm{h} \to 0} \frac{h_1^3h_2}{\sqrt{h_1^2+h_2^2}}
+\end{align*}
+is $0$.
+
+I'll actually first prove that the limit of the square is $0$, or in other words
+\[\lim_{\norm{h} \to 0} \frac{h_1^6h_2^2}{h_1^2+h_2^2}=0\]
+
+Fix an $\epsilon$.
+If we choose $\delta=\min(\epsilon, 1)$, then for any $h$ s.t. $\norm{h} < \delta$,
+$h_1, h_2 < \delta$ as well and
+\begin{align*}
+  \frac{h_1^6h_2^2}{h_1^2+h_2^2}
+   & \le \frac{h_1^6h_2^2}{h_1^2h_2^2+h_2^2h_1^2} \\
+   & = \frac{h_1^4}{2}                            \\
+   & \le \frac{\epsilon^4}{2}
+\end{align*}
+so as $\epsilon \to 0$, the bound we've achieved goes to $0$ as well
+since it's bounded from above and clearly nonnegative.
+
+Since the square goes to $0$ the original limit must go to $0$ too. $\square$
+
+\pagebreak
+
+\subsection{Order Matters}
+
+By basic calculus
+\begin{align*}
+  \frac{\partial f}{\partial x}
+   & = \frac{3x^2y\left(x^2+y^2\right)-2x \cdot x^3y}{\left(x^2+y^2\right)^2} \\
+   & = \frac{x^4y+3x^2y^3}{\left(x^2+y^2\right)^2}
+\end{align*}
+Then we use the limit definition to calculate the partial of this wrt $y$:
+\begin{align*}
+  \lim_{h \to 0} \frac{\frac{\partial f}{\partial x}(0, h)-\frac{\partial f}{\partial x}(0, 0)}{h}
+   & = \lim_{h \to 0} \frac{\frac{0}{h^4}}{h} \\
+   & = 0
+\end{align*}
+
+OTOH, if we started with $y$, we get
+\begin{align*}
+  \frac{\partial f}{\partial y}
+   & = \frac{x^3\left(x^2+y^2\right)-2y \cdot x^3y}{\left(x^2+y^2\right)^2} \\
+   & = \frac{x^5-2x^3y^2}{\left(x^2+y^2\right)^2}
+\end{align*}
+and then using the limit definition again to get the partial wrt $x$ we've
+\begin{align*}
+  \lim_{h \to 0} \frac{\frac{\partial f}{\partial y}(h, 0)-\frac{\partial f}{\partial y}(0, 0)}{h}
+   & = \lim_{h \to 0} \frac{\frac{h^5}{h^4}}{h} \\
+   & = 1
+\end{align*}
+giving us a different result from above.
+
+\pagebreak
+
+\section{Problem 6}
+
+All the partials are bounded, so
+$\left|\frac{\partial f}{\partial x_i}\right| < M\ \forall x \in E, 1 \le i \le n$.
+
+Let $\vec{h}=\sum_{i=1}^{n} c_i\vec{e}_i$.
+I'll denote $s(x)$ where x is an integer in $[0, n]$ as $\sum_{i=1}^{x} c_i\vec{e}_i$.
+For convenience let $s(0)=\vec{0}$.
+In other words, it represents the first $x$ elements of $h$.
+
+To get a bound on $|f(x+h)-f(x)|$, let's rewrite it as a telescoping sum:
+\begin{align*}
+  |f(x+\vec{h})-f(x)|
+   & = |f(x+s(n))-f(x+s(0))|                                                                        \\
+   & = \left|\sum_{i=1}^{n} f(x+s(i))-f(x+s(i-1))\right|                                            \\
+   & = \sum_{i=1}^{n} \left|\frac{\partial f}{\partial x_i}(x+s(i-1)+k_i\vec{e}_i) \cdot c_i\right| \\
+   & \le \sum_{i=1}^{n} M|c_i|
+\end{align*}
+where $0 < k_i < c_i$ by the MVT.
+
+As $\norm{h}$ tends to $0$, all the $c_i$s do as well.
+Besides that, everything else is finite, so
+\[\lim_{n \to 0} |f(x+\vec{h})-f(x)| = 0\quad\square\]
+
+\pagebreak
+
+\section{Problem 7}
+
+\subsection{Weaker Condition and Proof}
+
+The weaker condition is as follows.
+For any $x$ and $y$, we only need the convexity property to hold if
+$x_i=y_i$ for all $i$ from $2$ to $n$. ($E$ is still has to be open.)
+
+BWOC $f(x)$ depended on $x_1$, so $\exists \vec{x}, c$ s.t. $f(\vec{x}) \ne f(\vec{x}+c\vec{e}_1)$.
+
+By the MVT, $\exists 0 < m < c$ s.t.
+\[\frac{\partial f}{\partial x_1}(x+m\vec{e}_1)=\frac{f(x+c\vec{e}_1)-f(x)}{c}\]
+Since $x+c\vec{e}_1$ and $x$ only differ in the first term,
+the linear combination of them at which we are evaluating the partial must be $0$.
+However, the numerator and denominator on the RHS are both nonzero,
+which is a contradiction. $\square$
+
+\subsection{Needed BTW}
+
+Nothing was stated about continuity of $f$ or connectedness of $E$,
+so here's a really troll example with the following $f: \R \to \R$:
+\[f(x)=\begin{cases}
+    1 & x \ge 0          \\
+    0 & \text{otherwise}
+  \end{cases}\]
+
+Then, let $E=(-2, -1) \cup (1, 2)$.
+Though $f'(x)$ exists and is $0$ on both these intervals,
+$f$ clearly depends on $x$.
+
+\pagebreak
+
+\section{Problem 8}
+
+\subsection{Product Rule}
+
+I suppose there's no other choice but to bash out the limits.
+Lemme first do some stuff with the difference, though:
+\begin{align*}
+      & f(x+h)g(x+h)-f(x)g(x)-(f(x)g'(x)+g(x)f'(x)) \cdot h         \\
+  ={} & f(x+h)(g(x+h)-g(x))+g(x)(f(x+h)-f(x))-f(x)g'(x)h-g(x)f'(x)h \\
+  ={} & f(x+h)(g(x+h)-g(x))-f(x)g'(x)h+g(x)(f(x+h)-f(x)-f'(x)h)
+\end{align*}
+
+Then we actually do the limit.
+I've removed the subscripts, as all of them are as $\norm{h} \to 0$.
+\begin{align*}
+      & \lim \frac{\text{that expression above}}{\norm{h}}                       \\
+  ={} & \lim \frac{f(x+h)(g(x+h)-g(x))-f(x)g'(x)h}{\norm{h}}
+  + g(x)\lim \frac{f(x+h)-f(x)-f'(x)h}{\norm{h}}                                 \\
+  ={} & \lim \frac{f(x+h)(g(x+h)-g(x))-f(x)g'(x)h}{\norm{h}}                     \\
+  ={} & \lim \frac{f(x+h)(g(x+h)-g(x)-g'(x)h)+f(x+h)g'(x)h-f(x)g'(x)h}{\norm{h}} \\
+  ={} & \lim f(x+h) \cdot \lim \frac{g(x+h)-g(x)-g'(x)h}{\norm{h}}
+  + \lim \frac{g'(x)h \cdot (f(x+h)-f(x))}{\norm{h}}                             \\
+  ={} & \lim g'(x)\frac{h}{\norm{h}} \cdot \lim f(x+h)-f(x)               \\
+  ={} & 0\quad\square
+\end{align*}
+
+\subsection{Inverse Thing}
+
+We can apply the chain rule.
+Let $f: \R^n \to \R$ be as stated and $h: \R \setminus \{0\} \to \R$ be $h(x)=\frac{1}{x}$.
+
+Then, yeah, we just have this:
+\begin{align*}
+  D(h \circ f)(x_0)
+   & = Dh(f(x_0))Df(x_0)                      \\
+   & = -\frac{1}{f(x_0)^2}Df(x_0)\quad\square
+\end{align*}
+
+\end{document}
