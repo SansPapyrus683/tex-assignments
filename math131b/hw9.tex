@@ -242,8 +242,28 @@ Just plug in the numbers like so:
 
 \subsubsection{Continuous}
 
-Fix an $\epsilon$.
-Since $g$ is uniformly continuous, choose $\delta$ s.t. $|x-y| < \delta \implies |g(x)-g(y)| < \epsilon$.
+Notice that $g$ is uniformly continuous.
+We start from the fact that it's continuous on the compact $[0, 2]$, which makes it UC there.
+
+In other words, for any $\epsilon$
+$\exists \delta: x, y \in [0, 2] \land |x-y| < \delta \implies |g(x)-g(y)| < \epsilon$.
+
+To show UC-ness on $\R$, note that if we pick $\delta'=\min(\delta, 2)$, then
+\[\forall x, y \in \R: \exists a, b \in [0, 2], z \in \Z: x=a+z \land y=b+z\]
+In other words, we can represent any pair of real numbers with
+a pair of numbers in $[0, 2]$.
+
+Since $g$ is $\Z$-periodic,
+\[|f(x)-f(y)|=|f(a)-f(b)|<\epsilon\]
+and is UC on the entirety of $\R$.
+
+(proof continued on next page)
+
+\pagebreak
+
+With that proven, we can move onto the actual proof of continuity.
+
+Fix an $\epsilon$ and choose $\delta$ s.t. $|x-y| < \delta \implies |g(x)-g(y)| < \epsilon$.
 
 Then, for any $|d| < \delta$ we've
 \begin{align*}
@@ -255,8 +275,6 @@ Then, for any $|d| < \delta$ we've
 \end{align*}
 Notice that the integral doesn't depend on $\epsilon$ at all and is bounded,
 so with sufficiently small $\epsilon$ the error term goes to $0$. $\square$
-
-\pagebreak
 
 \subsection{Commutativity}
 
