@@ -263,7 +263,7 @@ which contradicts that the given matrix specified a valid linear transformation.
 If we let $\hat{h}=\braket{h_1, h_2}$ be a unit vector,
 we just have to take directional derivatives like so:
 \begin{align*}
-  \lim_{d \to 0} \frac{\braket{0, 0} + f\left(d\hat{h}\right)-f(\braket{0, 0})}{d}
+  \lim_{d \to 0} \frac{\braket{0, 0} + f(d\hat{h})-f(\braket{0, 0})}{d}
    & = \lim_{d \to 0} \frac{1}{d} \cdot \frac{d^3h_1^3}{d^2h_1^2+d^2h_2^2} \\
    & = \lim_{d \to 0} \frac{d^2h_1^3}{d^2h_1^2+d^2h_2^2}                   \\
    & = \frac{h_1^3}{h_1^2+h_2^2}
