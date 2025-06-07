@@ -1,0 +1,412 @@
+\documentclass[12pt]{article}
+
+\input{../kz}
+
+\rhead{Math 131BH}
+
+\makeatletter
+\def\@seccntformat#1{%
+  \expandafter\ifx\csname c@#1\endcsname\c@section\else
+  \csname the#1\endcsname\quad
+  \fi}
+\makeatother
+
+\DeclareMathOperator{\Fr}{Fr}
+\newcommand{\lra}{\xLeftrightarrow}
+\newcommand{\ra}{\xRightarrow}
+\newcommand{\N}{\mathbb{N}}
+\newcommand{\R}{\mathbb{R}}
+\newcommand{\Z}{\mathbb{Z}}
+\newcommand{\Q}{\mathbb{Q}}
+\newcommand{\norm}[1]{\left\lVert#1\right\rVert}
+\newcommand*{\ditto}{---''---}
+
+\begin{document}
+
+\section{Problem 1}
+
+I can represent $f$ as $\braket{f_1(x), f_2(x), f_3(x)}$.
+
+With this, we have
+\begin{align*}
+             & \norm{f(x)}=1                                    \\
+  \implies{} & \sqrt{f_1(x)^2+f_2(x)^2+f_3(x)^2}=1              \\
+  \implies{} & f_1(x)^2+f_2(x)^2+f_3(x)^2=1                     \\
+  \implies{} & \frac{d}{dx} \text{\ditto} = \frac{d}{dx} 1      \\
+  \implies{} & 2f_1(x)f_1'(x)+2f_2(x)f_2'(x)+2f_3(x)f_3'(x) = 0 \\
+  \implies{} & f_1(x)f_1'(x)+f_2(x)f_2'(x)+f_3(x)f_3'(x) = 0    \\
+  \implies{} & f(x) \cdot \nabla f(x) = 0\quad\square
+\end{align*}
+Geometrically this means that if a function is constant magnitude then
+the function is orthogonal to its gradient.
+
+\pagebreak
+
+\section{Problem 2}
+
+I'll just prove that $f$ isn't 1-1 in any neighborhood of $0$.
+
+If it \textit{were} injective, then there'd be a neighborhood around $0$ where $f$ is strictly monotonic.
+This then implies that $f'$ is always nonnegative or always nonpositive in that neighborhood as well.
+
+However, the derivative of $f$ for nonzero values is
+\[f'(x)=1+4x\sin\left(\frac{1}{x}\right)-2\cos\left(\frac{1}{t}\right)\]
+and for all $n \in \N$, setting $x=\frac{1}{2\pi n}$ gives
+\begin{align*}
+  f'(x)
+   & =1+4x\sin(2\pi n)-2\cos(2\pi n) \\
+   & = 1+0-2                         \\
+   & = -1
+\end{align*}
+and setting $x=\frac{1}{\pi(2n-1)}$ gives
+\begin{align*}
+  f'(x)
+   & =1+4x\sin(\pi(2n-1))-2\cos(\pi(2n-1)) \\
+   & = 1+0+2                               \\
+   & = 3
+\end{align*}
+so no matter how small our neighborhood is, there will always be two derivatives of different signs.
+This means $f$ can't be monotonic, so by extension it can't be 1-1. $\square$
+
+\pagebreak
+
+\section{Problem 3}
+
+\subsection{Critical Points}
+
+The gradient is
+\[\begin{bmatrix}
+    6x^2-6x & 6y^2+6y
+  \end{bmatrix}\]
+and setting both elements equal to $0$ gives the following solutions:
+\begin{align*}
+  (0, 0) &  & (1, 0) &  & (0, -1) &  & (1, -1)
+\end{align*}
+
+I'll just go through each of the points one by one and see if they're an extreme point.
+\begin{enumerate}
+  \item $(0, 0)$ is neither.
+        While $f(0, y) > f(0, 0) = 0\ \forall y > 0$,
+        $f(0, 0) \le f(x, 0)\ \forall x < \frac{3}{2}$ since
+        \begin{align*}
+          f(x, 0)
+           & = 2x^3-3x^2 \\
+           & = x^2(2x-3) \\
+           & \le 0
+        \end{align*}
+  \item $(1, 0)$ is a local minimum.
+        This is because $f(x, y)=h(x)+g(y)$,
+        where $1$ is a local minimum of $h(x)=2x^3-3x^2$
+        and $0$ is a local minimum of $g(y)=2y^3+3y^2$.
+        Both of these can be verified by the second derivative test.
+  \item $(0, -1)$ is a local maximum by similar reasoning as for $(1, 0)$.
+  \item $(1, -1)$ is neither.
+        For all $x > 1$, we have
+        \begin{align*}
+          f(x, -1)
+           & = 2x^3-3x^2+1 \\
+           & = x^2(2x-3)+1 \\
+           & > 0
+        \end{align*}
+        while for all $y < -1$ we have
+        \begin{align*}
+          f(1, y)
+           & = -1+2y^3+3y^2 \\
+           & = y^2(3+2y)-1  \\
+           & < 0
+        \end{align*}
+\end{enumerate}
+
+\pagebreak
+
+\subsection{No Good Neighborhoods}
+
+To be able to solve for $f(x, y)=0$ in a neighborhood of some point $(x, y)$,
+we can use the Implict Function Theorem which requires at least one of these
+terms to be nonzero:
+\[f'(x, y)=\begin{bmatrix}
+    6x^2-6x & 6y^2+6y
+  \end{bmatrix}\]
+The only points that don't satisfy the conditions are $(0, 0)$, $(1, -1)$, $(0, -1)$, and $(1, 0)$.
+
+Notice that
+\[2x^3-3x^2+2y^3+3y^2=(x+y)\left(2x^2-2xy-3x+2y^2+3y\right)\]
+So for $f(x, y)=0$ either $y=-x$ or they satisfy that weird quadratic thing.
+
+$f(0, -1)$ and $f(1, 0)$ are both nonzero, so the only sus points are $(0, 0)$ and $(1, -1)$.
+
+To show that they're in $S$, we need to show that for any $x$ in a neighborhood
+around them there's more than one $y$ s.t. $f(x, y)=0$.
+We're guaranteed at least one since $y=-x$ is always a solution.
+
+To see that the quadratic also gives a solution notice that by the quadratic formula
+\[y=\frac{2x-3 \pm \sqrt{(2x-3)^2-8\left(2x^2-3x\right)}}{4}\]
+
+For $(0, 0)$, if we take the positive solution and take $x$ to $0$,
+since the expression is continuous on $\left(-\frac{1}{2}, \frac{3}{2}\right)$
+$y$ tends to $0$ as well.
+We know this $y$ isn't equal to $-x$ since the only points
+where the two curves intersect are $(0, 0)$ and $(1, -1)$ anyways.
+
+What this means is that for any neighborhood $B_r((0, 0))$,
+we can find an $x \ne 0$ that has two candidates for $y$:
+\begin{itemize}[nolistsep]
+  \item $y=-x$
+  \item $y=$ that quadratic formula above using $+$
+\end{itemize}
+All this winds up implying that $(0, 0) \in S$.
+
+For $(1, -1)$ we can do something similar to see that it has no good neighborhoods either.
+
+Thus, $S=\{(0, 0), (1, -1)\}$.
+
+\pagebreak
+
+\section{Problem 4}
+
+$f$ is differentiable by inspection; all the partials (below) are clearly continuous:
+\[f'(x)=\begin{bmatrix}
+    2xy_1+e^x & x^2 & 1
+  \end{bmatrix}\]
+$f(0, 1, -1)=0$ and $f'(0, 1, -1)_1=e^0\ne 0$, we can use the Implicit Function Theorem.
+
+There's a $C^1$ mapping from a neighborhood of $(1, -1)$ to $\R$ (call it $g$) s.t.
+\[f(x, y_1, y_2)=0\text{ in the neighborhood} \iff x=g(y_1, y_2)\]
+Since $f(0, 1, -1)=0$, $g(1, -1)=0$.
+Let $G=g(y_1, y_2)$ for convenience.
+
+$f(G, y_1, y_2)=0$, so its partials w.r.t. $y_1$ is $0$ and
+\begin{align*}
+  \frac{\partial}{\partial y_1} f(G, y_1, y_2)
+   & = \frac{\partial f}{\partial y_1}(G, y_1, y_2) + \frac{\partial f}{\partial x}(G, y_1, y_2)\frac{\partial g}{\partial y_1}(y_1, y_2) \\
+   & = 0
+\end{align*}
+We can then isolate $\frac{\partial g}{\partial y_1}$ to evaluate it at $(1, -1)$:
+\begin{align*}
+  \frac{\partial g}{\partial y_1}(1, -1)
+   & = -\frac{\frac{\partial f}{\partial y_1}(G, 1, -1)}{\frac{\partial f}{\partial x}(G, 1, -1)} \\
+   & = -\frac{\frac{\partial f}{\partial y_1}(0, 1, -1)}{\frac{\partial f}{\partial x}(0, 1, -1)} \\
+   & = \boxed{0}
+\end{align*}
+
+We can do something similar to see that
+\begin{align*}
+  \frac{\partial g}{\partial y_2}(1, -1)
+   & = -\frac{\frac{\partial f}{\partial y_2}(0, 1, -1)}{\frac{\partial f}{\partial x}(0, 1, -1)} \\
+   & = \boxed{-1}
+\end{align*}
+
+\pagebreak
+
+\section{Problem 5}
+
+\subsection{Contraction}
+
+Lemme first do some stuff with the elementwise difference of $\phi(x)$ and $\phi(y)$:
+\begin{align*}
+  |\phi(x)_i-\phi(y)_i|
+   & = \left|\int_{0}^{1} \frac{d}{dt} \phi(x+t(y-x))_i\,dt\right| \\
+   & = \left|\int_{0}^{1} (\phi'(x+t(y-x))(y-x))_i\,dt\right|
+\end{align*}
+$\phi'(x)=f'(x)-I$, so it should be small as we get really close to $x_0$.
+
+$f$ is $C^1$, so every element of the matrix $f'(x)$ is a continuous function;
+since $f'(x_0)=I$, we can choose $\delta$ s.t.
+\[\norm{x-x_0} < \delta \implies |f'(x)_{ij}-I_{ij}| < \frac{1}{2n^2}\]
+
+If $x$ and $y$ are both in $B_\delta(x_0)$, then $x+t(y-x)$ should be in there too
+for any $0 \le t \le 1$ since balls are convex.
+Thus, $\norm{(x+t(y-x))-x_0} < \delta$ and $|f'(x+t(y-x))_{ij}-I_{ij}| < \frac{1}{2n^2}$.
+
+Call that resulting matrix $A$.
+For any vector $v$ and index $i$,
+\begin{align*}
+  |(Av)_i|
+   & = \left|\sum_{j=1}^{n} A_{ij}v_j\right| \\
+   & \le \sum_{j=1}^{n} |A_{ij}||v_j|        \\
+   & \le \sum_{j=1}^{n} \frac{|v_j|}{2n^2}
+\end{align*}
+
+So now we can continue bounding like so:
+\begin{align*}
+  \left|\int_{0}^{1} (\phi'(x+t(y-x))(y-x))_i\,dt\right|
+   & \le \int_{0}^{1} |((f'(x+t(y-x))-I)(y-x))_i|\,dt           \\
+   & \le \int_{0}^{1} \sum_{i=1}^{n} \frac{|(y-x)_i|}{2n^2}\,dt \\
+   & = \sum_{i=1}^{n} \frac{|(y-x)_i|}{2n^2}                    \\
+   & = \frac{1}{2n^2} \sum_{i=1}^{n} |(y-x)_i|
+\end{align*}
+
+That inequality's only for one component; now we actually bound the norm:
+\begin{align*}
+  \norm{\phi(x)-\phi(y)}
+   & = \sqrt{\sum_{i=1}^{n} (\phi(x)_i-\phi(y)_i)^2}                                  \\
+   & \le \sqrt{\sum_{i=1}^{n} \left(\frac{1}{2n^2} \sum_{j=1}^{n} |(y-x)_j|\right)^2} \\
+   & = \frac{1}{2n^2}\sqrt{\sum_{i=1}^{n} \left(\sum_{j=1}^{n} |(y-x)_j|\right)^2}    \\
+   & = \frac{1}{2n^2} \sqrt{n\left(\sum_{j=1}^{n} |(y-x)_j|\right)^2}                 \\
+   & = \frac{\sqrt{n}}{2n^2} \norm{x-y}                                               \\
+   & \le \frac{1}{2} \norm{x-y}\quad\square
+\end{align*}
+
+\pagebreak
+
+\subsection{And Invertible}
+
+\subsubsection{Dets are Continuous}
+
+If we let the distance $d$ between two matrices be the squre root of the sum
+of squared differences between all elements, then the determinant is actually continuous.
+
+The proof is by induction on $n$ where $n$ is the size of the matrix.
+The base case where $n=1$ is trivial since in that case $\det A=A_{11}$.
+
+For the inductive step, assuming the determinant of any $n \times n$ matrix is continuous,
+we use the cursed alternating sums approach on an $(n+1) \times (n+1)$ matrix $A$:
+\begin{align*}
+  \det A
+  &= \sum_{i=1}^{n} (-1)^{i+1} \det \overline{A_{1i}}
+\end{align*}
+where $\overline{A_{1i}}$ indicates $A$ with the first row \& $i$-th column removed.
+
+Fix an $\epsilon$.
+
+By our inductive hypothesis, $\exists \delta_i$ for each $i$ s.t.
+$d(A', \overline{A_{1i}}) < \delta_i \implies |\det A' - \det \overline{A_{1i}}| < \frac{\epsilon}{n}$.
+
+Let $\delta=\min_{i=1, \cdots, n} \delta_i$;
+notice that $d(A, A') < \delta \implies d(\overline{A_{1i}}, \overline{A'_{1i}}) < \delta$ for each $i$.
+
+Now we can bound the difference like so:
+\begin{align*}
+  |\det A - \det A'|
+  &= \left|\sum_{i=1}^{n} (-1)^{i+1} \det \overline{A_{1i}} - \sum_{i=1}^{n} (-1)^{i+1} \det \overline{A'_{1i}}\right| \\
+  &\le \sum_{i=1}^{n} \left|\det \overline{A_{1i}} - \det \overline{A'_{1i}}\right| \\
+  &\le n \cdot \frac{\epsilon}{n} \\
+  &= \epsilon
+\end{align*}
+which should conclude the proof :clueless:.
+
+\subsubsection{Actual Proof}
+
+With that, we know that $\exists \delta: d(A, I) < \delta \implies |\det A - \det I| < \frac{1}{2} \implies A \ne 0$.
+
+$f'(x_0)=I$, so this $\delta$ should work for our purposes.
+By the $C^1$-ness of $f$ pick $r$ s.t. $\norm{x-x_0} < r \implies d(f'(x), f'(x_0)) < \delta$. 
+This makes it so the determinant of any $f'(x)$ within $B_r(x_0)$ can't be nonzero,
+which means they're invertible. $\square$
+
+\pagebreak
+
+\section{Problem 6}
+
+\subsection{Dot Product Equality}
+
+Consider the single-variable function
+\[g(t)=\vec{v} \cdot (f(t(y-x)+x)-f(x))\]
+so $g(0)=\vec{v} \cdot f(x)$ and $g(1)=\vec{v} \cdot f(y)$.
+
+By the normal MVT, $\exists 0 < t < 1: g'(t)=\vec{v} \cdot (g(1)-g(0))$.
+
+The RHS of this expression is the LHS of the equality we need to prove,
+so now with a little bit of derivative wrangling we have that
+\begin{align*}
+  g'(t)
+   & = \frac{d}{dt} \vec{v} \cdot f(t(y-x)+x) - \frac{d}{dt} \vec{v} \cdot f(x) \\
+   & = \vec{v} \cdot (f'(t(y-x)+x)(y-x))                                        \\
+   & = \vec{v} \cdot (f'(z)(y-x))
+\end{align*}
+where $z$ is some point on the segment between $x$ and $y$. $\square$
+
+\subsection{True Equality?}
+
+Unfortunately, this doesn't mean there exists a $z$ s.t. $f(y)-f(x)=f'(z)(y-x)$.
+
+Consider $f: \R \to \R^2$ defined by
+\[f(x)=\Braket{-x(x-2), x\sin\left(\frac{\pi}{2}x\right)}\]
+with $x=0$ and $y=2$.
+$f(x)=f(y)=\vec{0}$, so we'd want a $z$ s.t. $2f'(z)=\vec{0}$ as well.
+
+However, $\frac{d}{dx} f(x)_1=-2x+2$ is only $0$ at $x=1$.
+
+When we plug that into
+$\frac{d}{dx} f(x)_2=\frac{\pi x}{2}\cos\left(\frac{\pi x}{2}\right)+\sin\left(\frac{\pi x}{2}\right)$,
+the number isn't $0$.
+
+Thus, there's no point at which $2f'(z)=0$.
+
+\pagebreak
+
+\section{Problem 7}
+
+\subsection{Main Body}
+
+WLOG assume $x_0=\vec{0}$ and $f: \R^n \to \R$.
+If the output is multidimensional we can rerun this argument
+for each output component and it would be the same thing.
+
+It STP that both of the partials are equivalent to the following:
+\[\lim_{h \to 0} \frac{f(he_1+he_2)-f(he_2)-f(he_1)+f(0)}{h^2}\]
+
+Regrouping the top gives $(f(he_1+he_2)-f(he_2))-(f(he_1)-f(\vec{0}))$,
+which can then be written as $g(h)-g(0)$ where $g(x)=f(he_1+xe_2)-f(xe_2)$.
+
+With this, by the MVT $\exists 0 < a < h$ s.t. $g(h)-g(0)=g'(a)h$ and
+\begin{align*}
+  & \lim_{h \to 0} \frac{(f(he_1+he_2)-f(he_2))-(f(he_1)-f(\vec{0}))}{h^2} \\
+  ={} & \lim_{h \to 0} \frac{g'(a)}{h} \\
+  ={} & \lim_{h \to 0} \frac{\partial x_2 f(he_1+ae_2)-\partial x_2 f(ae_2)}{h} \\
+  ={} & \lim_{h \to 0} \frac{D(\partial x_2 f)(\vec{0})(he_1)+o(h)}{h} \\
+  ={} & \lim_{h \to 0} \frac{D(\partial x_2 f)(\vec{0})(he_1)}{h} \\
+  ={} & D(\partial x_2 f)(\vec{0})(e_1) \\
+  ={} & \partial x_1 \partial x_2 f(\vec{0})
+\end{align*}
+
+Notice that if we grouped the initial term into $(f(he_1+he_2)-f(he_1))-(f(he_2)-f(\vec{0}))$
+then we could run basically the same steps to get that it was equal to $\partial x_2 \partial x_2 f(\vec{0})$,
+so the two second derivatives are equal. $\square$
+
+Some of the steps here likely need further elaboration though.
+
+\subsection{Some Other Stuff I Probably Should Justify}
+
+\subsubsection{The Lil O}
+
+I first need to convince myself that
+\[\partial x_2 f(he_1+ae_2)-\partial x_2 f(ae_2)
+=D(\partial x_2 f)(\vec{0})(he_1)+o(h)\]
+or in other words
+\[\lim_{h \to 0} \frac{\partial x_2 f(he_1+ae_2)-\partial x_2 f(ae_2)-D(\partial x_2 f)(\vec{0})(he_1)}{h}=0\]
+
+Abbreviating $\delta x_2 f$ as $F$ and $D(\partial x_2 f)(\vec{0})$ as $A$, we have
+\begin{align*}
+  \text{above limit}
+  &= \lim_{h \to 0} \frac{F(he_1+ae_2)-F(0)-A(he_1+ae_2)}{h} - \frac{F(0)-f(ae_2)+A(ae_2)}{h} \\
+  &= \lim_{h \to 0} \frac{F(he_1+ae_2)-F(0)-A(he_1+ae_2)}{h} - \lim_{h \to 0} \frac{F(ae_2)-F(0)-A(ae_2)}{h}
+\end{align*}
+As long as both of those go to $0$ we're chilling.
+
+The first one goes to $0$ since by definition
+\[\lim_{h \to 0} \frac{|F(he_1+ae_2)-F(0)-A(he_1+ae_2)|}{\left|\sqrt{a^2+h^2}\right|}=0\]
+and for small enough $h$
+\[\frac{|F(he_1+ae_2)-F(0)-A(he_1+ae_2)|}{\left|h\right|}
+< \frac{|F(he_1+ae_2)-F(0)-A(he_1+ae_2)|}{\left|\sqrt{a^2+h^2}\right|}\]
+
+The second one also goes to $0$ since
+$\left|\frac{F(ae_2)-F(0)-A(ae_2)}{h}\right|
+< \left|\frac{F(ae_2)-F(0)-A(ae_2)}{a}\right|$.
+
+In both these cases, the upper bound goes to $0$, which forces the
+lower term to be $0$ too as everything is wrapped in absolute values.
+
+\subsubsection{And the Final Limit}
+
+Lemme also show
+\[\lim_{h \to 0} \frac{D(\partial x_2 f)(\vec{0})(he_1)}{h}
+= D(\partial x_2 f)(\vec{0})(e_1)\]
+This is true since $D(\partial x_2 f)(\vec{0})$ is a linear transformation, so
+\begin{align*}
+  \lim_{h \to 0} \frac{D(\partial x_2 f)(\vec{0})(he_1)}{h}
+  &= \lim_{h \to 0} \frac{D(\partial x_2 f)(\vec{0})(e_1) \cdot h}{h} \\
+  &= D(\partial x_2 f)(\vec{0})(e_1)
+\end{align*}
+
+\end{document}
