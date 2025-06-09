@@ -267,20 +267,20 @@ where $\overline{A_{1i}}$ indicates $A$ with the first row \& $i$-th column remo
 Fix an $\epsilon$.
 
 By our inductive hypothesis, $\exists \delta_i$ for each $i$ s.t.
-$d(A', \overline{A_{1i}}) < \delta_i \implies |\det A' - \det \overline{A_{1i}}| < \frac{\epsilon}{n}$.
+$d(A', \overline{A_{1i}}) < \delta_i \implies |\det A' - \det \overline{A_{1i}}| < \epsilon$.
 
-Let $\delta=\min\left(\min_{i=1, \cdots, n} \delta_i, \frac{\epsilon}{n}\right)$;
+Let $\delta=\min\left(\min_{i=1, \cdots, n} \delta_i, \epsilon\right)$;
 notice that $d(A, A') < \delta \implies d(\overline{A_{1i}}, \overline{A'_{1i}}) < \delta$ for each $i$.
-Also, the individual elements of $A$ and $A'$ can't differ by more than $\frac{\epsilon}{n}$.
+Also, the individual elements of $A$ and $A'$ can't differ by more than $\epsilon$.
 
 Now we can bound the difference like so:
 \begin{align*}
   |\det A - \det A'|
   &= \left|\sum_{i=1}^{n} (-1)^{i+1} A_{1i} \det \overline{A_{1i}} - \sum_{i=1}^{n} (-1)^{i+1} A'_{1i} \det \overline{A'_{1i}}\right| \\
   &\le \sum_{i=1}^{n} \left|A_{1i} \det \overline{A_{1i}} - A'_{1i} \det \overline{A'_{1i}}\right| \\
-  &\le n \cdot \text{some small term surely}
+  &\le n \cdot \epsilon\left(A_{1i}+\det \overline{A_{1i}}+\epsilon\right)
 \end{align*}
-which should conclude the proof :clueless:.
+Everything in that parenthesis is fixed, so this should conclude the proof.
 
 \subsubsection{Actual Proof}
 
