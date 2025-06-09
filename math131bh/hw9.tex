@@ -261,10 +261,7 @@ The base case where $n=1$ is trivial since in that case $\det A=A_{11}$.
 
 For the inductive step, assuming the determinant of any $n \times n$ matrix is continuous,
 we use the cursed alternating sums approach on an $(n+1) \times (n+1)$ matrix $A$:
-\begin{align*}
-  \det A
-  &= \sum_{i=1}^{n} (-1)^{i+1} \det \overline{A_{1i}}
-\end{align*}
+\[\det A = \sum_{i=1}^{n} (-1)^{i+1} A_{1i} \det \overline{A_{1i}}\]
 where $\overline{A_{1i}}$ indicates $A$ with the first row \& $i$-th column removed.
 
 Fix an $\epsilon$.
@@ -272,16 +269,16 @@ Fix an $\epsilon$.
 By our inductive hypothesis, $\exists \delta_i$ for each $i$ s.t.
 $d(A', \overline{A_{1i}}) < \delta_i \implies |\det A' - \det \overline{A_{1i}}| < \frac{\epsilon}{n}$.
 
-Let $\delta=\min_{i=1, \cdots, n} \delta_i$;
+Let $\delta=\min\left(\min_{i=1, \cdots, n} \delta_i, \frac{\epsilon}{n}\right)$;
 notice that $d(A, A') < \delta \implies d(\overline{A_{1i}}, \overline{A'_{1i}}) < \delta$ for each $i$.
+Also, the individual elements of $A$ and $A'$ can't differ by more than $\frac{\epsilon}{n}$.
 
 Now we can bound the difference like so:
 \begin{align*}
   |\det A - \det A'|
-  &= \left|\sum_{i=1}^{n} (-1)^{i+1} \det \overline{A_{1i}} - \sum_{i=1}^{n} (-1)^{i+1} \det \overline{A'_{1i}}\right| \\
-  &\le \sum_{i=1}^{n} \left|\det \overline{A_{1i}} - \det \overline{A'_{1i}}\right| \\
-  &\le n \cdot \frac{\epsilon}{n} \\
-  &= \epsilon
+  &= \left|\sum_{i=1}^{n} (-1)^{i+1} A_{1i} \det \overline{A_{1i}} - \sum_{i=1}^{n} (-1)^{i+1} A'_{1i} \det \overline{A'_{1i}}\right| \\
+  &\le \sum_{i=1}^{n} \left|A_{1i} \det \overline{A_{1i}} - A'_{1i} \det \overline{A'_{1i}}\right| \\
+  &\le n \cdot \text{some small term surely}
 \end{align*}
 which should conclude the proof :clueless:.
 
@@ -304,7 +301,7 @@ Consider the single-variable function
 \[g(t)=\vec{v} \cdot (f(t(y-x)+x)-f(x))\]
 so $g(0)=\vec{v} \cdot f(x)$ and $g(1)=\vec{v} \cdot f(y)$.
 
-By the normal MVT, $\exists 0 < t < 1: g'(t)=\vec{v} \cdot (g(1)-g(0))$.
+By the normal MVT, $\exists 0 < t < 1: g'(t)=g(1) - g(0)$.
 
 The RHS of this expression is the LHS of the equality we need to prove,
 so now with a little bit of derivative wrangling we have that
