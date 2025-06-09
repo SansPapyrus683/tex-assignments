@@ -280,9 +280,9 @@ I propose that the derivative is $\begin{bmatrix}0 & 0\end{bmatrix}$ at $(0, 0)$
 
 So if we go from the definition, we need to show that
 \begin{align*}
-  ={} & \lim_{\norm{h} \to 0} \frac{\norm{0 + h_1, 0 + h_2}-f(0, 0) - (0 \cdot h_1 + 0 \cdot h_2)}{\norm{h}} \\
+  ={} & \lim_{\norm{h} \to 0} \frac{f(h_1 + h_2)-f(0, 0) - (0 \cdot h_1 + 0 \cdot h_2)}{\norm{h}} \\
   ={} & \lim_{\norm{h} \to 0} \frac{\frac{h_1^3h_2}{h_1^2+h_2^2}}{\sqrt{h_1^2+h_2^2}}                        \\
-  ={} & \lim_{\norm{h} \to 0} \frac{h_1^3h_2}{\sqrt{h_1^2+h_2^2}}
+  ={} & \lim_{\norm{h} \to 0} \frac{h_1^3h_2}{\left(h_1^2+h_2^2\right)^{3/2}}
 \end{align*}
 is $0$.
 
@@ -306,6 +306,9 @@ Since the square goes to $0$ the original limit must go to $0$ too. $\square$
 \pagebreak
 
 \subsection{Order Matters}
+
+Since we just showed that $f'(0, 0)=\begin{bmatrix}0 & 0\end{bmatrix}$,
+this implies that $\frac{\partial f}{\partial x}(0, 0) = \frac{\partial f}{\partial y}(0, 0) = 0$.
 
 By basic calculus
 \begin{align*}
