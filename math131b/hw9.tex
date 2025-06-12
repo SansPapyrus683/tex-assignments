@@ -113,7 +113,7 @@ Since $\Re(\braket{f, g}) \le |\braket{f, g}|$, we have by what we just showed i
   \implies{} & \braket{f, g} + \braket{g, f} \le 2\sqrt{\braket{f, f}\braket{g, g}}                   \\
   \implies{} & \braket{f, f} + \braket{f, g} + \braket{g, f} + \braket{g, g}
   \le \braket{f, f} + 2\sqrt{\braket{f, f}\braket{g, g}} + \braket{g, g}                              \\
-  \implies{} & \braket{f + g, f + g} \le \left(\sqrt{\braket{f, f}} + \sqrt{\braket{g, g}}\right)     \\
+  \implies{} & \braket{f + g, f + g} \le \left(\sqrt{\braket{f, f}} + \sqrt{\braket{g, g}}\right)^2     \\
   \implies{} & \sqrt{\braket{f + g, f + g}} \le \norm{f}_2 + \norm{g}_2                               \\
   \implies{} & \norm{f+g}_2 \le \norm{f}_2+\norm{g}_2\quad\square
 \end{align*}
@@ -172,12 +172,16 @@ while if $n \ne m$, we can let $k=n-m$ where $k \ne 0$ and
 We have
 \begin{align*}
   \Braket{f, e_n}
-   & = \Braket{\sum_{n'=-N}^{N} c_n'e_n', e_n} \\
-   & = \sum_{n=-N}^{N} \Braket{c_n'e_n', e_n}  \\
-   & = \sum_{n=-N}^{N} c_n'\Braket{e_n', e_n}  \\
+   & = \Braket{\sum_{n'=-N}^{N} c_{n'}e_{n'}, e_n} \\
+   & = \sum_{n'=-N}^{N} \Braket{c_{n'}e_{n'}, e_n}  \\
+   & = \sum_{n'=-N}^{N} c_{n'}\Braket{e_{n'}, e_n}  \\
    & = c_n\Braket{e_n, e_n}                    \\
    & = c_n
 \end{align*}
+Of course, this is assuming that $-N \le n \le N$.
+If it isn't, then the result is just $0$.
+
+\pagebreak
 
 \subsection{Norm Identity}
 
