@@ -1,0 +1,134 @@
+\documentclass[12pt]{article}
+
+\input{../kz}
+
+\rhead{ECE 133A}
+
+\newcommand{\norm}[1]{\left\lVert#1\right\rVert}
+\DeclareMathOperator{\std}{std}
+\DeclareMathOperator{\avg}{avg}
+
+\begin{document}
+
+\section{Exercise T2.8}
+
+\subsection{Part A}
+
+I'm assuming that $\alpha$ and $\beta$ are fixed.
+
+Evaluating the integral gives
+\begin{align*}
+    \int_\alpha^\beta p(x)\,dx
+     & = \sum_{i=0}^{n-1} \int_{\alpha}^{\beta} c_{i+1}x^i                                  \\
+     & = \sum_{i=0}^{n-1} \left.\left(\frac{c_{i+1}}{i+1}x^{i+1}\right)\right|^\beta_\alpha \\
+     & = \sum_{i=1}^{n} \frac{c_i\left(\beta^i-\alpha^i\right)}{i}
+\end{align*}
+which is indeed a linear function of the coefficients.
+
+This can be represented as $a^Tc$, where
+\[a_i = \frac{\beta^i - \alpha^i}{i}\]
+
+\subsection{Part B}
+
+Taking the derivative at $\alpha$ gives us
+\begin{align*}
+    \frac{d}{dx} p(\alpha)
+     & = \sum_{i=1}^{n-1} c_{i+1}i\alpha^{i-1} \\
+     & = \sum_{i=2}^{n} c_i (i-1)\alpha^{i-2}
+\end{align*}
+which is also a linear function of the coefficients.
+
+This can be written as $b^Tc$, where
+\[b_i = \begin{cases}
+        0                 & i=1   \\
+        (i-1)\alpha^{i-2} & i > 1
+    \end{cases}\]
+
+\section{Exercise T3.9}
+
+Notice that
+\begin{align*}
+    \norm{x-c}^2-\norm{x-d}^2
+     & = \sum_{i=1}^{n} (x_i-c_i)^2 - (x_i-d_i)^2                     \\
+     & = \sum_{i=1}^{n} 2x_id_i - 2x_ic_i + c_i^2 - d_i^2             \\
+     & = \sum_{i=1}^{n} x_i(2d_i-2c_i) + \sum_{i=1}^{n} c_i^2 - d_i^2 \\
+     & = 2(d-c)^Tx + \norm{c}^2 - \norm{d}^2
+\end{align*}
+so this is indeed an affine transformation of $x$.
+
+Here,
+\begin{gather*}
+    a = 2(d-c)^T \\
+    b = \norm{c}^2 - \norm{d}^2
+\end{gather*}
+
+\pagebreak
+
+\section{Exercise A1.2}
+
+Following the hint, let $\gamma = \arg\left(b^Ha\right)$, $\alpha=\norm{a}$, and $\beta=\norm{b}$.
+
+This way, $b^Ha = \left|b^Ha\right|e^{j\gamma}$.
+
+Then,
+\begin{align*}
+    0
+     & \le \norm{\beta a - \alpha e^{j\gamma} b}^2                                                                                                                                   \\
+     & = \left(\beta a - \alpha e^{j\gamma} b\right)^H\left(\beta a - \alpha e^{j\gamma} b\right)                                                                                    \\
+     & = \norm{\beta a}^2+\norm{\alpha e^{j\gamma} b}^2 - (\beta a)^H(\alpha e^{j\gamma} b) - (\alpha e^{j\gamma} b)^H(\beta a)                                                      \\
+     & = \beta^2\norm{a}^2+\alpha^2\norm{b}^2 - \alpha\beta e^{j\gamma}\left(a^Hb + b^Ha\right)                                 & \text{since $\norm{e^{j\gamma}} = 1$}              \\
+     & = 2\norm{a}^2\norm{b}^2 - 2\norm{a}\norm{b}e^{j\gamma}\left|b^Ha\right|                                                  & \text{since $\left|b^Ha\right|=\left|a^Hb\right|$} \\
+     & = 2\norm{a}^2\norm{b}^2 - 2\norm{a}\norm{b}\left|b^Ha\right|
+\end{align*}
+
+Moving the second term to the left side gets us
+\[2\norm{a}\norm{b}\left|b^Ha\right| \le 2\norm{a}^2\norm{b}^2
+    \implies \left|b^Ha\right| \le \norm{a}\norm{b}\]
+
+Equality holds true when $\beta a - \alpha e^{j\gamma} b=0$,
+or in other words when $\beta a = \alpha e^{j\gamma} b$.
+
+\pagebreak
+
+\section{Exercise T3.25}
+
+\subsection{Part A}
+
+The mean is
+\begin{align*}
+    \avg(p)
+     & = \frac{1}{n}\sum_{i=1}^{n} \left(\theta r + (1-\theta) \mu^{\text{rf}}\mathbf{1}\right)_i \\
+     & = \frac{\theta \mathbf{1}^Tr + n(1-\theta)\mu^{\text{rf}}}{n}                              \\
+     & = \theta\mu + (1-\theta)\mu^{\text{rf}}
+\end{align*}
+and the STD is
+\begin{align*}
+    \std(p)
+     & = \frac{1}{\sqrt{n}} \sqrt{\sum_{i=1}^{n} (p_i - \avg(p))^2}          \\
+     & = \frac{1}{\sqrt{n}} \sqrt{\sum_{i=1}^{n} (\theta r_i - \theta\mu)^2} \\
+     & = \frac{|\theta|}{\sqrt{n}} \sqrt{\sum_{i=1}^{n} (r_i-\mu)^2}           \\
+     & = |\theta|\sigma
+\end{align*}
+
+At $\theta=0$, the mean is $\mu^{\text{rf}}$ and the STD is $0$, which makes sense
+since you know 100\% that all your holdings are still gonna be there.
+
+At $\theta=1$, the mean is $\mu$ and the STD is $\sigma$, which also makes sense
+as you're basically completely at the whims of the market.
+
+\subsection{Part B}
+
+If we wanted a target risk level of $\sigma^{\text{tar}}$,
+then we'd simply choose $\theta=\pm \frac{\sigma^{\text{tar}}}{\sigma}$.
+Since $\theta$ is inside an absolute value, there's two solutions.
+
+
+\subsection{Part C}
+
+Leverage happens when $\theta > 1$, or when $\sigma^{\text{tar}} > \sigma$.
+
+Shorting happens when $\theta < 0$, or simply whenever we choose to take the negative $\theta$.
+
+Hedging happens in all the other cases.
+
+\end{document}
