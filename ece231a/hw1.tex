@@ -1,0 +1,480 @@
+\documentclass[12pt]{article}
+
+\input{../kz}
+
+\rhead{ECE 231A}
+
+\newcommand{\ind}{\perp\!\!\!\!\perp} 
+
+\begin{document}
+
+\section{Resources}
+
+I've only used my own brain + posted slides/resources.
+
+\section{Coin Flips}
+
+\subsection{Part A}
+
+The chance that we need $n$ flips is $(1-p)^{n-1}p$.
+
+Thus,
+\begin{align*}
+  H(X)
+   & = -\sum_{n=1}^{\infty} (1-p)^{n-1}p \log \left((1-p)^{n-1}p\right)                                      \\
+   & = -p \sum_{n=1}^{\infty} (1-p)^{n-1} \left(\log (1-p)^{n-1} + \log p\right)                             \\
+   & = -p \left[\sum_{n=1}^{\infty} (n-1)(1-p)^{n-1}\log(1-p) + \log p\sum_{n=1}^{\infty} (1-p)^{n-1}\right] \\
+   & = -p \left[\log(1-p)\sum_{n=1}^{\infty} n(1-p)^n + \log p \sum_{n=1}^{\infty} (1-p)^n + \log p\right]   \\
+   & = -p \left[\log(1-p) \cdot \frac{1-p}{p^2} + \log p \cdot \frac{1-p}{p}+\log p\right]                   \\
+   & = \boxed{\frac{(p-1)\log(1-p)}{p}-\log p}
+\end{align*}
+
+\pagebreak
+
+\subsection{Part B}
+
+Plugging $p=\frac{1}{2}$ into the expression above gives us
+\[-\log \frac{1}{2} - \log \frac{1}{2} = \boxed{2}\]
+
+\subsection{Part C}
+
+Initially, the best question to ask is whether $X=1$ or not,
+since we eliminate exactly half the possible outcomes in terms of probability.
+
+Of the remaining outcomes, $X=2$ takes up another half, so if $X \ne 1$
+the best question to ask after that is if it's $2$ or not.
+
+We can follow this procedure to get what I believe is the most efficient way
+to find the true value of $X$, as we eliminate in the worst case half the search space each time.
+
+The expected number of questions is:
+\begin{align*}
+  E[\text{\# of Qs}]
+   & = 1 \cdot \frac{1}{2} + 2 \cdot \frac{1}{2^2} + 3 \cdot \frac{1}{2^3} \cdots \\
+   & = \sum_{n=1}^{\infty} n \cdot \frac{1}{2^n}                                  \\
+   & = \frac{1/2}{1/4}                                                            \\
+   & = \boxed{2}
+\end{align*}
+which is equivalent to the entropy we got above.
+
+\pagebreak
+
+\section{Entropy of Functions of an RV}
+
+\subsection{Part A}
+
+$H(X, g(X)) = H(X) + H(g(X) \mid X)$ by the chain rule for entropy.
+
+\subsection{Part B}
+
+We have that
+\[H(g(X) \mid X) = -\sum_{x \in X} \sum_{y \in g(X)} p(y, x) \log p(y \mid x)\]
+Notice that for the term in the summation, there's two possible cases:
+\begin{enumerate}
+  \item $g(x)=y$, so $p(y \mid x) = 1$ and $\log p(y \mid x) = 0$.
+  \item $g(x) \ne y$, so $p(y \mid x) = 0$.
+\end{enumerate}
+Either way, all terms in the summation come out to $0$ and $H(g(X) \mid X) = 0$.
+
+\subsection{Part C}
+
+Here it doesn't matter in which order we apply the chain rule, so we take $H(g(X))$ out first.
+
+\subsection{Part D}
+
+Entropy is always nonnegative, so this inequality holds trivially.
+
+\pagebreak
+
+\section{Computing 2D Relative Entropy}
+
+We can think of this as a single random variable with four outcomes instead of
+two random variables with two outcomes.
+
+Doing so allows us to just directly apply the formula like so:
+\begin{align*}
+  D(p \parallel q)
+   & = \frac{1}{6}\log\frac{1/6}{1/4}+\frac{7}{12}\log\frac{7/12}{1/2}
+  +\frac{1}{6}\log\frac{1/6}{1/12}+\frac{1}{12}\log\frac{1/12}{1/6}            \\
+   & = \frac{1}{6}\log\frac{2}{3} + \frac{7}{12}\log\frac{7}{6}
+  + \frac{1}{6}\log 2 + \frac{1}{12} \log \frac{1}{2}                          \\
+   & = \frac{1}{6}\log\frac{2}{3} + \frac{7}{12}\log\frac{7}{6} + \frac{1}{12} \\
+   & \approx \boxed{0.116}
+\end{align*}
+
+\pagebreak
+
+\section{Relative Entropy On a Line}
+
+\subsection{Part A}
+
+We start at the border and go to the center like so:
+\begin{center}
+  \includegraphics[width=5cm]{img/hw1/simplex}
+\end{center}
+
+\subsection{Part B}
+
+Applying the formula gets us
+\begin{align*}
+  D(p \parallel q_\lambda)
+   & = \frac{1}{3}\left(\log\frac{1/3}{\lambda/3} + \log\frac{1/3}{(3-\lambda)/6} + \log\frac{1/3}{(3-\lambda)/6}\right) \\
+   & = \frac{1}{3}\left(2 - \log \lambda - \log (3-\lambda) - \log (3-\lambda)\right)                                    \\
+   & = \frac{1}{3}\left(2-\log \lambda - 2\log(3-\lambda)\right)
+\end{align*}
+
+Plotting it on MATLAB gives the following (sorry idk what's up with the resolution):
+\begin{center}
+  \includegraphics[width=10cm]{img/hw1/p_diff_q}
+\end{center}
+At $\lambda=0$, the line tends towards positive infinity.
+
+\subsection{Part C}
+
+This time we've
+\begin{align*}
+  D(q_\lambda \parallel p)
+   & = \frac{\lambda}{3}\log\frac{\lambda/3}{1/3} + \frac{3-\lambda}{6}\log\frac{(3-\lambda)/6}{1/3} + \frac{3-\lambda}{6}\log\frac{(3-\lambda)/6}{1/3} \\
+   & = \frac{\lambda}{3}\log \lambda + \frac{3-\lambda}{3}\log\frac{3-\lambda}{2}
+\end{align*}
+and plotting that gives
+\begin{center}
+  \includegraphics[width=10cm]{img/hw1/q_diff_p}
+\end{center}
+Here, the graph converges to $\log \frac{3}{2}$ instead of infinity.
+This is because $\lim_{x \to 0} x \log x = 0$.
+
+\subsection{Part D}
+
+While both have the same general shape
+(decreasing as $\lambda$ increases and reaching $0$ when it hits $1$),
+the two have different behavior as $\lambda$ becomes small.
+
+This is because using $q_\lambda$ at small $\lambda$ to represent $p$ becomes
+"impossible" in a sort of manner as sampling $x$ from $q$ becomes impossible.
+
+On the other hand, using $p$ to represent $q_\lambda$ is still feasible
+in some sort of way.
+Here, sampling an $x$ from $p$ can be thought of as just "garbage" data.
+
+\pagebreak
+
+\section{Mutual Information?}
+
+In this case, $D(p \parallel q) = I(p; q)$, since each entry in $q$
+is equivalent to $p(x)p(y)$.
+
+\section{Joint Entropy Example}
+
+\subsection{Part A}
+
+\begin{align*}
+  H(X)
+   & = -\frac{2}{3}\log\frac{2}{3}-\frac{1}{3}\log\frac{1}{3} \\
+   & = -\frac{2}{3}(1 - \log 3) + \frac{1}{3}\log 3           \\
+   & = \boxed{\log 3 - \frac{2}{3}}
+\end{align*}
+
+Since the distribution of $Y$ is functionally identical to that of $X$,
+$H(Y)$ is equal to that as well.
+
+\subsection{Part B}
+
+We can use the result from \ref{sec:7c} and the chain rule to get
+\[H(X \mid Y) = H(Y \mid X) = \boxed{\frac{2}{3}}\]
+
+\subsection{Part C}\label{sec:7c}
+
+\[H(X, Y) = -3 \cdot \frac{1}{3}\log\frac{1}{3} = \boxed{\log 3}\]
+
+\subsection{Part D}\label{sec:7d}
+
+\[H(Y) - H(Y \mid X) = \log 3 - \frac{4}{3}\]
+
+\subsection{Part E}
+
+$I(X; Y)$ is exactly what the expression in \ref{sec:7d} describes.
+
+\pagebreak
+
+\subsection{Part F}
+
+The diagram on the slides already does this...
+\begin{center}
+  \includegraphics[width=10cm]{img/hw1/venn}
+\end{center}
+
+The only thing that maybe should be added is that $I(X; Y) = H(Y) - H(Y \mid X)$.
+
+\pagebreak
+
+\section{Mutual Info and the Weather}
+
+\subsection{Part A}
+
+\begin{align*}
+  I(P_S; W)
+   & = H(W) - H(W \mid P_S)                                       \\
+   & = -(0.1\log 0.1 + 0.9\log 0.9) + (0.1\log 0.1 + 0.9\log 0.9) \\
+   & = \boxed{0}
+\end{align*}
+
+\subsection{Part B}
+
+The probability table looks like this:
+\begin{table}[H]
+  \centering
+  \begin{tabular}{|c|c|c|}
+    \hline
+    $P_W$/$W$ & R    & S   \\
+    \hline
+    R         & 0.75 & 0   \\
+    \hline
+    S         & 0.15 & 0.1 \\
+    \hline
+  \end{tabular}
+\end{table}
+
+So Wendy's mutual information is:
+\begin{align*}
+  I(P_W; W)
+   & = H(W) - H(W \mid P_W)                                                                                   \\
+   & = -(0.1\log 0.1 + 0.9\log 0.9) + \left(1 + 0.15 \cdot \log\frac{3}{5} + 0.1 \cdot \log\frac{2}{5}\right) \\
+   & \approx \boxed{0.288}
+\end{align*}
+
+\subsection{Part C}
+
+Wendy probably provides more info about the weather since she has higher mutual info.
+
+\subsection{Part D}
+
+When Wendy predicts rain, I know 100\% it's going to be rain, so I'd go with her
+over Stormy, who has a 10\% chance of being wrong.
+
+\pagebreak
+
+\section{Why Log?}
+
+\subsection{Part A}
+
+I'll use $S(n)$ as a shorthand for $\sum_{i=1}^{n} p_i$.
+
+The proof is by induction on both $k$ and $m$; the base case is given as the axiom.
+
+The truth of the statement depends on the sequence and amount we group.
+I'll represent these two dependencies as a 2-tuple: $(\text{length}, \text{group amt})$.
+I'll prove that if this property holds for $(m, k-1)$ and $(k, k-1)$,
+then it holds for $(m, k)$.
+
+Assuming truth for $k-1$, for $k$ we have
+\begin{align*}
+      & H_m(p_1, \cdots, p_m)                                                    \\
+  ={} & H_{m-k+2}(S(k-1), p_k, \cdots, p_m)
+  + S(k-1)H_{k-1}\left(\frac{p_1}{S(k-1)}, \cdots, \frac{p_{k-1}}{S(k-1)}\right) \\
+  ={} & H_{m-k+1}(S(k), p_{k+1}, \cdots, p_m)
+  + S(k)H_2\left(\frac{S(k-1)}{S(k)}, \frac{p_k}{S(k)}\right)
+  + \text{that term above}
+\end{align*}
+
+The first term is what we want.
+To combine the second terms, notice that
+\begin{align*}
+      & S(k)H_k\left(\frac{p_1}{S(k)}, \cdots, \frac{p_k}{S(k)}\right)                               \\
+  ={} & S(k)\left(H_2\left(\frac{S(k-1)}{S(k)}, \frac{p_k}{S(k)}\right)
+  + \frac{S(k-1)}{S(k)}H_{k-1}\left(\frac{p_1}{S(k-1)}, \cdots, \frac{p_{k-1}}{S(k-1)}\right)\right) \\
+  ={} & S(k)H_2\left(\frac{S(k-1)}{S(k)}, \frac{p_k}{S(k)}\right)
+  + S(k-1)H_{k-1}\left(\frac{p_1}{S(k-1)}, \cdots, \frac{p_{k-1}}{S(k-1)}\right)
+\end{align*}
+since we also assumed the property holds for $(k, k-1)$.
+
+This implication is enough to carry truth over to all $2 \le k < m$,
+since truth is assumed for all $m \in \mathbb{N}$ and $k=2$ initially. $\square$
+
+\pagebreak
+
+\subsection{Part B}
+
+We repeatedly group terms like so:
+\begin{align*}
+  f(mn)
+   & = H_{mn}\left(\frac{1}{mn}, \cdots, \frac{1}{mn}\right)                                                   \\
+   & = H_{(m-1)n+1}\left(\frac{1}{m}, \frac{1}{mn}, \cdots, \frac{1}{mn}\right) + \frac{1}{m}f(n)              \\
+   & = H_{(m-2)n+2}\left(\frac{1}{m}, \frac{1}{m}, \frac{1}{mn}, \cdots, \frac{1}{mn}\right) + \frac{2}{m}f(n) \\
+   & = \cdots                                                                                                  \\
+   & = H_m\left(\frac{1}{m}, \cdots, \frac{1}{m}\right) + \frac{m}{m}f(n)                                      \\
+   & = f(m) + f(n)\quad\square
+\end{align*}
+
+\subsection{Part C}
+
+If we were to use the natural logarithm, then
+\[H\left(\frac{1}{2}, \frac{1}{2}\right) = 2 \cdot \frac{1}{2} \ln 2 = \ln 2\]
+so instead of $1$ it would have to be $\ln 2$ instead.
+
+\pagebreak
+
+\section{Concavity of Entropy}
+
+\subsection{Part A}
+
+Nowhere did it say we couldn't use the second derivative test, so...
+\begin{align*}
+  \frac{d}{dx} \log_b x
+   & = \frac{\frac{d}{dx} \ln x}{\ln b}     \\
+   & = \frac{1}{x\ln b}                     \\
+  \frac{d^2}{dx^2} \log_b x
+   & = \frac{1}{\ln b} \cdot -\frac{1}{x^2}
+\end{align*}
+which is strictly negative for all $x > 0$. $\square$
+
+\subsection{Part B}
+
+Same thing.
+\begin{align*}
+  \frac{d}{dx} x \log_b x
+   & = \frac{1}{\ln b} \frac{d}{dx} x \ln x       \\
+   & = \frac{\ln x + 1}{\ln b}                    \\
+  \frac{d^2}{dx^2} x \log_b x
+   & = \frac{1}{x}                                \\
+   & > 0\ \forall \text{positive $x$}\quad\square
+\end{align*}
+
+\subsection{Part C}
+
+Letting the base be $b$ again, the first derivative is
+\[H'(p) = -\frac{\ln p + 1}{\ln b} - \frac{-\ln(1-p)-1}{\ln b}\]
+and the second is
+\begin{align*}
+  H''(p)
+   & = -\frac{\frac{1}{p}}{\ln b} - \frac{\frac{1}{1-p}}{\ln b} \\
+   & = \frac{\frac{1}{1-p}+\frac{1}{p}}{\ln b}
+\end{align*}
+When $0 < p < 1$, both of the addends in the numerator are positive. $\square$
+
+\pagebreak
+
+\section{Max and Min Entropy}
+
+\subsection{Part A}
+
+The maximum entropy achievable is $\log n$.
+This is only achievable when $p_i=\frac{1}{n}$.
+
+For $n=3$, the point is here:
+\begin{center}
+  \includegraphics[width=8cm]{img/hw1/max_entropy}
+\end{center}
+
+\subsection{Part B}
+
+The minimum entropy is $0$, and it occurs when all $p_i$ are $0$ except for one.
+
+On the simplex, these correspond to the vertices.
+
+\pagebreak
+
+\section{Urn Entropy}
+
+Let $B_i$ denote the color of the $i$th ball drawn \textit{with} replacement
+and $B_i'$ the same thing but \textit{without} replacement.
+
+Notice that without any conditioning, $B_i$ and $B_i'$ have the same distribution
+and thus the same entropy.
+
+By the chain rule of entropy,
+\begin{align*}
+  H(B_1, \cdots, B_k)
+  &= \sum_{i=1}^{k} H(B_i \mid B_1, \cdots, B_{i-1}) \\
+  &= \sum_{i=1}^{k} H(B_i) \\
+  &= kH(B_1)
+\end{align*}
+since all $B_i$s are independent and have the same distribution.
+
+As for the one without replacement, we can only say that
+\[H(B_1', \cdots, B_k') = \sum_{i=1}^{k} H(B_i' \mid B_1', \cdots, B_{i-1}')\]
+However, since conditioning can only decrease entropy,
+\[H(B_i' \mid B_1', \cdots, B_{i-1}') \le H(B_i') = H(B_i)\]
+so entropy of drawing balls without replacement is \textit{at most}
+the entropy of drawing balls with.
+
+% To check if this inequality is strict, lemme evaluate $H(B_2' \mid B_1')$:
+
+\pagebreak
+
+\section{Conditioning Increases Entropy?}
+
+\subsection{Part A}
+
+$X_2$ has a $\frac{2}{3}$ chance to be black and $\frac{1}{3}$ chance to be white, so
+\[H(X_2)=-\frac{1}{3}\log\frac{1}{3}-\frac{2}{3}\log\frac{2}{3}=\boxed{\log 3 - \frac{2}{3}}\]
+
+\subsection{Part B}
+
+If the first ball is black, then
+\[H(X_2 \mid X_1=\text{black})=-2 \cdot \frac{1}{2}\log \frac{1}{2} = 1\]
+but if it was white, then there's only one outcome and
+\[H(X_2 \mid X_1=\text{white})=-1\log 1 = 0\]
+Something notable is that $H(X_2 \mid X_1=\text{black}) > H(X_2)$.
+
+\subsection{Part C}
+
+\[H(X_2 \mid X_1) = \frac{2}{3} \cdot 1 + \frac{1}{3} \cdot 0 = \boxed{\frac{2}{3}}\]
+
+\pagebreak
+
+\section{Conditional Mutual Information}
+
+\subsection{Part A}\label{sec:14a}
+
+By the chain rule of mutual information, we have
+\[I(X; Y, Z) = I(X; Z) + I(X; Y \mid Z) = I(X; Y) + I(X; Z \mid Y)\]
+
+Since $X \rightarrow Y \rightarrow Z$, $I(X; Z \mid Y) = 0$ and
+\[I(X; Z) + I(X; Y \mid Z) = I(X; Y) \implies I(X; Y \mid Z) \le I(X; Y)\]
+since mutual information is nonnegative. $\square$
+
+\subsection{Part B}
+
+No- here's a case where $I(X; Y \mid Z) > I(X; Y)$.
+
+Consider the XOR example from class, where $X$ and $Y$ are both
+random coin flips taking $0$ or $1$ and $Z = X \oplus Y$.
+
+Since $X \ind Y$, $I(X; Y) = 0$.
+However,
+\begin{align*}
+  I(X; Y \mid Z)
+  &= H(X) - H(X \mid Y, Z) \\
+  &= 1-0 \\
+  &= 1
+\end{align*}
+since knowing $Y$ and $Z$ allows us to deduce with 100\% certainty what $X$ is.
+
+\section{Find the Gap}
+
+By that same equation we wrote in \ref{sec:14a},
+\[I(X; Y) - I(X; Z) = I(X; Y \mid Z)\]
+
+\pagebreak
+
+\section{Mixing Increases Entropy}
+
+The entropy of $(p_1, \cdots, p_i, \cdots, p_j, \cdots, p_m)$ is just $\sum_{k=1}^{m} p_k \log p_k$.
+
+OTOH, the entropy of $\left(p_1, \cdots, \frac{p_i+p_j}{2}, \cdots, \frac{p_i+p_j}{2}, \cdots, p_m\right)$ is
+basically the exact same, except for the terms at $i$ and $j$.
+At those terms it's $\frac{p_i+p_j}{2}\log\frac{p_i+p_j}{2}$.
+
+In other words, it suffices to show that
+\[p_i \log p_i + p_j \log p_j \le 2 \cdot \frac{p_i+p_j}{2}\log\frac{p_i+p_j}{2}\]
+
+Applying the Log-Sum inequality with the following sequences:
+\begin{align*}
+  a_1=p_i, a_2=p_j && b_1=b_2=1
+\end{align*}
+yields
+\[p_i \log \frac{p_i}{1} + p_j \log \frac{p_j}{1} \ge (p_i+p_j)\log\frac{p_i+p_j}{1+1}\]
+which when simplified yields exactly what we want. $\square$
+
+\end{document}
