@@ -1,0 +1,90 @@
+\documentclass[12pt]{article}
+
+\input{../kz}
+
+\rhead{CS 118}
+
+\begin{document}
+
+\section{Intersymbol Interference}
+
+\begin{enumerate}
+      \item The outputs are $2 V$, $0 V$, and $2 V$ respectively.
+            The receiver will then output the bit sequence $\texttt{101}$.
+      \item Here, the outputs are still $2 V$, $0 V$, and $2 V$, resulting in the same bits.
+      \item The outputs are $2 V$, $2.75 V$, and $2 V$, so now the bits are $\texttt{111}$.
+      \item When the input sequence dips down to $0$, the output frequency has to also have a
+            corresponding sort of "dip" in the middle.
+            Otherwise, the receiver won't be able to detect the change.
+\end{enumerate}
+
+\pagebreak
+
+\section{Clock Recovery}
+
+\begin{enumerate}
+      \item I've marked the times in multiples of $t$ where $t$ is the sender's clock rate.
+            Here, $t=1.09 s$.
+            \begin{center}
+                  \includegraphics[width=15cm]{img/hw1/signal}
+            \end{center}
+            The green marks indicate the ideal sampling times.
+
+      \item If the receiver doesn't run the clock recovery, then it'll sample at $9.5 s$ when the true ideal sample time is $9.5t$, or $10.355 s$.
+            Here, the sampling is off by a whole $0.855 s$.
+
+      \item The sampled signal is still correct- \texttt{0101110010}.
+
+            It's sampled at the following seconds:
+            \[.5, 1.5, 2.59, 3.68, 4.77, 5.86, 6.95, 8.04, 9.13, 10.22\]
+
+            The value of \texttt{lag} is only $0$ when the loop initially starts.
+            After, it takes on a constant value of $0.9$ for the rest of the code.
+
+      \item A transition already occurs during the time from $t=1.5 s$ to $t=2.59 s$,
+            so it would depend on which transition the edge detector recognizes.
+
+            If it doesn't use the spike from the noise, the worst case scenario is that
+            the third sampled bit might be a \texttt{1} instead of a \texttt{0}.
+
+            OTOH, if the spike is the actual recognized transition, then \texttt{lag}
+            would take on a much higher value and the sampling times would be delayed.
+
+      \item No transition occurs due to the signal here.
+            However, in this case \texttt{lag} would wind up taking a negative value
+            for some time and squish the later sampling instances together.
+\end{enumerate}
+
+\pagebreak
+
+\section{code here bc idk where else to put it}
+
+\begin{python}
+bits = "0101110010"
+send_interval = 1.09
+transitions = [i * send_interval for i in [1, 2, 3, 6, 8, 9]]
+
+lag = 0
+at = 1 / 2
+pred = 0
+sampled = []
+lags = []
+for _ in range(10):
+    print(at)
+    sampled.append(bits[int(at // send_interval)])
+    lags.append(lag)
+
+    pred += 1 + lag
+    next_at = at + 1 + lag
+
+    for t in transitions:
+        if at <= t <= next_at:
+            lag = t - pred
+
+    at = next_at
+
+print(sampled)
+print(lags)
+\end{python}
+
+\end{document}
