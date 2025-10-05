@@ -26,7 +26,9 @@ Thus,
    & = -p \left[\sum_{n=1}^{\infty} (n-1)(1-p)^{n-1}\log(1-p) + \log p\sum_{n=1}^{\infty} (1-p)^{n-1}\right] \\
    & = -p \left[\log(1-p)\sum_{n=1}^{\infty} n(1-p)^n + \log p \sum_{n=1}^{\infty} (1-p)^n + \log p\right]   \\
    & = -p \left[\log(1-p) \cdot \frac{1-p}{p^2} + \log p \cdot \frac{1-p}{p}+\log p\right]                   \\
-   & = \boxed{\frac{(p-1)\log(1-p)}{p}-\log p}
+   & = \frac{(p-1)\log(1-p)}{p}-\log p \\
+   &= \frac{-q\log q - p\log p}{p} \\
+   &= \boxed{\frac{H(p)}{p}}
 \end{align*}
 
 \pagebreak
@@ -393,12 +395,10 @@ since all $B_i$s are independent and have the same distribution.
 
 As for the one without replacement, we can only say that
 \[H(B_1', \cdots, B_k') = \sum_{i=1}^{k} H(B_i' \mid B_1', \cdots, B_{i-1}')\]
-However, since conditioning can only decrease entropy,
-\[H(B_i' \mid B_1', \cdots, B_{i-1}') \le H(B_i') = H(B_i)\]
-so entropy of drawing balls without replacement is \textit{at most}
-the entropy of drawing balls with.
-
-% To check if this inequality is strict, lemme evaluate $H(B_2' \mid B_1')$:
+However, since $B_i'$ and its predecessors aren't independent,
+\[H(B_i' \mid B_1', \cdots, B_{i-1}') < H(B_i') = H(B_i)\]
+so the entropy of drawing balls without replacement is lower
+than that of drawing balls with.
 
 \pagebreak
 
