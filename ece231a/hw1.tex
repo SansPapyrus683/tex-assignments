@@ -10,7 +10,7 @@
 
 \section{Resources}
 
-I've only used my own brain + posted slides/resources.
+I've used my own brain, posted slides/resources and some yapping with Kevin Zhao.
 
 \section{Coin Flips}
 
@@ -104,8 +104,6 @@ Doing so allows us to just directly apply the formula like so:
    & \approx \boxed{0.116}
 \end{align*}
 
-\pagebreak
-
 \section{Relative Entropy On a Line}
 
 \subsection{Part A}
@@ -114,6 +112,8 @@ We start at the border and go to the center like so:
 \begin{center}
   \includegraphics[width=5cm]{img/hw1/simplex}
 \end{center}
+
+\pagebreak
 
 \subsection{Part B}
 
@@ -125,11 +125,23 @@ Applying the formula gets us
    & = \frac{1}{3}\left(2-\log \lambda - 2\log(3-\lambda)\right)
 \end{align*}
 
-Plotting it on MATLAB gives the following (sorry idk what's up with the resolution):
+Plotting it gives
 \begin{center}
-  \includegraphics[width=10cm]{img/hw1/p_diff_q}
+  \includegraphics[width=9cm]{img/hw1/p_diff_q}
 \end{center}
 At $\lambda=0$, the line tends towards positive infinity.
+
+The code for this was pretty simple, just
+\begin{verbatim}
+x = np.linspace(0, 1, 10000)
+y = 1/3 * (2 - np.log2(x) - 2 * np.log2(3 - x))
+
+plt.plot(x, y)
+plt.xlabel("lambda")
+plt.ylabel("D(p || q)")
+plt.show()
+\end{verbatim}
+followed by some Matplotlib commands.
 
 \subsection{Part C}
 
@@ -141,10 +153,16 @@ This time we've
 \end{align*}
 and plotting that gives
 \begin{center}
-  \includegraphics[width=10cm]{img/hw1/q_diff_p}
+  \includegraphics[width=9cm]{img/hw1/q_diff_p}
 \end{center}
 Here, the graph converges to $\log \frac{3}{2}$ instead of infinity.
 This is because $\lim_{x \to 0} x \log x = 0$.
+
+The code for this graph was the same as that in the previous part.
+Just replace the second line with
+\begin{verbatim}
+y = x/3 * np.log2(x) + (3 - x) / 3 * np.log2((3 - x) / 2)
+\end{verbatim}
 
 \subsection{Part D}
 
