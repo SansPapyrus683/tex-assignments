@@ -1,0 +1,265 @@
+\documentclass[12pt]{article}
+
+\input{../kz}
+
+\rhead{ECE 231A}
+
+\newcommand{\ind}{\perp\!\!\!\!\perp} 
+\newcommand{\ceil}[1]{\left\lceil#1\right\rceil}
+\newcommand*{\ditto}{-''-}
+\DeclareMathOperator{\E}{E}
+
+\begin{document}
+
+\section{Resources}
+
+I've used my own brain, posted slides/resources and a Discord chat with Kevin Zhao.
+
+\section{Relative Entropy}
+
+\subsection{Part A}
+
+Using the law of large numbers gives us
+\begin{align*}
+    \lim -\frac{1}{n} \log q(X_1, \cdots, X_n)
+     & = \lim -\frac{1}{n} \sum_{i=1}^{n} \log q(X_i)                     \\
+     & = \E_{p(x)}[-\log q(x)]                                            \\
+     & = \sum_{i=1}^{m} -p(x)\log q(x)                                    \\
+     & = \sum_{i=1}^{m} -p(x)\left(\log\frac{q(x)}{p(x)}+\log p(x)\right) \\
+     & = \sum_{i=1}^{m} p(x)\log\frac{p(x)}{q(x)}-p(x)\log p(x)           \\
+     & = \boxed{D(p \parallel q) +H(p)}
+\end{align*}
+
+\subsection{Part B}
+
+The computation basically goes the same way,
+except now we don't have to add and subtract a $p(x)$.
+Because of that, the answer now is just $\boxed{D(p \parallel q)}$.
+
+\section{Take it to the Limit}
+
+We have
+\begin{align*}
+    \lim \frac{1}{n} \log \frac{p\left(x^n, y^n\right)}{p\left(x^n\right)p\left(y^n\right)}
+     & = E_{p(x, y)}\left[\log\frac{p(x, y)}{p(x)p(y)}\right]  \\
+     & = \sum_{x} \sum_{y} p(x, y)\log\frac{p(x, y)}{p(x)p(y)} \\
+     & = D(p(x, y) \parallel p(x)p(y))                         \\
+     & = \boxed{I(X; Y)}
+\end{align*}
+
+\section{The AEP in Action}
+
+\subsection{Part A}
+
+We just apply the formula for entropy:
+\begin{align*}
+    H(X)
+     & =-\frac{3}{4}\log\frac{3}{4}-\frac{1}{4}\log\frac{1}{4} \\
+     & =-\frac{3}{4}(\log 3 - 2)-\frac{1}{4}(-2)               \\
+     & =\frac{3}{2}-\frac{3}{4}\log 3+\frac{1}{2}              \\
+     & =\boxed{2-\frac{3}{4}\log 3}
+\end{align*}
+
+\subsection{Part B}
+
+Assuming the $x_i$s are i.i.d,
+\begin{align*}
+    -\frac{1}{n}\log p(x_1, \cdots, x_n)
+     & = -\frac{1}{n}\sum_{i=1}^{n} \log p(x_i)                         \\
+     & = -\frac{1}{n}\left(k\log\frac{3}{4}+(n-k)\log\frac{1}{4}\right) \\
+     & = -\frac{1}{n}(k\log 3-2k-2+2k)                                  \\
+     & = \boxed{2-\frac{k}{n}\log 3}
+\end{align*}
+
+\pagebreak
+
+\subsection{Part C}
+
+The values of $k$ for which $x_n \in A_\epsilon^{(n)}$ are $5$, $6$, and $7$.
+
+Thus,
+\[\left|A_\epsilon^{(n)}\right|=\binom{8}{5}+\binom{8}{6}+\binom{8}{7}=\boxed{92}\]
+and
+\[P\left(x_n \in A_\epsilon^{(n)}\right) = \sum_{k=5}^{7} \binom{8}{k}\frac{3^k}{4^8} \approx \boxed{0.786}\]
+
+\subsection{Part D}
+
+Any $k$ from $10$ to $14$ inclusive works.
+
+Same thing here:
+\begin{gather*}
+    \left|A_\epsilon^{(n)}\right|=\sum_{k=10}^{14} \binom{16}{k} = \boxed{14876} \\
+    P\left(x_n \in A_\epsilon^{(n)}\right) \approx \boxed{0.857}
+\end{gather*}
+
+\subsection{Part E}
+
+$P\left(x_n \in A_\epsilon^{(n)}\right)$ did increase with $n$.
+
+\subsection{Part F}
+
+For $n=8$,
+\[2^{n(H(X)+\epsilon)} \approx 272.52 \ge 92\]
+and for $n=16$,
+\[2^{n(H(X)+\epsilon)} \approx 74267.84 \ge 14876\]
+
+\pagebreak
+
+\section{The AEP and Source Coding}
+
+\subsection{Part A}
+
+There's $\sum_{k=0}^{3} \binom{100}{k}=166751$ sequences with $\le 3$ codewords,
+so the minimum length is $\ceil{\log 166751}=\boxed{18}$.
+
+\subsection{Part B}
+
+This is much less than the $100$ bits needed for the naive representation.
+
+\subsection{Part C}
+
+The chance we get a source sequence \textit{with} a codeword is
+\[\sum_{k=0}^{3} \binom{100}{k}(0.005)^k(0.995)^{100-k} \approx 0.998\]
+so the chance we get a sequence for which no codeword has been assigned is around $\boxed{0.002}$.
+
+\section{Time's Arrow}
+
+The key thing to note is that since the process is stationary,
+\[P(X_{-n}=x_1, \cdots, X_1=x_n) = P(X_1=x_1, \cdots, X_n=x_n)\]
+
+By similar reasoning,
+\begin{align*}
+             & P(X_{-n}, \cdots, X_0) = P(X_0, \cdots, X_n)                       \\
+    \implies & P(X_{-n}, \cdots, X_{-1}) \cdot P(X_0 \mid X_{-n}, \cdots, X_{-1})
+    = P(X_1, \cdots, X_n) \cdot P(X_0 \mid X_1, \cdots, X_n)                      \\
+    \implies & P(X_0 \mid X_{-n}, \cdots, X_{-1}) = P(X_0 \mid X_1, \cdots, X_n)
+\end{align*}
+In other words, the distribution for $P(X_0)$ is the same
+whether you condition on the past or the future, as long as the outcomes
+for both are the same.
+This means that the entropy of the two are identical as well.
+
+Thus,
+\begin{gather*}
+    \sum_{x^n} P(X_{-n}=x_1, \cdots, X_1=x_n)H(X_0 \mid \ditto) \\
+    \qquad= \sum_{x^n} P(X_1=x_1, \cdots, X_n=x_n)H(X_0 \mid \ditto)
+\end{gather*}
+and by extension
+\[H(X_0 \mid X_{-1}, \cdots, X_{-n})=H(X_0 \mid X_1, \cdots, X_n)\quad\square\]
+
+\section{Average Entropy vs. Conditional Entropy}
+
+Since the process is stationary, like in lecture
+\[H(X_n \mid X_1, \cdots, X_{n-1}) \ge H(X_{n+1} \mid X_1, \cdots, X_n)\]
+and so
+\begin{align*}
+    \frac{H(X_1, \cdots, X_n)}{n}
+     & = \frac{\sum_{i=1}^{n} H(X_i \mid X_1, \cdots, X_{i-1})}{n}   \\
+     & \ge \frac{\sum_{i=1}^{n} H(X_n \mid X_1, \cdots, X_{n-1})}{n} \\
+     & = H(X_n \mid X_1, \cdots, X_{n-1})\quad\square
+\end{align*}
+
+\section{Adam's Seat Selection}
+
+The transition matrix is
+\[P=\begin{bmatrix}
+        \frac{1}{4} & \frac{3}{4} & 0           \\
+        0           & \frac{1}{3} & \frac{2}{3} \\
+        \frac{1}{2} & 0           & \frac{1}{2}
+    \end{bmatrix}\]
+
+Along with summing to $1$, $\mu$ has to satisfy
+\begin{align*}
+    \frac{\mu_1}{4}+\frac{\mu_3}{2}=\mu_1  &  &
+    \frac{3\mu_1}{4}+\frac{\mu_2}{3}=\mu_2 &  &
+    \frac{2\mu_2}{3}+\frac{\mu_3}{2}=\mu_3
+\end{align*}
+solving this gets us
+\[\mu=\begin{bmatrix}
+        \frac{8}{29} &  & \frac{9}{29} &  & \frac{12}{29}
+    \end{bmatrix}\]
+
+The entropy rate for this is thus
+\begin{align*}
+               & H(X_2 \mid X_1)                                                                            \\
+    ={}        & \frac{8}{29}H(X_2 \mid X_1=1)+\frac{9}{29}H(X_2 \mid X_1=2)+\frac{12}{29}H(X_2 \mid X_1=3) \\
+    \approx {} & \boxed{0.923}
+\end{align*}
+
+\pagebreak
+
+\section{Python Code}
+
+I've written the following code to automatically calculate the rate of entropy
+given an unweighted graph.
+\pyth{nodes} contains the list of amounts of nodes, while \pyth{edges}
+contains the number of outgoing edges from each type of node.
+The example code uses the chessboard from the lecture 4 slides.
+
+\begin{python}
+from math import log2
+
+nodes = [4, 24, 36]
+edges = [3, 5, 8]
+
+# 2W, where we sum up all edges
+w2 = sum(n * e for n, e in zip(nodes, edges))
+# the stationary distribution for each node
+mu = [e / w2 for e in edges]
+
+# calculate H(X2 | X1) according to the formula
+entropy = 0
+for i in range(len(nodes)):
+    cond_entropy = log2(edges[i])  # since all edges are equally likely
+    entropy += mu[i] * nodes[i] * cond_entropy
+
+print(f"entropy rate: {round(entropy, 3)}")
+\end{python}
+Running this code produces $2.766$, which is what the slides also give.
+
+\section{Random Chessboard Walk}
+
+\subsection{King}
+
+We have:
+\begin{itemize}[nolistsep]
+    \item $4$ nodes with $3$ edges
+    \item $4$ nodes with $5$ edges
+    \item $1$ node with $8$ edges
+\end{itemize}
+So the entropy rate is around $\boxed{2.236}$.
+
+\subsection{Queen}
+
+We have:
+\begin{itemize}[nolistsep]
+    \item $8$ nodes with $6$ edges
+    \item $1$ node with $8$ edges
+\end{itemize}
+So the entropy rate is around $\boxed{2.644}$.
+
+\subsection{Odd Bishop}
+
+Only $5$ nodes are relevant for this bishop.
+Of these,
+\begin{itemize}[nolistsep]
+    \item $4$ have $2$ edges
+    \item $1$ has $4$ edges
+\end{itemize}
+So the entropy rate is $\boxed{\frac{4}{3}}$.
+
+\subsection{Even Bishop}
+
+Only $4$ nodes are relevant for this bishop.
+All of them have $2$ edges, so the entropy is just $\boxed{1}$.
+
+\subsection{Rook}
+
+All $9$ nodes have $4$ edges for the rook, so the entropy is just $\boxed{2}$.
+
+\section{Random Walk of Spider}
+
+We have $6$ nodes with $3$ edges and $9$ nodes with $4$ edges,
+so the entropy is around $\boxed{1.8617}$.
+
+\end{document}
