@@ -66,6 +66,28 @@ Here,
 
 \section{Exercise A1.2}
 
+Let $a$ and $b$ be vectors defined by:
+\begin{align*}
+    a_i=\sqrt{x_i} &  & b_i=\frac{1}{\sqrt{x_i}}
+\end{align*}
+
+Then by CS we've:
+\begin{align*}
+               & |x^Ty| \le \norm{x}\norm{y}                                                                \\
+    \implies{} & \left|\sum_{i=1}^{n} \sqrt{x_i} \cdot \frac{1}{\sqrt{x_i}}\right|
+    \le \sqrt{\sum_{i=1}^{n} x_i}\sqrt{\sum_{i=1}^{n} \frac{1}{x_i}}                                        \\
+    \implies{} & n \le \sqrt{\sum_{i=1}^{n} x_i \cdot \sum_{i=1}^{n} \frac{1}{x_i}}                         \\
+    \implies{} & n^2 \le \sum_{i=1}^{n} x_i \cdot \sum_{i=1}^{n} \frac{1}{x_i}                              \\
+    \implies{} & \frac{n}{\sum_{i=1}^{n} \frac{1}{x_i}} \le \frac{1}{n}\sum_{i=1}^{n} x_i                   \\
+    \implies{} & \left(\sum_{i=1}^{n} \frac{1}{n}\right)^{-1} \le \frac{1}{n}\sum_{i=1}^{n} x_i\quad\square
+\end{align*}
+
+\pagebreak
+
+\section{Exercise A1.3}
+
+OK THIS PROBLEM WASN'T ON THE HW I THOUGHT THIS WAS 1.2 HAHAHAHAHAHAAHHA
+
 Following the hint, let $\gamma = \arg\left(b^Ha\right)$, $\alpha=\norm{a}$, and $\beta=\norm{b}$.
 
 This way, $b^Ha = \left|b^Ha\right|e^{j\gamma}$.
@@ -111,7 +133,7 @@ and the STD is
     \std(p)
      & = \frac{1}{\sqrt{n}} \sqrt{\sum_{i=1}^{n} (p_i - \avg(p))^2}          \\
      & = \frac{1}{\sqrt{n}} \sqrt{\sum_{i=1}^{n} (\theta r_i - \theta\mu)^2} \\
-     & = \frac{|\theta|}{\sqrt{n}} \sqrt{\sum_{i=1}^{n} (r_i-\mu)^2}           \\
+     & = \frac{|\theta|}{\sqrt{n}} \sqrt{\sum_{i=1}^{n} (r_i-\mu)^2}         \\
      & = |\theta|\sigma
 \end{align*}
 
