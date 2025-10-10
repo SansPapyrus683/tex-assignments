@@ -1,0 +1,169 @@
+\documentclass[12pt]{article}
+
+\input{../kz}
+
+\rhead{ECE 133A}
+
+\newcommand{\norm}[1]{\left\lVert#1\right\rVert}
+\DeclareMathOperator{\std}{std}
+\DeclareMathOperator{\avg}{avg}
+\DeclareMathOperator{\Tr}{Tr}
+\newcommand{\R}{\mathbb{R}}
+
+\begin{document}
+
+\section{Exercise A1.8}
+
+\subsection{Part A}
+
+Taking derivatives wrt $c_1$ gives
+\begin{align*}
+    \frac{d}{dc_1} J
+     & = \frac{d}{dc_1} \frac{(c_1\mathbf{1}+c_2a-b)^T(c_1\mathbf{1}+c_2a-b)}{n(1+c_2^2)}                                        \\
+     & = \frac{1}{n(1+c_2^2)} \frac{d}{dc_1} \left(c_1^2n+2c_1\mathbf{1}^T(c_2a-b)+\norm{c_2a-b}\right) \\
+     & = \frac{1}{n(1+c_2^2)} \left(2nc_1+2 \cdot \mathbf{1}^T(c_2a-b)\right)
+\end{align*}
+Setting this equal to $0$ and solving gives
+\[\frac{2c_1}{(1+c_2^2)}=-\frac{2 \cdot \mathbf{1}^T(c_2a-b)}{n(1+c_2^2)}\]
+so removing the common $\frac{2}{(1+c_2^2)}$ gets us
+\begin{align*}
+    c_1
+     & =-\frac{\mathbf{1}^T(c_2a-b)}{n}                    \\
+     & =\frac{\mathbf{1}^Tb}{n}-c_2\frac{\mathbf{1}^Ta}{n} \\
+     & =m_b-m_ac_2\quad\square
+\end{align*}
+
+\pagebreak
+
+\subsection{Part B}
+
+Simplifying gives
+\begin{align*}
+    J
+     & = \frac{\norm{c_2(a-m_a\mathbf{1})-(b-m_b\mathbf{1})}^2}{n(1+c_2^2)} \\
+     & = \frac{1}{n(1+c_2^2)}\left(c_2^2\norm{a-m_a\mathbf{1}}^2+\norm{b-m_b\mathbf{1}}^2-2c_2(a-m_a\mathbf{1})^T(b-m_b\mathbf{1})\right) \\
+     &= \frac{c_2^2\norm{a-m_a\mathbf{1}}^2}{n(1+c_2)}+\frac{\norm{b-m_b\mathbf{1}}^2}{n(1+c_2^2)}-\frac{2c_2(a-m_a\mathbf{1})^T(b-m_b\mathbf{1})}{n(1+c_2^2)} \\
+     &= \frac{c_2^2s_a^2}{1+c_2^2}+\frac{s_b^2}{1+c_2}-\frac{(a-m_a\mathbf{1})^T(b-m_b\mathbf{1})}{n}\frac{2c_2}{1+c_2^2} \\
+     &= \frac{c_2^2s_a^2}{1+c_2^2}+\frac{s_b^2}{1+c_2}-\rho s_a s_b\frac{2c_2}{1+c_2^2} \\
+     &= \frac{c_2^2s_a^2+s_b^2-2\rho s_a s_b c_2}{1+c_2^2}
+\end{align*}
+
+Then, differentiating wrt $c_2$ gives
+\begin{align*}
+    \frac{dJ}{dc_2}
+    &= \frac{1}{(1+c_2^2)^2} \cdot \left((2c_2s_a^2-2\rho s_a s_b)(1+c_2^2) - 2c_2(c_2^2s_a^2+s_b^2-2\rho s_a s_b c_2)\right)
+\end{align*}
+While this looks bad, only the term in parenthesis really matters since we need it to be zero
+and the fraction in front is always nonzero.
+
+Setting that equal to $0$ and simplifying gives
+\begin{align*}
+    & (2c_2s_a^2-2\rho s_a s_b)(1+c_2^2) - 2c_2(c_2^2s_a^2+s_b^2-2\rho s_a s_b c_2) = 0 \\
+    \implies{} & \left(2c_2s_a^2+2c_2^3s_a^2-2\rho s_a s_b - 2c_2^2\rho s_a s_b\right) - \left(2c_2^3s_a^2 + 2c_2s_b^2 - 4\rho s_a s_b c_2^2\right) = 0 \\
+    \implies{} & 2\rho s_a s_b c_2^2 + 2c_2s_a^2 - 2c_2s_b^2 - 2\rho s_a s_b = 0 \\
+    \implies{} & \rho c_2^2 + c_2\left(\frac{s_a}{s_b}-\frac{s_b}{s_a}\right) - \rho = 0
+\end{align*}
+
+Assuming $\rho > 0$ first, the parabola is upward-facing, so it's increasing at the second root.
+Since $\frac{1}{(1+c_2^2)^2}$ is always positive, the actual derivative is also increasing at this point
+and the root with positive discriminant is the minimum.
+It's obvious that this root is also positive.
+
+By similar reasoning (reversing all the signs and whatnot), the negative root
+is the minimum when $\rho < 0$ as well. $\square$
+
+\pagebreak
+
+\section{Exercise A2.4}
+
+Let $G_A'$ be $G_A$ but with self-loops for all the nodes.
+
+Notice that $I+A$ is the matrix associated with $G_A'$, since
+after the addition of $I$ every node is guaranteed to have an edge to itself.
+
+\subsection{A Quick Graph Theory Tangent}
+
+I propose that $G_A'$ is strongly connected iff for any pair of nodes $a$ and $b$
+there exists a path of length $n-1$ between them.
+
+For the forward direction, notice that any path between $a$ and $b$ 
+can't contain more than $n-1$ edges, because any past that would imply
+a cycle in the path that we can remove without consequence.
+For paths of length less than $n-1$, we can use the self-loop on
+either $a$ or $b$ added previously to add as many edges as necessary
+to achieve a length of $n-1$.
+
+The reverse implication is thankfully quite simple, since a path existing between
+any two nodes is the very definition of being strongly connected.
+
+\subsection{Main Proof}
+
+After the above, it STP that $((I+A)^x)_{ij}$ is positive iff there's a path of length $x$ from $i$ to $j$.
+
+The proof is by induction, where the base case of $x=1$ is given by construction.
+
+For the inductive step, notice that
+\begin{align*}
+    (I+A)^{x+1}_{ij}
+    &= ((I+A)^x(I+A))_{ij} \\
+    &= \sum_{k=1}^{n} (I+A)^x_{ik}(I+A)_{kj}
+\end{align*}
+If this is positive, then since all elements of $A$ are nonnegative there's at least one $k$ s.t.
+$(I+A)^x_{ik}(I+A)_{kj} > 0$, implying the existence of
+\begin{enumerate}[nolistsep]
+    \item A node $k$ there $i$ can reach in $x$ edges
+    \item An edge from $k$ to $j$
+\end{enumerate}
+and thus a path of length $x+1$ from $i$ to $j$.
+
+OTOH, a path of length $x+1$ from $i$ to $j$ implies both the things in the above list
+as well, and thus holds true by our inductive hypothesis.
+
+Given what we just proved, then $G_A'$ is strongly connected iff $A$ is irreducible.
+Since adding self-loops never boosts or reduces connectivity, we also have
+the same result for $G_A$. $\square$
+
+\section{Exercise T10.11}
+
+\subsection{Part A}\label{sec:matTr}
+
+The $x$th element in the diagonal is
+\[(A^TB)_{xx}=\sum_{i=1}^{m} A_{ix}B_{ix}\]
+The indices in $A$ are reversed since we're multiplying by $A^T$.
+
+Summing over all $x$ from $1$ to $n$ then gets us
+\[\sum_{x=1}^{n} (A^TB)_{xx} = \sum_{x=1}^{n} \sum_{i=1}^{m} A_{ix}B_{ix}\quad\square\]
+Comput ing this value takes $\boxed{O(mn)}$ time.
+
+\subsection{Part D}
+
+Applying the formula from \ref{sec:matTr} to $BA^T$ gives us
+\begin{align*}
+    \Tr(BA^T)
+     & = \sum_{i=1}^{n} \sum_{j=1}^{m} (B^T)_{ij}(A^T)_{ij} \\
+     & = \sum_{i=1}^{n} \sum_{j=1}^{m} B_{ji}A_{ji}         \\
+     & = \sum_{i=1}^{m} \sum_{j=1}^{n} A_{ij}B_{ij}         \\
+     & = \Tr(A^TB)\quad\square
+\end{align*}
+The jump from the second nested summation to the third is simply a reordering
+of the indices.
+At the end of the day it's still a "dot product" of the matrices.
+
+\pagebreak
+
+\section{Exercise A2.8}
+
+Let $c_i \in \R^n$ be defined by $c_i=Bx_i$.
+
+We can compute each $c_i$ in $O(n^2)$ time, so doing all of them would take $O(n^3)$ time.
+
+Then, if we split $y$ into $y_1, \cdots, y_n$ the same way we did for $x$, then
+\[y_x=\sum_{i=1}^{n} A_{xi}Bx_i=\sum_{i=1}^{n} A_{xi}c_i\]
+We're adding up $n$ vectors that are just scaled differently,
+so this would also take $O(n^2)$ time for one $x$ and $O(n^3)$ overall.
+
+Notice that this step is done independently from the computation of $C_i$,
+and so due to how big-O notation works the overall complexity is still $\boxed{O(n^3)}$,
+which is way better than the $O(n^4)$ complexity of the naive algorithm.
+
+\end{document}
