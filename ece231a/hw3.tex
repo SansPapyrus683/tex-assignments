@@ -1,0 +1,339 @@
+\documentclass[12pt]{article}
+
+\input{../kz}
+
+\rhead{ECE 231A}
+
+\newcommand{\ind}{\perp\!\!\!\!\perp} 
+\newcommand{\ceil}[1]{\left\lceil#1\right\rceil}
+\newcommand*{\ditto}{-''-}
+\newcommand{\N}{\mathbb{N}}
+\renewcommand{\c}{\texttt}
+\DeclareMathOperator{\E}{E}
+
+\begin{document}
+
+\section{Resources}
+
+I've used my own brain, posted slides/resources and a Discord chat with Kevin Zhao.
+
+\section{Code Analysis}
+
+\subsection{Part A}
+
+This code isn't instantaneous, as $0$ is a prefix of all the others.
+
+However, it does satisfy the Kraft Inequality:
+\[2^{-1}+2^{-2}+2^{-3}+2^{-6}+2^{-9} \approx 0.89 < 1\]
+so an instantaneous binary source code with these lengths does exist.
+
+\subsection{Part B}
+
+The code isn't uniquely decodable either.
+
+If the codewords were for the letters $a$ through $e$ inclusive, then
+\[C(cd)=C(e)=001001001\]
+
+\pagebreak
+
+\section{Reversal}
+
+\subsection{Part A}
+
+This code isn't instantaneous, as $0$ is a prefix of all the others.
+
+However, it does satisfy the Kraft Inequality:
+\[2^{-1} + 2^{-2} + 2^{-3} + 2^{-4} + 2^{-5} + 2^{-6} + 2^{-6} = 1\]
+so an instantaneous binary source code with these lengths does exist.
+
+\subsection{Part B}
+
+Despite not being instantaneous, it's still uniquely decodeable.
+
+Any encoded string can be split into a $0$ followed by some amount of $1$s.
+After "using up" as many of the $1$s as possible, whatever's left goes with the $0$.
+This works because the codewords don't contain any run of $1$s after that's greater than $6$.
+
+\section{Kraft Slackness}
+
+Consider the codeword tree up to $l_{max}$, the longest out of all the word lengths.
+
+As this code is instantaneous, no code word can be an ancestor of another.
+Each code word thus eliminates exactly $D^{l_{max}-l_i}$ code words of length $l_{max}$.
+
+In total, the number of codewords of length $l_{max}$ eliminated are:
+\begin{align*}
+    \sum_{i=1}^{m} D^{l_{max}-l_i}
+     & = D^{l_{max}} \sum_{i=1}^{m} D^{-l_i} \\
+     & < D^{l_{max}}
+\end{align*}
+where the inequality comes from what was given in the problem.
+
+This means that there exists a sequence of symbols of length $l_{max}$ s.t.
+it has no codeword as a parent.
+Thus, it can't be decoded into any sequence the source alphabet. $\square$
+
+\pagebreak
+
+\section{One Bit Above Entropy}
+
+Fix a positive $\epsilon$- I'm assuming $\epsilon < 1$.
+
+For no reason in particular,
+let's choose $n \in \N$ big enough s.t. $\frac{1}{D^{n+\epsilon}} < \epsilon$.
+
+Consider the near-uniform distribution where all outcomes have probability $\frac{1}{D^{n+\epsilon}}$
+except for one that has probability $p$.
+If $m+1$ is the number of outcomes, these are the properties of the distribution:
+\begin{align*}
+    \sum_{i=1}^{m} \frac{1}{D^{n+\epsilon}}+p=1 &  &
+    0 < p < \frac{1}{D^{n+\epsilon}}
+\end{align*}
+
+Then, using the encoding method described in class,
+\begin{align*}
+        & L-H(X)                                                                                                            \\
+    ={} & \sum_{i=1}^{m} \frac{1}{D^{n+\epsilon}}\ceil{\log_D D^{n+\epsilon}} + p\ceil{\log_D p}
+    - \sum_{i=1}^{n} \frac{1}{D^{n+\epsilon}} \log_D D^{n+\epsilon} - p \log_D p                                            \\
+    ={} & m\left(\frac{1}{D^{n+\epsilon}}\left(\ceil{n+\epsilon}-n\right)\right) + p\left(\ceil{\log_D p} - \log_D p\right) \\
+    ={} & \frac{m}{D^{n+\epsilon}} + p\left(\ceil{\log_D p} - \log_D p\right)                                               \\
+    >{} & \frac{m}{D^{n+\epsilon}}                                                                                          \\
+    ={} & 1 - p                                                                                                             \\
+    >{} & 1-\frac{1}{D^{n+\epsilon}}                                                                                        \\
+    >{} & 1-\epsilon
+\end{align*}
+So $L-H(X) > 1-\epsilon$.
+Just move the $H(X)$ over to the other side and you have it. $\square$
+
+\pagebreak
+
+\section{Huffman Code}
+
+The tree is as follows:
+\begin{center}
+    \includegraphics[width=10cm]{img/hw3/binary}
+\end{center}
+The codewords for each probability are as follows:
+\begin{itemize}[nolistsep]
+    \item $\frac{1}{2}$- \c{1}
+    \item $\frac{1}{4}$- \c{01}
+    \item $\frac{1}{8}$- \c{001}
+    \item $\frac{1}{16}$- \c{0001}
+    \item $\frac{1}{32}$- \c{00001}
+    \item $\frac{1}{64}$- \c{000001}
+    \item $\frac{1}{64}$- \c{000000}
+\end{itemize}
+The expected length of this code is
+\[\frac{1}{2}+\frac{2}{4}+\frac{3}{8}+\frac{4}{16}+\frac{6}{32}+\frac{7}{64}+\frac{7}{64} = 2.03125\]
+which is actually equivalent to the entropy of the PMF.
+
+\pagebreak
+
+\section{Non-Binary Huffman Code?}
+
+\subsection{Part A}
+
+The tree is as follows:
+\begin{center}
+    \includegraphics[width=10cm]{img/hw3/ternary_w_binary}
+\end{center}
+The codewords for each probability are as follows:
+\begin{itemize}[nolistsep]
+    \item $\frac{1}{3}$- \c{1}
+    \item $\frac{1}{3}$- \c{01}
+    \item $\frac{1}{9}$- \c{001}
+    \item $\frac{1}{9}$- \c{0001}
+    \item $\frac{1}{27}$- \c{00001}
+    \item $\frac{1}{27}$- \c{000001}
+    \item $\frac{1}{27}$- \c{000000}
+\end{itemize}
+It's average length is around $\boxed{2.407}$ bits.
+
+\pagebreak
+
+\subsection{Part B}
+
+The tree is as follows:
+\begin{center}
+    \includegraphics[width=5cm]{img/hw3/ternary}
+\end{center}
+The codewords, listed in order from top to bottom, are:
+\begin{align*}
+    \c{2} && \c{1} && \c{02} && \c{01} && \c{002} && \c{001} && \c{000}
+\end{align*}
+The average length of this code is $\boxed{\frac{13}{9}}$.
+
+\subsection{Part C}
+
+The ternary's code average length is equivalent to the entropy in trits:
+\begin{align*}
+        & H_3(X)                                                                                                                                                                                                                       \\
+    ={} & -\left(\frac{1}{3}\log_3\frac{1}{3} + \frac{1}{3}\log_3\frac{1}{3} + \frac{1}{9}\log_3\frac{1}{9} + \frac{1}{9}\log_3\frac{1}{9} + \frac{1}{27}\log_3\frac{1}{27} + \frac{1}{27}\log_3\frac{1}{27} + \frac{1}{27}\log_3\frac{1}{27}\right) \\
+    ={} & 2 \cdot \frac{1}{3}+ 2 \cdot \frac{2}{9}+ 3 \cdot \frac{3}{27} \\
+    ={} & \boxed{\frac{13}{9}}
+\end{align*}
+In this case, the ternary code is more efficient, since it gets closer to its entropy base.
+
+\pagebreak
+
+\section{A Sufficient Set of Huffman Codes}
+
+\subsection{Part A}
+
+There's only one tree possible with Huffman coding.
+
+When there's only three symbols, the only way the algorithm can go about things
+is to merge two nodes first and then merge the third one with the result.
+
+\subsection{Part B}
+
+If there's four nodes, then two trees are possible:
+\begin{center}
+    \hfill
+    \includegraphics[width=5cm]{img/hw3/huffman4_1}
+    \hfill
+    \includegraphics[width=5cm]{img/hw3/huffman4_2}
+    \hfill \mbox{}
+\end{center}
+
+\pagebreak
+
+\section{Codeword Lengths}
+
+\subsection{Part A}
+
+We have
+\[2^{-1} + 2^{-2} + 2^{-3} + 2^{-4} + 2^{-5}=\frac{31}{32} \le 1\]
+which satisfies the Kraft inequality.
+Thus, an instantaneous code exists with these lengths.
+
+\subsection{Part B}
+
+Consider the following set of codewords:
+\begin{itemize}[nolistsep]
+    \item \c{1}
+    \item \c{00}
+    \item \c{010}
+    \item \c{0110}
+    \item \c{0110}
+\end{itemize}
+
+\subsection{Part C}
+
+Any Huffman code has to have at least two codewords with the same length.
+
+All codewords are of distinct length here, so this can't be a Huffman code
+no matter what PMF we start out with.
+
+\section{Bad Codes}
+
+$\{\c{00}, \c{01}, \c{10}, \c{110}\}$ can't be a Huffman code
+because it only has one codeword of the longest length $3$.
+
+$\{\c{01}, \c{10}\}$ also can't be a Huffman code because it's not optimal.
+$\{\c{0}, \c{1}\}$ achieves a lower average length.
+
+\pagebreak
+
+\section{Arithmetic Coding}
+
+\subsection{Initial Data Structures}
+
+Both of my functions depend on this here bit of data:
+\begin{python}
+EOT = "$"
+symbols = {"a": 0, "b": 1, "c": 2, EOT: 3}
+pmf = [.4, .35, .15, .1]
+pref = [0]
+
+for i in pmf:
+    pref.append(pref[-1] + i)
+left_end, right_end = pref[:-1], pref[1:]
+\end{python}
+
+\subsection{Part A}
+
+I defined and ran this function:
+\begin{python}
+def encode_str(string: str) -> list[int]:
+    lo, hi = 0, 1
+    transmission = []
+    for c in string + EOT:
+        id_ = symbols[c]
+        lower, upper = left_end[id_], right_end[id_]
+
+        scaling = hi - lo
+        lo, hi = lo + lower * scaling, lo + upper * scaling
+
+        while True:
+            if hi <= 0.5:
+                transmission.append(0)
+                lo, hi = lo * 2, hi * 2
+            elif lo > 0.5:
+                transmission.append(1)
+                lo, hi = (lo - 0.5) * 2, (hi - 0.5) * 2
+            else:
+                break
+
+    return transmission + [1]
+
+
+print("".join(str(i) for i in encode_str("caab")))
+\end{python}
+The output was \boxed{\c{110001001}}.
+
+\subsection{Part B}
+
+For decoding I defined this function here:
+\begin{python}
+def decode_bin(transmission: list[int]) -> str:
+    val = 0
+    for v, t in enumerate(transmission):
+        val += 2 ** (-v - 1) * t
+
+    ret = []
+    while not ret or ret[-1] != EOT:
+        for l, r, s in zip(left_end, right_end, symbols):
+            if l <= val < r:
+                ret.append(s)
+                val = (val - l) / (r - l)
+                break
+
+    return "".join(ret[:-1])  # no need to return the <eot>
+
+
+print(decode_bin([0, 0, 1, 1, 0, 1, 0, 1, 1, 1]))
+\end{python}
+The output was \boxed{\c{abac}}.
+
+\pagebreak
+
+\section{LZW}
+
+\subsection{Part A}
+
+The encoding goes as follows:
+\begin{enumerate}[label=\roman*.]
+    \item \c{c}- encoded as $3$, adds $ca$ as $4$.
+    \item \c{a}- encoded as $1$, adds $ab$ as $5$.
+    \item \c{b}- encoded as $2$, adds $bc$ as $6$.
+    \item \c{c}- encoded as $3$, adds $cb$ as $7$.
+    \item \c{bc}- encoded as $6$, adds $bcb$ as $8$.
+    \item \c{bcb}- encoded as $8$, no more to encode.
+\end{enumerate}
+Our final sequence is \boxed{3, 1, 2, 3, 6, 8}.
+
+\subsection{Part B}
+
+The decoding goes as follows:
+\begin{enumerate}[label=\roman*.]
+    \item $3$- decoded as \c{c}, adds \c{c?} as $4$.
+    \item $4$- decoded as \c{cc}, adds \c{cc?} as $5$.
+    \item $5$- decoded as \c{ccc}, adds \c{ccc?} as $6$.
+    \item Same thing goes on from $6$ to $9$.
+    \item Finally, $1$ is decoded as just $a$.
+\end{enumerate}
+
+In total, the message is $28$ \c{c}s followed by one \c{a}.
+
+\end{document}
