@@ -1,0 +1,162 @@
+\documentclass[12pt]{article}
+
+\input{../kz}
+
+\rhead{CS 118}
+
+\renewcommand{\c}{\texttt}  % short for \code
+
+\begin{document}
+
+\section{HDLC Bit-stuffing Code}
+
+\begin{enumerate}[label=\Alph*.]
+    \item The code works by scanning through all consecutive "runs" of \c{1}s in the provided array.
+
+          The two main variables it uses to keep track of it's position are
+          \c{i}, it's position in the array, and \c{j}, it's position
+          in the buffer it's going to print out.
+
+          It does this by running a for loop through the array itself and then
+          running a subclause as soon as it encounters a \c{1}.
+          After this, it sets \c{i} to the index immediately following the run
+          before continuing on to the outer for loop.
+
+          Within the subclause is another for loop that keeps a counter of how
+          many \c{1}s it's seen inside the run.
+          As soon as the counter hits $5$, it's reset and an additional $0$
+          is added alongside all the original bits.
+
+    \item The output is \boxed{\c{111110011111010}}
+
+    \item \begin{algorithmic}[1]
+              \LComment{Returns the destuffed code or reports an error if the encoded string is invalid}
+              \Procedure{\c{destuff}}{\c{arr}}
+                  \State $\c{result} \gets []$
+                  \State $\c{ones} \gets 0$
+                  \State $i \gets 0$
+                  \While{$i <$ length of \c{arr}}
+                      \If{$\c{arr}[i] = 1$}
+                        \State Append $1$ to \c{result}
+                        \State $\c{ones} \gets \c{ones} + 1$
+                        \If{$\c{ones} = 5$}
+                            \If{$\c{arr[i + 1]} = 1$}
+                                \State report error!
+                                \Comment{$6$ consecutive $1$s can't exist}
+                            \EndIf
+                            \State $i \gets i + 1$
+                            \Comment{Move $i$ past the stuffed $0$}
+                            \State $\c{ones} \gets 0$
+                        \EndIf
+                      \item[]
+                      \ElsIf{$\c{arr}[i] = 0$}
+                        \State Append $0$ to \c{result}
+                      \EndIf
+
+                      \item[]
+                      \State $i \gets i + 1$
+                      \Comment{Move on to the next bit}
+                  \EndWhile
+                  
+                  \item[]
+                  \State \Return \c{result}
+              \EndProcedure
+          \end{algorithmic}
+\end{enumerate}
+
+\pagebreak
+
+\section{Error Detection - CRCs}
+
+\begin{enumerate}[label=\Alph*.]
+    \item The two errors are these:
+          \begin{enumerate}[label=\arabic*.]
+              \item There's an indexing error in the for loop.
+                    It should stop when $\c{i} < \c{input\_len}$,
+                    not when $\c{i} \le \c{input\_len}$.
+
+              \item The dividend is wrong.
+                    It should be the input left-shifted by $3$ bits, not the input as is.
+          \end{enumerate}
+
+    \item We want to find the mod-2 remainder when \c{110010000} is divided by \c{1001}.
+
+          I'll just go through the bits one by one and XOR when necessary.
+          New lines indicate when a XOR has occurred.
+          \begin{align*}
+                    & \c{1} \to \c{11} \to \c{110} \to \c{1100} \\
+              \to{} & \c{101} \to \c{1011}                      \\
+              \to{} & \c{10} \to \c{100} \to \c{1000}           \\
+              \to{} & \c{1} \to \c{10} \to \c{100}
+          \end{align*}
+          So our overall remainder is \boxed{\c{100}}.
+
+    \item This code is usually run in the physical layer and thus very close to the hardware.
+          Thus, ChatGPT chose C, the most popular hardware-adjacent language.
+
+    \item The raw bitstring \c{1011011} must be divisible by \c{1001} for things to work out.
+
+          We do the division and see if it all checks out:
+          \begin{align*}
+                  & \c{1} \to \c{10} \to \c{101} \to \c{1011} \\
+              \to & \c{10} \to \c{100} \to \c{1001}           \\
+              \to & \c{0} \to \c{01} = \c{1}
+          \end{align*}
+          The remainder is nonzero, so an error is detected.
+
+    \item Even though the client might not detect any errors, this doesn't mean
+          no corruption occurred.
+          This is fine, though, as the chance of random errors still preserving
+          the divisiblity is next to nothing.
+
+    \item The longer a CRC generator is, the better it is at detecting burst errors.
+          However, it also means we have to send more bits over the wire,
+          so we can't just pick arbitrarily long generator polynomials.
+\end{enumerate}
+
+\pagebreak
+
+\section{Error Recovery}
+
+\begin{enumerate}[label=\Alph*.]
+    \item The \textbf{STATUS} packets are needed due to the following hypothetical situation:
+          \begin{itemize}
+              \item Sender has $5$ total packets to send.
+              \item The first $4$ packets are fine and are received in order.
+              \item The fifth and last packet is lost.
+              \item The receiver doesn't know anything, so no \textbf{NACK} is sent.
+              \item The sender also doesn't know anything, so the last one isn't retransmitted.
+          \end{itemize}
+
+    \item Suppose there do exist data packets that haven't been properly received yet.
+          Since the status timer is running, the sender will keep on sending \textbf{STATUS}
+          packets to check on the receiver.
+
+          Eventually, by the law of large numbers
+          one \textbf{STATUS} packet and one corresponding \textbf{NACK} packet will make it through.
+          This means that the sender will then retransmit the missing data packet.
+          If that one doesn't make it, the whole status thing does it all over again. $\square$
+
+    \item The timer must be stopped only when a \textbf{NACK} has been received
+          that acknowledges all the data that needed to be sent.
+
+          It must be started in the following scenarios:
+          \begin{itemize}
+              \item When the last \textbf{STATUS} packet was sent
+              \item When the last data packet was sent
+          \end{itemize}
+
+    \item Let the status timeout be $S$ in seconds and the one-way delay be $T$.
+
+          The worst case scenario is the following:
+          \begin{itemize}
+              \item Sender sends second packet and receiver transmits a \textbf{NACK} pack- $2T s$.
+              \item Sender retransmits first packet and starts status timer.
+              \item No other packets are lost, so it takes $S$ seconds for the status timer to go off.
+              \item Sender sends off a \textbf{STATUS} packet and gets a \textbf{NACK} back- $2T s$.
+          \end{itemize}
+          Assuming $S > T$ which I don't think is unreasonable,
+          this has a total latency of $\boxed{4T+S}$ seconds.
+\end{enumerate}
+
+\end{document}
