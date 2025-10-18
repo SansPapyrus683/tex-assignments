@@ -1,0 +1,126 @@
+\documentclass[12pt]{article}
+
+\input{../kz}
+
+\rhead{ECE 133A}
+
+\newcommand{\norm}[1]{\left\lVert#1\right\rVert}
+\DeclareMathOperator{\std}{std}
+\DeclareMathOperator{\avg}{avg}
+\DeclareMathOperator{\Tr}{Tr}
+\newcommand{\R}{\mathbb{R}}
+\newcommand*{\vertbar}{\rule[-1ex]{0.5pt}{2.5ex}}
+\newcommand*{\horzbar}{\rule[.5ex]{2.5ex}{0.5pt}}
+
+\begin{document}
+
+\section{Exercise A4.15}
+
+The first set of equations with $p$ itself is just:
+\[\begin{bmatrix}
+        1      & t_1    & t_1^2  & \cdots & t_1^{n-1} \\
+        1      & t_2    & t_2^2  & \cdots & t_2^{n-1} \\
+        \vdots & \vdots & \vdots &        & \vdots    \\
+        1      & t_m    & t_m^2  & \cdots & t_m^{n-1}
+    \end{bmatrix}x = y\]
+
+For the second set, notice that $p'$ is also a polynomial:
+\[p'(x)=x_2+2x_3t+3x_4t^2+\cdots+(n-1)x_{n}t^{n-2}\]
+so we can represent that set as another matrix multiplication:
+\[\begin{bmatrix}
+        0      & 1      & 2t_1   & \cdots & (n-1)t_1^{n-2} \\
+        0      & 1      & 2t_2   & \cdots & (n-1)t_2^{n-2} \\
+        \vdots & \vdots & \vdots &        & \vdots         \\
+        0      & 1      & 2t_m   & \cdots & (n-1)t_m^{n-2}
+    \end{bmatrix}x = s\]
+
+The two matrices above have the same width, so we can just stack
+them on top of each other and call it a day:
+\[\begin{bmatrix}
+        \text{the first one} \\
+        \text{the second one}
+    \end{bmatrix}x=\begin{bmatrix}
+        y \\
+        s
+    \end{bmatrix}\]
+
+\pagebreak
+
+\section{Exercise T8.11}
+
+\subsection{General System}
+
+Following the hint, we square the equations:
+\[\rho_i^2 = \norm{x-a_i}^2 = x^Tx + a_i^Ta_i - 2x^Ta_i\]
+Subtracting the first equation from the others gives
+\begin{align*}
+    \rho_i^2-\rho_1^2
+     & = \left(x^Tx + a_i^Ta_i - 2x^Ta_i\right) - \left(x^Tx + a_1^Ta_1 - 2x^Ta_1\right) \\
+     & = \norm{a_i}^2 - \norm{a_1}^2 - 2x^T(a_i-a_1)
+\end{align*}
+and moving all the constant crap to the LHS gives us
+\[(a_1-a_i)x^T = \frac{1}{2}\left(\rho_i^2 - \rho_1^2 - \norm{a_i}^2 + \norm{a_1}^2\right)\]
+which we can stack all together into a linear system:
+\[\begin{bmatrix}
+        \horzbar & a_1 - a_2 & \horzbar \\
+        \horzbar & a_1 - a_3 & \horzbar \\
+        \horzbar & a_1 - a_4 & \horzbar
+    \end{bmatrix}x = \frac{1}{2}\begin{bmatrix}
+        \rho_2^2 - \rho_1^2 - \norm{a_2}^2 + \norm{a_1}^2 \\
+        \rho_3^2 - \rho_1^2 - \norm{a_3}^2 + \norm{a_1}^2 \\
+        \rho_4^2 - \rho_1^2 - \norm{a_4}^2 + \norm{a_1}^2
+    \end{bmatrix}\]
+
+\subsection{Specific Instance}
+
+Plugging in the numbers and using \texttt{np.linalg.solve} gives
+\[x \approx \begin{bmatrix}
+        0.6047 \\
+        0.4047 \\
+        -0.5035
+    \end{bmatrix}\]
+
+\pagebreak
+
+\section{Exercise A4.3}
+
+I mean, no other choice than to multiply it out...
+\begin{align*}
+        & \left(A+uv^T\right)\left(A^{-1}-\frac{1}{1+v^TA^{-1}u}A^{-1}uv^TA^{-1}\right) \\
+    ={} & \left(A+uv^T\right)\left(I-\frac{1}{1+v^TA^{-1}u}\left(A^{-1}uv^T\right)\right)A^{-1} \\
+    ={} & \left(A-\frac{1}{1+v^TA^{-1}u}AA^{-1}uv^T+uv^T-\frac{1}{1+v^TA^{-1}u}uv^TA^{-1}uv^T\right)A^{-1} \\
+    ={} & I-\frac{1}{1+v^TA^{-1}u}uv^TA^{-1}+uv^TA^{-1}-\frac{1}{1+v^TA^{-1}u}uv^TA^{-1}uv^TA^{-1} \\
+    ={} & I+\left(-\frac{I}{1+v^TA^{-1}u}+I-\frac{1}{1+v^TA^{-1}u}uv^TA^{-1}\right)uv^TA^{-1} \\
+    ={} & I+\left(\frac{v^TA^{-1}u}{1+v^TA^{-1}u}-\frac{1}{1+v^TA^{-1}u}uv^TA^{-1}\right)uv^TA^{-1} \\
+    ={} & I+\frac{1}{1+v^TA^{-1}u}\left(v^TA^{-1}uI-uv^TA^{-1}\right)uv^TA^{-1}
+\end{align*}
+Now it just STP that $\left(v^TA^{-1}uI-uv^TA^{-1}\right)uv^T=\mathbf{0}$,
+since that would make the entire RHS reduce to just $I$.
+
+That expression is true because
+\begin{align*}
+    & \left(v^TA^{-1}uI-uv^TA^{-1}\right)uv^T \\
+    ={} & v^TA^{-1}u \cdot uv^T-uv^TA^{-1}uv^T \\
+    ={} & v^TA^{-1}u \cdot uv^T-u(v^TA^{-1}u)v^T \\
+    ={} & v^TA^{-1}u \cdot uv^T - v^TA^{-1}u \cdot uv^T \\
+    ={} & \mathbf{0}\quad\square
+\end{align*}
+where the trick is to pinch the scalar out from the middle in the second term.
+
+\pagebreak
+
+\section{Exercise A4.18}
+
+Uh, yeah, just some equation chaining:
+\begin{align*}
+    & A^T=A^T \\
+    \implies{} & A^T=I \cdot A^T \\
+    \implies{} & A^T=(XA)^T A^T \\
+    \implies{} & A^T = A^TX^TA^T \\
+    \implies{} & A^T = A^T(AX)^T \\
+    \implies{} & A^T = A^TAX \\
+    \implies{} & (A^TA)^{-1}A^T = (A^TA)^{-1}(A^TA)X \\
+    \implies{} & A^\dagger = X\quad\square
+\end{align*}
+
+\end{document}
