@@ -16,6 +16,8 @@
 
 \section{Exercise A4.15}
 
+\subsection{Part A}
+
 The first set of equations with $p$ itself is just:
 \[\begin{bmatrix}
         1      & t_1    & t_1^2  & \cdots & t_1^{n-1} \\
@@ -43,6 +45,52 @@ them on top of each other and call it a day:
         y \\
         s
     \end{bmatrix}\]
+
+\pagebreak
+
+\subsection{Part B}
+
+It STP that the only solution to the above linear system when $y=s=\mathbf{0}$ is $x=\mathbf{0}$ as well.
+
+If the outputs are all $0$, then $p(t_i)=p'(t_i)=0$ for all $i=1, \cdots, m$.
+
+I propose that this implies $t_i$ is a double root for $p$.
+
+Suppose $t_i$ was just a single root, so we can set $p(x)=(x-t_i)h(x)$ where $h(t_i) \ne 0$.
+Then,
+\begin{align*}
+    p'(t_i)
+     & = h(t_i)+(t_i-t_i)h'(t_i) \\
+     & = h(t_i)                  \\
+     & \ne 0
+\end{align*}
+which is a contradiction.
+
+All the $t_i$s must occur at least twice in the factored version of $p$.
+However, the only way a polynomial of degree $n-1$ can have $n$ roots (including duplicates)
+is if it's $0$ \textit{everywhere},
+
+Thus, the only solution to the above system is
+$x=\mathbf{0}$ and our above matrix is nonsingular. $\square$.
+
+\subsection{Part C}
+
+Solving the system with \texttt{np.linalg.solve} gives
+\[x^T \approx \begin{bmatrix}
+        -2        &
+        0         &
+        134.735   &
+        -75.308   &
+        -1859.645 &
+        4962.037  &
+        -4696.586 &
+        1537.766
+    \end{bmatrix}\]
+and the plot of $p(x)$ looks like this:
+\begin{center}
+    \includegraphics[width=8cm]{img/hw3/poly}
+\end{center}
+Note the scale on the y-axis.
 
 \pagebreak
 
@@ -86,12 +134,12 @@ Plugging in the numbers and using \texttt{np.linalg.solve} gives
 
 I mean, no other choice than to multiply it out...
 \begin{align*}
-        & \left(A+uv^T\right)\left(A^{-1}-\frac{1}{1+v^TA^{-1}u}A^{-1}uv^TA^{-1}\right) \\
-    ={} & \left(A+uv^T\right)\left(I-\frac{1}{1+v^TA^{-1}u}\left(A^{-1}uv^T\right)\right)A^{-1} \\
+        & \left(A+uv^T\right)\left(A^{-1}-\frac{1}{1+v^TA^{-1}u}A^{-1}uv^TA^{-1}\right)                    \\
+    ={} & \left(A+uv^T\right)\left(I-\frac{1}{1+v^TA^{-1}u}\left(A^{-1}uv^T\right)\right)A^{-1}            \\
     ={} & \left(A-\frac{1}{1+v^TA^{-1}u}AA^{-1}uv^T+uv^T-\frac{1}{1+v^TA^{-1}u}uv^TA^{-1}uv^T\right)A^{-1} \\
-    ={} & I-\frac{1}{1+v^TA^{-1}u}uv^TA^{-1}+uv^TA^{-1}-\frac{1}{1+v^TA^{-1}u}uv^TA^{-1}uv^TA^{-1} \\
-    ={} & I+\left(-\frac{I}{1+v^TA^{-1}u}+I-\frac{1}{1+v^TA^{-1}u}uv^TA^{-1}\right)uv^TA^{-1} \\
-    ={} & I+\left(\frac{v^TA^{-1}u}{1+v^TA^{-1}u}-\frac{1}{1+v^TA^{-1}u}uv^TA^{-1}\right)uv^TA^{-1} \\
+    ={} & I-\frac{1}{1+v^TA^{-1}u}uv^TA^{-1}+uv^TA^{-1}-\frac{1}{1+v^TA^{-1}u}uv^TA^{-1}uv^TA^{-1}         \\
+    ={} & I+\left(-\frac{I}{1+v^TA^{-1}u}+I-\frac{1}{1+v^TA^{-1}u}uv^TA^{-1}\right)uv^TA^{-1}              \\
+    ={} & I+\left(\frac{v^TA^{-1}u}{1+v^TA^{-1}u}-\frac{1}{1+v^TA^{-1}u}uv^TA^{-1}\right)uv^TA^{-1}        \\
     ={} & I+\frac{1}{1+v^TA^{-1}u}\left(v^TA^{-1}uI-uv^TA^{-1}\right)uv^TA^{-1}
 \end{align*}
 Now it just STP that $\left(v^TA^{-1}uI-uv^TA^{-1}\right)uv^T=\mathbf{0}$,
@@ -99,9 +147,9 @@ since that would make the entire RHS reduce to just $I$.
 
 That expression is true because
 \begin{align*}
-    & \left(v^TA^{-1}uI-uv^TA^{-1}\right)uv^T \\
-    ={} & v^TA^{-1}u \cdot uv^T-uv^TA^{-1}uv^T \\
-    ={} & v^TA^{-1}u \cdot uv^T-u(v^TA^{-1}u)v^T \\
+        & \left(v^TA^{-1}uI-uv^TA^{-1}\right)uv^T       \\
+    ={} & v^TA^{-1}u \cdot uv^T-uv^TA^{-1}uv^T          \\
+    ={} & v^TA^{-1}u \cdot uv^T-u(v^TA^{-1}u)v^T        \\
     ={} & v^TA^{-1}u \cdot uv^T - v^TA^{-1}u \cdot uv^T \\
     ={} & \mathbf{0}\quad\square
 \end{align*}
@@ -113,12 +161,12 @@ where the trick is to pinch the scalar out from the middle in the second term.
 
 Uh, yeah, just some equation chaining:
 \begin{align*}
-    & A^T=A^T \\
-    \implies{} & A^T=I \cdot A^T \\
-    \implies{} & A^T=(XA)^T A^T \\
-    \implies{} & A^T = A^TX^TA^T \\
-    \implies{} & A^T = A^T(AX)^T \\
-    \implies{} & A^T = A^TAX \\
+               & A^T=A^T                             \\
+    \implies{} & A^T=I \cdot A^T                     \\
+    \implies{} & A^T=(XA)^T A^T                      \\
+    \implies{} & A^T = A^TX^TA^T                     \\
+    \implies{} & A^T = A^T(AX)^T                     \\
+    \implies{} & A^T = A^TAX                         \\
     \implies{} & (A^TA)^{-1}A^T = (A^TA)^{-1}(A^TA)X \\
     \implies{} & A^\dagger = X\quad\square
 \end{align*}
