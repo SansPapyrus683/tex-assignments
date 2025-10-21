@@ -1,0 +1,413 @@
+\documentclass[12pt]{article}
+
+\input{../kz}
+
+\rhead{ECE 231A}
+
+\newcommand{\ind}{\perp\!\!\!\!\perp} 
+\newcommand{\ceil}[1]{\left\lceil#1\right\rceil}
+\newcommand*{\ditto}{-''-}
+\newcommand{\N}{\mathbb{N}}
+\renewcommand{\c}{\texttt}
+\DeclareMathOperator{\E}{E}
+
+\begin{document}
+
+\section{Resources}
+
+I've used my own brain, posted slides/resources and a Discord chat with Kevin Zhao.
+
+\section{Additive Noise Channel}
+
+There's some casework to be done.
+
+If $a \notin \{-1, 1\}$ then the possible outputs for $0$ and $1$ are disjoint and $\boxed{C=1}$.
+
+If not, then WLOG consider $a=1$.
+If $X$ takes $0$ with probability $p$, then the output probabilities are as follows:
+\begin{itemize}
+    \item $Y=0$ with probability $\frac{p}{2}$
+    \item $Y=1$ with probability $\frac{p}{2}+\frac{1-p}{2}=\frac{1}{2}$
+    \item $Y=2$ with probability $\frac{1-p}{2}$.
+\end{itemize}
+Then, calculating the mutual information gives us
+\begin{align*}
+    I(X; Y)
+     & = H(Y) - H(Y \mid X)                                                                        \\
+     & = -\frac{1}{2}\log\frac{1}{2}-\frac{p}{2}\log\frac{p}{2}-\frac{1-p}{2}\log\frac{1-p}{2} - 1 \\
+     & = H(p)-\frac{1}{2}                                                                          \\
+     & \le \frac{1}{2}
+\end{align*}
+Setting $p=\frac{1}{2}$ achieves this upper bound of $\boxed{C=\frac{1}{2}}$.
+
+Notice that if $a=-1$, then it's the same thing with $0$ as the common value instead of $1$.
+
+\pagebreak
+
+\section{Inverse Erasure Channel}
+
+Letting $p_i$ be the chance that $X$ takes on $i$, we have
+\begin{align*}
+    H(Y \mid X)
+     & = p_1 \cdot 0 + p_2 \cdot 1 + p_3 \cdot 0 \\
+     & = p_2
+\end{align*}
+and thus
+\begin{align*}
+    I(X; Y)
+     & = H(Y) - H(Y \mid X) \\
+     & = H(Y) - p_2         \\
+     & \le 1 - p_2          \\
+     & \le \boxed{1}
+\end{align*}
+This upper bound is easily achieved by setting $p_2=0$
+(I don't think the values for $p_1$ and $p_3$ matter that much).
+
+\section{Cyclic Symmetry}\label{sec:cyclic}
+
+\subsection{Part A}
+
+We have
+\[P=\begin{bmatrix}
+        1-a & a & 0   \\
+        0   & a & 1-a
+    \end{bmatrix}\]
+where the columns correspond to $0$, $e$, and $1$ in that order.
+
+\subsection{Part B}
+
+The sets are
+\begin{align*}
+    S_1 = \left\{[1-a, 0]^T, [0, 1-a]^T\right\} &  & S_2 = \left\{[a, a]^T\right\}
+\end{align*}
+
+\pagebreak
+
+\subsection{Part C}
+
+Consider two distributions $x_1, \cdots, x_n$ and $x_1', \cdots, x_n'$
+where $x_i'=x_{i-1}'$ (where subtraction is done cyclically, you get the idea).
+
+It STP that these two distributions give us the same mutual information.
+
+First of all, notice that since all the rows are permutations of each other,
+\[H(Y \mid X) = \sum_{i=1}^{n} x_i H(\text{one row}) = H(\text{one row})\]
+and the same goes for $X'$.
+
+The resulting expression has no dependence on the pmf of the input distribution,
+so now all we have to show is that $H(Y)$ for the two are the same.
+
+Each $S_i$ corresponds to a nonempty set of output variables,
+so I'll show that the elements within each $S_i$ don't change on a shift.
+
+WLOG number the output alphabet within a single $S_i$ $y_1, \cdots, y_m$.
+Let $p$ be the function that indicates a symbol's probability under $X$
+and $p'$ be the same but for $X'$.
+
+Consider any output element $y_g$.
+Under $X$, the chance of it occuring is
+\[p(y_g)=\sum_{i=1}^{n} p(x_i)M_{ig}\]
+Now by our premise, there's a column (let's call it column $h$) that's a cyclic shift of $g$.
+
+Notice that since $M_{ig}=M_{(i-1)h}$,
+\begin{align*}
+    p'(y_h)
+     & =\sum_{i=1}^{n} p(x_i')M_{ih}         \\
+     & = \sum_{i=1}^{n} p(x_{i-1})M_{(i-1)h} \\
+     & = \sum_{i=1}^{n} P(x_i)M_{ig}         \\
+     & = p(y_g)
+\end{align*}
+so each $y_g$'s probability under the original distribution is equivalent to
+some $y_h$'s probability under the new distribution.
+
+Since this is basically a "shifting" of the set's values, the overall probabilities of each $S_i$
+and by extension $Y$ as a whole stay the same.
+Thus, their entropies and mutual information are the same as well. $\square$
+
+\pagebreak
+
+\section{Errors, Erasures, \& Symmetry}
+
+\subsection{Part A}
+
+The transition matrix is
+\[P=\begin{bmatrix}
+        1-\alpha-p & \alpha & p          \\
+        p          & \alpha & 1-\alpha-p
+    \end{bmatrix}\]
+
+\subsection{Part B}
+
+As this matrix satisfies the conditions laid out in \ref{sec:cyclic},
+the channel is indeed cyclically symmetric.
+
+\subsection{Part C}
+
+The only way this channel can be weakly symmetric is if
+\[1-\alpha-p+p = 2\alpha \implies \alpha=\frac{1}{3}\]
+
+\subsection{Part D}
+
+Since this channel is cyclically symmetric, we can use the uniform distribution.
+\begin{align*}
+    I(X; Y)
+     & = H(Y) - H(Y \mid X)                                                                                     \\
+     & = h_3\left(\frac{1-\alpha}{2}, \alpha, \frac{1-\alpha}{2}\right) - h_3\left(1-\alpha-p, \alpha, p\right) \\
+     & = -(1-\alpha)\log\frac{1-\alpha}{2}+p\log p+(1-\alpha-p)\log(1-\alpha-p)
+\end{align*}
+
+\subsection{Part E}
+
+If $\alpha=0$, it's the BSC and the capacity becomes
+\[-\log\frac{1}{2}+p\log p+(1-p)\log(1-p)=1-H(p)\]
+which is the same as what the slides derived.
+
+If $p=0$, it's the BEC.
+The capacity becomes $C=1-\alpha$, which is also consistent.
+
+\pagebreak
+
+\section{Symmetric Channel?}
+
+\subsection{Part A}
+
+A channel's weakly symmetric if all the rows of its transition matrix
+are permutations of each other and all the columns have the same sum.
+
+For this channel,
+\[P=\begin{bmatrix}
+        \frac{1}{2} & \frac{1}{4} & \frac{1}{4} & 0           \\
+        \frac{1}{2} & \frac{1}{4} & \frac{1}{4} & 0           \\
+        0           & \frac{1}{4} & \frac{1}{4} & \frac{1}{2} \\
+        0           & \frac{1}{4} & \frac{1}{4} & \frac{1}{2}
+    \end{bmatrix}\]
+The rows all have the same values, and all columns sum to $1$,
+so this channel is weakly symmetric.
+
+\subsection{Part B}
+
+No, the channel isn't cyclically symmetric.
+
+Consider $X=\left[\frac{1}{2}, \frac{1}{2}, 0, 0\right]$.
+
+Here, the PMF of $Y=\left[\frac{1}{2}, \frac{1}{4}, \frac{1}{4}, 0\right]$.
+
+Now, shifting $X$ to the right by one gives $X=\left[0, \frac{1}{2}, \frac{1}{2}, 0\right]$.
+
+In this case, the PMF is $Y=\left[\frac{1}{4}, \frac{1}{4}, \frac{1}{4}, \frac{1}{4}\right]$.
+
+\subsection{Part C}
+
+Since this channel is weakly symmetric, we can use the uniform distribution:
+\begin{align*}
+    I(X; Y)
+     & = H(Y) - H(Y \mid X)                                                                             \\
+     & = -4 \cdot \frac{1}{4}\log\frac{1}{4} - h_4\left(\frac{1}{2}, \frac{1}{4}, \frac{1}{4}, 0\right) \\
+     & = 2-\frac{3}{2}                                                                                  \\
+     & = \boxed{\frac{1}{2}}
+\end{align*}
+
+\pagebreak
+
+\section{Symmetric Channel Part II}
+
+\subsection{Part A}
+
+Here,
+\[P=\begin{bmatrix}
+        \frac{1}{2} & \frac{3}{8} & 0           & \frac{1}{8} \\
+        0           & \frac{1}{2} & \frac{3}{8} & \frac{1}{8} \\
+        \frac{3}{8} & 0           & \frac{1}{2} & \frac{1}{8}
+    \end{bmatrix}\]
+Since the first and last column sum to $\frac{7}{8}$ and $\frac{3}{8}$,
+this channel isn't weakly symmetric.
+
+\subsection{Part B}
+
+However, since the first three columns are cyclic shifts of $\left[\frac{1}{2}, 0, \frac{3}{8}\right]$
+and the last column is uniform.
+
+This, combined with that all the rows are permutations of each other,
+means that the conditions in \ref{sec:cyclic} are met and that
+this channel is cyclically symmetric.
+
+So regardless, we can use the uniform distribution:
+\begin{align*}
+    I(X; Y)
+     & = H(Y) - H(Y \mid X)                                                           \\
+     & = \boxed{h_4\left(\frac{7}{24}, \frac{7}{24}, \frac{7}{24}, \frac{1}{8}\right)
+        -h_4\left(\frac{1}{2}, \frac{3}{8}, 0, \frac{1}{8}\right)}
+\end{align*}
+
+\subsection{Part C}
+
+Since the rows are all permutations, $H(Y \mid X)$ is constant wrt $X$.
+
+It remains to find an upper bound for $H(Y)$.
+If we let the PMF for $X$ be $[a, b, c]$, then
+\begin{align*}
+    H(Y)
+     & = h_4\left(\frac{a}{2}+\frac{3c}{8}, \frac{3a}{8}+\frac{b}{2}, \frac{3b}{8}+\frac{c}{2}, \frac{a+b+c}{8}\right) \\
+     & = h_4\left(\frac{a}{2}+\frac{3c}{8}, \frac{3a}{8}+\frac{b}{2}, \frac{3b}{8}+\frac{c}{2}, \frac{1}{8}\right)     \\
+     & \le h_4\left(\frac{7}{24}, \frac{7}{24}, \frac{7}{24}, \frac{1}{8}\right)
+\end{align*}
+Since the last term is fixed, the best we can do is the uniformly distribute the remaining probability.
+
+From the previous part, we see that this upper bound of $H(Y)$ and by extension $C$
+is indeed achievable.
+
+\pagebreak
+
+\section{Joint Typicality}
+
+\subsection{Part A}
+
+By the joint AEP, the chance that $\left(x_1^n, y_1^n\right) \in A_\epsilon^{(n)}$ tends to $1$ as $n \to \infty$.
+
+\subsection{Part B}
+
+Since the subscripts are different, $x_1^n$ and $y_2^n$ are independent.
+
+Thus, using something of the joint AEP again gives us
+\[P\left(\left(x_1^n, y_2^n\right) \in A_\epsilon^{(n)}\right) \le 2^{-n(I(X; Y) - 3\epsilon)}\]
+
+\subsection{Part C}
+
+If $p=0.03113$, then $I(X; Y) = 1 - H(p) \approx 0.8$ and
+\[2^{-n(I(X; Y) - 3\epsilon)} \approx \boxed{8.899 \cdot 10^{-16}}\]
+
+\subsection{Part D}
+
+As $n \to \infty$, the exponent becomes arbitrarily large
+in the negative direction and the upper bound tends to \boxed{0}.
+
+\subsection{Part E}
+
+This upper bound on the probability of a sequence being in the typical set
+also serves as a lower bound on the chance of us confusing one message for another.
+
+\pagebreak
+
+\section{JT on a Channel with Two Outupts}
+
+\subsection{Part A}
+
+\subsubsection{Bounds of Interest}
+
+Lemme just derive some bounds first.
+
+We have these two by a process nearly identical to what was done in lecture:
+\begin{gather*}
+    \left|-\frac{1}{n}\log p(x^n) - H(X)\right| < \epsilon
+    \implies p(x^n) < 2^{-n(H(X)-\epsilon)} \\
+    \left|-\frac{1}{n}\log p(y^n, z^n) - H(Y, Z)\right| < \epsilon
+    \implies p(y^n, z^n) < 2^{-n(H(Y, Z)-\epsilon)}
+\end{gather*}
+And this one requires a bit more work but is similar to how the
+single-variable AEP works:
+\begin{align*}
+    \left|-\frac{1}{n}\log p(x^n, y^n, z^n) - H(X, Y, Z)\right| < \epsilon
+     & \implies p(x^n, y^n, z^n) > 2^{-n(H(X, Y, Z)+\epsilon)}             \\
+     & \implies \left|A_\epsilon^{(n)}\right| < 2^{n(H(X, Y, Z)+\epsilon)}
+\end{align*}
+
+\subsubsection{Actual UB}
+
+Let $X^n$ and $(Y^n, Z^n)$ be independent of each other.
+
+In that case,
+\begin{align*}
+    P\left((X^n, Y^n, Z^n) \in A_\epsilon^{(n)}\right)
+     & = \sum_{(x^n, y^n, z^n) \in A_\epsilon^{(n)}} p(x^n)p(y^n, z^n) \\
+     &< \left|A_\epsilon^{(n)}\right| 2^{-n(H(X)-\epsilon)} 2^{-n(H(Y, Z)-\epsilon)} \\
+     &< 2^{n(H(X, Y, Z)+\epsilon)} 2^{-n(H(X)-\epsilon)} 2^{-n(H(Y, Z)-\epsilon)} \\
+     &= 2^{-n(H(X)+H(Y,Z)-H(X,Y,Z)-3\epsilon)} \\
+     &= \boxed{2^{-n(I(X; Y, Z) - 3\epsilon)}}
+\end{align*}
+
+\subsection{Part B}
+
+Fix an $\epsilon > 0$.
+
+\subsubsection{Strategy}
+
+Like in lecture, let's select a set of random codes according to $P_i(x)$.
+In other words, the chance that we use the symbol $x_j$ to encode any letter
+for any specific message is $p_i(x_j)$.
+
+The receiver decodes a message as being number $i$ iff
+\begin{gather*}
+    (\text{codeword for $i$}, y^n, z^n) \in A_\epsilon^{(n)} \\
+    (\text{codeword for all $j \ne i$}, y^n, z^n) \notin A_\epsilon^{(n)}
+\end{gather*}
+
+\subsubsection{Proof This Works and I'm Not Schizo}
+
+Consider any rate $R < I(X; Y, Z)$.
+
+The expected error across all codes we randomly generate is
+\begin{align*}
+    \sum_{C} P(C) \cdot \text{expected err for $C$}
+    &= \sum_{C} P(C) \cdot \frac{1}{2^{nR}}\sum_{i=1}^{2^{nR}} \lambda_i \\
+    &= \frac{1}{2^{nR}} \sum_{C} \sum_{i=1}^{2^{nR}} P(C)\lambda_i \\
+    &= \frac{1}{2^{nR}} \sum_{i=1}^{2^{nR}} \sum_{C} P(C)\lambda_i \\
+    &= \sum_{C} P(C)\lambda_1 \\
+    &= \text{expected prob. of an err if we transmit $1$}
+\end{align*}
+
+Let's also define the following events:
+\[E_i = (X^n(i), Y^n, Z^n) \in A_\epsilon^{(n)}\quad i = 1, \cdots, 2^{nR}\]
+in other words, $E_i$ is the event that the received message
+is in the typical set assuming that $i$ was the transmitted message.
+
+The expected probability of an error is thus
+\begin{align*}
+    \E[\text{err} \mid 1]
+    &= P(E_1^C \cup E_2 \cup \cdots \cup E_{2^{nR}}) \\
+    &\le P(E_1^C) + \sum_{i=2}^{2^{nR}} P(E_i) \\
+    &\le \epsilon + \sum_{i=2}^{2^{nR}} 2^{-n(I(X; Y, Z) - 3\epsilon)}
+\end{align*}
+as long as we choose $n$ sufficiently large by the AEP.
+
+Since this is the expected error across all codes,
+there must be at least one code that has an average error probability
+less than this as well, thus proving that the rate is achievable. $\square$
+
+\pagebreak
+
+\section{All Codes are Good}
+
+\subsection{Markov's Inequality}
+
+ok this proof is for a continuous rv but, like, surely it's the same for discrete, right? :clueless:
+
+Let's just chain some inequalities:
+\begin{align*}
+    \E[X]
+     & = \int_{0}^{\infty} xp(x)\,dx                                            \\
+     & = \int_{0}^{\delta} xp(x)\,dx + \int_{\delta}^{\infty} xp(x)\,dx         \\
+     & \ge \int_{0}^{\delta} xp(x)\,dx + \int_{\delta}^{\infty} \delta p(x)\,dx \\
+     & \ge \int_{\delta}^{\infty} \delta p(x)\,dx                               \\
+     & = \delta \int_{\delta}^{\infty} p(x)\,dx                                 \\
+     & = \delta P(X \ge \delta)
+\end{align*}
+This gives us that $\delta P(X \ge \delta) \le \E[X]$,
+which when moving $\delta$ to the other side gives the desired inequality. $\square$
+
+\subsection{Implications for Channel Errors}
+
+The statement doesn't really define what "random" means, so I'm just gonna assume
+we randomly generate them the same way we did in lecture.
+
+Fix our error target $\delta > 0$.
+
+If $X$ is the average error rate of a randomly generated code, then
+$P(X \ge \delta)$ represents the probability that it exceeds the error target.
+
+$\E[X]$ is the expected average error across all codes, and in lecture
+we proved that we can make it arbitrarily small as the block length goes to infinity.
+
+Since $\E[X] \to 0$ and $\delta$ is fixed, then $P(X \ge \delta)$ is bounded above
+by some vanishing term according to Markov's inequality. $\square$
+
+\end{document}
