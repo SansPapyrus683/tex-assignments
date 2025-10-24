@@ -1,0 +1,334 @@
+\documentclass[12pt]{article}
+
+\input{../kz}
+
+\rhead{ECE 133A}
+
+\newcommand{\norm}[1]{\left\lVert#1\right\rVert}
+\DeclareMathOperator{\std}{std}
+\DeclareMathOperator{\avg}{avg}
+\DeclareMathOperator{\rms}{rms}
+\DeclareMathOperator{\Tr}{Tr}
+\DeclareMathOperator{\diag}{diag}
+\newcommand{\R}{\mathbb{R}}
+\newcommand*{\vertbar}{\rule[-1ex]{0.5pt}{2.5ex}}
+\newcommand*{\horzbar}{\rule[.5ex]{2.5ex}{0.5pt}}
+
+\begin{document}
+
+\section{Exercise A5.11}
+
+\subsection{Part A}
+
+The first $n-1$ rows just specify $A_{ii}x_i = b_i$, which is doable with just one computation.
+
+The only row that requires any real work is the last one, and since
+we already now the first $n-1$ elements of $b$, the last element is already
+pinned down and specified; we just have to calculate it:
+\[b_n = \frac{1}{A_{nn}}\sum_{i=1}^{n-1} A_{ni}b_i\]
+This computation that takes $O(n)$ time combined the the other variables
+that all together take $O(n)$ time as well makes the overall complexity still just \boxed{O(n)}.
+
+\subsection{Part B}
+
+Computing the inverse is equivalent to solving the equation for $e_1$ through $e_n$.
+
+The thing is, for all of these vectors, we know there can be at most \textit{one} nonzero
+element out of $b_1, \cdots, b_{n-1}$ by how the matrix is constructed.
+If we're solving for $e_1$, then it has to be $b_1$, and solving for $e_2$
+requires $b_2$ to be the nonzero one, so on and so forth.
+
+Thus, we can actually solve each equation here in a number of flops
+constant with respect to $n$, making the overall complexity of inverting $A$ \boxed{O(n)}.
+
+\pagebreak
+
+\section{Exercise A5.6}
+
+\subsection{Part A}
+
+Notice that
+\begin{gather*}
+    (DX)_{ij} = \sum_{k=1}^{n} D_{ik}X_{kj} = D_{ii}X_{ij} \\
+    (XD)_{ij} = \sum_{k=1}^{n} X_{ik}D_{kj} = X_{ij}D_{jj}
+\end{gather*}
+so really we just have to solve $n^2$ equations of the form
+\[X_{ij}D_{ii}+X_{ij}D_{jj}=B_{ij}\]
+which will always have a solution since the problem guarantees $D_{ii}+D_{jj} \ne 0$.
+
+Each of these equations takes constant time to solve, so
+the overall complexity of our algorithm is just \boxed{O(n^2)}.
+
+\pagebreak
+
+\subsection{Part B}
+
+If we focus our attention on the first column, we see that
+\begin{align*}
+    B_{i1}
+     & = \sum_{k=1}^{n} L_{ik}X_{k1}+\sum_{k=1}^{n} (L^T)_{k1}X_{ik} \\
+     & = \sum_{k=1}^{n} L_{ik}X_{k1}+\sum_{k=1}^{1} (L^T)_{k1}X_{ik} \\
+     & = \sum_{k=1}^{n} L_{ik}X_{k1} + L_{11}X_{i1}
+\end{align*}
+which then implies that
+\[b_1 = L x_1 + L_{11}x_1\]
+where $b_1$ and $x_1$ are the first columns for $B$ and $X$ respectively.
+
+Notice that since $L$ is triangular, this linear system for the first column of $X$
+and $B$ can be solved in $O(n^2)$ time.
+
+For the second column, we have something similar:
+\begin{align*}
+               & B_{i2} = \sum_{k=1}^{n} L_{ik}X_{k2} + \sum_{k=1}^{2} (L^T)_{k2}X_{ik} \\
+    \implies{} & b_2 = Lx_2 + L_{21}x_1 + L_{22}x_2                                     \\
+    \implies{} & b_2 - L_{21}x_1 = Lx_2 + L_{22}x_2
+\end{align*}
+From the previous step we already know what $x_1$ is, so
+we can move it to the LHS and solve for the RHS just like we did before
+since $L$ is still lower triangular.
+
+We do this all the way until $x_n$.
+At each step we do have to compute the LHS, which in the worst case takes $O(n^2)$ for each step.
+However, solving the triangular matrix equation also takes $O(n^2)$,
+so it doesn't really impact the overall complexity.
+
+In the end, we do an $O(n^2)$ computation $n$ times, once for each column of $X$,
+resulting in a final complexity of $\boxed{O(n^3)}$.
+
+\pagebreak
+
+\section{Exercise A6.3}
+
+\subsection{Part A}
+
+Since $S^T=-S$, $S+S^T=0$, and $x^T(S+S^T)x = 0$.
+Doing some equation manipulation gives
+\begin{align*}
+    0
+     & =x^T(S+S^T)x          \\
+     & = x^TSx + x^TS^Tx     \\
+     & = x^TSx + (Sx)^Tx     \\
+     & = x^TSx + (x^T(Sx))^T \\
+     & = x^TSx + x^TSx
+\end{align*}
+where the last step is true due to the output being a scalar.
+
+It should be pretty clear that $2x^TSx = 0 \implies x^TSx = 0$.
+
+Now as for the actual proof,
+\begin{align*}
+               & (I-S)x = \mathbf{0}        \\
+    \implies{} & x^T(I-S)x = \mathbf{0}     \\
+    \implies{} & x^TIx - x^TSx = \mathbf{0} \\
+    \implies{} & x^Tx = \mathbf{0}          \\
+    \implies{} & x = \mathbf{0}\quad\square
+\end{align*}
+
+\subsection{Part B}
+
+This is just some really scuffed algebra:
+\begin{align*}
+               & S-S^2 = (I-S)S                                      \\
+    \implies{} & (I-S)^{-1}S - (I-S)^{-1}S^2 = S                     \\
+    \implies{} & (I-S)^{-1}S(I-S) = S                                \\
+    \implies{} & (I-S)^{-1}S = S(I-S)^{-1}                           \\
+    \implies{} & (I-S)^{-1} + (I-S)^{-1}S = (I-S)^{-1} + S(I-S)^{-1} \\
+    \implies{} & (I-S)^{-1}(I+S) = (I+S)(I-S)^{-1}\quad\square
+\end{align*}
+
+\pagebreak
+
+\subsection{Part C}
+
+For convenience, sometimes I'll let $X=(I-S)^{-1}$.
+
+It STP that $AA^T=I$:
+\begin{align*}
+    AA^T
+     & = (I+S)X((I+S)X)^T                 \\
+     & = X(I+S)(X(I+S))^T                 \\
+     & = X(I+S)(I+S)^TX^T                 \\
+     & = X(I+S)(I-S)X^T                   \\
+     & = X(I-S)(I+S)X^T                   \\
+     & = (I+S)X^T                         \\
+     & = (I-S)^T\left((I-S)^T\right)^{-1} \\
+     & = I\quad\square
+\end{align*}
+
+\pagebreak
+
+\section{Exercise A6.9}
+
+\subsection{Part A}
+
+On the LHS, notice that putting $S$ on the right just rotates the rows to the left:
+\begin{align*}
+    (WS)_{ab}
+     & = \sum_{c=1}^{k} W_{ac}S_{cb} \\
+     & = \begin{cases}
+             W_{a(b+1)} & b < n \\
+             W_{a1}     & b = n
+         \end{cases}
+\end{align*}
+We see that each cell takes on the value of its right neighbor, with the
+cells at the end wrapping around to the beginning.
+With this being the case, doing the multiplication $k-1$ times will rotate
+each row in $W$ $k-1$ times as well.
+
+As fot the RHS, notice that multiplying a diagonal by a matrix
+does an elementwise multiplication of each column with the elements along the diagonal, so
+\begin{align*}
+    (\diag(We_k)W)_{ab}
+     & = \omega^{-(a-1)(b-1)}\omega^{-(a-1)(k-1)} \\
+     & = \omega^{-(a-1)(b+k-2)}
+\end{align*}
+Notice that when $k=2$, $(\diag(We_k)W)_{ab}=W_{a(b+1)}$, with the edge case
+of the last column turning into all $1$s since the exponent would become a multiple of $n$.
+For arbitrary $k$, the idea is that $(\diag(We_k)W)_{ab}=W_{a(b+k-1)}$ where $b+k-1$
+is calculated mod $n$.
+
+Regardless, these two operations are doing the same thing, which is circularly
+rotating each row to the left by $1$ for each increase in $k$. $\square$
+
+\pagebreak
+
+\subsection{Part B}
+
+If we expand out $S$ using the expression given, then
+\[T(a)=\begin{bmatrix}
+        \frac{1}{n}W^H\diag(We_1)Wa & \cdots & \frac{1}{n}W^H\diag(We_n)Wa
+    \end{bmatrix}\]
+where we can then strip out the common prefix to get
+\[T(a)=\frac{1}{n}W^H\begin{bmatrix}
+        \diag(We_1)Wa & \cdots & \diag(We_n)Wa
+    \end{bmatrix}\]
+It STP that the remaining matrix is equivalent to $\diag(Wa)W$.
+
+Fix a column $c$.
+On the $T(a)$ side, we have
+\begin{align*}
+    (\diag(We_c)Wa)_i
+     & = \sum_{k=1}^{n} (\diag(We_c)W)_{ik} a_k   \\
+     & = \sum_{k=1}^{n} \omega^{-(i-1)(k+c-2)}a_k
+\end{align*}
+and on the other (where $w_c$ represents the $c$th column of $w$)
+\begin{align*}
+    (\diag(Wa)w_c)_i
+     & = \diag(Wa)_{ii} W_{ic}                                           \\
+     & = \sum_{k=1}^{n} W_{ik}c_k \cdot W_{ic}                           \\
+     & = \sum_{k=1}^{n} \omega^{(i-1)(k-1)}c_k \cdot \omega^{(i-1)(c-1)} \\
+     & = \sum_{k=1}^{n} \omega^{(i-1)(c+k-2)}c_k                         \\
+     & = (\diag(We_c)Wa)_i\quad\square
+\end{align*}
+
+There's almost certainly a better way to do this, but hey, if it works, it works!
+
+\pagebreak
+
+\subsection{Part C}
+
+Expanding $T(a)x$ gives
+\[T(a)x = \frac{1}{n}W^H\diag(Wa)Wx\]
+We can first compute $Wx$ and $Wa$ using the FFT.
+
+All $\diag(Wa)Wx$ does is an elementwise product, so that can be computed in $O(n)$ time.
+
+After that, we have $\frac{1}{n}W^H \cdot \text{whatever vector that gives}$,
+which is an inverse DFT that can again be done with FFT.
+
+Overall, we have three linearithmic operations and one linear operation, so the total TC is just $O(n \log n)$.
+
+\subsection{Part D}
+
+We have
+\begin{align*}
+               & T(a)x = b                          \\
+    \implies{} & \frac{1}{n}W^H\diag(Wa)Wx = b      \\
+    \implies{} & \diag(Wa)Wx = Wb                   \\
+    \implies{} & Wx = \diag(Wa)^{-1}Wb              \\
+    \implies{} & x = \frac{1}{n}W^H\diag(Wa)^{-1}Wb
+\end{align*}
+The inverse of a diagonal matrix is the inverse of the elements along the diagonal,
+so we can invert $\diag(Wa)$ given $Wa$ in $O(n)$ time.
+
+With that in mind, we can compute the following in this order:
+\begin{itemize}
+    \item $Wb$ and $\diag(Wa)$ using the FFT in $O(n \log n)$
+    \item $\diag(Wa)^{-1}Wb$ in $O(n)$
+    \item $\frac{1}{n}W^H\left(\diag(Wa)^{-1}Wb\right)$ in $O(n \log n)$
+\end{itemize}
+
+An empirical comparison of the speed is in the attached Jupyter Notebook.
+
+\pagebreak
+
+\section{Exercise A6.25}
+
+\subsection{Part A}
+
+Let $q_i$ be the $i$th column of $Q$.
+
+Since $R_{11} q_1 = \mathbf{1}$ and $\norm{q_1} = 1$,
+\begin{align*}
+    \norm{R_{11}q_1}
+     & = R_{11}\norm{q_1} \\
+     & = R_{11}           \\
+     & = \sqrt{n}
+\end{align*}
+Solving for $n$ yields $n = \boxed{R_{11}^2}$.
+
+This also implies that $q_1 = \frac{1}{\sqrt{n}}\mathbf{1}$.
+
+\subsection{Part B}
+
+Letting $r_i$ be the $i$th column of $R$, we have
+\[a=\norm{Qr_1}=\norm{r_1}\]
+since matrices with orthonormal columns preserve norms.
+In a similar vein, $b=\norm{r_2}$.
+
+\subsection{Part C}
+
+From the second column,
+\begin{align*}
+               & R_{12}q_1 + R_{22}q_2 = a                         \\
+    \implies{} & R_{12}q_1^Tq_1 = \frac{1}{\sqrt{n}}\mathbf{1}^T a \\
+    \implies{} & \avg(a) = \boxed{\frac{R_{12}}{\sqrt{n}}}
+\end{align*}
+we can do something similar for the third column to see that $\avg(b) = \boxed{\frac{R_{13}}{\sqrt{n}}}$.
+
+\subsection{Part D}
+
+Given that we know the above quantities, $\std(a)$ (and by extension $\std(b)$) is just:
+\begin{align*}
+    \std(a)
+     & = \rms(a-\avg(a)\mathbf{1})                                                                     \\
+     & = \frac{1}{\sqrt{n}}\sqrt{(a-\avg(a)\mathbf{1})^T(a-\avg(a)\mathbf{1})}                                \\
+     & = \frac{1}{\sqrt{n}}\sqrt{\left(a^Ta - 2\avg(a)\mathbf{1}^Ta + \avg(a)^2\mathbf{1}^T\mathbf{1}\right)} \\
+     & = \frac{1}{\sqrt{n}}\sqrt{\norm{a}^2 - \avg(a)\mathbf{1}^Ta}                              \\
+     & = \boxed{\sqrt{\frac{\norm{a}^2-n\avg(a)^2}{n}}}
+\end{align*}
+
+\subsection{Part E}
+
+From class, we know that
+\begin{align*}
+    \rho_{ab}
+     & = \frac{1}{n}\sum_{i=1}^{n} \frac{a_i-\avg(a)}{\std(a)}\frac{b_i-\avg(b)}{\std(b)}                                                \\
+     & = \frac{1}{n\std(a)\std(b)}\sum_{i=1}^{n} (a_i-\avg(a))(b_i-\avg(b))                                                              \\
+     & = \frac{1}{n\std(a)\std(b)} (a-\avg(a)\mathbf{1})^T(b-\avg(b)\mathbf{1})                                                          \\
+     & = \frac{1}{n\std(a)\std(b)}\left(a^Tb - \avg(a)\mathbf{1}^Tb - \avg(b)\mathbf{1}^Ta + \avg(a)\avg(b)\mathbf{1}^T\mathbf{1}\right) \\
+     & = \frac{1}{n\std(a)\std(b)}\left(a^Tb - n\avg(a)\avg(b)\right)
+\end{align*}
+
+All of the quantities except for $a^Tb$ can be figured out from the previous parts.
+
+We get the dot product by using their expanded form in the QR:
+\begin{align*}
+    a^Tb
+     & = (R_{12}q_1+R_{22}q_2)^T(R_{13}q_1 + R_{23}q_2 + R_{33}q_3) \\
+     & = R_{12}R_{13}q_1^Tq_1 + R_{22}R_{23}q_2^Tq_2                \\
+     & = R_{12}R_{13}+R_{22}R_{23}
+\end{align*}
+Plugging this newfound term back into the above expression gives us $\rho$.
+
+\end{document}
