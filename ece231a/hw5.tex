@@ -1,0 +1,380 @@
+\documentclass[12pt]{article}
+
+\input{../kz}
+
+\rhead{ECE 231A}
+
+\newcommand{\ind}{\perp\!\!\!\!\perp} 
+\newcommand*{\ditto}{-''-}
+\newcommand{\N}{\mathbb{N}}
+\renewcommand{\c}{\texttt}
+\DeclareMathOperator{\E}{E}
+
+\begin{document}
+
+\section{Resources}
+
+I've used my own brain, posted slides/resources and a Discord chat with Kevin Zhao.
+
+\section{Fano's Without Conditioning}
+
+\subsection{Part A}
+
+Assuming that $p_1 \ge \frac{1}{m}$, the best way to choose the remaining elements
+is to set $p_i = \frac{1-p_1}{m-1}$.
+
+The entropy of this is then
+\begin{align*}
+    H(X)
+     & = -p_1 \log p_1 - (m-1) \cdot \frac{1-p_1}{m-1} \log\frac{1-p_1}{m-1} \\
+     & = -p_1 \log p_1 - (1-p_1) \log\frac{1-p_1}{m-1}                       \\
+     & = -p_1 \log p_1 - (1-p_1)\log(1-p_1) + (1-p_1)\log(m-1)               \\
+     & = H(p_1) + P_e\log(m-1)                                               \\
+     & < \boxed{H(P_e) + P_e\log m}
+\end{align*}
+
+\subsection{Part B}
+
+$P_e$ represents a binary outcome, so its entropy is at most $1$.
+
+Replacing $H(P_e)$ with that in the inequality gives
+\begin{align*}
+               & H(X) < 1 + P_e \log m       \\
+    \implies{} & H(X) - 1 < P_e \log m       \\
+    \implies{} & P_e > \frac{H(X)-1}{\log m}
+\end{align*}
+
+\pagebreak
+
+\section{Differential Entropy}
+
+I LOVE INTEGRALS
+
+\subsection{Part A}
+
+We have
+\begin{align*}
+    h(X)
+     & = -\int_{0}^{\infty} \lambda e^{-\lambda x} \cdot \ln\left(\lambda e^{-\lambda x}\right)\,dx                \\
+     & = -\int_{0}^{\infty} \lambda e^{-\lambda x} \cdot \left(-\lambda x + \ln \lambda\right)\,dx                 \\
+     & = \int_{0}^{\infty} \lambda^2 x e^{-\lambda x}\,dx-\int_{0}^{\infty} \lambda \ln \lambda e^{-\lambda x}\,dx \\
+     & = \int_{0}^{\infty} \lambda^2 x e^{-\lambda x}\,dx-\intval{-\ln \lambda e^{-\lambda x}}^\infty_0            \\
+     & = \intval{-e^{-\lambda x}(\lambda x + 1)}^\infty_0 - \ln \lambda                                            \\
+     & = \boxed{1 - \ln \lambda}
+\end{align*}
+where the left-hand integral was done using integration by parts.
+
+\subsection{Part B}
+
+This distribution is symmetric around $0$, so it suffices
+to calculate the entropy for positive $x$:
+\begin{align*}
+    h(X)
+     & = -\int_{0}^{\infty} \frac{1}{2} \lambda e^{-\lambda x} \cdot \ln\left(\frac{1}{2} \lambda e^{-\lambda x}\right)\,dx                      \\
+     & = -\frac{1}{2} \int_{0}^{\infty} \lambda e^{-\lambda x} \cdot \left(-\lambda x + \ln \frac{\lambda}{2}\right)\,dx                         \\
+     & = \frac{1}{2}\int_{0}^{\infty} \lambda^2 x e^{-\lambda x} - \frac{1}{2}\int_{0}^{\infty} \ln \frac{\lambda}{2} \lambda e^{-\lambda x}\,dx \\
+     & = \frac{1}{2} - \frac{1}{2}\ln \frac{\lambda}{2}
+\end{align*}
+Doubling this yields the answer of \boxed{1-\ln \frac{\lambda}{2}}.
+
+\subsection{Part C}
+
+The sum of $X_1$ and $X_2$ is also normal, with mean $\mu_1 + \mu_2$
+and variance $\sigma_1^2 + \sigma_2^2$.
+
+Thus, the differential entropy is
+\boxed{\frac{1}{2}\log\left(2\pi e \left(\sigma_1^2+\sigma_2^2\right)\right)}.
+
+\section{Exponential Channel}
+
+\subsection{Part A}
+
+Let $p$ be the chance that $X=0$.
+
+Then, surely we just combine the two:
+\[f_Y(y)=\begin{cases}
+        \frac{3pe^{-y}}{2}     & 0 \le y < \ln \frac{3}{2}     \\
+        \frac{3e^{-y}}{2}      & \ln \frac{3}{2} \le y < \ln 3 \\
+        \frac{3(1-p)e^{-y}}{2} & \ln 3 \le y                   \\
+        0                      & \text{otherwise}
+    \end{cases}\]
+
+And now to show that this integrates to $1$:
+\begin{align*}
+        & \int_{0}^{\infty} f_Y(y)\,dy                     \\
+    ={} & \int_{0}^{\ln 3/2} \frac{3pe^{-y}}{2}\,dy
+    + \int_{\ln 3/2}^{\ln 3} \frac{3e^{-y}}{2}\,dy
+    + \int_{\ln 3}^{\infty} \frac{3(1-p)e^{-y}}{2}\,dy     \\
+    ={} & \intval{-\frac{3pe^{-y}}{2}}^{\ln 3/2}_0
+    + \intval{-\frac{3e^{-y}}{2}}^{\ln 3}_{\ln 3/2}
+    + \intval{-\frac{3(1-p)e^{-y}}{2}}^{\infty}_{\ln 3}    \\
+    ={} & \left(\frac{3p}{2}-\frac{3p \cdot 2/3}{2}\right)
+    + \left(\frac{3 \cdot 2/3}{2}-\frac{3 \cdot 1/3}{2}\right)
+    + \frac{3(1-p) \cdot \frac{1}{3}}{2}                   \\
+    ={} & \frac{p}{2} + \frac{1}{2} + \frac{1-p}{2}        \\
+    ={} & 1
+\end{align*}
+Incredible, I'm the goat.
+
+\subsection{Part B}
+
+For the sake of consistency I'm going to use the natural log here:
+\[H(X)=\ln 2 \approx 0.693\]
+
+\pagebreak
+
+\subsection{Part C}
+
+\subsubsection{Case 1: \texorpdfstring{$0 \le y \le \ln \frac{3}{2}$}{0 <= y <= ln 3/2}}
+
+$X$ is always going to be $0$ in this case, so $H(X)=0$.
+
+\subsubsection{Case 2: \texorpdfstring{$\ln \frac{3}{2} \le y \le \ln 3$}{ln 3/2 <= y <= ln 3}}
+
+This is the only case that's interesting.
+
+The chance that $X$ is $0$ is
+\[\frac{\frac{3pe^{-y}}{2}}{\frac{3pe^{-y}}{2}+\frac{3(1-p)e^{-y}}{2}} = \frac{3pe^{-y}}{3e^{-y}} = p\]
+so in other words $H(X \mid Y = y)$ for $\ln \frac{3}{2} \le y \le \ln 3$ is just $H(X)$.
+
+\subsubsection{Case 3: \texorpdfstring{$\ln 3 <= y$}{ln 3 <= y}}
+
+$X$ is always going to be $1$ here, so $H(X)=0$.
+
+\subsection{Part D}
+
+We have
+\begin{align*}
+    P\left(\ln \frac{3}{2} \le Y \le \ln 3\right)
+     & = \int_{\ln 3/2}^{\ln 3} \frac{3e^{-y}}{2}\,dy \\
+     & = \frac{1}{2}
+\end{align*}
+and since the entropies in other regions are $0$, $H(X \mid Y) = \boxed{\frac{1}{2}H(X)}$.
+
+\subsection{Part E}\label{sec:4e}
+
+If $X=\left(\frac{1}{2}, \frac{1}{2}\right)$,
+\begin{align*}
+    I(X; Y)
+     & = H(X) - H(X \mid Y)   \\
+     & = \frac{\ln 2}{2}      \\
+     & \approx \boxed{0.3466}
+\end{align*}
+
+\subsection{Part F}
+
+Oh god.
+I'm assuming $X$ is still equally likely to go either way.
+
+Let's do the parts one by one:
+\begin{align*}
+    -\int_{0}^{\ln 3/2} \frac{3e^{-y}}{4} \ln \frac{3e^{-y}}{4}\,dy
+     & = \intval{\frac{3}{4}e^{-y}\left(\ln\frac{3e^{-y}}{4}-1\right)}^{\ln 3/2}_0 \\
+     & \approx 0.119
+\end{align*}
+
+The integral is evaluated similarly for the second one:
+\begin{align*}
+    -\int_{\ln 3/2}^{\ln 3} \frac{3e^{-y}}{2} \ln \frac{3e^{-y}}{2}\,dy
+     & = \intval{\frac{3}{2}e^{-y}\left(\ln\frac{3e^{-y}}{2}-1\right)}^{\ln 3}_{\ln 3/2} \\
+     &\approx 0.153
+\end{align*}
+
+and the third one:
+\begin{align*}
+    -\int_{\infty}^{\ln 3} \frac{3e^{-y}}{4} \ln \frac{3e^{-y}}{4}\,dy
+     & = \intval{\frac{3}{4}e^{-y}\left(\ln\frac{3e^{-y}}{4}-1\right)}^{\infty}_{\ln 3} \\
+     & \approx 0.597
+\end{align*}
+
+Adding these three together should get us the answer of
+\[0.119+0.153+0.597=\boxed{0.869}\]
+
+\pagebreak
+
+\subsection{Part G}
+
+There's two integrals we have evaluate to:
+\begin{align*}
+    h(Y \mid X = 0)
+     & = -\int_{0}^{\ln 3} \frac{3e^{-y}}{2} \ln \frac{3e^{-y}}{2}\,dy        \\
+     & = 1-\ln\frac{3}{2}+\frac{\ln 3}{2}                                     \\
+     & \approx 0.0452                                                         \\
+    h(Y \mid X = 1)
+     & = -\int_{\ln 3/2}^{\infty} \frac{3e^{-y}}{2} \ln \frac{3e^{-y}}{2}\,dy \\
+     & = 1
+\end{align*}
+
+The weighted sum of these two is then
+\[h(Y \mid X) \approx \frac{0.0452+1}{2} = \boxed{0.5226}\]
+
+\subsection{Part H}
+
+Using the formula with $h(Y)$ and $h(Y \mid X)$ instead gives
+\begin{align*}
+    I(X; Y)
+     & = h(Y) - h(Y \mid X)    \\
+     & \approx 0.869 - 0.5226 \\
+     & = \boxed{0.3464}
+\end{align*}
+which is around the same thing as what we got in \ref{sec:4e}.
+
+\pagebreak
+
+\section{Conditional Entropy of a Product}
+
+\subsection{Part A}
+
+$aY$ scales the outcomes, but it doesn't change the underlying probability
+nor does it merge any two elements together since $a \ne 0$.
+Thus, $H(aY)=H(Y)$.
+
+\subsection{Part B}
+
+Using the result from the previous part gives
+\begin{align*}
+    H(XY \mid X)
+     & = \sum_{x \in X} p(X=x)H(XY \mid X = x) \\
+     & = \sum_{x \in X} p(X=x)H(Y)             \\
+     & = \boxed{H(Y)}
+\end{align*}
+
+\subsection{Part C}
+
+If $X$ is continuous,
+\begin{align*}
+    h(XY \mid X)
+    &= \int_{-\infty}^{\infty} f(x)h(XY \mid X=x) \\
+    &= \int_{-\infty}^{\infty} f(x)(h(Y \mid X=x)+\log |x|) \\
+    &= \int_{-\infty}^{\infty} f(x)h(Y \mid X=x) + f(x)\log |x| \\
+    &= \int_{-\infty}^{\infty} f(x)h(Y \mid X=x) + \int_{-\infty}^{\infty} f(x)\log |x| \\
+    &= \boxed{h(Y \mid X) + \E_X[\log |x|]}
+\end{align*}
+If $X$ is discrete, the expression turns out to be the same by means of a similar derivation.
+
+\pagebreak
+
+\section{Data Processing and Entropy}
+
+\subsection{Part A}
+
+We have both
+\begin{align*}
+    H(g(X), X)
+     & = H(g(X))+H(X \mid g(X)) \\
+     & = H(X)+H(g(X) \mid X)
+\end{align*}
+Since $H(g(X) \mid X) = 0$ and entropy is nonnegative, $H(X) \ge H(g(X))$. $\square$
+
+\subsection{Part B}
+
+If $g(x)=2x$, then $h(g(X))=h(X)+\log 2 > h(X)$.
+
+\subsection{Part C}
+
+Let the \textbf{floor distance} of $x$ be $x-\floor{x}$ and the PDF of $X$ be $f$.
+
+Notice that all numbers whose floor distance is in $[0, 0.5]$ get mapped to $[0, 0.5]$ themselves,
+and those whose distance is in $(0.5, 1)$ get mapped to $(-0.5, 0)$.
+
+From this, we can see that the PDF of $g(X)$ (call it $g'$) is:
+\[g'(x)=\sum_{i=-\infty}^{\infty} f(x+i)\label{eq:1}\]
+for $x \in (-0.5, 0.5]$.
+
+We have
+\begin{align*}
+    h(g(X))
+     & = -\int_{-.5}^{.5} g'(x)\log g'(x) \,dx                                                                                \\
+     & = -\int_{-.5}^{.5} \left(\sum_{i=-\infty}^{\infty} f(x+i)\right)\left(\log \sum_{i=-\infty}^{\infty} f(x+i)\right)\,dx \\
+     & \le -\int_{-.5}^{.5} \sum_{i=-\infty}^{\infty} f(x+i)\log f(x+i)\,dx                                                   \\
+     & = -\sum_{i=-\infty}^{\infty} \int_{-.5}^{.5} f(x+i)\log f(x+i)\,dx                                                     \\
+     & = -\int_{-\infty}^{\infty} f(x)\log f(x)\,dx                                                                           \\
+     & = h(X)
+\end{align*}
+
+\section{More Modulo Mischief}
+
+\subsection{Part A}
+
+Just some algebra:
+\begin{align*}
+    (a+b)\log(a+b)
+     & = a\log(a+b)+b\log(a+b)             \\
+     & \ge a \log a + b \log b\quad\square
+\end{align*}
+
+\subsection{Part B}
+
+If $f$ is a PDF, then it's nonnegative for all $x$.
+
+The proof is by induction(?) on the number of $i$ we consider.
+The base case is pretty simple- consider just the set $\{0\}$:
+\[f(x)\log f(x) \le f(x)\log f(x)\]
+
+Now assume truth for all finite sets $S$.
+Adding another element $j$ into it gives
+\begin{align*}
+          & f(x+j) \log f(x+j) + \sum_{i \in S} f(x+i) \log f(x+i)                                         \\
+    \le{} & f(x+j) \log f(x+j) + \left(\sum_{i \in S} f(x+i)\right)\log \left(\sum_{i \in S} f(x+i)\right) \\
+    \le{} & \left(\sum_{i \in S \cup \{j\}} f(x+i)\right)\log\left(\sum_{i \in S \cup \{j\}} f(x+i)\right)
+\end{align*}
+so the inequality still holds.
+
+Assuming the summation converges, we can add more $j$s until we get all the integers. $\square$
+
+\subsection{Part C}
+
+We just, uh:
+\begin{align*}
+        & (a+b)\log(a+b)+a\log\frac{a}{a+b}+b\log\frac{b}{a+b}                                \\
+    ={} & a\left(\log(a+b)+\log\frac{a}{a+b}\right)+b\left(\log(a+b)+\log\frac{b}{a+b}\right) \\
+    ={} & a\log a + b \log b\quad\square
+\end{align*}
+
+\subsection{Part D}
+
+Recall that we defined $g'(x)$, the PDF of $Y$, in \eqref{eq:1}.
+
+We have
+\begin{align*}
+    h(X)
+     & = \int_{-\infty}^{\infty} f(x) \log f(x)\,dx                                                                         \\
+     & = \int_{-.5}^{.5} \sum_{i=-\infty}^{\infty} f(x+i)\log f(x+i)\,dx                                                    \\
+     & = \int_{-.5}^{.5} g'(x)\log g'(x) + \sum_{i=-\infty}^{\infty} f(x+i)\log\frac{f(x+i)}{g'(x)}\,dx                     \\
+     & = \int_{-.5}^{.5} g'(x)\log g'(x)\,dx + \int_{-.5}^{.5} \sum_{i=-\infty}^{\infty} f(x+i)\log\frac{f(x+i)}{g'(x)}\,dx \\
+     & = h(Y) + \int_{-.5}^{.5} \sum_{i=-\infty}^{\infty} f(x+i)\log\frac{f(x+i)}{g'(x)}\,dx                                \\
+     & = h(Y) + \int_{-.5}^{.5} g'(x) \sum_{i=-\infty}^{\infty} \frac{f(x+i)}{g'(x)}\log\frac{f(x+i)}{g'(x)}\,dx            \\
+     & = h(Y) + \E_Y\left[\sum_{i=-\infty}^{\infty} P(Z=z \mid Y=y)\right]                                                  \\
+     & = h(Y) + \E_Y[H(Z \mid Y = y)]                                                                                       \\
+     & = h(Y) + H(Z \mid Y)\quad\square
+\end{align*}
+
+\pagebreak
+
+\section{Mut. Info for a Mixed Distribution}
+
+\subsection{Part A}
+
+Same as in \ref{sec:4e}: $H(X)=\log 2$.
+
+\subsection{Part B}
+
+Since the outputs given an $X$ are mutually disjoint, $H(X \mid Y)=0$.
+
+\subsection{Part C}
+
+\begin{enumerate}[label=\roman*.]
+    \item $h(Y \mid X=0)=-\infty$, since the distribution is discrete.
+    \item $h(Y \mid X=1)=\log\left(\frac{3}{2}-\frac{1}{2}\right)=0$, since it's uniform.
+    \item $h(Y \mid X)=\frac{-\infty+0}{2}=-\infty$. (real analysis is crying and sobbing rn)
+\end{enumerate}
+
+\subsection{Part D}
+
+\[h(Y)=H(X)+h(Y \mid X)-H(X \mid Y)=-\infty\]
+
+\subsection{Part E}
+
+\[I(X;Y)=H(X)-H(X \mid Y)=\log 2\]
+
+\end{document}
