@@ -1,0 +1,146 @@
+\documentclass[12pt]{article}
+
+\input{../kz}
+
+\rhead{CS 118}
+
+\renewcommand{\c}{\texttt}
+
+\begin{document}
+
+\section{Bridging and Loops}
+
+\begin{enumerate}
+      \item Bridges can keep some cache of all the packets they've seen before.
+            If a duplicate packet is detected, a bridge just drops it.
+
+      \item Obviously this approach won't work if packets can be dropped and need to be transmitted
+            between different LANS.
+\end{enumerate}
+
+\section{IP Broadcast Storms; Bridges VS Routers}
+
+\begin{enumerate}
+      \item This is what happens:
+            \begin{itemize}
+                  \item D broadcasts an ARP request to the entire network.
+                        However, since this specifies the IP address (not the data link address),
+                        only A pays attention.
+                  \item A gives an ARP response.
+                  \item D now sends the packet to A's data link address.
+                        However, since this address was set to the broadcast address
+                        of all 1s, every node on the network gets the packet.
+            \end{itemize}
+
+      \item If the bridge is replaced by an IP router, then D shouldn't know A's MAC address;
+            all it should do is send to the IP router and let it to the rest of the work.
+
+            The IP router still gives the packet to everyone in A's network, but
+            at least D's network is spared.
+            This results in $T-M-1$ less endnodes that have to deal with
+            packets that weren't meant for them.
+\end{enumerate}
+
+\pagebreak
+
+\section{IP Forwarding; LMP w/ Tries}
+
+\begin{enumerate}
+      \item If a child is \c{NULL} I didn't draw it.
+            \begin{center}
+                  \includegraphics[width=10cm]{img/hw3/trie}
+            \end{center}
+
+            \pagebreak
+
+      \item Say our IP address went like \c{000}.
+            It would stop after going to the \c{0} child of \c{00},
+            since that's a null pointer.
+
+            However, it would then have to know what the longest prefix it matched was.
+            Just knowing the last node traversed wouldn't suffice, since \c{00}
+            doesn't corrspond with any entry in the forwarding table.
+
+            Thus, we need an \c{is\_end\_of\_prefix} field to keep track
+            of which nodes can be thought of as the "last matched entry".
+
+      \item When adding a prefix, we need future lookups to know that
+            this node is now a valid entry in the forwarding table.
+            To indicate this, we set \c{is\_end\_of\_prefix} to be $1$.
+
+      \item Well, there's many ways to implement it and with some
+            pointer magic we could have just kept track of the next hop + interface
+            instead of the actual last matching node.
+
+            An edge case that could be possible in multithreaded systems
+            is if the next hop of an entry changes during a walk.
+            If this is the case, then keeping track of the next hop and interface directly
+            wouldn't suffice as the values would then become outdated.
+
+      \item \c{extract\_destination\_ip} reads bytes $16$ through $19$ inclusive
+            and concatenates in big-endian order to recover the destination IP.
+
+            It looks in these indices because according to the IP spec
+            that's where the bytes of the destination IP are.
+            Nothing more to it, really
+
+      \item The code could probably include a default IP to forward things to
+            if no matching entry is found.
+            It should also perhaps check if the destination IP is in its own local network
+            and act accordingly if it is.
+\end{enumerate}
+
+\pagebreak
+
+\section{Modifying Routing to Avoid Fragmentation}
+
+\begin{enumerate}
+      \item The shortest path is
+      \[\c{R1} \to \c{R2} \to \c{R4} \to \c{R3} \to \c{P}\]
+      The largest packet size that can get through is \boxed{512} bytes.
+
+      \item Define the following functions:
+      \begin{itemize}
+            \item $d(a, b)$ is the distance from $a$ to $b$, and it's $\infty$ if the two aren't adjacent.
+            \item $m(a, b)$ is the max packet size from $a$ to $b$, and it's $-\infty$ if they aren't adjacent.
+      \end{itemize}
+      
+      The equation for \c{Distance} is
+      \[\c{Distance}(P, R) = \min_{N} (\c{Distance}(P, N) + d(R, N))\]
+      and for \c{MinMaxPacketSize} it's
+      \[\c{MinMaxPacketSize}(P, R) = \max_{N} \min(\c{MinMaxPacketSize}(P, N), m(R, N))\]
+
+      \pagebreak
+
+      \item The system takes $3$ time steps to converge.
+      
+      $t=1$:
+      \begin{center}
+            \includegraphics[width=13cm]{img/hw3/t1}
+      \end{center}
+
+      $t=2$:
+      \begin{center}
+            \includegraphics[width=13cm]{img/hw3/t2}
+      \end{center}
+
+      $t=3$:
+      \begin{center}
+            \includegraphics[width=13cm]{img/hw3/t3}
+      \end{center}
+
+      \item Assuming the connection fails at the start of $t=7$,
+      the system takes another $2$ time steps to converge.
+
+      $t=7$:
+      \begin{center}
+            \includegraphics[width=13cm]{img/hw3/t7}
+      \end{center}
+
+      $t=8$:
+      \begin{center}
+            \includegraphics[width=13cm]{img/hw3/t8}
+      \end{center}
+\end{enumerate}
+
+\end{document}
