@@ -1,0 +1,342 @@
+\documentclass[12pt]{article}
+
+\input{../kz}
+
+\rhead{ECE 133A}
+
+\newcommand{\norm}[1]{\left\lVert#1\right\rVert}
+\DeclareMathOperator{\std}{std}
+\DeclareMathOperator{\avg}{avg}
+\DeclareMathOperator{\rms}{rms}
+\DeclareMathOperator{\Tr}{Tr}
+\DeclareMathOperator{\diag}{diag}
+\newcommand{\R}{\mathbb{R}}
+\newcommand*{\vertbar}{\rule[-1ex]{0.5pt}{2.5ex}}
+\newcommand*{\horzbar}{\rule[.5ex]{2.5ex}{0.5pt}}
+
+\begin{document}
+
+\section{Exercise A8.3}
+
+We can rearrange the equation to get
+\[\alpha t_i + \beta = \ln\left(\frac{y_i}{1-y_i}\right)\]
+which is a linear transformation of $\alpha$ and $\beta$.
+Since $y_i \ne 0$, division by $0$ won't happen.
+
+Thus, the parameters for our least squares regression are
+\begin{align*}
+    A = \begin{bmatrix}
+            t & \mathbf{1}
+        \end{bmatrix}
+     &  &
+    b=\ln(y \oslash (1-y))
+\end{align*}
+where $\oslash$ denotes elementwise division.
+The variable is just the 2D vector $\begin{bmatrix}\alpha \\ \beta\end{bmatrix}$.
+
+A test of this formulation can be found in the attached Jupyter Notebook.
+
+\pagebreak
+
+\section{Exercise A8.6}
+
+\subsection{Part A}
+
+The term inside the summation can be "simplified" to
+\[(u_i-u_c)^2+(v_i-v_c)^2-R^2=(u_c^2+v_c^2-R^2)-2u_cu_i+u_i^2-2v_cv_i+v_i^2\]
+
+Thus, we can define this as a least squares with
+\begin{align*}
+    A=\begin{bmatrix}
+          -2u & -2v & \mathbf{1}
+      \end{bmatrix} &  &
+    b=-u^2-v^2              &  & x=\begin{bmatrix}u_c \\ v_c \\ w\end{bmatrix}
+\end{align*}
+where $u$ and $v$ are the vectors containing $u_i$ and $v_i$ respectively.
+
+\subsection{Part B}
+
+Let $w > u_c^2+v_c^2$.
+It suffices to show that there's a better value of $w$ given a $u_c$ and $v_c$.
+
+Then
+\begin{align*}
+    (u_i-u_c)^2+(v_i-v_c)^2-R^2
+     & = w-2u_cu_i+u_i^2-2v_cv_i+v_i^2           \\
+     & > u_c^2+v_c^2-2u_cu_i+u_i^2-2v_cv_i+v_i^2 \\
+     & = (u_c-u_i)^2+(v_c-v_i)^2                 \\
+     & \ge 0
+\end{align*}
+so across all things in the summation the term inside the parenthesis
+that's being squared is strictly positive.
+
+This means that by decreasing $w$ we can reduce the magnitude across
+all terms and by extension the norm of the residual, giving us a more optimal solution. $\square$
+
+Testing of this formulation can be found in the attached Jupyter Notebook.
+
+\section{Exercise T12.12}
+
+\subsection{Part A}
+
+Nothing a little equation manipulation can't do:
+\begin{align*}
+    \mathcal{D}(u)+\mathcal{D}(v)
+     & = \sum_{e=1}^{L} ((p_{i_e})_1-(p_{j_e})_1)^2+ \sum_{e=1}^{L} ((p_{i_e})_2-(p_{j_e})_2)^2 \\
+     & = \sum_{e=1}^{L} ((p_{i_e})_1-(p_{j_e})_1)^2 + ((p_{i_e})_2-(p_{j_e})_2)^2               \\
+     & = \sum_{e=1}^{L} \norm{p_{i_e}-p_{j_e}}^2\quad\square
+\end{align*}
+Notice how it doesn't matter which direction the edges go.
+
+\subsection{Part B}
+
+\subsubsection{Setup}
+
+Let $B_1$ be an $L \times N-K$ matrix with each row corresponding to an edge,
+and $c_1$ be a vector of length $L$ with corresponding entries.
+
+For each edge $(i_e, j_e)$, we define the rows like so:
+\begin{itemize}[nolistsep]
+    \item If $i_e$ and $j_e$ are both free nodes, then $(B_1)_{e(i_e)}=1$ and $(B_1)_{e(j_e)}=-1$.
+    \item If $i_e$ is free and $j_e$ is fixed, then $(B_1)_{e(i_e)}=1$ and $(c_1)_e=-(p_e)_1$.
+          We do a similar thing if it's vice versa.
+    \item If both are fixed, $(c_1)_e=(p_{i_e})_1-(p_{j_e})_1$.
+\end{itemize}
+Any entry that isn't mentioned is set to $0$.
+
+We also define $B_2 \in \R^{L \times N-K}$ and $c_2 \in \R^L$
+using a similar procedure, only using the second coordinates instead of the first.
+
+I propose that minimizing
+\begin{equation} \label{eq:1}
+    \norm{\begin{bmatrix}B_1 & 0 \\ 0 & B_2\end{bmatrix}x-\begin{bmatrix}c_1 \\ c_2\end{bmatrix}}
+\end{equation}
+solves the problem.
+
+\subsubsection{Proof This Works and I'm Not Crazy}
+
+To do this, I'll first show that $\norm{B_1u-c_1}^2=\mathcal{D}(u)$.
+
+Let the resulting vector be $r \in \R^L$.
+
+Each edge $(i_e, j_e)$ can be done separately and according to the cases I've laid out before:
+\begin{itemize}[nolistsep]
+    \item If $i_e$ and $j_e$ are both fixed, $r_e=1 \cdot (p_{i_e})_1 - 1 \cdot (p_{j_e})_1=(p_{i_e})_1 - (p_{j_e})_1$.
+    \item If $i_e$ is free and $j_e$ is fixed, $r_e=1 \cdot (p_{i_e})_1 -(c_1)_e=(p_{i_e})_1 - (p_{j_e})_1$.
+          The reversed case is basically identical.
+    \item If both are fixed, the formula is just $-(c_1)_e$.
+\end{itemize}
+
+The square of all of these components are $((p_{i_e})_1 - (p_{j_e})_1)^2$,
+which when summed is the same as $\mathcal{D}(u)$.
+
+For the same reasons, $\norm{B_2v-c_2}^2=\mathcal{D}(v)$.
+
+Since \ref{eq:1} takes the norm of the \textit{concatenated} vectors,
+not their sum, it is equivalent to $\mathcal{D}(u)+\mathcal{D}(v)$, which is
+precisely what we're trying to minimize. $\square$
+
+\subsection{Part C}
+
+The best coordinates for the first $6$ points are:
+\[\begin{bmatrix}
+        0.355 & 0.348 \\
+        0.531 & 0.799 \\
+        0.513 & 0.564 \\
+        0.553 & 0.48  \\
+        0.612 & 0.63  \\
+        0.791 & 0.527
+    \end{bmatrix}\]
+and when plotted the graph looks like this:
+\begin{center}
+    \includegraphics[width=10cm]{img/hw5/placement}
+\end{center}
+
+\section{Exercise A8.11}
+
+\subsection{Part A}
+
+Fully expanded, the normal equation is
+\[\begin{bmatrix}
+        1 & 10^{-k} & 0       \\
+        1 & 0       & 10^{-k}
+    \end{bmatrix}\begin{bmatrix}
+        1       & 1       \\
+        10^{-k} & 0       \\
+        0       & 10^{-k}
+    \end{bmatrix}x=\begin{bmatrix}
+        1 & 10^{-k} & 0       \\
+        1 & 0       & 10^{-k}
+    \end{bmatrix}\begin{bmatrix}
+        -10^{-k} \\ 1+10^{-k} \\ 1-10^{-k}
+    \end{bmatrix}\]
+which simplifies to the linear system
+\[\begin{bmatrix}
+        1+10^{-2k} & 1          \\
+        1          & 1+10^{-2k}
+    \end{bmatrix}x=\begin{bmatrix}
+        10^{-2k} \\ -10^{-2k}
+    \end{bmatrix}\]
+
+Solving this analytically gives \boxed{x=\begin{bmatrix}1 \\ -1\end{bmatrix}}.
+
+\subsection{Part B}
+
+The results for $k=6$, $k=7$, and $k=8$ are as follows:
+\begin{align*}
+    \begin{bmatrix}
+        0.999999999860908 \\
+        -0.999999999860908
+    \end{bmatrix} &  &
+    \begin{bmatrix}
+        1.000000001838782 \\
+        -1.000000001838781
+    \end{bmatrix} &  &
+    \begin{bmatrix}
+        1.000000006592782 \\
+        -1.000000006592782
+    \end{bmatrix}
+\end{align*}
+I'm not sure how many decimal places are needed, so I just put
+all the decimals \texttt{format long} gave me.
+
+\subsection{Part C}
+
+If we calculate it with \texttt{(A' * A) \textbackslash\ (A' * b)}, the results are
+\begin{align*}
+    \begin{bmatrix}
+        0.999911107241502 \\
+        -0.999911107241502
+    \end{bmatrix} &  &
+    \begin{bmatrix}
+        1.000799917512465 \\
+        -1.000799917512465
+    \end{bmatrix} &  &
+    \begin{bmatrix}
+        \infty \\
+        -\infty
+    \end{bmatrix}
+\end{align*}
+Evidently, this method is more numerically unstable than the previous one.
+
+\pagebreak
+
+\section{Exercise A8.14}
+
+oh my god bruh
+
+\subsection{Part A}
+
+It suffices to show that the given solution satisfies the normal equation
+\[\begin{bmatrix}A & a\end{bmatrix}^T
+    \begin{bmatrix}
+        A & a
+    \end{bmatrix}
+    \begin{bmatrix}
+        \hat{y} \\ \hat{z}
+    \end{bmatrix}=\begin{bmatrix}A & a\end{bmatrix}^Tb\]
+which "simplifies" to
+\[\begin{bmatrix}
+        A^TA & A^Ta \\
+        a^TA & a^Ta
+    \end{bmatrix}\begin{bmatrix}
+        \hat{y} \\ \hat{z}
+    \end{bmatrix}=\begin{bmatrix}
+        A^T \\ a^T
+    \end{bmatrix}b\]
+
+Anyways, we can first multiply by $\begin{bmatrix}\hat{x} \\ 0\end{bmatrix}$:
+\[\begin{bmatrix}
+        A^TA & A^Ta \\
+        a^TA & a^Ta
+    \end{bmatrix}\begin{bmatrix}
+        \hat{x} \\ 0
+    \end{bmatrix}=\begin{bmatrix}
+        A^TA\hat{x}+0 \cdot A^TA \\
+        a^TA\hat{x}+0 \cdot a^Ta
+    \end{bmatrix}=\begin{bmatrix}
+        A^Tb \\
+        a^TA\hat{x}
+    \end{bmatrix}\]
+where the last step is because $\hat{x}$ satisfies the normal equation wrt $A$ and $b$.
+
+Then we multiply by $\begin{bmatrix}(A^TA)^{-1}A^Ta \\ -1\end{bmatrix}$:
+\begin{align*}
+    \begin{bmatrix}
+        A^TA & A^Ta \\
+        a^TA & a^Ta
+    \end{bmatrix}\begin{bmatrix}
+                     (A^TA)^{-1}A^Ta \\ -1
+                 \end{bmatrix}
+     & = \begin{bmatrix}
+             A^TA(A^TA)^{-1}A^Ta-A^Ta \\
+             a^TA(A^TA)^{-1}A^Ta-a^Ta
+         \end{bmatrix} \\
+     & = \begin{bmatrix}
+             A^Ta-A^Ta \\
+             a^T(A(A^TA)^{-1}A^Ta-a)
+         \end{bmatrix}   \\
+     & = \begin{bmatrix}
+             0 \\
+             a^T(A(A^TA)^{-1}A^T-I)a
+         \end{bmatrix}
+\end{align*}
+Putting that nasty scalar in front gives us
+\[-\frac{a^T(b-A\hat{x})}{a^T(I-A(A^TA)^{-1}A^T)a}\begin{bmatrix}
+        0 \\
+        a^T(A(A^TA)^{-1}A^T-I)a
+    \end{bmatrix}=\begin{bmatrix}
+        0 \\
+        a^T(b-A\hat{x})
+    \end{bmatrix}\]
+
+Adding these two gives
+\[\begin{bmatrix}
+    A^Tb \\ a^TA\hat{x}
+\end{bmatrix}+\begin{bmatrix}
+    0 \\ a^T(b-A\hat{x})
+\end{bmatrix}=\begin{bmatrix}
+    A^Tb \\ a^Tb
+\end{bmatrix}\]
+which is exactly what we want. $\square$
+
+\subsection{Part B}
+
+We first calculate $\hat{x}:$
+\begin{align*}
+    \hat{x}
+    &= (A^TA)^{-1}A^Tb \\
+    &= ((QR)^TQR)^{-1}(QR)^Tb \\
+    &= (R^TQ^TQR)^{-1}R^TQ^Tb \\
+    &= (R^TR)^{-1}R^TQ^Tb \\
+    &= R^{-1}R^{-T}R^TQ^Tb \\
+    &= R^{-1}Q^Tb
+\end{align*}
+so we just have to solve the linear system $R\hat{x}=Q^Tb$.
+
+Calculating $Q^Tb$ takes $m(2n-1)$ flops, and the back substitution for $R$ takes $n^2$ flops,
+giving us a total flop count of around \boxed{2mn+n^2} flops.
+
+To solve for $\hat{y}$ and $\hat{z}$, there's a couple things we need to solve.
+
+The element in the second matrix, $A^\dagger a$, can be computed in much the same way
+we did for $A^\dagger b$ in $2mn+n^2$ flops.
+
+The scalar in the numerator, $a^T(b-A\hat{x})$, doesn't need anything fancy.
+Doing all the muliplications through brute force takes around $2mn$ flops.
+
+Finally, the denominator can first be simplified like so:
+\begin{align*}
+     a^T(I-A(A^TA)^{-1}A^T)a
+     &= a^T(I-QR \cdot R^{-1}Q^T)a \\
+     &= a^T(I-QQ^T)a
+\end{align*}
+where $QQ^T$ a matrix that's all zeros except the first $n$ elements on the diagonal.
+
+This means that $(I-QQ^T)a$ is just the first $n$ elements of $a$,
+and we can compute the denominator in just $n$ flops.
+
+It doesn't cost too much to put these elements together, since it's all just elementwise stuff at this point.
+This gives us a flop count of (again) \boxed{2mn+n^2} to compute $\hat{y}$ and $\hat{z}$.
+
+\end{document}
