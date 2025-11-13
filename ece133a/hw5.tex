@@ -331,12 +331,10 @@ Finally, the denominator can first be simplified like so:
      &= a^T(I-QR \cdot R^{-1}Q^T)a \\
      &= a^T(I-QQ^T)a
 \end{align*}
-where $QQ^T$ a matrix that's all zeros except the first $n$ elements on the diagonal.
-
-This means that $(I-QQ^T)a$ is just the first $n$ elements of $a$,
-and we can compute the denominator in just $n$ flops.
+Here, we need around $m^2n$ flops to compute $(I-QQ^T)$, and about $m^2$ flops to calculate $a^T(I-QQ^T)a$
+by first doing the matrix-vector multiplication on the right.
 
 It doesn't cost too much to put these elements together, since it's all just elementwise stuff at this point.
-This gives us a flop count of (again) \boxed{2mn+n^2} to compute $\hat{y}$ and $\hat{z}$.
+This gives us a flop count of about \boxed{2mn+n^2+m^2(n+1)} to compute $\hat{y}$ and $\hat{z}$.
 
 \end{document}
