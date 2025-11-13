@@ -1,0 +1,358 @@
+\documentclass[12pt]{article}
+
+\input{../kz}
+
+\rhead{ECE 231A}
+
+\newcommand{\ind}{\perp\!\!\!\!\perp} 
+\newcommand*{\ditto}{-''-}
+\newcommand{\N}{\mathbb{N}}
+\newcommand{\R}{\mathbb{R}}
+\renewcommand{\c}{\texttt}
+\DeclareMathOperator{\E}{E}
+
+\begin{document}
+
+\section{Resources}
+
+I've used my own brain, posted slides/resources and a Discord chat with Kevin Zhao.
+
+\section{A Truncated Gaussian}
+
+\subsection{Part A}\label{sec:1a}
+
+Consider any PDF $g(x)$ s.t. $\E_g[X^2]=\sigma^2$.
+
+Then,
+\begin{align*}
+    0
+     & \le D(g \parallel \phi)                                                                                \\
+     & = \int g(x) \ln\frac{g(x)}{\phi(x)}\,dx                                                                \\
+     & = \int g(x)\ln g(x)\,dx - \int g(x)\ln \phi(x)\,dx                                                     \\
+     & = \int g(x)\ln g(x)\,dx + \int g(x)\left(\frac{1}{2}\ln(2\pi\sigma^2)+\frac{x^2}{2\sigma^2}\right)\,dx \\
+     & = -h(g) + \frac{1}{2}\ln(2\pi\sigma^2)+\int g(x)\frac{x^2}{2\sigma^2}\,dx                              \\
+     & = -h(g) + \frac{1}{2}\ln(2\pi\sigma^2)+\frac{\E_g[X^2]}{2\sigma^2}                                     \\
+     & = -h(g) + \frac{1}{2}\ln(2\pi\sigma^2)+\frac{1}{2}                                                     \\
+     & = -h(g) + h(\phi)
+\end{align*}
+This entire chain just says $0 \le -h(g)+h(\phi)$, which when rearranged gives $h(g) \le h(\phi)$. $\square$
+
+\subsection{Part B}
+
+I'm assuming we have the constraints that $\E[X^2] \le P$.
+
+We have
+\begin{align*}
+    I(X; Y)
+     & = h(Y) - h(Y \mid X) \\
+     & = h(Y) - h(Z \mid X) \\
+     & = h(Y) - h(Z)
+\end{align*}
+
+$h(Z)$ is constant w.r.t $X$, so it remains to maximize the differential entropy of $Y$.
+
+We can bound that value like so:
+\[h(Y)=\frac{1}{2}\log(2\pi e \cdot \E[Y^2])\]
+The only thing we can control in that expression is $\E[Y^2]$:
+\begin{align*}
+    \E[Y^2]
+     & = \E[X^2]+2\E[XZ]+\E[Z^2]     \\
+     & = \E[X^2]+2\E[X]\E[Z]+\E[Z^2] \\
+     & \le P + \sigma^2
+\end{align*}
+where the second equality is because $X \perp Z$.
+
+Notice that this bound is met with equality when $X$ is Gaussian,
+as the sum of $\mathcal{N}(0, P)$ and $\mathcal{N}(0, \sigma^2)$ is
+$\mathcal{N}(0, P+\sigma^2)$. $\square$
+
+\subsection{Part C}
+
+The proof of this is similar to \ref{sec:1a}.
+
+Consider any $g$ s.t. $g(x)=0\ \forall |x| > 1$ and $\E_g[x]=\sigma^2$:
+\begin{align*}
+    0
+    &\le D(g \parallel \tau) \\
+    &= \int_{-1}^{1} g(x)\ln\frac{g(x)}{\tau(x)}\,dx \\
+    &= \int_{-1}^{1} g(x)\ln g(x)\,dx - \int_{-1}^{1} g(x)\ln \tau(x)\,dx \\
+    &= -h(g) - \int_{-1}^{1} g(x)\left(\ln\frac{1}{K\sqrt{2\pi\gamma^2}}-\frac{x^2}{2\gamma^2}\right) \\
+    &= -h(g) - \int_{-1}^{1} \tau(x)\ln\tau(x)\,dx \\
+    &= -h(g) + h(\tau)
+\end{align*}
+Thus, $0 \le -h(g)+h(\tau) \implies h(g) \le h(\tau)$. $\square$
+
+\subsection{Part D}
+
+For the normal Gaussian channel, we relied on the fact that the sum of two
+normal distributions is another normal distribution.
+
+However, if we make $X$ a \textit{truncated} normal, we have no clue what
+the resulting distribution will be when we sum it with $Z$.
+At least that's what
+\href{https://math.stackexchange.com/q/831714/713952}{this Stack Exchange thread}
+told me.
+
+\section{Shaping Gain}
+
+Just some algebra and calc stuff:
+\begin{align*}
+    I(X_g; Y_g) - I(X_s; Y_s)
+     & = (h(Y_g) - h(Y_g \mid X_g)) - (h(Y_s) - h(Y_s \mid X_s)) \\
+     & = (h(Y_g) - h(Z \mid X_g)) - (h(Y_s) - h(Z \mid X_s))     \\
+     & = (h(Y_g) - h(Z)) - (h(Y_s) - h(Z))                       \\
+     & = h(Y_g) - h(Y_s)                                         \\
+     & = D(Y_s \parallel Y_g)
+\end{align*}
+
+The last equality is due to two things:
+\begin{enumerate}
+    \item $Y_s$ and $Y_g$ have the same variance,
+          as both input distributions have the same variance and are independent of $Z$.
+    \item As we saw in \ref{sec:1a}, the relative entropy between a distribution
+          and a Gaussian with the same variance is the same as the difference
+          of their entropies.
+\end{enumerate}
+
+\section{BSC vs. Gaussian}
+
+\subsection{Part A}
+
+\begin{center}
+    \includegraphics[width=10cm]{img/hw6/capacity}
+\end{center}
+
+\pagebreak
+
+\subsection{Part B}
+
+Let the quantizing process be a function $f: \R \to \left\{-\sqrt{P}, \sqrt{P}\right\}$.
+
+Since $X \to Y \to f(Y)$, $I(X; f(Y)) \le I(X; Y)$, so in other words the channel
+with binary PAM has a capacity that's at least that of the BSC.
+
+However, $I(X; Y) = H(X) - H(X \mid Y) \le 1$, which is the same asymptote of the BSC.
+
+\subsection{Part C}
+
+There's two lines, trust me.
+It's just that they're really, \textit{really} close together.
+
+\begin{center}
+    \includegraphics[width=10cm]{img/hw6/lb_ub}
+\end{center}
+
+\section{Shannon, Sensors, A/D Convertors}
+
+\subsection{Part A}
+
+As was mentioned in lecture, the capacity of this channel is
+\boxed{\frac{1}{2}\log\left(1+\frac{P}{N}\right)} bits per use.
+
+\subsection{Part B}
+
+For cts. time, the capacity is \boxed{W\log\left(1+\frac{P}{N_0W}\right)} bits per second.
+
+\subsection{Part C}
+
+We take the limit as $W \to \infty$:
+\begin{align*}
+    \lim_{W \to \infty} W\log\left(1+\frac{P}{N_0W}\right)
+     & = \lim_{W \to \infty} W\log e\ln\left(1+\frac{P}{N_0W}\right) \\
+     & = \lim_{W \to \infty} W\log e \cdot \frac{P}{N_0W}            \\
+     & = \log e\frac{P}{N_0}
+\end{align*}
+where the second equality is because $\ln(1+x)\approx x$ for small $x$.
+
+\subsection{Part D}
+
+To send one (1) bit at $\frac{1}{2}\log(1+P)$ bits per use takes \boxed{\frac{2P}{\log(1+P)} J}.
+
+\subsection{Part E}
+
+It takes $\frac{P}{W\log\left(1+\frac{P}{N_0W}\right)} J$ to send one bit over the cts. channel.
+The denominator monotonically increases with $W$, so the theoretical limit is $\boxed{\frac{N_0}{\log e} J}$.
+While this is more efficient energy-wise than the discrete channel,
+it's not achievable since we'll always have finite bandwidth IRL.
+
+\subsection{Part F}
+
+We have $P=3 W$ and $N_0=10^{-9} \frac{W}{Hz}$.
+
+Solving $\log\left(1+\frac{P}{N_0W}\right)= 1 \text{ bit}$ gives us $W=\boxed{3 \cdot 10^9\text{ Hz}}$.
+
+\section{Parallel Channels and Waterfilling}
+
+We need $\sigma_1^2-\sigma_2^2$ units of power before it starts to behave like a pair of channels.
+
+For any $P \le \sigma_1^2-\sigma_2^2$, the optimal power allocation is always going to
+be to just send everything down the second channel.
+
+Letting $v=\sigma_2^2+P$, we have
+\[(v-\sigma_1^2)^+ + (v-\sigma_2^2)^+ = 0+P = P\]
+which as we see, gives all power to the second channel.
+
+Now when $P > \sigma_1^2-\sigma_2^2$, we need to use both channels.
+
+Here, $v=\sigma_1^2+\frac{P-(\sigma_1^2-\sigma_2^2)}{2}$ and
+\begin{align*}
+    (v-\sigma_1^2)^+ + (v-\sigma_2^2)^+
+    &= \frac{P-(\sigma_1^2-\sigma_2^2)}{2} + \sigma_1^2 +  \frac{P-\sigma_1^2-\sigma_2^2}{2} \\
+    &= P
+\end{align*}
+In this case, both channels actually get used.
+
+\pagebreak
+
+\section{Split Ends}
+
+\subsection{Part A}
+
+I'm assuming we don't have to prove that $Z$ is a sufficient statistic. :clueless:
+
+In other words, $X \to Z \to Y$, which means $I(X; Z) \ge I(X; Y)$.
+Since $X \to Y \to Z$ as well, $I(X; Y) \ge I(X; Z) \implies I(X; Y) = I(X; Z)$.
+
+This means that it suffices to maximize $I(X; Z)$:
+\begin{align*}
+    I(X; Z)
+     & = H(X)-H(X \mid Z)              \\
+     & = H(X)-H(X \mid Z=b)P(Z=b)      \\
+     & = H(X)-\frac{1}{2}H(X \mid Z=b) \\
+     & = H(X)-\frac{1}{2}H(X)          \\
+     & = \frac{1}{2}H(X)
+\end{align*}
+This is maximized when $X$ is the uniform distribution,
+so the capacity is \boxed{\frac{1}{2}}.
+
+\subsection{Part B}
+
+NOOOO I THOUGHT WE WOULDN'T HAVE TO PROVE THAT
+
+It STP $P(Y \mid Z, X) = P(Y \mid Z)$.
+
+Let's start with $P(Y=0)$.
+
+The LHS simplifies like so:
+\begin{align*}
+    P(Y=0 \mid Z, X)
+     & = \int_{0}^{1} \sum_{z \in \{a, b, c\}} f(x)P(Z=z)P(Y=0 \mid X=x, Z=z) \,dx \\
+     & = \int_{0}^{1} f(x)\frac{p}{2} \cdot P(Y=0 \mid X=x, Z=a) \,dx              \\
+     & = \int_{0}^{1} f(x)\frac{p}{2} \cdot \frac{1}{2}\,dx                        \\
+     & = \frac{p}{4}
+\end{align*}
+while the RHS goes like this:
+\begin{align*}
+    P(Y=0 \mid Z)
+     & = \sum_{z \in \{a, b, c\}} P(Z=z)P(Y=0 \mid Z=z) \\
+     & = P(z=a)P(Y=0 \mid Z=a)                          \\
+     & = \frac{p}{2} \cdot \frac{1}{2}                  \\
+     & = \frac{p}{4}
+\end{align*}
+so the two are indeed the same.
+
+By symmetry, the same holds for $1$, $4$, and $5$.
+
+Now we move on to $P(Y=2)$, doing the LHS:
+\begin{align*}
+    P(Y=2 \mid Z, X)
+     & = \int_{0}^{1} \sum_{z \in \{a, b, c\}} f(x)P(Z=z)P(Y=2 \mid X=x, Z=z) \,dx \\
+     & = \int_{0}^{1} f(x)\frac{1}{2} \cdot P(Y=2 \mid X=x, Z=b) \,dx              \\
+     & = \int_{0}^{1} f(x)\frac{1}{2} \cdot \frac{1}{2}\,dx                        \\
+     & = \frac{1}{4}
+\end{align*}
+then the RHS
+\begin{align*}
+    P(Y=2 \mid Z)
+     & = \sum_{z \in \{a, b, c\}} P(Z=z)P(Y=2 \mid Z=z) \\
+     & = P(z=b)P(Y=2 \mid Z=a)                          \\
+     & = \frac{1}{2} \cdot \frac{1}{2}                  \\
+     & = \frac{1}{4}
+\end{align*}
+By symmetry this also applies to $p=3$.
+
+So yeah, the PMF of $P(Y \mid Z, X)$ is the same as that of $P(Y \mid Z)$. $\square$
+
+\section{Two Independent Looks At \texorpdfstring{$Y$}{Y}}
+
+\subsection{Part A}\label{sec:8a}
+
+We have
+\begin{align*}
+    I(X; Y_1, Y_2)
+     & = H(Y_1, Y_2) - H(Y_1, Y_2 \mid X)                    \\
+     & = H(Y_1, Y_2) - (H(Y_1 \mid X) + H(Y_2 \mid Y_1, X))  \\
+     & = H(Y_1, Y_2) - (H(Y_1 \mid X) + H(Y_2 \mid X))       \\
+     & = H(Y_1, Y_2) - 2H(Y_1 \mid X)                        \\
+     & = H(Y_1) + H(Y_1 \mid Y_2) - 2H(Y_1 \mid X)           \\
+     & = 2H(Y_1) - 2H(Y_1 \mid X) - H(Y_1) + H(Y_1 \mid Y_2) \\
+     & = 2I(X; Y_1) - I(Y_1; Y_2)\quad\square
+\end{align*}
+
+\subsection{Part B}
+
+The mutual info of the first channel is $I(X; Y_1, Y_2) = 2I(X; Y_1) - I(Y_1 \mid Y_2)$,
+while that of the second channel is $I(X; Y_1)$.
+
+Since mutual information is positive, the mutual information of the first channel
+and therefore the capacity will always be less than twice that of the second channel.
+
+\pagebreak
+
+\section{Mutual Information for Correlated Normals}
+
+Applying the formula for multivariate entropy from class gives us
+\begin{align*}
+    h(X, Y)
+     & = \frac{1}{2}\log\left((2\pi e)^2 \cdot \det\begin{bmatrix}
+                                                       \sigma^2     & \rho\sigma^2 \\
+                                                       \rho\sigma^2 & \sigma^2
+                                                   \end{bmatrix}\right) \\
+     & = \frac{1}{2}\log\left((2\pi e)^2 \cdot \sigma^4(1-\rho^2)\right)       \\
+     & = \log\left(2\pi e \sigma^2 \sqrt{1-p^2}\right)
+\end{align*}
+
+We also have $h(X)=h(Y)=\frac{1}{2}\log(2\pi e\sigma^2)$, so
+\begin{align*}
+    I(X; Y)
+     & = h(X)+h(Y)-h(X, Y)                                                     \\
+     & = \log(2\pi e \sigma^2) - \log\left(2\pi e \sigma \sqrt{1-p^2}\right)   \\
+     & = \log\left(\frac{2\pi e \sigma^2}{2\pi e \sigma^2 \sqrt{1-p^2}}\right) \\
+     & = \log\left(\frac{1}{\sqrt{1-p^2}}\right)                               \\
+     & = -\frac{1}{2}\log \sqrt{1-p^2}
+\end{align*}
+
+Here's the value of this expression for some special values of $\rho$:
+\begin{itemize}
+    \item At $\rho=-1$, $X=-Y$ and $I(X; Y)=\infty$ since knowing one tells us everything about the other
+          and the two are defined by PDFs, not PMFs.
+    \item At $\rho=0$, $X \perp Y$ and their mutual info is naturally $0$.
+    \item At $\rho=1$, $X=Y$ and $I(X; Y)=\infty$ in the same way as when $\rho=-1$.
+\end{itemize}
+
+\pagebreak
+
+\section{The Two-Look Gaussian Channel}
+
+\subsection{Part A}
+
+If $\rho=1$ then this is equivalent to a single channel with noise $N$.
+
+The capacity is thus $\frac{1}{2}\log\left(1+\frac{P}{N}\right)$.
+
+\subsection{Part B}
+
+If $\rho=0$, then sending $x$ gets us two independent samples of $\mathcal{N}(x, N)$.
+
+Since the average of two normal samples is also distributed normally,
+This is equivalent to having one sample with noise $\frac{N}{2}$.
+
+Thus, the capacity is $\frac{1}{2}\log\left(1+\frac{2P}{N}\right)$.
+
+\subsection{Part C}
+
+If $\rho=-1$, $Z_1=-Z_2$ and we can recover $x$ exactly by taking the average of $Y_1$ and $Y_2$.
+
+This is equivalent to a channel with $0$ noise which has infinite capacity.
+
+\end{document}
