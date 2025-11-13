@@ -96,51 +96,50 @@
 
 \begin{enumerate}
       \item The shortest path is
-      \[\c{R1} \to \c{R2} \to \c{R4} \to \c{R3} \to \c{P}\]
-      The largest packet size that can get through is \boxed{512} bytes.
+            \[\c{R1} \to \c{R2} \to \c{R4} \to \c{R3} \to \c{P}\]
+            The largest packet size that can get through is \boxed{512} bytes.
 
-      \item Define the following functions:
-      \begin{itemize}
-            \item $d(a, b)$ is the distance from $a$ to $b$, and it's $\infty$ if the two aren't adjacent.
-            \item $m(a, b)$ is the max packet size from $a$ to $b$, and it's $-\infty$ if they aren't adjacent.
-      \end{itemize}
-      
-      The equation for \c{Distance} is
-      \[\c{Distance}(P, R) = \min_{N} (\c{Distance}(P, N) + d(R, N))\]
-      and for \c{MinMaxPacketSize} it's
-      \[\c{MinMaxPacketSize}(P, R) = \max_{N} \min(\c{MinMaxPacketSize}(P, N), m(R, N))\]
+            For convenience, let $d(a, b)$ be the distance from $a$ to $b$.
+            It's $\infty$ if the two aren't adjacent.
 
-      \pagebreak
+            The equation for \c{Distance} is
+            \[\c{Distance}(P, R) = \min_{n \in N} (\c{Distance}(P, n) + d(R, n))\]
+            and for \c{MinMaxPacketSize} it's
+            \[\c{MinMaxPacketSize}(P, R) = \min_{n \in \c{Closest}(P, R)} \c{MinMaxPacketSize}(P, n)\]
+            where
+            \[\c{Closest}(P, R) = \{n \in N \mid \c{Distance}(P, n) + d(R, n) = \c{Distance}(P, R)\}\]
+
+            \pagebreak
 
       \item The system takes $3$ time steps to converge.
-      
-      $t=1$:
-      \begin{center}
-            \includegraphics[width=13cm]{img/hw3/t1}
-      \end{center}
 
-      $t=2$:
-      \begin{center}
-            \includegraphics[width=13cm]{img/hw3/t2}
-      \end{center}
+            $t=1$:
+            \begin{center}
+                  \includegraphics[width=11cm]{img/hw3/t1}
+            \end{center}
 
-      $t=3$:
-      \begin{center}
-            \includegraphics[width=13cm]{img/hw3/t3}
-      \end{center}
+            $t=2$:
+            \begin{center}
+                  \includegraphics[width=11cm]{img/hw3/t2}
+            \end{center}
+
+            $t=3$:
+            \begin{center}
+                  \includegraphics[width=11cm]{img/hw3/t3}
+            \end{center}
 
       \item Assuming the connection fails at the start of $t=7$,
-      the system takes another $2$ time steps to converge.
+            the system takes another $2$ time steps to converge.
 
-      $t=7$:
-      \begin{center}
-            \includegraphics[width=13cm]{img/hw3/t7}
-      \end{center}
+            $t=7$:
+            \begin{center}
+                  \includegraphics[width=13cm]{img/hw3/t7}
+            \end{center}
 
-      $t=8$:
-      \begin{center}
-            \includegraphics[width=13cm]{img/hw3/t8}
-      \end{center}
+            $t=8$:
+            \begin{center}
+                  \includegraphics[width=13cm]{img/hw3/t8}
+            \end{center}
 \end{enumerate}
 
 \end{document}
