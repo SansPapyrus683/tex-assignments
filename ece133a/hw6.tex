@@ -1,0 +1,133 @@
+\documentclass[12pt]{article}
+
+\input{../kz}
+
+\rhead{ECE 133A}
+
+\newcommand{\norm}[1]{\left\lVert#1\right\rVert}
+\DeclareMathOperator{\std}{std}
+\DeclareMathOperator{\avg}{avg}
+\DeclareMathOperator{\rms}{rms}
+\DeclareMathOperator{\Tr}{Tr}
+\DeclareMathOperator{\diag}{diag}
+\newcommand{\R}{\mathbb{R}}
+\newcommand{\wilde}{\widetilde}
+\newcommand*{\vertbar}{\rule[-1ex]{0.5pt}{2.5ex}}
+\newcommand*{\horzbar}{\rule[.5ex]{2.5ex}{0.5pt}}
+
+\begin{document}
+
+\section{Exercise A9.4}
+
+\subsection{Part A}
+
+\subsubsection{Manipulating the LHS}
+
+Let's first figure out what $T(X)^TT(X)$ is:
+\begin{align*}
+    T(X)^TT(X)
+    &= T(X)^HT(X) \\
+    &= \left(\frac{1}{n^2}\wilde{W}^H\diag(\wilde{W}x)\wilde{W}\right)^H\left(\frac{1}{n^2}\wilde{W}^H\diag(\wilde{W}x)\wilde{W}\right) \\
+    &= \frac{1}{n^4} \wilde{W}^H\diag(\wilde{W}x)^H\wilde{W} \cdot \wilde{W}^H\diag(\wilde{W}x)\wilde{W} \\
+    &= \frac{1}{n^2} \wilde{W}^H\diag(\wilde{W}x)^H\diag(\wilde{W}x)\wilde{W} \\
+    &= \frac{1}{n^2} \wilde{W}^H\diag\left(\wilde{W}x \odot (\wilde{W}x)^H\right)\wilde{W}
+\end{align*}
+where $x$ is the corresponding $n^2$-vector of $X$.
+
+We can calculate the middle matrix in $O(n^2 \log n)$ time by doing the following:
+\begin{enumerate}
+    \item Get $\wilde{W}x$ by applying the 2D FFT in $O(n^2 \log n)$.
+    \item Do an elementwise dot product with hitself and get $\diag(\cdots)$ in $O(n)$.
+\end{enumerate}
+
+Then, adding all three transpose products on the LHS gives us:
+\begin{align*}
+     & (A^TA + \lambda D_V^T D_V + \lambda D_H^T D_H)x \\
+    ={} & \frac{1}{n^2} \wilde{W}^H\diag\left(\wilde{W}b \odot \overline{\wilde{W}b} + \lambda\wilde{W}e \odot \overline{\wilde{W}e} + \lambda\wilde{W}t \odot \overline{\wilde{W}t}\right)\wilde{W}x
+\end{align*}
+where $e$ and $t$ are the vectorizations of $E$ and $E^T$ respectively.,
+
+From now on, I'll use $d$ to represent the vector inside the $\diag$ function from now on.
+
+\subsubsection{Manipulating the RHS}
+
+The RHS "simplifies" like so:
+\begin{align*}
+    A^Ty
+    &= T(B)^Hy \\
+    &= \left(\frac{1}{n^2}\wilde{W}^H\diag(\wilde{W}b)\wilde{W}\right)^Hy \\
+    &= \frac{1}{n^2} \wilde{W}^H\diag(\wilde{W}b)^H\wilde{W}y
+\end{align*}
+
+\subsubsection{Putting Them Together}
+
+We now have this equation to solve:
+\[\frac{1}{n^2}\wilde{W}^H\diag(d)\wilde{W}
+=\frac{1}{n^2} \wilde{W}^H\diag(\wilde{W}b)^H\wilde{W}y\]
+
+This can be simplified like so:
+\begin{align*}
+    & \frac{1}{n^2}\wilde{W}^H\diag(d)\wilde{W}x
+=\frac{1}{n^2} \wilde{W}^H\diag(\wilde{W}b)^H\wilde{W}y \\
+\implies{} & \diag(d)\wilde{W}x=\diag(\wilde{W}b)^H\wilde{W}y \\
+\implies{} & \wilde{W}x=\diag(1 \oslash d)\diag(\wilde{W}b)^H\wilde{W}y \\
+\implies{} & x=\frac{1}{n^2}W^H \diag(1 \oslash d)\diag(\wilde{W}b)^H\wilde{W}y
+\end{align*}
+where $\oslash$ represent elementwise division.
+I'm pretty sure it's not too bad to assume that all elements of $d$ are nonzero.
+
+We can calculate this in the following manner:
+\begin{enumerate}
+    \item Get $\wilde{W}y$ using 2D FFT in $O(n^2 \log n)$ time.
+    \item $\diag(\wilde{W}b)$ (and by extension its transpose) was already obtained when doing the LHS.
+    \item Merge the above two elements in $O(n^2)$ time since it's just an elementwise product.
+    \item Multiply the above result with $\diag(1 \oslash d)$ in $O(n^2)$ time by similar reasoning. 
+    \item Finally put $\frac{1}{n^2}\wilde{W}^H$ on the right with a 2D IFFT.
+\end{enumerate}
+
+Combining these two steps finally gets us a linear system of $n^2$ equations and $n^2$ variables,
+which we can solve like any other lienar system.
+
+
+This algorithm is implemented in the attached Jupyter notebook.
+
+\subsection{Part B}
+
+Also seee the notebook for the deblurring implementation.
+
+\pagebreak
+
+\section{Exercise A10.2}
+
+It's easier to make the first vehicle $1$ unit ahead of the second vehicle
+instead of having them start $1$ unit apart.
+
+We just have to find the least-norm solution that meets the following constraints:
+\begin{enumerate}
+    \item $s_1(20)-p_1(20)=1$
+    \item $s_2(20)=0$
+    \item $p_2(20)=0$
+\end{enumerate}
+
+Let's do some bashing to see what the equations actually are:
+\begin{align*}
+     & s_1(1)=0                                    &  & s_2(1)=0.1u(0)                                              \\
+     & s_1(2)=0.1u(0)                              &  & s_2(2)=0.95 \cdot 0.1u(0) + 0.1u(1)                         \\
+     & s_1(3)=u(0)(0.1 + 0.95 \cdot 0.1) + 0.1u(1) &  & s_2(3)=0.95^2 \cdot 0.1u(0) + 0.95 \cdot 0.1 u(1) + 0.1u(2)
+\end{align*}
+
+We can do some pattern recognition to see that
+\begin{gather*}
+    s_1(n)=\sum_{i=0}^{n-2} \left(u(i)\sum_{j=0}^{n-i-2} 0.1 \cdot 0.95^j\right) \\
+    s_2(n)=\sum_{i=0}^{n-1} 0.95^{n-1-i} \cdot 0.1u(i)
+\end{gather*}
+
+A similar expression is the formula for $p_1(n)$ and $p_2(n)$ only
+with $0.8$ and $0.2$ instead of $0.95$ and $0.1$ respectively.
+
+Regardless, all of these expressions are linear in terms of $u(t)$ and $v(t)$,
+so this can indeed be formulated as a least norm problem.
+
+See the attached Jupyter notebook for my solution.
+
+\end{document}

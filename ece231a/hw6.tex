@@ -131,7 +131,7 @@ Let the quantizing process be a function $f: \R \to \left\{-\sqrt{P}, \sqrt{P}\r
 Since $X \to Y \to f(Y)$, $I(X; f(Y)) \le I(X; Y)$, so in other words the channel
 with binary PAM has a capacity that's at least that of the BSC.
 
-However, $I(X; Y) = H(X) - H(X \mid Y) \le 1$, which is the same asymptote of the BSC.
+Also, $I(X; Y) = H(X) - H(X \mid Y) = H(X) \le 1$, which is the same asymptote of the BSC.
 
 \subsection{Part C}
 
@@ -183,22 +183,26 @@ Solving $\log\left(1+\frac{P}{N_0W}\right)= 1 \text{ bit}$ gives us $W=\boxed{3 
 
 \section{Parallel Channels and Waterfilling}
 
+Let $P'=2P$ for convenience.
+
 We need $\sigma_1^2-\sigma_2^2$ units of power before it starts to behave like a pair of channels.
 
-For any $P \le \sigma_1^2-\sigma_2^2$, the optimal power allocation is always going to
+(So in other words, the threshold is when $P=\frac{\sigma_1^2-\sigma_2^2}{2}$).
+
+For any $P' \le \sigma_1^2-\sigma_2^2$, the optimal power allocation is always going to
 be to just send everything down the second channel.
 
-Letting $v=\sigma_2^2+P$, we have
-\[(v-\sigma_1^2)^+ + (v-\sigma_2^2)^+ = 0+P = P\]
+Letting $v=\sigma_2^2+P'$, we have
+\[(v-\sigma_1^2)^+ + (v-\sigma_2^2)^+ = 0+P' = P'\]
 which as we see, gives all power to the second channel.
 
-Now when $P > \sigma_1^2-\sigma_2^2$, we need to use both channels.
+Now when $P' > \sigma_1^2-\sigma_2^2$, we need to use both channels.
 
-Here, $v=\sigma_1^2+\frac{P-(\sigma_1^2-\sigma_2^2)}{2}$ and
+Here, $v=\sigma_1^2+\frac{P'-(\sigma_1^2-\sigma_2^2)}{2}$ and
 \begin{align*}
     (v-\sigma_1^2)^+ + (v-\sigma_2^2)^+
-    &= \frac{P-(\sigma_1^2-\sigma_2^2)}{2} + \sigma_1^2 +  \frac{P-\sigma_1^2-\sigma_2^2}{2} \\
-    &= P
+    &= \frac{P'-(\sigma_1^2-\sigma_2^2)}{2} + \sigma_1^2 + \frac{P'-\sigma_1^2-\sigma_2^2}{2} \\
+    &= P'
 \end{align*}
 In this case, both channels actually get used.
 
