@@ -1,0 +1,314 @@
+\documentclass[12pt]{article}
+
+\input{../kz}
+
+\rhead{ECE 231A}
+
+\newcommand{\ind}{\perp\!\!\!\!\perp} 
+\newcommand*{\ditto}{-''-}
+\newcommand{\N}{\mathbb{N}}
+\newcommand{\R}{\mathbb{R}}
+\renewcommand{\c}{\teXttt}
+\DeclareMathOperator{\E}{E}
+\DeclareMathOperator{\Var}{Var}
+
+\begin{document}
+
+\section{Resources}
+
+I've used my own brain, posted slides/resources and a Discord chat with Kevin Zhao.
+
+\section{4-ary Hamming Distortion}
+
+We have
+\begin{align*}
+    I(\hat{X}; X)
+     & = H(X) - H(X \mid \hat{X})                                              \\
+     & \ge 2 - (H(P(\hat{X} \ne X)) + P(\hat{X} \ne X)H(X \mid X \ne \hat{X})) \\
+     & \ge \boxed{2-H(D)-D\log 3}
+\end{align*}
+
+To achieve this lower bound, consider the following test channel going from $\hat{X}$ to $X$:
+\[P=\begin{bmatrix}
+        1-D & D/3 & D/3 & D/3 \\
+        D/3 & 1-D & D/3 & D/3 \\
+        D/3 & D/3 & 1-D & D/3 \\
+        D/3 & D/3 & D/3 & 1-D
+    \end{bmatrix}\]
+This transition matrix is cyclically symmetric, so it's maximized when the input distribution is symmetric.
+This also implies that the output distribution is symmetric.
+
+The mutual information is as follows:
+\begin{align*}
+    I(X; \hat{X})
+     & = H(X)-H(X \mid \hat{X})                                       \\
+     & = 2-H_4\left(1-D, \frac{D}{3}, \frac{D}{3}, \frac{D}{3}\right) \\
+     & = 2-\left(-D\log\left(\frac{D}{3}\right)-(1-D)\log(1-D)\right) \\
+     & = 2-(-D \log D-(1-D)\log(1-D)+D\log 3)                         \\
+     & = 2-(H(D)+D\log 3)
+\end{align*}
+which is exactly what we want, thus implying a $P(\hat{X} \mid X)$ that satisfies all the constraints.
+
+\pagebreak
+
+\section{\texorpdfstring{$m$}{m}-ary Hamming Distortion}
+
+By engineer's induction, I propose that $R(D)$ for arbitrary $m$ is
+\[R(D)=\log m - H(D) - D\log(m-1)\]
+That this is a lower bound can be proved in basically the same way that we proved it for $m=4$
+with a couple of changes to the numbers.
+
+We can construct a test channel for this similar to the way we did it for $m-4$:
+\[P_{ij}=\begin{cases}
+        1-D           & i=j              \\
+        \frac{D}{m-1} & \text{otherwise}
+    \end{cases}\]
+This matrix is also cyclically symmetric,
+so the channel achieves capacity with $\hat{X}$ is distributed uniformly.
+
+The capacity is as follows:
+\begin{align*}
+    I(X; \hat{X})
+     & = H(X)-H(X \mid \hat{X})                                              \\
+     & = \log m-H_m\left(1-D, \frac{D}{m-1}, \cdots, \frac{D}{m-1}\right)    \\
+     & = \log m-\left(-D\log\left(\frac{D}{m-1}\right)-(1-D)\log(1-D)\right) \\
+     & = \log m-(-D \log D-(1-D)\log(1-D)+D\log(m-1))                        \\
+     & = \log m-(H(D)+D\log(m-1))
+\end{align*}
+showing that this lower bound is indeed achievable.
+
+\section{Scaled Hamming Distortion}
+
+The only thing that's changed about this cost function is that we need $2P(\hat{X} \ne X) \le D$
+instead of $P(\hat{X} \ne X)$.
+
+This also means that $\boxed{R(D)=R_3\left(\frac{D}{2}\right)}$, where $R_3$ is the rate distortion
+function calculated in the previous section when $m=3$.
+
+\pagebreak
+
+\section{RD Function With Infinite Distortion}
+
+If $d(x, \hat{X})=\infty$ when $\hat{X}=1$ and $x=0$, this forces $P(\hat{X}=0 \mid x=0)=1$.
+
+Past that, the only variable we can change is $P(\hat{X}=1 \mid x=1)$, which I'll denote as $p$.
+
+The only place where we have a nonzero distortion is when
+we send a $0$ instead of a $1$ with a $\frac{1-p}{2}$ chance.
+
+Our distortion rate is bounded by $D$, so let's set it at equality: $\frac{1-p}{2}=D$.
+This is because the more $0$s we send instead of $1$s, the farther we make the distribution
+of $\hat{X}$ from the uniform and the lower we make the entropy.
+
+With that set,
+\begin{align*}
+    I(\hat{X}; X)
+     & = H(X)-H(X \mid \hat{X})                                            \\
+     & = 1-P(\hat{X}=0)H(X \mid \hat{X}=0)-P(\hat{X}=1)H(X \mid \hat{X}=1) \\
+     & = 1-\frac{2-p}{2}H(X \mid \hat{X}=0)-\frac{p}{2}H(X \mid \hat{X}=1) \\
+     & = 1-\frac{2-p}{2}H(X \mid \hat{X}=0)                                \\
+     & = 1-\left(\frac{1}{2}+D\right)H(X \mid \hat{X}=0)                   \\
+     & = 1-\left(\frac{1}{2}+D\right)H\left(\frac{1}{2-p}\right)           \\
+     & = 1-\left(\frac{1}{2}+D\right)H\left(\frac{1}{2D+1}\right)
+\end{align*}
+
+\pagebreak
+
+\section{Erasure Distortion}
+
+I'm going to assume the middle column is some "error" state, since the indices don't 100\% match up.
+Otherwise, $d(1, 1)=1$, and there's no universe in which that makes sense.
+
+\subsection{Part A}
+
+We can lower bound $R(D)$ as follows:
+\begin{align*}
+          & I(\hat{X}; X)                                                                                           \\
+    ={}   & H(X)-H(X \mid \hat{X})                                                                                  \\
+    ={}   & 1 - H(X \mid \hat{X}=0)P(\hat{x}=0) - H(X \mid \hat{X}=e)P(\hat{x}=e) - H(X \mid \hat{X}=1)P(\hat{x}=1) \\
+    ={}   & 1- H(X \mid \hat{X}=e)P(\hat{x}=e)                                                                      \\
+    \ge{} & 1-H(X \mid \hat{X}=e)D                                                                                  \\
+    \ge{} & \boxed{1-D}
+\end{align*}
+
+I'll show how to achieve this LB in the next part.
+
+\subsection{Part B}
+
+Here, instead of $p$ being the chance that we send a $0$ instead of a $1$,
+we let $p$ be the chance we send an $e$ instead of any symbol.
+By symmetry, this should be the same regardless of the original symbol.
+
+Now, since $p$ applies to both symbols, we set $p=D$ to get the following mutual info:
+\begin{align*}
+        & I(\hat{X}; X)                                                                                           \\
+    ={} & H(X)-H(X \mid \hat{X})                                                                                  \\
+    ={} & 1 - H(X \mid \hat{X}=0)P(\hat{x}=0) - H(X \mid \hat{X}=e)P(\hat{x}=e) - H(X \mid \hat{X}=1)P(\hat{x}=1) \\
+    ={} & 1- H(X \mid \hat{X}=e)P(\hat{x}=e)                                                                      \\
+    ={} & 1-p                                                                                                     \\
+    ={} & 1-D
+\end{align*}
+In this case, $H(X \mid \hat{X}=e)=1$ because it was equally likely that we got a $0$ or a $1$ when we have an $e$.
+
+\pagebreak
+
+\section{Conditional Probability That Achieves \texorpdfstring{$R(D)$}{R(D)}}
+
+didn't we do this in lecture what
+
+Regardless, from the hint we can represent the conditional distribution using a BSC with crossover probability $D$.
+
+The output and conditionals are alrady known:
+\begin{gather*}
+    P(X=0)=p \\
+    P(X=1)=1-p \\
+    P(X=0 \mid \hat{X}=1)=P(X=1 \mid \hat{X}=0)=D \\
+    P(X=0 \mid \hat{X}=0)=P(X=1 \mid \hat{X}=1)=1-D
+\end{gather*}
+Letting $a=P(\hat{X}=0)$, we have
+\begin{align*}
+               & (1-D)a + D(1-a)=p               \\
+    \implies{} & a(1-2D)=p-D                     \\
+    \implies{} & P(\hat{X}=0)=\frac{p-D}{1-2D}   \\
+    \implies{} & P(\hat{X}=1)=\frac{1-p-D}{1-2D}
+\end{align*}
+
+
+From this we can find $P(\hat{X} \mid X)$ using Bayes' rule:
+\begin{align*}
+    P(X=0 \mid \hat{X}=0)
+     & = \frac{P(X=0 \mid \hat{X}=0)P(\hat{X}=0)}{P(X=0)} \\
+     & = \frac{(1-D)\frac{p-D}{1-2D}}{\frac{1}{2}}        \\
+     & = \frac{2(1-D)(p-D)}{1-2D}
+\end{align*}
+By a similar process, we have
+\begin{gather*}
+    P(X=1 \mid \hat{X}=0)=\frac{2D(p-D)}{1-2D} \\
+    P(X=1 \mid \hat{X}=1)=\frac{2(1-D)(1-p-D)}{1-2D} \\
+    P(X=0 \mid \hat{X}=1)=\frac{2D(1-p-D)}{1-2D}
+\end{gather*}
+
+\pagebreak
+
+\section{Bounds on \texorpdfstring{$R(D)$}{R(D)} for MSE}
+
+\subsection{Lower Bound}
+
+Since we're using the squared error distortion, we have the constraint that $\E[(X-\hat{X})^2] \le D$.
+
+And now,
+\begin{align*}
+    I(X; \hat{X})
+     & = h(X) - h(X \mid \hat{X})                      \\
+     & = h(X) - h(X - \hat{X} \mid \hat{X})            \\
+     & \ge h(X) - h(X - \hat{X})                       \\
+     & \ge h(X) - h(\mathcal{N}(0, \E[(X-\hat{X})^2])) \\
+     & \ge h(X) - h(\mathcal{N}(0, D))                 \\
+     & = h(X) - \frac{1}{2}\log(2\pi eD)
+\end{align*}
+
+\subsection{Upper Bound}
+
+Following the hint, consider the following channel:
+\begin{gather*}
+    Z \sim \mathcal{N}\left(0, \frac{D\sigma^2}{\sigma^2-D}\right) \\
+    \hat{X}=\frac{\sigma^2-D}{\sigma^2}(X+Z)
+\end{gather*}
+Since $X \parallel Z$,
+\begin{align*}
+    \Var(\hat{X})
+     & = \frac{(\sigma^2-D)^2}{\sigma^4}(\Var(X)+\Var(Z))                                  \\
+     & = \frac{(\sigma^2-D)^2}{\sigma^4}\left(\frac{D\sigma^2}{\sigma^2-D}+\sigma^2\right) \\
+     & = \frac{(\sigma^2-D)^2}{\sigma^4} \cdot \frac{\sigma^4}{\sigma^2-D}                 \\
+     & = \sigma^2-D
+\end{align*}
+and
+\[h(\hat{X}) \le \frac{1}{2}\log(2 \pi e(\sigma^2-D))\]
+This allows us to bound $I(X; \hat{X})$ like so:
+\begin{align*}
+    I(X; \hat{X})
+     & = h(\hat{X}) - h(\hat{X} \mid X)                                                                         \\
+     & = h(\hat{X}) - h(Z \mid X)                                                                               \\
+     & = h(\hat{X}) - h(Z)                                                                                      \\
+     & \le \frac{1}{2}\log(2 \pi e(\sigma^2-D)) - h(Z)                                                          \\
+     & = \frac{1}{2}\log(2 \pi e(\sigma^2-D)) - \frac{1}{2}\log\left(2\pi e \frac{D\sigma^2}{\sigma^2-D}\right) \\
+     & = \frac{1}{2}\log \frac{2\pi e (\sigma^2-D)}{2\pi e \frac{D\sigma^2}{\sigma^2-D}}                        \\
+     & = \frac{1}{2}\log \frac{(\sigma^2-D)^2}{D\sigma^2}                                                       \\
+     & \le \frac{1}{2}\log \frac{\sigma^2}{D}\quad\square
+\end{align*}
+The last line is true (assuming $D < \sigma^2$) because
+\begin{align*}
+               & \sigma^2 - D \le \sigma^2                               \\
+    \implies{} & (\sigma^2-D)^2 \le \sigma^4                             \\
+    \implies{} & \frac{(\sigma^2-D)^2}{\sigma^2} \le \sigma^2            \\
+    \implies{} & \frac{(\sigma^2-D)^2}{D\sigma^2} \le \frac{\sigma^2}{D}
+\end{align*}
+
+It's not unreasonable to assume $D < \sigma^2$ because the past that
+we can just always predict $\E[X]$ and on average we'll be off by the variance, which is $\sigma^2$.
+
+\section{Conditional That Achieves \texorpdfstring{$R(D)$}{R(D)}}
+
+We have $\hat{X}=X-Z=X+Z$ since $Z$ has zero mean, so once we know $x$, $\hat{X} \mid x \sim \mathcal{N}(x, D)$.
+
+\pagebreak
+
+\section{Simplicity is Best}
+
+\subsection{Part A}\label{sec:10a}
+
+The best we can do is $\frac{1}{2}\log\left(1+\frac{P}{N}\right)$ bits per channel use.
+
+Since $R(D)=\frac{1}{2}\log\frac{P}{D}$, we can set the two to be equivalent to obtain
+\begin{align*}
+               & \frac{1}{2}\log\frac{P}{D}=\frac{1}{2}\log\left(1+\frac{P}{N}\right) \\
+    \implies{} & \log\frac{P}{D}=\log\left(1+\frac{P}{N}\right)                       \\
+    \implies{} & \frac{P}{D}=1+\frac{P}{N}                                            \\
+    \implies{} & D=\boxed{\frac{NP}{N+P}}
+\end{align*}
+
+\subsection{Part B}
+
+We have
+\begin{align*}
+    \lim_{P/N \to \infty} \frac{NP}{N+P}
+     & = \lim_{P/N \to \infty} \frac{P}{1+\frac{P}{N}}                   \\
+     & = \lim_{P/N \to \infty} N \cdot \frac{\frac{P}{N}}{1+\frac{P}{N}} \\
+     & = N
+\end{align*}
+which is equivalent to the error when just sending $X$ raw.
+
+\subsection{Part C}
+
+We want to choose a to minimize this weird expression:
+\begin{align*}
+    \E\left[(a(X+Z)-X)^2\right]
+    &= \E\left[a^2(X+Z)^2+X^2-2aX(X+Z)\right] \\
+    &= \E\left[X^2(a^2+1-2a)+2a^2XZ+a^2Z^2-2aZ\right] \\
+    &= (a-1)^2\E\left[X^2\right]+2a^2\E[X]\E[Z]+a^2\E\left[Z^2\right]-2a\E[Z] \\
+    &= (a-1)^2\E\left[X^2\right]+a^2\E\left[Z^2\right] \\
+    &= (a-1)^2P+a^2N
+\end{align*}
+Taking the derivative and setting it to $0$ gives $\boxed{a=\frac{P}{P+N}}$.
+Plugging it back into the expression we got in \ref{sec:10a} indeed gives
+an expected value of $\frac{NP}{N+P}$.
+
+\pagebreak
+
+\section{Properties of an Optimal Code}
+
+I'll name the inequalities by their label in the textbook:
+\begin{itemize}
+    \item \textbf{10.58} pushes the output codewords to all be equally likely or
+          as close to equally likely as possible.
+    \item \textbf{10.59} forces $f_n$ to be deterministic, so knowing $X^n$ completely determines $f(X^n)$.
+    \item \textbf{10.61} requires $g_n$ to not map multiple sequences of bits to the same codeword
+          so no two elements in $f_n(X^n)$'s PMF are merged together.
+    \item \textbf{10.65} wants $X_i$ to only depend on $\hat{X}_i$, so compression should be done by symbol.
+          Not sure how this meshes with what we got at the end of lecture 13 with the Gaussian input.
+    \item \textbf{10.67} forces $I(X; \hat{X})$ to be the lowest possible given its expected distortion.
+    \item \textbf{10.69}, assuming $R(d)$ isn't linear anywhere, requires $\E[d(X_i, \hat{X}_i)]$ to be independent of $i$.
+          In other words, it's unoptimal to heap distortion onto a single part of the codeword.
+\end{itemize}
+
+\end{document}
