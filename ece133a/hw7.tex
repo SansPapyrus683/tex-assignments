@@ -1,0 +1,230 @@
+\documentclass[12pt]{article}
+
+\input{../kz}
+
+\rhead{ECE 133A}
+
+\newcommand{\norm}[1]{\left\lVert#1\right\rVert}
+\DeclareMathOperator{\std}{std}
+\DeclareMathOperator{\avg}{avg}
+\DeclareMathOperator{\rms}{rms}
+\DeclareMathOperator{\Tr}{Tr}
+\DeclareMathOperator{\diag}{diag}
+\newcommand{\R}{\mathbb{R}}
+\newcommand{\wilde}{\widetilde}
+\newcommand*{\vertbar}{\rule[-1ex]{0.5pt}{2.5ex}}
+\newcommand*{\horzbar}{\rule[.5ex]{2.5ex}{0.5pt}}
+
+\begin{document}
+
+\section{Exercise A10.9}
+
+\subsection{Part A}
+
+It STP that $\exists z \in \R$ s.t.
+\[\begin{bmatrix}
+        A^TA  & e_i \\
+        e_i^T & 0
+    \end{bmatrix}\begin{bmatrix}
+        x \\ z
+    \end{bmatrix}=\begin{bmatrix}
+        A^Tb \\ 0
+    \end{bmatrix}\]
+where $x$ is the expression given in the problem.
+
+This system breaks down into the following linear equations:
+\begin{align*}
+    A^TAx + ze_i = A^Tb &  & x_i = 0
+\end{align*}
+
+Given that $\hat{x}=(A^TA)^{-1}A^Tb$, we have
+\begin{align*}
+    A^TAx + ze_i
+     & = A^TA\left(\hat{x}-\frac{\hat{x}_i}{(A^TA)^{-1}_{ii}}(A^TA)^{-1}e_i\right)+ze_i \\
+     & = A^Tb - \frac{\hat{x}_i}{(A^TA)^{-1}_{ii}} e_i + ze_i                           \\
+     & = A^Tb - \left(\frac{\hat{x}_i}{(A^TA)^{-1}_{ii}} - z\right)e_i
+\end{align*}
+so just setting $z=\frac{\hat{x}_i}{(A^TA)^{-1}_{ii}}$ makes the LHS of the first equation $A^Tb$.
+
+I suppose we also have to check that $x_i$ is actually $0$.
+
+Notice that $(A^TA)^{-1}e_i$ is just the $i$th column of the matrix, and
+when we divide it by the scalar $(A^TA)^{-1}_{ii}$ we make the $i$th element of that vector $1$.
+Then, multiplying it by $\hat{x}_i$ ensures the $i$th element to be $0$.
+
+Subtracting this resulting vector from $\hat{x}$ is guaranteed to make $x_i=0$.
+
+\subsection{Part B}
+
+Assuming we already have the QR factorization of $A$,
+we can first compute $A^TA=R^TR$ in $O(mn^2)$ time.
+
+Using the normal equations, we can calculate $\hat{x}=R^{-1}Q^Tb$
+using back (or was it forward?) substitution in $O(n^2+nm)$ time.
+
+After that, the only thing left to do is get $(A^TA)^{-1}e_i$
+by solving the linear system $R^TRx=e_i$, which can be done in $O(n^2)$ time.
+This vector also happens to be the $i$th column of $(A^TA)^{-1}$, so
+the $i$th element of this vector is also the number in the denominator.
+
+After that it's just a bunch of elementwise stuff that takes linear time,
+so our overall time complexity is \boxed{O(mn^2+n^2)}.
+
+\section{Exercise A11.8}
+
+\subsection{Part C}
+
+At the first step, we've
+\begin{align*}
+    R_{11}=\sqrt{1}=1 &  & R_{1,2:n}=A_{1,2:n}=\begin{bmatrix}0 & 1\end{bmatrix}
+\end{align*}
+
+Now we take the outer product and subtract it from $A$:
+\[A_{2:n,2:n}-R^T_{1,2:n}R_{1,2:n}=\begin{bmatrix}
+        1 & 1 \\
+        1 & a
+    \end{bmatrix}-\begin{bmatrix}
+        0 & 0 \\
+        0 & 1
+    \end{bmatrix}=\begin{bmatrix}
+        1 & 1   \\
+        1 & a-1
+    \end{bmatrix}\]
+
+At the second step, we have
+\begin{align*}
+    R_{22}=\sqrt{a-1} &  & R_{23}=\frac{1}{\sqrt{a-1}} \cdot 1
+\end{align*}
+
+And subtracting this outer product (which is just a scalar at this point) forces
+\[R_{33}=\sqrt{a-1-\frac{1}{a-1}}\]
+
+Both both these square roots to be real, we need $a > 2$.
+
+If it is, our Cholseky factor is
+\[R=\begin{bmatrix}
+        1 & 0          & 1                        \\
+        0 & \sqrt{a-1} & 1/\sqrt{a-1}             \\
+        0 & 0          & \sqrt{a-1-\frac{1}{a-1}}
+    \end{bmatrix}\]
+
+\pagebreak
+
+\subsection{Part D}
+
+This goes much the same way.
+
+At the first step, we've
+\begin{align*}
+    R_{11}=\sqrt{1}=1 &  & R_{1,2:n}=A_{1,2:n}=\begin{bmatrix}0 & a\end{bmatrix}
+\end{align*}
+
+Now we take the outer product and subtract it from $A$:
+\[A_{2:n,2:n}-R^T_{1,2:n}R_{1,2:n}=\begin{bmatrix}
+        1 & 0 \\
+        0 & 1
+    \end{bmatrix}-\begin{bmatrix}
+        0 & 0   \\
+        0 & a^2
+    \end{bmatrix}=\begin{bmatrix}
+        1 & 0     \\
+        0 & 1-a^2
+    \end{bmatrix}\]
+
+At the second step, we have
+\begin{align*}
+    R_{22}=1 &  & R_{23}=0
+\end{align*}
+
+Since $R_{23}=0$, there's nothing to subtract from the final element and we have $R_{33}=\sqrt{1-a^2}$.
+
+This implies the condition that $a < 1$, and our Cholseky factor is thus
+\[R=\begin{bmatrix}
+        1 & 0 & a            \\
+        0 & 1 & 0            \\
+        0 & 0 & \sqrt{1-a^2}
+    \end{bmatrix}\]
+
+\pagebreak
+
+\section{Exercise A11.30}
+
+\subsection{Part A}
+
+For any $x \ne \mathbf{0}$, if we let $v=C^Tx$, then
+\begin{align*}
+    x^TAx
+     & = x^TCD^{-1}C^Tx                              \\
+     & = v^TD^{-1}v                                  \\
+     & = \sum_{i=1}^{m} v_i^2 \cdot \frac{1}{D_{ii}} \\
+     & > 0
+\end{align*}
+The last inequality is due to a couple things:
+\begin{itemize}[nolistsep]
+    \item $C^T$ has linearly independent columns, so $x \ne \mathbf{0} \implies C^Tx \ne \mathbf{0}$.
+    \item $D_{ii}$ has positive elements only, so all elements in the summation are nonnegative.
+\end{itemize}
+
+\subsection{Part B}
+
+We need to solve these two equations:
+\begin{align*}
+    Dx+C^Ty=\mathbf{0} &  & Cx=b
+\end{align*}
+With some manipulation on the first equation we have
+\begin{align*}
+    & Dx+C^Ty=\mathbf{0} \\
+    \implies{} & x+D^{-1}C^Ty=\mathbf{0} \\
+    \implies{} & Cx+CD^{-1}C^Ty=\mathbf{0} \\
+    \implies{} & CD^{-1}C^Ty=-b \\
+    \implies{} & Ay=-b
+\end{align*}
+which can be easily solved given the Cholseky factorization of $A$ in $O(n^2)$ time.
+
+To do that, we have to first calculate $A$ ($O(nm^2)$) and then actually factor it ($O(n^3)$).
+
+$x$ is trivially solved, since $Dx=-C^Ty$ and $D$ is a diagonal matrix.
+It takes $O(mn)$ flops to calculate $-C^Ty$, and $m$ flops to divide each element by $D_{ii}$.
+
+Putting all this together gives us a final TC of \boxed{O(nm^2+n^3)}
+(I've omitted the other terms since these cubic terms dominate).
+
+\pagebreak
+
+\subsection{Part C}
+
+This time, we have the system
+\begin{gather*}
+    Dx+C^Ty=\mathbf{0} \\
+    dz+f^Ty=0 \\
+    Cx+zf=b
+\end{gather*}
+where $d, z \in \R$ and $f \in R^n$.
+
+In a similar manner as the previous part, we can manipulate the first equation to get
+\[b-zf+Ay=\mathbf{0} \implies y=A^{-1}(zf+b)\]
+and we can isolate $z$ in the third equation to get
+\begin{align*}
+    z
+    &=-\frac{f^Ty}{d} \\
+    &= -\frac{f^TA^{-1}(zf+b)}{d} \\
+    &= -\frac{zf^TA^{-1}f+f^TA^{-1}b}{d}
+\end{align*}
+
+All we need to get $z$ is $f^TA^{-1}f$ and $f^TA^{-1}b$.
+Thankfully, we don't have to calculate any inverse, since
+\begin{align*}
+    f^TA^{-1}b
+    &= f^TR^{-1}R^{-T}b \\
+    &= (R^{-T}f)^T \cdot R^{-T}b
+\end{align*}
+and we can get both terms in $O(n^2)$ time since $R$ is upper triangular.
+The process for $f^TA^{-1}f$ goes in much the same manner.
+
+With $z$ solved, $Ay=zf+b$ can be solved in $O(n^2)$ time and $x=-D^{-1}C^Ty$
+can be calculated in the same way as it was previously in $O(mn)$ time.
+
+Putting all this together gives us a time complexity of \boxed{O(n^2+mn)},
+assuming we have all the matrices from the previous part ready.
+
+\end{document}
