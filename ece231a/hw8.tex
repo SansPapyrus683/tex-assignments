@@ -1,0 +1,315 @@
+\documentclass[12pt]{article}
+
+\input{../kz}
+
+\rhead{ECE 231A}
+
+\newcommand{\ind}{\perp\!\!\!\!\perp} 
+\newcommand*{\ditto}{-''-}
+\newcommand{\N}{\mathbb{N}}
+\newcommand{\R}{\mathbb{R}}
+\renewcommand{\c}{\teXttt}
+\DeclareMathOperator{\E}{E}
+\DeclareMathOperator{\Var}{Var}
+
+\begin{document}
+
+\section{Resources}
+
+I've used my own brain, posted slides/resources and a Discord chat with Kevin Zhao.
+
+\section{Unusual MAC}
+
+\subsection{Part A}
+
+For $(0, 1)$, we can send $X_1=0$ and $X_2 \sim \text{Bernoulli}\left(\frac{1}{2}\right)$.
+
+Since $X_1$ is always $0$, $Y=X_2$ and $I(X_2; Y \mid X_1)=1$.
+
+The channel is symmetric around $\mathcal{X}_1$ and $\mathcal{X}_2$,
+so by similar reasoning $(1, 0)$ is achievable too.
+
+\subsection{Part B}
+
+Let $p_1$ be the chance $X_1=1$ and $p_2$ be the chance $X_2=1$.
+
+Then,
+\begin{align*}
+    I(X_1, X_2; Y)
+     & = H(Y) - H(Y \mid X_1, X_2)                         \\
+     & = H\left(1-p_1-p_2+\frac{p_1p_2}{2}\right) - p_1p_2 \\
+     & \le 1\quad\square
+\end{align*}
+where the final inequality comes from the fact that the entropy is of a binary variable.
+
+\subsection{Part C}
+
+I feel like the rate $\left(\frac{1}{2}, \frac{1}{2}\right)$ is \textit{not} achievable.
+
+This rate would force both $p_1$ and $p_2$ to be nonzero, as they both would
+have to send over some information each channel use.
+
+However, as we saw in the previous part, this forces $I(X_1, X_2; Y)$
+to be \textit{strictly} less than $1=\frac{1}{2}+\frac{1}{2}$.
+Thus, the only way we can get this pair is with time sharing.
+
+\pagebreak
+
+\section{Multiplication MAC}
+
+\subsection{Part A}
+
+First, notice that $I(X_1; Y \mid X_2)=H(p)$, since $X_2 \ne 0$ and we can always recover $X_1$ from $Y$.
+
+Also,
+\begin{align*}
+    I(X_2; Y \mid X_1)
+     & = p \cdot I(X_2; Y \mid X_1=1)+(1-p) \cdot I(X_2; Y \mid X_1=0) \\
+     & = pH(X_2) + (1-p) \cdot 0                                       \\
+     & = pH(X_2)
+\end{align*}
+and
+\begin{align*}
+    I(X_1, X_2; Y)
+     & = H(X_1, X_2) - H(X_1, X_2 \mid Y)                   \\
+     & = H(X_1)+H(X_2) - H(X_1 \mid Y) - H(X_2 \mid X_1, Y) \\
+     & = H(p)+H(X_2)
+\end{align*}
+
+No matter what $p$ is it's optimal to let $X_2$ be uniform across $\mathcal{X}_2$.
+
+\subsection{Part B}
+
+Everywhere at or below the blue line is good.
+\begin{center}
+    \includegraphics[width=10cm]{img/hw8/mul}
+\end{center}
+
+\subsection{Part C}
+
+As the region is already convex, adding the convex hull doesn't increase its area.
+
+\section{Modulo Addition MAC}
+
+Knowing either $X_1$ or $X_2$ and $Y$ allows us to recover the other input, so
+\begin{gather*}
+    I(X_1; Y \mid X_2) = H(X_1) = \le 1 \\
+    I(X_2; Y \mid X_1) = H(X_2)
+\end{gather*}
+and the joint mutual info is
+\begin{align*}
+    I(X_1, X_2; Y)
+     & = H(Y) - H(Y \mid X_1, X_2) \\
+     & = H(Y)
+\end{align*}
+Notice that if we let $X_2$ be uniform over its alphabet,
+\begin{align*}
+    P(Y=y)
+     & = (1-p)P(X_2=y)+pP(X_2=y-1)                     \\
+     & = (1-p) \cdot \frac{1}{4} + p \cdot \frac{1}{4} \\
+     & = \frac{1}{4}
+\end{align*}
+and $H(Y)=2$, which is the largest it can possibly be.
+
+Conveniently, this also maximizes $H(X_2)$, so there's no tradeoffs to be made here and
+\begin{gather*}
+    I_1 = 1 \\
+    I_2 = I_3 = 2
+\end{gather*}
+giving us the following feasible region:
+\begin{center}
+    \includegraphics[width=10cm]{img/hw8/mod4}
+\end{center}
+
+\section{Binary Adder MAC}
+
+\subsection{Part A}
+
+As expected,
+\begin{gather*}
+    I(X_1; Y \mid X_2) = H(X_1) = H(p_1) \\
+    I(X_2; Y \mid X_1) = H(X_2) = H(p_2)
+\end{gather*}
+and
+\begin{align*}
+        & I(X_1, X_2; Y)                                     \\
+    ={} & H(Y) - H(Y \mid X_1, X_2)                          \\
+    ={} & H(Y)                                               \\
+    ={} & H_3(p_1p_2, (1-p_1)(1-p_2), p_1(1-p_2)+p_2(1-p_1)) \\
+    ={} & H_3(p_1p_2, (1-p_1)(1-p_2), p_1+p_2-p_1p_2)
+\end{align*}
+
+\subsection{Part B}
+
+I mean, nothing special here, just:
+\begin{align*}
+        & H_4(p_1(1-p_2), p_1p_2, (1-p_1)(1-p_2), (1-p_1)p_2) \\
+    ={} & H_3(p_1, (1-p_1)(1-p_2), (1-p_1)p_2) + p_1H(p_2)    \\
+    ={} & H(p_1) + (1-p_1)H(p_2) + p_1H(p_2)                  \\
+    ={} & H(p_1) + H(p_2)\quad\square
+\end{align*}
+
+\subsection{Part C}
+
+If you'll excuse the dogwater LaTeX, notice that
+\begin{align*}
+        & H(p_1)+H(p_2)                                                                                          \\
+    ={} & H_4(p_1(1-p_2), p_1p_2, (1-p_1)(1-p_2), (1-p_1)p_2)                                                    \\
+    ={} & H_3(p_1p_2, (1-p_1)(1-p_2), p_1+p_2-p_1p_2)                                                            \\
+        & + (p_1+p_2-p_1p_2)H_2\left(\frac{p_1(1-p_2)}{p_1+p_2-p_1p_2}, \frac{(1-p_1)p_2}{p_1+p_2-p_1p_2}\right)
+\end{align*}
+and thus
+\[H(Y)=H(p_1)+H(p_2) - \alpha H(q)\]
+where
+\begin{gather*}
+    \alpha = p_1+p_2-p_1p_2 \\
+    q = \frac{p_1(1-p_2)}{p_1+p_2-p_1p_2}
+\end{gather*}
+
+\subsection{Part D}
+
+I used Desmos this time, but the idea's there.
+
+\begin{center}
+    \includegraphics[width=10cm]{img/hw8/bin\_add}
+\end{center}
+The red region is $p_1=p_2=0.5$, and the green region is $p_1=0.3$ and $p_2=0.7$.
+As we can see, the red does not completely contain the green.
+
+\pagebreak
+
+\section{TDMA vs. CDMA}
+
+\subsection{Part A}
+
+Let $C(x)=\frac{1}{2}\log(x)$ for convenience.
+
+The pentagon is bounded above by the following inequalities:
+\begin{gather*}
+    R_1 < C\left(\frac{3N}{N}\right) = C(3) \\
+    R_2 < C\left(\frac{3N}{N}\right) = C(3) \\
+    R_1+R_2 < C\left(\frac{3N+3N}{N}\right) = C(6)
+\end{gather*}
+and when graphed is everything below the blue line:
+\begin{center}
+    \includegraphics[width=10cm]{img/hw8/two_normals}
+\end{center}
+
+\pagebreak
+
+\subsection{Part B}
+
+When the first channel sends with power $\frac{3N}{\lambda}$ for $\lambda$ of the time
+and power $0$ for all other moments, its average power is just $\frac{3N}{\lambda} \cdot \lambda = 3N$.
+
+Using the channel like this gives an average rate of
+$\lambda C\left(\frac{3N/\lambda}{N}\right) = \lambda C\left(\frac{3}{\lambda}\right)$.
+
+By similar logic, the second sender can get
+$(1-\lambda)C\left(\frac{3}{1-\lambda}\right)$ bits per use on average.
+
+Plotting these two rates against each other gives
+\begin{center}
+    \includegraphics[width=10cm]{img/hw8/time_sharing}
+\end{center}
+
+\subsection{Part C}
+
+As we can see, there's only three $\lambda$s that achieve optimality: $0$, $1$, and $0.5$.
+
+\subsection{Part D}
+
+TSMA could have latency issues, since if you wanna send something right away
+you would have to wait for your time share before actually beginning to transmit.
+This is especially annoying if the other side isn't even using their time slice;
+you're waiting in this case for essentially no reason at all.
+
+\section{Noiseless MAC}
+
+Really funny to ask this when I've actually used this in previous questions:
+\begin{align*}
+    R_1+R_2
+     & < I(X_1, X_2; Y)            \\
+     & = H(Y) - H(Y \mid X_1, X_2) \\
+     & = H(Y)\quad\square
+\end{align*}
+Notice that since $f$ is a deterministic function, knowing $X_1$ and $X_2$
+allows us to deduce with 100\% certainty $Y=f(X_1, X_2)$, so $H(Y \mid X_1, X_2)=0$.
+
+\section{Slepian-Wolf For Deterministic \texorpdfstring{$f$}{f}}
+
+We have
+\begin{gather*}
+    R_1 > H(X \mid Y) \\
+    R_2 > H(Y \mid X) = 0 \\
+    R_1+R_2 > H(X, Y) = H(X)
+\end{gather*}
+which results in the following region:
+\begin{center}
+    \includegraphics[width=10cm]{img/hw8/funny_region}
+\end{center}
+If $f$ is one-to-one, then the vertical dotted line would just be the same as the vertical axis.
+
+\section{Slepian-Wolf}
+
+Just some basic entropy calculations:
+\begin{gather*}
+    H(Y \mid X) = H(Z \oplus X \mid X) = H(Z) = H(r) \\
+    H(X, Y) = H(X) + H(Y \mid X) = H(p) + H(r)
+\end{gather*}
+The last one is a bit more complicated though:
+\begin{align*}
+    H(X \mid Y)
+     & = H(X, Y) - H(Y)             \\
+     & = H(p) + H(r) - H(1-p-r+2pr)
+\end{align*}
+
+\section{Slepian-Wolf for Multiplication}
+
+Some more number wrangling:
+\begin{gather*}
+    H(X_2 \mid X_1) = H(X_1 \times Z \mid X_1) = 2p \\
+    H(X_1, X_2) = H(X_1) + H(X_2 \mid X_1) = H(p_1) + 2p
+\end{gather*}
+Also notice that if $X_2$ is nonzero, then $X_1$ has to be $1$.
+The opposite is true if $X_2=0$.
+Thus, $X_2$ gives us everything we need to know about $X_1$ and $H(X_1 \mid X_2) = 0$.
+
+The plot for $p_1=0.5$ is as follows:
+\begin{center}
+    \includegraphics[width=10cm]{img/hw8/sw_mul}
+\end{center}
+
+\section{Slepian-Wolf for Distributed Sensors}
+
+I think we just also have to communicate $e$ as an actual outcome, right?
+
+Then
+\begin{align*}
+        & H(X_2 \mid X_1)                                                                                      \\
+    ={} & \alpha_1 H(X_2 \mid X_1 = e) + (1-p)(1-\alpha_1)H(X_2 \mid X_1=0) + p(1-\alpha_1)H(X_2 \mid X_1 = 1) \\
+    ={} & \alpha_1 H(X_2) + (1-\alpha_1)H(\alpha_2)
+\end{align*}
+and similarly $H(X_1 \mid X_2) = \alpha_2 H(X_1) + (1-\alpha_2)H(\alpha_1)$.
+
+Finally,
+\[H(X_1, X_2) = \alpha_2 H(X_1) + (1-\alpha_2)H(\alpha_1) + H(X_2)\]
+
+For the sake of completeness, I'll write out the PMF of $X_1$:
+\begin{itemize}
+    \item $P(X_1=0)=(1-\alpha_1)(1-p)$
+    \item $P(X_1=e)=\alpha_1$
+    \item $P(X_1=1)=(1-\alpha_1)p$
+\end{itemize}
+The PMF of $X_2$ is analagous.
+
+When all the parameters are $\frac{1}{2}$,
+\begin{align*}
+    H(X_2 \mid X_1) = H(X_1 \mid X_2) = 1.25 && H(X_1, X_2) = 2.75
+\end{align*}
+and the region looks like this:
+\begin{center}
+    \includegraphics[width=7cm]{img/hw8/sw_sensors}
+\end{center}
+
+\end{document}
