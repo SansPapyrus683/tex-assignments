@@ -166,7 +166,16 @@ where the second equality is because $\ln(1+x)\approx x$ for small $x$.
 
 \subsection{Part D}
 
-To send one (1) bit at $\frac{1}{2}\log(1+P)$ bits per use takes \boxed{\frac{2P}{\log(1+P)} J}.
+We have $P$ joules per symbol and $\frac{1}{\frac{1}{2}\log(1+P)}$ symbols per bit,
+giving us $\frac{P}{\frac{1}{2}\log(1+P)}$ joules per bit.
+
+This expression decreases with $P$, so we can take the limit to $0$ to see that
+\begin{align*}
+    \lim_{P \to 0} \frac{P}{\frac{1}{2}\log(1+P)}
+    &= \lim_{P \to 0} \frac{P}{\frac{1}{2} \log_2 e \cdot \ln(1+P)} \\
+    &= \lim_{P \to 0} \frac{1}{\frac{1}{2} \log_2 e \cdot \frac{1}{1+P}} \\
+    &= \boxed{\frac{2}{\log_2 e}}
+\end{align*}
 
 \subsection{Part E}
 
@@ -179,7 +188,8 @@ it's not achievable since we'll always have finite bandwidth IRL.
 
 We have $P=3 W$ and $N_0=10^{-9} \frac{W}{Hz}$.
 
-Solving $\log\left(1+\frac{P}{N_0W}\right)= 1 \text{ bit}$ gives us $W=\boxed{3 \cdot 10^9\text{ Hz}}$.
+Solving $\frac{1}{2}\log\left(1+\frac{P}{N_0W}\right)= 1 \text{ bit}$ gives us $W=10^9\text{ Hz}$.
+Since the sampling rate is $2W$, the best rate we can sample at is $2W=\boxed{2 \cdot 10^9}\text{ Hz}$.
 
 \section{Parallel Channels and Waterfilling}
 
