@@ -70,6 +70,145 @@ the $i$th element of this vector is also the number in the denominator.
 After that it's just a bunch of elementwise stuff that takes linear time,
 so our overall time complexity is \boxed{O(mn^2+n^2)}.
 
+\section{Exercise A10.19}
+
+\subsection{Part A}
+
+It suffices to show that $\hat{x}(\lambda)$ satisfies the normal equation with
+\begin{align*}
+    A'=\begin{bmatrix}
+           \sqrt{\lambda}a_1^T \\
+           a_2^T               \\
+           \vdots              \\
+           a_m^T
+       \end{bmatrix} &  &
+    b'=\begin{bmatrix}
+           \sqrt{\lambda}b_1 \\
+           b_2               \\
+           \vdots            \\
+           b_m
+       \end{bmatrix}
+\end{align*}
+In other words, we need to prove that
+\[(A'^TA') \cdot \hat{x}(\lambda) = A'^Tb'\]
+
+First lemme see if $(A'^TA')$ can be simplified in any way:
+\begin{align*}
+    (A'^TA')_{ij}
+     & = \sum_{k=1}^{m} A'^T_{ik}A'_{kj}                    \\
+     & = \sum_{k=1}^{m} A'_{ki}A'_{kj}                      \\
+     & = \lambda A_{1i}A_{1j} + \sum_{k=2}^{m} A_{ki}A_{kj} \\
+     & = (A^TA)_{ij} + (\lambda - 1)A_{1i}A_{1j}
+\end{align*}
+so extending this to all elements gives
+\[A'^TA' = A^TA + (\lambda - 1)a_1 a_1^T\]
+and if we let $\xi$ be that horrid fraction given in the problem,
+\begin{align*}
+        & (A'^TA') \cdot \hat{x}(\lambda)                                                                                                \\
+    ={} & \left(A^TA + (\lambda - 1)a_1 a_1^T\right) \cdot \left((A^TA)^{-1}A^Tb + \xi (A^TA)^{-1}a_1\right)                             \\
+    ={} & A^TA\left((A^TA)^{-1}A^Tb + \xi (A^TA)^{-1}a_1\right) + (\lambda-1)a_1 a_1^T \left((A^TA)^{-1}A^Tb + \xi (A^TA)^{-1}a_1\right) \\
+    ={} & A^Tb + \xi a_1 + (\lambda-1)a_1 a_1^T \left((A^TA)^{-1}A^Tb + \xi (A^TA)^{-1}a_1\right)                                        \\
+    ={} & A^Tb + \xi a_1 + (\lambda-1)a_1 a_1^T \left(\hat{x} + \xi (A^TA)^{-1}a_1\right)
+\end{align*}
+
+Ok, well, that doesn't seem to nice.
+Lemme do some reduction on the RHS, $A'^Tb'$, to see if they have anything in common:
+\begin{align*}
+    (A'^Tb')_i
+     & = \sum_{k=1}^{m} A'^T_{ik}b'_k                 \\
+     & = \sum_{k=1}^{m} A'_{ki}b'_k                   \\
+     & = \lambda A_{1i}b_1 + \sum_{k=2}^{m} A_{ki}b_k \\
+     & = (A^Tb)_i + (\lambda - 1)A_{1i}b_1
+\end{align*}
+and so $A'^Tb' = A^Tb + (\lambda - 1)b_1a_1$.
+
+Well, at least that remvoes the common term of $A^Tb$.
+It remains to show
+\[\xi a_1 + (\lambda-1)a_1 a_1^T \left(\hat{x} + \xi (A^TA)^{-1}a_1\right) = (\lambda - 1)b_1a_1\]
+
+For convenience, let $c=a_1^T(A^TA)^{-1}$ be an $1 \times n$ matrix.
+
+Then on the RHS we have
+\begin{align*}
+        & \xi a_1 + (\lambda-1)a_1 a_1^T \left(\hat{x} + \xi (A^TA)^{-1}a_1\right) \\
+    ={} & \xi a_1 + (\lambda - 1)a_1cA^Tb + (\lambda - 1)\xi a_1 c a_1             \\
+    ={} & \left(\xi + (\lambda - 1)cA^Tb + (\lambda - 1)\xi ca_1\right)a_1
+\end{align*}
+so we can reduce that nasty equation above to "just"
+\[\xi + (\lambda - 1)cA^Tb + (\lambda - 1)\xi ca_1 = (\lambda - 1)b_1\]
+or, after dividing both sides by $\lambda-1$,
+\[\frac{\xi}{\lambda - 1} + cA^Tb + \xi ca_1 = b_1\]
+
+Having $c$ as an intermediary also allows us to write
+\[\xi = \frac{(\lambda-1)(b_1-cA^Tb)}{1+(\lambda-1)ca_1}\]
+
+But now it's time to bite the bullet and expand everything out:
+\begin{align*}
+        & \frac{\xi}{\lambda - 1} + cA^Tb + \xi ca_1                                                                                                          \\
+    ={} & \frac{b_1-cA^Tb}{1+(\lambda-1)ca_1} + cA^Tb + \frac{(\lambda-1)(b_1-cA^Tb)ca_1}{1+(\lambda-1)ca_1}                                                  \\
+    ={} & \frac{b_1-cA^Tb}{1+(\lambda-1)ca_1} + \frac{cA^Tb + (\lambda-1)cA^Tbca_1}{1+(\lambda-1)ca_1} + \frac{(\lambda-1)(b_1-cA^Tb)ca_1}{1+(\lambda-1)ca_1} \\
+    ={} & \frac{b_1 - cA^Tb + cA^Tb + (\lambda-1)cA^Tbca_1 + (\lambda-1)(-cA^Tb)ca_1 + (\lambda-1)b_1ca_1}{1+(\lambda-1)ca_1}                                 \\
+    ={} & \frac{b_1+(\lambda-1)b_1ca_1}{1+(\lambda-1)ca_1}                                                                                                    \\
+    ={} & \frac{b_1(1 + (\lambda - 1)ca_1)}{1+(\lambda-1)ca_1}                                                                                                \\
+    ={} & b_1\quad\square
+\end{align*}
+Funny how things work out.
+
+\subsection{Part B}
+
+Assuming we already have $A=QR$, $A^TA=R^TR$ and we can do the following:
+\begin{enumerate}
+    \item Compute $(A^TA)^{-1}a_1$ by solving $R^TRy=a_1$ in $O(n^2)$ time using back \& forward substitution.
+    \item Given the above, we can get $a_1^T(A^TA)^{-1}a_1$ in $O(n)$ time since it's a vector dot product.
+\end{enumerate}
+
+\subsection{Part C}
+
+This is a constrained least squares problem where $A$ is missing its first row and $C$ is just that missing first row.
+
+If we redefine $A'$ and $b'$ to be their originals without the first row, then
+by a method similar to what we did in part A it can be shown that
+$A'^TA' = A^TA - a_1a_1^T$ and $A'^Tb' = A^Tb - b_1a_1$
+
+So now it suffices to show $\exists z \in \R$ s.t.
+\[\begin{bmatrix}
+        A^TA - a_1a_1^T & a_1 \\
+        a_1^T           & 0
+    \end{bmatrix}\begin{bmatrix}
+        x' \\ z
+    \end{bmatrix}=\begin{bmatrix}
+        A^T - b_1a_1 \\
+        a_1
+    \end{bmatrix}\]
+where $x'$ is the solution given in the problem.
+
+Once again, let $c=a_1^T(A^TA)^{-1}$, so the diabolical fraction
+\[\frac{b_1-a_1^T\hat{x}}{a_1^T(A^TA)^{-1}a_1}=\frac{b_1-cA^Tb}{ca_1}\]
+
+First let's just check that the second system works out:
+\begin{align*}
+    & a_1^T\left(\hat{x}+\frac{b_1-cA^Tb}{ca_1}(A^TA)^{-1}a_1\right) \\
+    ={} & a_1^T\hat{x} + \frac{b_1-cA^Tb}{ca_1}a_1^T(A^TA)^{-1}a_1 \\
+    ={} & cA^Tb + \frac{b_1-cA^Tb}{ca_1}ca_1 \\
+    ={} & b_1
+\end{align*}
+Alright, all seems good here.
+
+Now in preparation for the first system, let's simplify $(A^TA-a_1a_1^T)x'$:
+\begin{align*}
+    & (A^TA-a_1a_1^T)x' \\
+    ={} & (A^TA-a_1a_1^T)\left((A^TA)^{-1}A^Tb + \frac{b_1-cA^Tb}{ca_1}(A^TA)^{-1}a_1\right) \\
+    ={} & A^Tb + \frac{b_1-cA^Tb}{ca_1}a_1 - a_1c\left(A^Tb+\frac{b_1-cA^Tb}{ca_1}a_1\right) \\
+    ={} & A^Tb + \left(\frac{b_1-cA^Tb}{ca_1} - c\left(A^Tb+\frac{b_1-cA^Tb}{ca_1}a_1\right)\right)a_1
+\end{align*}
+As we can see, it's $A^Tb$ plus some cursed multiple of $a_1$.
+No matter what that scalar comes out to be, we can always
+tune $z$ s.t. it plus the scalar winds up being $-b_1$.
+
+Thus, the propose solution is indeed optimal. $\square$
+
+\pagebreak
+
 \section{Exercise A11.8}
 
 \subsection{Part C}
@@ -173,10 +312,10 @@ We need to solve these two equations:
 \end{align*}
 With some manipulation on the first equation we have
 \begin{align*}
-    & Dx+C^Ty=\mathbf{0} \\
-    \implies{} & x+D^{-1}C^Ty=\mathbf{0} \\
+               & Dx+C^Ty=\mathbf{0}        \\
+    \implies{} & x+D^{-1}C^Ty=\mathbf{0}   \\
     \implies{} & Cx+CD^{-1}C^Ty=\mathbf{0} \\
-    \implies{} & CD^{-1}C^Ty=-b \\
+    \implies{} & CD^{-1}C^Ty=-b            \\
     \implies{} & Ay=-b
 \end{align*}
 which can be easily solved given the Cholseky factorization of $A$ in $O(n^2)$ time.
@@ -206,17 +345,17 @@ In a similar manner as the previous part, we can manipulate the first equation t
 and we can isolate $z$ in the third equation to get
 \begin{align*}
     z
-    &=-\frac{f^Ty}{d} \\
-    &= -\frac{f^TA^{-1}(zf+b)}{d} \\
-    &= -\frac{zf^TA^{-1}f+f^TA^{-1}b}{d}
+     & =-\frac{f^Ty}{d}                    \\
+     & = -\frac{f^TA^{-1}(zf+b)}{d}        \\
+     & = -\frac{zf^TA^{-1}f+f^TA^{-1}b}{d}
 \end{align*}
 
 All we need to get $z$ is $f^TA^{-1}f$ and $f^TA^{-1}b$.
 Thankfully, we don't have to calculate any inverse, since
 \begin{align*}
     f^TA^{-1}b
-    &= f^TR^{-1}R^{-T}b \\
-    &= (R^{-T}f)^T \cdot R^{-T}b
+     & = f^TR^{-1}R^{-T}b          \\
+     & = (R^{-T}f)^T \cdot R^{-T}b
 \end{align*}
 and we can get both terms in $O(n^2)$ time since $R$ is upper triangular.
 The process for $f^TA^{-1}f$ goes in much the same manner.
