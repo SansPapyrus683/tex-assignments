@@ -187,18 +187,18 @@ Once again, let $c=a_1^T(A^TA)^{-1}$, so the diabolical fraction
 
 First let's just check that the second system works out:
 \begin{align*}
-    & a_1^T\left(\hat{x}+\frac{b_1-cA^Tb}{ca_1}(A^TA)^{-1}a_1\right) \\
-    ={} & a_1^T\hat{x} + \frac{b_1-cA^Tb}{ca_1}a_1^T(A^TA)^{-1}a_1 \\
-    ={} & cA^Tb + \frac{b_1-cA^Tb}{ca_1}ca_1 \\
+        & a_1^T\left(\hat{x}+\frac{b_1-cA^Tb}{ca_1}(A^TA)^{-1}a_1\right) \\
+    ={} & a_1^T\hat{x} + \frac{b_1-cA^Tb}{ca_1}a_1^T(A^TA)^{-1}a_1       \\
+    ={} & cA^Tb + \frac{b_1-cA^Tb}{ca_1}ca_1                             \\
     ={} & b_1
 \end{align*}
 Alright, all seems good here.
 
 Now in preparation for the first system, let's simplify $(A^TA-a_1a_1^T)x'$:
 \begin{align*}
-    & (A^TA-a_1a_1^T)x' \\
-    ={} & (A^TA-a_1a_1^T)\left((A^TA)^{-1}A^Tb + \frac{b_1-cA^Tb}{ca_1}(A^TA)^{-1}a_1\right) \\
-    ={} & A^Tb + \frac{b_1-cA^Tb}{ca_1}a_1 - a_1c\left(A^Tb+\frac{b_1-cA^Tb}{ca_1}a_1\right) \\
+        & (A^TA-a_1a_1^T)x'                                                                            \\
+    ={} & (A^TA-a_1a_1^T)\left((A^TA)^{-1}A^Tb + \frac{b_1-cA^Tb}{ca_1}(A^TA)^{-1}a_1\right)           \\
+    ={} & A^Tb + \frac{b_1-cA^Tb}{ca_1}a_1 - a_1c\left(A^Tb+\frac{b_1-cA^Tb}{ca_1}a_1\right)           \\
     ={} & A^Tb + \left(\frac{b_1-cA^Tb}{ca_1} - c\left(A^Tb+\frac{b_1-cA^Tb}{ca_1}a_1\right)\right)a_1
 \end{align*}
 As we can see, it's $A^Tb$ plus some cursed multiple of $a_1$.
@@ -232,19 +232,19 @@ Now we take the outer product and subtract it from $A$:
 
 At the second step, we have
 \begin{align*}
-    R_{22}=\sqrt{a-1} &  & R_{23}=\frac{1}{\sqrt{a-1}} \cdot 1
+    R_{22}=1 &  & R_{23}=1
 \end{align*}
 
 And subtracting this outer product (which is just a scalar at this point) forces
-\[R_{33}=\sqrt{a-1-\frac{1}{a-1}}\]
+\[R_{33}=\sqrt{a-2}\]
 
 Both both these square roots to be real, we need $a > 2$.
 
 If it is, our Cholseky factor is
 \[R=\begin{bmatrix}
-        1 & 0          & 1                        \\
-        0 & \sqrt{a-1} & 1/\sqrt{a-1}             \\
-        0 & 0          & \sqrt{a-1-\frac{1}{a-1}}
+        1 & 0 & 1          \\
+        0 & 1 & 1          \\
+        0 & 0 & \sqrt{a-2}
     \end{bmatrix}\]
 
 \pagebreak
@@ -341,13 +341,13 @@ This time, we have the system
 where $d, z \in \R$ and $f \in R^n$.
 
 In a similar manner as the previous part, we can manipulate the first equation to get
-\[b-zf+Ay=\mathbf{0} \implies y=A^{-1}(zf+b)\]
+\[b-zf+Ay=\mathbf{0} \implies y=A^{-1}(zf-b)\]
 and we can isolate $z$ in the third equation to get
 \begin{align*}
     z
      & =-\frac{f^Ty}{d}                    \\
-     & = -\frac{f^TA^{-1}(zf+b)}{d}        \\
-     & = -\frac{zf^TA^{-1}f+f^TA^{-1}b}{d}
+     & = -\frac{f^TA^{-1}(zf-b)}{d}        \\
+     & = -\frac{zf^TA^{-1}f-f^TA^{-1}b}{d}
 \end{align*}
 
 All we need to get $z$ is $f^TA^{-1}f$ and $f^TA^{-1}b$.
@@ -360,7 +360,7 @@ Thankfully, we don't have to calculate any inverse, since
 and we can get both terms in $O(n^2)$ time since $R$ is upper triangular.
 The process for $f^TA^{-1}f$ goes in much the same manner.
 
-With $z$ solved, $Ay=zf+b$ can be solved in $O(n^2)$ time and $x=-D^{-1}C^Ty$
+With $z$ solved, $Ay=zf-b$ can be solved in $O(n^2)$ time and $x=-D^{-1}C^Ty$
 can be calculated in the same way as it was previously in $O(mn)$ time.
 
 Putting all this together gives us a time complexity of \boxed{O(n^2+mn)},
