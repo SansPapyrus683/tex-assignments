@@ -284,8 +284,8 @@ We want to choose a to minimize this weird expression:
 \begin{align*}
     \E\left[(a(X+Z)-X)^2\right]
     &= \E\left[a^2(X+Z)^2+X^2-2aX(X+Z)\right] \\
-    &= \E\left[X^2(a^2+1-2a)+2a^2XZ+a^2Z^2-2aZ\right] \\
-    &= (a-1)^2\E\left[X^2\right]+2a^2\E[X]\E[Z]+a^2\E\left[Z^2\right]-2a\E[Z] \\
+    &= \E\left[X^2(a^2+1-2a)+(2a^2-2a)XZ+a^2Z^2\right] \\
+    &= (a-1)^2\E\left[X^2\right]+(2a^2-2a)\E[X]\E[Z]+a^2\E\left[Z^2\right]\\
     &= (a-1)^2\E\left[X^2\right]+a^2\E\left[Z^2\right] \\
     &= (a-1)^2P+a^2N
 \end{align*}

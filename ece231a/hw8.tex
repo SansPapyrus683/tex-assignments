@@ -136,7 +136,7 @@ and
     ={} & H(Y) - H(Y \mid X_1, X_2)                          \\
     ={} & H(Y)                                               \\
     ={} & H_3(p_1p_2, (1-p_1)(1-p_2), p_1(1-p_2)+p_2(1-p_1)) \\
-    ={} & H_3(p_1p_2, (1-p_1)(1-p_2), p_1+p_2-p_1p_2)
+    ={} & H_3(p_1p_2, (1-p_1)(1-p_2), p_1+p_2-2p_1p_2)
 \end{align*}
 
 \subsection{Part B}
@@ -155,15 +155,15 @@ If you'll excuse the dogwater LaTeX, notice that
 \begin{align*}
         & H(p_1)+H(p_2)                                                                                          \\
     ={} & H_4(p_1(1-p_2), p_1p_2, (1-p_1)(1-p_2), (1-p_1)p_2)                                                    \\
-    ={} & H_3(p_1p_2, (1-p_1)(1-p_2), p_1+p_2-p_1p_2)                                                            \\
-        & + (p_1+p_2-p_1p_2)H_2\left(\frac{p_1(1-p_2)}{p_1+p_2-p_1p_2}, \frac{(1-p_1)p_2}{p_1+p_2-p_1p_2}\right)
+    ={} & H_3(p_1p_2, (1-p_1)(1-p_2), p_1+p_2-2p_1p_2)                                                            \\
+        & + (p_1+p_2-2p_1p_2)H_2\left(\frac{p_1(1-p_2)}{p_1+p_2-2p_1p_2}, \frac{(1-p_1)p_2}{p_1+p_2-2p_1p_2}\right)
 \end{align*}
 and thus
 \[H(Y)=H(p_1)+H(p_2) - \alpha H(q)\]
 where
 \begin{gather*}
-    \alpha = p_1+p_2-p_1p_2 \\
-    q = \frac{p_1(1-p_2)}{p_1+p_2-p_1p_2}
+    \alpha = p_1+p_2-2p_1p_2 \\
+    q = \frac{p_1(1-p_2)}{p_1+p_2-2p_1p_2}
 \end{gather*}
 
 \subsection{Part D}
@@ -174,7 +174,7 @@ I used Desmos this time, but the idea's there.
     \includegraphics[width=10cm]{img/hw8/bin\_add}
 \end{center}
 The red region is $p_1=p_2=0.5$, and the green region is $p_1=0.3$ and $p_2=0.7$.
-As we can see, the red does not completely contain the green.
+As we can see, the red completely contains the green.
 
 \pagebreak
 
