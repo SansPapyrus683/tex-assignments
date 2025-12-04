@@ -176,16 +176,16 @@ Letting $a=P(\hat{X}=0)$, we have
 
 From this we can find $P(\hat{X} \mid X)$ using Bayes' rule:
 \begin{align*}
-    P(X=0 \mid \hat{X}=0)
+    P(\hat{X}=0 \mid X=0)
      & = \frac{P(X=0 \mid \hat{X}=0)P(\hat{X}=0)}{P(X=0)} \\
      & = \frac{(1-D)\frac{p-D}{1-2D}}{\frac{1}{2}}        \\
      & = \frac{2(1-D)(p-D)}{1-2D}
 \end{align*}
 By a similar process, we have
 \begin{gather*}
-    P(X=1 \mid \hat{X}=0)=\frac{2D(p-D)}{1-2D} \\
-    P(X=1 \mid \hat{X}=1)=\frac{2(1-D)(1-p-D)}{1-2D} \\
-    P(X=0 \mid \hat{X}=1)=\frac{2D(1-p-D)}{1-2D}
+    P(\hat{X}=1 \mid X=0)=\frac{2D(p-D)}{1-2D} \\
+    P(\hat{X}=1 \mid X=1)=\frac{2(1-D)(1-p-D)}{1-2D} \\
+    P(\hat{X}=0 \mid X=1)=\frac{2D(1-p-D)}{1-2D}
 \end{gather*}
 
 \pagebreak
@@ -249,7 +249,7 @@ we can just always predict $\E[X]$ and on average we'll be off by the variance, 
 
 \section{Conditional That Achieves \texorpdfstring{$R(D)$}{R(D)}}
 
-We have $\hat{X}=X-Z=X+Z$ since $Z$ has zero mean, so once we know $x$, $\hat{X} \mid x \sim \mathcal{N}(x, D)$.
+uuuhhhh my initial answer was wronger than wrong so\dots
 
 \pagebreak
 
