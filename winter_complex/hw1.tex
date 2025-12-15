@@ -1,0 +1,310 @@
+\documentclass[12pt]{article}
+
+\input{../kz}
+
+\rhead{winter complex pain}
+
+\makeatletter
+\def\@seccntformat#1{%
+  \expandafter\ifx\csname c@#1\endcsname\c@section\else
+  \csname the#1\endcsname\quad
+  \fi}
+\makeatother
+
+\DeclareMathOperator{\cis}{cis}
+\newcommand{\lra}{\xLeftrightarrow}
+\newcommand{\ra}{\xRightarrow}
+
+\begin{document}
+
+\section{Chapter 1.1}
+
+\subsection{Exercise 21}
+
+Multiplying the second equation by $-1-i$ gives
+\[(1-i)z_1+(1+2i)(-1-i)z_2=-1-i\]
+which simplifies to
+\[(1-i)z_1+(1-3i)z_2=-1-i\]
+which we can then subtract from the first to get
+\[(2+3j)z_2=3-2j \implies \boxed{z_2=-i}\]
+and plugging that back into the first equation gives \boxed{z_1=1+i}.
+
+\subsection{Exercise 22}
+
+There's $4$ solutions to $z^4=16$:
+\begin{enumerate}
+  \item $z=2$
+  \item $z=-2$
+  \item $z=2i$
+  \item $z=-2i$
+\end{enumerate}
+
+\subsection{Exercise 23}
+
+If we let $z=a+bi$ where $a > 0$, then
+\begin{align*}
+  \Re(1/z)
+   & = \Re\left(\frac{1}{a+bi}\right)       \\
+   & = \Re\left(\frac{a-bi}{a^2-b^2}\right) \\
+   & = \frac{a}{a^2+b^2}                    \\
+   & > 0
+\end{align*}
+since both the numerator and the denominator are positive. $\square$
+
+\subsection{Exercise 24}
+
+Again, let $z+a+bi$, only now $b > 0$:
+\begin{align*}
+  \Im(1/z)
+   & = \Im\left(\frac{1}{a+bi}\right)       \\
+   & = \Im\left(\frac{a-bi}{a^2-b^2}\right) \\
+   & = \frac{-b}{a^2+b^2}                   \\
+   & < 0
+\end{align*}
+since the numerator is negative and the denominator is positive. $\square$
+
+\subsection{Exercise 30}
+
+BWOC say there existed such a $\mathcal{P}$.
+
+Say $i \in \mathcal{P}$.
+Then, $i \cdot i = -1 \in \mathcal{P}$ and $-1 \cdot i=-i \in \mathcal{P}$ by the third condition.
+
+However, the first condition mandates that only \textit{one} of $i$ and $-i$ can belong in $\mathcal{P}$,
+which is a contradiction.
+
+By similar logic, we can conclude that $-i \notin \mathcal{P}$ as well.
+Thus, no $\mathcal{P}$ can satisfy the specified conditions. $\square$
+
+\section{Chapter 1.2}
+
+\subsection{Exercise 7 (e, h, i, j)}
+
+I'll describe the set as if it were just a graph in the $xy$-plane,
+where reals are on the $x$-axis and imaginaries are on the $y$-axis.
+
+\begin{enumerate}
+  \item[(e)] $y=\pm \sqrt{4x+4}$, which gives a sort of horizontal parabola.
+  \item[(h)] All points at or to the right of $x=4$.
+  \item[(i)] A circle of radius $\sqrt{2}$ centered at $(0, -1)$.
+  \item[(j)] Everything outside of a circle of radius $\sqrt{6}$ centered at the origin.
+\end{enumerate}
+
+\subsection{Exercise 16}
+
+Let $z=a+bi$ where $a^2+b^2=1$ and $a \ne 1$.
+Then,
+\begin{align*}
+  \Re(1/(1-z))
+   & = \Re\left(\frac{1}{(1-a)+bi}\right)           \\
+   & = \Re\left(\frac{(1-a)-bi}{(1-a)^2+b^2}\right) \\
+   & = \frac{1-a}{(1-a)^2+b^2}                      \\
+   & = \frac{1-a}{a^2-2a+1+b^2}                     \\
+   & = \frac{1-a}{2-2a}                             \\
+   & = \frac{1}{2}\quad\square
+\end{align*}
+
+\section{Chapter 1.3}
+
+\subsection{Exercise 11}
+
+Notice that $(1+i)(5-i)^4 = 956-4j=4(239-j)$.
+
+Thus,
+\begin{align*}
+             & \arg\left((1+i)(5-i)^4\right)=\arg(239-j)              \\
+  \implies{} & \arg(1+i)+4\arg(5-i)=\arg(239-j)                       \\
+  \implies{} & \frac{\pi}{4}=\arg(239-j)-4\arg(5-i)                   \\
+  \implies{} & \frac{\pi}{4}=4\arg(5+i)-\arg(239+j)                   \\
+  \implies{} & \frac{\pi}{4}=4\arctan(1/5)-\arctan(1/239)\quad\square
+\end{align*}
+
+\section{Chapter 1.4}
+
+\subsection{Exercise 13}
+
+\subsubsection{Part A}
+
+Numbers, numbers, numbers...
+\begin{align*}
+  \sin^2 \theta + \cos^2 \theta
+   & = \left(\frac{e^{i\theta}-e^{-i\theta}}{2i}\right)^2
+  + \left(\frac{e^{i\theta}+e^{-i\theta}}{2}\right)^2     \\
+   & = -\frac{e^{2i\theta}+e^{-2i\theta}-2}{4}
+  + \frac{e^{2i\theta}+e^{-2i\theta}+2}{4}                \\
+   & = \frac{4}{4}                                        \\
+   & = 1\quad\square
+\end{align*}
+
+\subsubsection{Part B}
+
+I'll use $a$ and $b$ instead of $\theta_1$ and $\theta_2$ for ease of typing.
+\begin{align*}
+      & \cos(a)\cos(b)-\sin(a)\sin(b)                           \\
+  ={} & \frac{e^{ia}+e^{-ia}}{2} \cdot \frac{e^{ib}+e^{-ib}}{2}
+  - \frac{e^{ia}-e^{-ia}}{2i} \cdot \frac{e^{ib}-e^{-ib}}{2i}   \\
+  ={} & \frac{e^{i(a+b)}+e^{i(a-b)}+e^{-i(a+b)}+e^{i(b-a)}}{4}
+  +\frac{e^{i(a+b)}-e^{i(a-b)}+e^{-i(a+b)}-e^{i(b-a)}}{4}       \\
+  ={} & \frac{2e^{i(a+b)}+2e^{-i(a+b)}}{4}                      \\
+  ={} & \cos(a+b)\quad\square
+\end{align*}
+
+\subsection{Exercise 20}
+
+Let $S=\sum_{i=0}^{n} z^i$.
+Then,
+\begin{align*}
+             & Sz=\sum_{j=1}^{n+1} z^j             \\
+  \implies{} & Sz-S=z^{n+1}-1                      \\
+  \implies{} & S=\frac{z^{n+1}-1}{z-1}\quad\square
+\end{align*}
+
+\subsubsection{Part A}
+
+Consider the above expression with $z=\cis \theta$.
+
+Since $z^n=\cis n\theta$, we can let $x=(n+1)\theta$ for brevity and
+\begin{align*}
+      & 1+\cos \theta + \cdots + \cos n\theta                                                                              \\
+  ={} & \Re\left(\sum_{j=0}^{n} z^j\right)                                                                                 \\
+  ={} & \Re\left(\frac{\cis x - 1}{\cis \theta - 1}\right)                                                                 \\
+  ={} & \Re\left(\frac{(\cos x + i\sin x - 1)(\cos \theta - 1 - i\sin\theta)}{2-2\cos \theta}\right)                       \\
+  ={} & \Re\left(\frac{\cos x\cos\theta - \cos x + \sin x\sin\theta- \cos\theta + 1 + i(\cdots)}{2-2\cos \theta}\right)    \\
+  ={} & \frac{\cos x\cos\theta - \cos x + \sin x\sin\theta- \cos\theta + 1}{2-2\cos\theta}                                 \\
+  ={} & \frac{\cos(x-\theta)-\cos x -\cos \theta+1}{2-2\cos\theta}                                                         \\
+  ={} & \frac{1-\cos\theta}{2-2\cos\theta} + \frac{\cos n\theta - \cos x}{2-2\cos \theta}                                  \\
+  ={} & \frac{1}{2} + \frac{\cos n\theta - \cos x}{2-2\cos \theta}                                                         \\
+  ={} & \frac{1}{2} + \frac{\cos n\theta - \cos\theta \cos n\theta + \sin\theta\sin n\theta}{2-2\cos\theta}                \\
+  ={} & \frac{1}{2} + \frac{\cos n\theta(1-\cos \theta)}{2-2\cos\theta} + \frac{\sin\theta\sin n\theta}{2-2\cos\theta}     \\
+  ={} & \frac{1}{2}+\frac{\cos n\theta}{2}+\frac{\sin\theta \sin n\theta}{2\tan(\theta/2)\sin\theta}                       \\
+  ={} & \frac{1}{2}+\frac{\cos n\theta}{2}+\frac{\sin n\theta \cos(\theta/2)}{2\sin(\theta/2)}                             \\
+  ={} & \frac{1}{2}+\frac{\cos n\theta\sin(\theta/2)}{2\sin(\theta/2)}+\frac{\sin n\theta \cos(\theta/2)}{2\sin(\theta/2)} \\
+  ={} & \frac{1}{2}+\frac{\sin ((n+1/2)\theta)}{2\sin(\theta/2)} \quad\square
+\end{align*}
+
+\subsubsection{Part B}\label{sec:sin_sum}
+
+This is basically the same thing, except we take the imaginary part instead.
+\begin{align*}
+      & \sin\theta + \cdots + \sin n\theta                                                                        \\
+  ={} & \Im\left(\sum_{j=0}^{n} z^j\right)                                                                        \\
+  ={} & \Im\left(\frac{(\cos x + i\sin x - 1)(\cos \theta - 1 - i\sin\theta)}{2-2\cos \theta}\right)              \\
+  ={} & \Im\left(\frac{\cdots + i(-\cos x\sin\theta+\sin x\cos\theta-\sin x+\sin\theta)}{2-2\cos\theta}\right)    \\
+  ={} & \frac{-\cos x\sin\theta+\sin x\cos\theta-\sin x+\sin\theta}{2-2\cos\theta}                                \\
+  ={} & \frac{\sin n\theta-\sin x + \sin \theta}{2-2\cos\theta}                                                   \\
+  ={} & \frac{\sin n\theta-(\sin\theta\cos n\theta+\sin n\theta\cos\theta) + \sin \theta}{2-2\cos\theta}          \\
+  ={} & \frac{\sin n\theta(1-\cos \theta)}{2-2\cos\theta}+\frac{\sin\theta(1-\cos n\theta)}{2-2\cos\theta}        \\
+  ={} & \frac{\sin n\theta}{2} + \frac{\sin\theta(1-\cos n\theta)}{2\tan(\theta/2)\sin \theta}                    \\
+  ={} & \frac{\sin n\theta}{2} + \frac{(1-\cos n\theta)\cos(\theta/2)}{2\sin(\theta/2)}                           \\
+  ={} & \frac{\sin n\theta \sin(\theta/2)+(1-\cos n\theta)\cos(\theta/2)}{2\sin(\theta/2)}                        \\
+  ={} & \frac{\sin n\theta\sin(\theta/2)-\cos n\theta \cos(\theta/2) + \cos(\theta/2)}{2\sin(\theta/2)}           \\
+  ={} & \frac{-\cos((n+1/2)\theta) + \cos(\theta/2)}{2\sin(\theta/2)}                                             \\
+  ={} & \frac{2\sin\left(\frac{n+1}{2}\theta\right)\sin\left(\frac{n\theta}{2}\right)}{2\sin(\theta/2)}           \\
+  ={} & \frac{\sin\left(\frac{n+1}{2}\theta\right)\sin\left(\frac{n\theta}{2}\right)}{\sin(\theta/2)}\quad\square
+\end{align*}
+
+\subsection{Exercise 21}
+
+Using the result from \ref{sec:sin_sum}, we have
+\begin{align*}
+  \left|\frac{\sin(n\theta/2)}{\sin(\theta/2)}\right|
+   & = \left|\frac{\sin(n\theta/2)\sin((n+1)\theta/2)}{\sin(\theta/2)} \cdot \frac{1}{\sin((n+1)\theta/2)}\right|       \\
+   & = \left|\frac{\sin(n\theta/2)\sin((n+1)\theta/2)}{\sin(\theta/2)}\right|\left|\frac{1}{\sin((n+1)\theta/2)}\right| \\
+   & \le \left|\frac{\sin(n\theta/2)\sin((n+1)\theta/2)}{\sin(\theta/2)}\right|                                         \\
+   & = \left|\sum_{x=1}^{n} \sin x\theta\right|                                                                         \\
+   & \le n\quad\square
+\end{align*}
+
+\subsection{Exercise 22}
+
+The first equality just comes from Euler's equation.
+
+For the second, if we assume $n=0$, then
+\begin{align*}
+  \int_{0}^{2\pi} \cos(n\theta)\,d\theta + i\int_{0}^{2\pi}\sin(n\theta)\,d\theta
+   & = \int_{0}^{2\pi} 1\,d\theta + i\int_{0}^{2\pi}0\,d\theta \\
+   & = 2\pi
+\end{align*}
+OTOH, if $n \ne 0$, then we can do a $u$-sub with $u=n\theta$ and $d\theta=\frac{du}{n}$:
+\begin{align*}
+      & \int_{0}^{2\pi} \cos(n\theta)\,d\theta + i\int_{0}^{2\pi}\sin(n\theta)\,d\theta \\
+  ={} & \int_{0}^{2n\pi} \frac{\cos u}{n}\,du + i\int_{0}^{2n\pi}\frac{\sin(u)}{n}\,du  \\
+  ={} & \intval{\frac{\sin u}{n}}^{2n\pi}_0 + i\intval{-cos u}^{2n\pi}_0                \\
+  ={} & (0-0)+i(0-0)                                                                    \\
+  ={} & 0\quad\square
+\end{align*}
+
+\pagebreak
+
+\section{Chapter 1.6}
+
+\subsection{Exercise 2}\label{sec:descriptions}
+
+don't wanna get pen \& paper, i'll just describe them
+\begin{enumerate}[label=(\alph*)]
+  \item dotted circle at $1-i$ of radius $\sqrt{3}$
+  \item everything between $y=x$ and $y=-x$ to the right of the $y$ axis (not inclusive)
+  \item dotted circle centered at $2$ of radius $\sqrt{3}$ w/o the center
+  \item the region between $y=-1$ and $y=1$ with a dotted lower line but a solid upper one
+  \item everything outside of a circle at the center w/ radius $\sqrt{2}$, solid boundary
+  \item the region beyond $x=-1$ and $x=1$, both lines are solid
+\end{enumerate}
+
+\subsection{Exercise 3}
+
+(a), (b), and (c) are open.
+
+\subsection{Exercise 4}
+
+All the open sets are domains as well.
+
+\subsection{Exercise 5}
+
+(a), (c), and (d) are bounded.
+
+\subsection{Exercise 6}
+
+already did that in \ref{sec:descriptions} lol
+
+\pagebreak
+
+\section{Gamma Function}
+
+\subsection{Part A}
+
+We've
+\begin{align*}
+  \Gamma(1)
+   & = \int_{0}^{\infty} t^0 e^{-t}\,dt \\
+   & = \int_{0}^{\infty} e^{-t}\,dt     \\
+   & = \intval{-e^{-t}}^\infty_0        \\
+   & = \boxed{1}
+\end{align*}
+
+\subsection{Part B}
+
+Following the hint gves us
+\begin{align*}
+  \Gamma(s+1)
+   & = \int_0^\infty t^s e^{-t}\,dt                                    \\
+   & = -e^{-t}t^s-\int_0^\infty -e^{-t}st^{s-1}\,dt                    \\
+   & = \intval{-e^{-t}t^s}^\infty_0 + s\int_0^\infty e^{-t}t^{s-1}\,dt \\
+   & = 0 + s\Gamma(s-1)                                                \\
+   & = s\Gamma(s-1)\quad\square
+\end{align*}
+
+\subsection{Part C}
+
+I swear the previous two parts just imply that $\Gamma(n)=n!$ for $n \in \N$ directly.
+
+\subsection{Part D}
+
+We have
+\begin{align*}
+  \Gamma\left(\frac{1}{2}\right)
+   & = \int_{0}^{\infty} t^{-1/2}e^{-t}\,dt \\
+   & = \int_{0}^{\infty} 2e^{-u^2}\,du      \\
+   & = \boxed{\sqrt{\pi}}
+\end{align*}
+
+\end{document}
