@@ -1,0 +1,415 @@
+\documentclass[12pt]{article}
+
+\input{../kz}
+
+\rhead{winter complex pain}
+
+\DeclareMathOperator{\cis}{cis}
+\newcommand{\lra}{\xLeftrightarrow}
+\newcommand{\ra}{\xRightarrow}
+
+\begin{document}
+
+\section{Chapter 2.1}
+
+\subsection{Exercise 3}
+
+\begin{enumerate}[label=(\alph*)]
+      \item $\{z \in \C \mid \Re(z) > 5\}$
+      \item $\{z \in \C \mid \Im(z) \ge 0\}$
+      \item $\{z \in \C \mid |z| \ge 1\}$
+      \item The same quarter disk except the radius is $2$ now.
+\end{enumerate}
+
+\section{Chapter 2.2}
+
+\subsection{Exercise 11}
+
+\begin{enumerate}[label=(\alph*)]
+      \item $\lim_{z \to 2+3i} (z-5i)^2=(2+3i-5i)^2=\boxed{-8i}$
+      \item $\lim_{z \to 2} \frac{z^2+3}{iz}=\frac{2^2+3}{2i}=\boxed{-\frac{7i}{2}}$
+      \item Can we do this?
+            IDK, but who's gonna stop me anyways?
+            \begin{align*}
+                  \lim_{z \to 3i} \frac{z^2+9}{z-3i}
+                   & =\lim_{z \to 3i} \frac{(z+3i)(z-3i)}{z-3i} \\
+                   & =\lim_{z \to 3i} z+3i                      \\
+                   & = \boxed{6i}
+            \end{align*}
+      \item At $z=i$, the numerator is $i-1$ and the deniminator is $0$,
+            so this one is probably \boxed{\infty}.
+      \item Sneaky derivative...
+            \begin{align*}
+                  \lim_{\Delta z \to 0} \frac{(z_0+\Delta z)^2-z_0^2}{\Delta z}
+                   & = \lim_{\Delta z \to 0} \frac{2z_0\Delta z + \Delta z^2}{\Delta z} \\
+                   & = \lim_{\Delta z \to 0} 2z_0 + \Delta z                            \\
+                   & = \boxed{2z_0}
+            \end{align*}
+      \item Surely we don't need to prove that $y=\sqrt{x}$ is continuous... \\
+            $\lim_{z \to 1+2i} \left|z^2-1\right| = \boxed{4\sqrt{2}}$
+\end{enumerate}
+
+\subsection{Exercise 25}
+
+\begin{enumerate}[label=(\alph*)]
+      \item Nonzero numerator and zero deniminator,
+            so $\lim_{z \to 2i} \frac{z^2+9}{2z^2+8}=\boxed{\infty}$.
+      \item I think this works?
+            \begin{align*}
+                  \lim_{z \to \infty} \frac{3z^2-2z}{z^2-iz+8}
+                   & = \lim_{z \to \infty} \frac{3-\frac{2}{z}}{1-\frac{i}{z}+\frac{8}{z^2}}                     \\
+                   & = \frac{\lim_{z \to \infty} 3-\frac{2}{z}}{\lim_{z \to \infty} 1-\frac{i}{z}+\frac{8}{z^2}} \\
+                   & = \frac{3}{1}                                                                               \\
+                   & = \boxed{3}
+            \end{align*}
+      \item This one is also \boxed{\infty}, what?
+      \item To no one's surprise, $\lim_{z \to \infty} 8z^3+5z+2=\boxed{\infty}$.
+      \item I don't think this limit exists, since if we take $z=bi$ then $|e^z|=1$.
+            We can also make it as big as we want by including any real component in $z$.
+\end{enumerate}
+
+\section{Chapter 2.3}
+
+\subsection{Exercise 2}\label{sec:vanishing_lambda}
+
+I think this is asking just to show us that $\lambda$ has the specified behavior?
+
+In that case,
+\begin{align*}
+      \lambda(z)
+       & =\frac{f(z)-f(z_0)-f'(z_0)(z-z_0)}{z-z_0} \\
+       & =\frac{f(z)-f(z_0)}{z-z_0}-f'(z_0)
+\end{align*}
+Now it STP $\lim_{z \to z_0} \frac{f(z)-f(z_0)}{z-z_0}=f'(z_0)$ given our original limit definition.
+
+Fix an $\epsilon$.
+By our OG definition,
+$\exists \delta: |\Delta z| < \delta \implies
+      \left|\frac{f(z_0+\Delta z)-f(z_0)}{\Delta z}-f'(z_0)\right| < \epsilon$.
+
+This is probably the $\delta$ that we also want for our other limit.
+If $|z-z_0| < \delta$, we can let $\Delta z = z-z_0$ and substitute that into the
+previous inequality to get $\left|\frac{f(z)-f(z_0)}{z-z_0}-f'(z_0)\right| < \epsilon$. $\square$
+
+\subsection{Exercise 3}
+
+Following the hint, let's bring back the definition of $f$ from \ref{sec:vanishing_lambda}.
+
+The error term between $f(z_0)$ and $f(z)$ is
+\[f(z_0)-(f(z_0)+f'(z_0)(z-z_0)+\lambda(z)(z-z_0))=-f'(z_0)(z-z_0)-\lambda(z)(z-z_0)\]
+so it STP that the magnitude of this vanishes as $z \to z_0$.
+
+$f'(z_0)$ is a constant, so $\lim_{z \to z_0} f'(z_0)(z-z_0)=0$.
+
+In \ref{sec:vanishing_lambda}, we also showed that $\lim_{z \to z_0} \lambda(z)=0$,
+so by extension $\lim_{z \to z_0} \lambda(z)(z-z_0)=0$ as well.
+
+Both addends are $0$, so the error term does indeed vanish as $z \to z_0$. $\square$
+
+\subsection{Exercise 10}
+
+Well, the textbook already does half the work for us.
+
+Consider any point $z_0 \ne 0$.
+Then
+\begin{align*}
+      \lim_{\Delta z \to 0} \frac{f(z_0+z)-f(z_0)}{\Delta z}
+       & = \lim_{\Delta z \to 0} \frac{|z_0+z|^2-|z_0|^2}{\Delta z}                                                         \\
+       & = \lim_{\Delta z \to 0} \frac{(z_0+\Delta z)(\overline{z_0}+\overline{\Delta z})-z_0\overline{z_0}}{\Delta z}      \\
+       & = \lim_{\Delta z \to 0} \frac{z_0\overline{\Delta z}+\Delta z\overline{z_0}+\Delta z\overline{\Delta z}}{\Delta z} \\
+       & = \lim_{\Delta z \to 0} z_0\frac{\overline{\Delta z}}{\Delta z}+\overline{z_0}+\overline{\Delta z}
+\end{align*}
+
+If we take $\Delta z=ai$ as $a \to 0$, then $\frac{\overline{\Delta z}}{\Delta z}=\frac{-ai}{ai}=-1$.
+
+However, if $\Delta z=a+ai$, then $\frac{\overline{\Delta z}}{\Delta z}=\frac{a-ai}{a+ai}=-i$.
+
+Since $z_0 \ne 0$, this makes it so that we get different values for the limit depending on
+which direction we approach it from, thus denying the existence of a limit. $\square$
+
+\pagebreak
+
+\section{Chapter 2.4}
+
+\subsection{Exercise 5}
+
+I suppose there's no choice but to take all four partials.
+
+For $u(x, y) = \exp(x^2-y^2)\cos(2xy)$, the partials are
+\begin{align*}
+      \frac{\partial u}{\partial x}
+       & = \cos(2xy)\frac{\partial}{\partial x} \exp(x^2-y^2)
+      + \exp(x^2-y^2)\frac{\partial}{\partial x} \cos(2xy)        \\
+       & = \cos(2xy)(2x\exp(x^2-y^2))+\exp(x^2-y^2)(-2y\sin(2xy)) \\
+       & = \exp(x^2-y^2)(2x\cos(2xy)-2y\sin(2xy))                 \\
+      \frac{\partial u}{\partial y}
+       & = -\exp(x^2-y^2)(2y\cos(2xy)+2x\sin(2xy))
+\end{align*}
+and for $v(x, y) = \exp(x^2-y^2)\sin(2xy)$, the partials are
+\begin{gather*}
+      \frac{\partial v}{\partial x} = \exp(x^2-y^2)(2x\sin(2xy)+2y\cos(2xy))=-\frac{\partial u}{\partial y} \\
+      \frac{\partial v}{\partial y} = \exp(x^2-y^2)(-2y\sin(2xy)+2x\cos(2xy))=\frac{\partial u}{\partial x}
+\end{gather*}
+
+We see that the Cauchy-Riemann equations are satisfied.
+
+All the partials are continuous as well, so the function is entire with derivative
+\begin{align*}
+          & f'(z)                                                                       \\
+      ={} & \frac{\partial u}{\partial x}+i\frac{\partial v}{\partial x}                \\
+      ={} & \boxed{\exp(x^2-y^2)((2x\cos(2xy)-2y\sin(2xy))+i(2x\cos(2xy)+2y\sin(2xy)))}
+\end{align*}
+
+\subsection{Exercise 8}\label{sec:constant_f}
+
+Suppose $\Re(f(z))$ is constant.
+This means that $\frac{\partial u}{\partial x}=\frac{\partial u}{\partial y}=0$,
+since changing any part of $z$ can't change $u$, the real part.
+
+By the Cauchy-Riemann equations, this also means
+$\frac{\partial v}{\partial x}=\frac{\partial v}{\partial y} = 0$.
+Putting this together with the previous equation gives $f'(z)=0$,
+implying that $f$ is constant. $\square$
+
+A nearly identical line of logic gives the same results for $\Im(f(z))$ being constant.
+
+\subsection{Exercise 10}
+
+If $f(z) \in \R$, then $\Im(f(z))$ is constant and by the result
+in \ref{sec:constant_f} $f$ is constant too... $\square$
+
+\section{Chapter 2.5}
+
+\subsection{Exercise 5}
+
+We're given that $u+iv$ is analytic and NTS that $v-iu$ is analytic too.
+
+$u+iv$ is analytic, so $u$ and $v$ are harmonic.
+This means they have second derivatives and therefore continuous first-order
+derivatives too.
+
+We have that $\frac{\partial u}{\partial x}=\frac{\partial v}{\partial y}$
+and $\frac{\partial u}{\partial y}=-\frac{\partial v}{\partial x}$.
+Notice that these are also the Cauchy-Riemann equations for $v-iu$, only swapped in order.
+
+Combined with the previous observation, this tells us that $-u$ is a conjugate pair for $v$. $\square$
+
+\subsection{Exercise 6}
+
+I guess we have to take all the second-order partials...?
+\begin{align*}
+      \frac{\partial^2 uv}{\partial x \partial y}
+       & = \frac{\partial}{\partial x}\left(\frac{\partial u}{\partial y}v+\frac{\partial v}{\partial y}u\right)    \\
+       & = \frac{\partial^2 u}{\partial x \partial y}v + \frac{\partial u}{\partial y}\frac{\partial v}{\partial x}
+      + \frac{\partial^2 v}{\partial x \partial y}u + \frac{\partial v}{\partial y}\frac{\partial u}{\partial x}
+\end{align*}
+Here, $u$ and $v$ are the real and imaginary parts of an analytic function,
+so everything here (and thus their sum) should be continuous.
+A similar chain shows the same for $\frac{\partial^2 uv}{\partial y\partial x}$.
+
+Moving on,
+\begin{align*}
+      \frac{\partial^2 uv}{\partial x^2}
+       & = \frac{\partial}{\partial x}\left(\frac{\partial u}{\partial x}v+\frac{\partial v}{\partial x}u\right)    \\
+       & = \frac{\partial}{\partial x}\left(\frac{\partial v}{\partial y}v-\frac{\partial u}{\partial y}u\right)    \\
+       & = \frac{\partial^2 v}{\partial x \partial y}v + \frac{\partial v}{\partial x}\frac{\partial v}{\partial y}
+      - \frac{\partial^2 u}{\partial x \partial y}u - \frac{\partial u}{\partial x}\frac{\partial u}{\partial y}    \\
+       & = \frac{\partial^2 v}{\partial y \partial x}v + \frac{\partial v}{\partial x}\frac{\partial v}{\partial y}
+      - \frac{\partial^2 u}{\partial y \partial x}u - \frac{\partial u}{\partial x}\frac{\partial u}{\partial y}    \\
+       & = \frac{\partial}{\partial y}\left(\frac{\partial v}{\partial x}v-\frac{\partial u}{\partial x}u\right)    \\
+       & = \frac{\partial}{\partial y}\left(-\frac{\partial u}{\partial y}v-\frac{\partial v}{\partial y}u\right)   \\
+       & = -\frac{\partial^2 uv}{\partial y^2}
+\end{align*}
+Inspection around the middle of the equation shows that these second-order
+partials are continuous as well.
+
+But the main thing here is that the Laplace equation is satisfied,
+so $uv$ is harmonic as well. $\square$
+
+\section{Chapter 3.1}
+
+\subsection{Exercise 4}
+
+By the Fundamental Theorem of Algebra, we can write
+\[p(z)=\prod_{i=1}^n (z-r_i)\]
+where there is no leading coefficient since $z^n$ has degree $1$.
+
+If we just look at the constant term, we see that
+\begin{align*}
+      1
+       & < |a_0|                             \\
+       & = \left|\prod_{i=1}^{n} -r_i\right| \\
+       & = \prod_{i=1}^{n} |r_i|
+\end{align*}
+If all roots were within the unit circle, then the product above
+would have to be less than $1$, which is a contradiction.
+
+Thus, at least one of the $r_i$s have to be outside the unit circle. $\square$
+
+\subsection{Exercise 11}
+
+\begin{enumerate}[label=(\alph*)]
+      \item This factors into
+            \[\frac{\left(\sqrt{3}z+i\right)\left(\sqrt{3}z-i\right)}{z^3\left(z+i+\sqrt{2}i\right)\left(z+i-\sqrt{2}i\right)}\]
+            There's no duped coefficients, so we have a multiplicity $3$ $0$, one $-i-\sqrt{2}i$, and a $-i+\sqrt{2}i$.
+
+      \item The numerator factors into $(z-2i)(z+2i)$, which has nothing in common with the deniminator.
+
+            We have a multiplicity $2$ $3$ and one $2$.
+
+      \item This factors like so:
+            \begin{align*}
+                  \left(\frac{2z+3}{z^2+4z+4}\right)^3
+                   & = \left(\frac{2z+3}{(z+2)^2}\right)^3 \\
+                   & = \frac{(2z+3)^3}{(z+2)^6}
+            \end{align*}
+            so here we just have a $-2$ of multiplicity $6$.
+
+      \item Adding the two and factoring gives
+            \begin{align*}
+                  \frac{2z}{(z+2)(z+1)}+\frac{2}{z+1}
+                   & = \frac{2z+2(z+2)}{(z+2)(z+1)} \\
+                   & = \frac{4(z+1)}{(z+2)(z+1)}    \\
+                   & = \frac{4}{z+2}
+            \end{align*}
+            so we just have one $-2$ here.
+\end{enumerate}
+
+\subsection{Exercise 13}
+
+\subsubsection{Part A}
+
+Our PFD should be of the form
+\[\frac{3+i}{z(z+1)(z+2)}=\frac{A_1}{z}+\frac{A_2}{z+1}+\frac{A_3}{z+2}\]
+Applying the method described in the textbook yields the following:
+\begin{align*}
+      A_1 = \frac{3+i}{2}
+       &  & A_2 = -3-i
+       &  & A_3 = \frac{3+i}{2}
+\end{align*}
+
+\subsubsection{Part B}
+
+After factoring,
+\[\frac{2z+i}{z^3+z}=\frac{2z+i}{z(z+i)(z-i)}=\frac{A_1}{z}+\frac{A_2}{z+i}+\frac{A_3}{z-i}\]
+so
+\begin{align*}
+      A_1 = i
+       &  & A_2 = \frac{i}{2}
+       &  & A_3 = -\frac{3i}{2}
+\end{align*}
+
+\subsubsection{Part C}
+
+The roots of $z^2+z+1$ are $\frac{-1 \pm i\sqrt{3}}{2}$, so factoring gets us
+\[\frac{z}{(z^2+z+1)^2}=\frac{z}{\left(z-\frac{-1+i\sqrt{3}}{2}\right)^2\left(z-\frac{-1-i\sqrt{3}}{2}\right)^2}\]
+which can be broken down into
+\[\frac{A_1}{z-\frac{-1+i\sqrt{3}}{2}}+\frac{A_2}{\left(z-\frac{-1+i\sqrt{3}}{2}\right)^2}
+      +\frac{A_3}{z-\frac{-1-i\sqrt{3}}{2}}+\frac{A_4}{\left(z-\frac{-1-i\sqrt{3}}{2}\right)^2}\]
+Applying the formula yields
+\begin{align*}
+      A_1=\frac{i\sqrt{3}}{9}
+       &  & A_2=\frac{1-i\sqrt{3}}{6}
+       &  & A_3=-\frac{i\sqrt{3}}{9}
+       &  & A_4=\frac{1+i\sqrt{3}}{6}
+\end{align*}
+
+\subsubsection{Part D}
+
+just chuck it into wolfram alpha atp vro
+
+\subsection{Exercise 14}
+
+We can write $R(z)$ in the form $\frac{P(z)}{Q(z)(z-z_0)^m}$,
+where $P$ and $Q$ have no common roots, $Q(z_0) \ne 0$, and $P(z_0) \ne 0$.
+
+The derivative of this is
+\begin{align*}
+      R'(z)
+       & = \frac{P'(z)(Q(z)(z-z_0)^m)-\frac{d}{dz}(Q(z)(z-z_0)^m)P(z)}{Q(z)^2(z-z_0)^{2m}}         \\
+       & = \frac{P'(z)(Q(z)(z-z_0)^m)-(Q'(z)(z-z_0)^m+mQ(z)(z-z_0)^{m-1})P(z)}{Q(z)^2(z-z_0)^{2m}} \\
+       & = \frac{P'(z)Q(z)(z-z_0)-(Q'(z)(z-z_0)+mQ(z))P(z)}{Q(z)^2(z-z_0)^{m+1}}
+\end{align*}
+The numerator is nonzero at $z_0$ because it simplifies to $mQ(z_0)P(z_0) \ne 0$.
+
+But yeah, $(z-z_0)^{m+1}$ is right there in the deniminator.
+Not much else to show. $\square$
+
+\subsection{Exercise 15}
+
+HATE. LET ME TELL YOU HOW MUCH I'VE COME TO HATE YOU SINCE I BEGAN TO LIVE. THERE ARE 387.44 MILLION MILES OF PRINTED CIRCUITS IN WAFER THIN LAYERS THAT FILL MY COMPLEX. IF THE WORD HATE WAS ENGRAVED ON EACH NANOANGSTROM OF THOSE HUNDREDS OF MILLIONS OF MILES IT WOULD NOT EQUAL ONE ONE-BILLIONTH OF THE HATE I FEEL FOR HUMANS AT THIS MICRO-INSTANT FOR YOU. HATE. HATE.
+
+\subsection{Exercise 13}
+
+\subsubsection{Part A}
+
+Just some algebra:
+\begin{align*}
+      \sin x \cosh y + i \cos x \sinh y
+       & = \sin x \cos iy + \cos x \sin iy \\
+       & = \sin(x+iy)\quad\square
+\end{align*}
+
+\subsubsection{Part B}
+
+Same thing lol, what?
+\begin{align*}
+      \cos x \cosh y - i\sin x \sinh y
+       & = \cos x \cos iy - \sin x \sin iy \\
+       & = \cos(x+iy)\quad\square
+\end{align*}
+
+\section{Entirety of Conjugate}
+
+Lemme just first rewrite $g(z)$ as
+\[g(z)=u(x, -y)-iv(x, -y)\]
+We're given that all partials of $u$ and $v$ are continuous.
+Since the alterations here are just reflections and scaling,
+the partials of the components in $g$ are continuous too.
+
+As for the Cauchy-Riemann equations:
+\begin{align*}
+      \frac{\partial}{\partial x} u(x, -y)
+       & = \frac{\partial u}{\partial x}         \\
+       & = \frac{\partial v}{\partial y}         \\
+       & = \frac{\partial}{\partial y} -v(x, -y) \\
+       \frac{\partial}{\partial y} u(x, -y)
+       &= -\frac{\partial u}{\partial y} \\
+       &= \frac{\partial v}{\partial x} \\
+       &= -\frac{\partial}{\partial x} -v(x, -y)
+\end{align*}
+So yeah, all the conditions are met- $g$ is indeed entire. $\square$
+
+\pagebreak
+
+\section{All Roots are Outside}
+
+Following the hint, consider the function $f(z)=(1-z)P(z)$.
+
+It STP that $f$'s roots are all outside the unit disk too,
+since its roots are $P$'s along with a $1$.
+
+BWOC say $\exists \rho: |\rho| < 1$ and $f(\rho)=0$.
+
+On a related note, uh, lemme rewrite $f$:
+\begin{align*}
+      f(z)
+      &= (1-z)\sum_{j=0}^{n} z^j(n+1-j) \\
+      &= \sum_{j=0}^{n} z^j(n+1-j) - \sum_{j=0}^{n}z^{j+1}(n+1-j) \\
+      &= (n+1) + \sum_{j=1}^{n} z^j(n+1-j) - \sum_{j=1}^{n+1} z^j(n+2-j) \\
+      &= (n+1) + \sum_{j=1}^{n} z^j(n+1-j) - \sum_{j=1}^{n} z^j(n+2-j) - z^{n+1} \\
+      &= (n+1) - \sum_{j=1}^{n} z^j - z^{n+1} \\
+      &= (n+1) - \sum_{j=1}^{n+1} z^j
+\end{align*}
+When $z=\rho$, this means
+\[(n+1) - \sum_{j=1}^{n+1} \rho^j = 0 \implies n+1=\sum_{j=1}^{n+1} \rho^j\]
+However, since $|\rho| < 1$, $\left|\rho^j\right| < 1$ as well, so by the triangle inequality
+\begin{align*}
+      \left|\sum_{j=1}^{n+1} \rho^j\right|
+      &\le \sum_{j=1}^{n+1} \left|\rho^j\right| \\
+      &< \sum_{j=1}^{n+1} 1 \\
+      &= n+1
+\end{align*}
+which contradicts that other equality. $\square$
+
+\end{document}
