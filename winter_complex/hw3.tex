@@ -1,0 +1,323 @@
+\documentclass[12pt]{article}
+
+\input{../kz}
+
+\rhead{winter complex pain}
+
+\DeclareMathOperator{\cis}{cis}
+\DeclareMathOperator{\Log}{Log}
+\newcommand{\lra}{\xLeftrightarrow}
+\newcommand{\ra}{\xRightarrow}
+
+\begin{document}
+
+\section{Chapter 3.3}
+
+\subsection{Exercise 12}
+
+Do we just need to find a branch that makes $\log 1$ $2\pi i$?
+
+If so, then $\mathcal{L}_\pi(z)$ should work. :clueless:
+
+\subsection{Exercise 13}
+
+\begin{enumerate}[label=(\alph*)]
+      \item Principal branch $\mathcal{L}(z)$ should work.
+      \item Maybe $\mathcal{L}_0(z)$?
+      \item And here it's, uh, $\mathcal{L}_{\pi/2}(z)$?
+\end{enumerate}
+
+\subsection{Exercise 14}
+
+BWOC let such an $F$ exist.
+
+Now consider $g(z)=F(z)-\Log z$.
+$g'(z)=F'(z)-\frac{1}{z}=0$, which by a previous theorem implies that $g(z)=c$
+for some constant $c$.
+This then must imply that $F(z)=\Log z + c$ for some constant $c$ as well.
+
+We know that no matter what branch we choose, there's some argument $\theta$
+which always makes the logarithm non-analytic.
+This contradicts the premise, so no such $F$ can exist. $\square$
+
+\section{Chapter 3.5}
+
+\subsection{Exercise 15}
+
+\begin{enumerate}
+      \item Following the hint, our branch is
+            \begin{align*}
+                  (z-1)^{1/2}(z+1)^{1/2}
+                   & = (-1(1-z))^{1/2}(z+1)^{1/2}               \\
+                   & = i(1-z)^{1/2}(z+1)^{1/2}                  \\
+                   & = i\exp\left(\frac{1}{2}\Log(1-z^2)\right)
+            \end{align*}
+            which is nonanalytic only when $z \in \R$ and $1-z \le 0$ or $z+1 \le 0$.
+            In other words, this is only when $|z| \ge 1$ and is outside of the unit disk.
+
+      \item ok i looked at the solution guide and it says $z\left(\frac{4}{z^2}+1\right)^{1/2}$
+            with the principal log works but it literally isn't analytic at $z=\pm 2i$
+
+      \item this is literally just the example: $z^2\exp\left(\frac{1}{2}\Log\left(1-\frac{1}{z^4}\right)\right)$
+
+      \item is this not the same thing??? $z\exp\left(\frac{1}{3}\Log\left(1-\frac{1}{z^3}\right)\right)$
+\end{enumerate}
+
+\subsection{Exercise 16}
+
+wha
+
+i mean like if we choose $\Log c$, then $e^{z\Log c}$ is just
+a composition of two analytic functions, so we get the derivative as
+$\Log c \cdot e^{z \Log c} = \Log c \cdot c^z$?
+
+\section{Chapter 4.1}
+
+\subsection{Exercise 9}
+
+The first circle is just $-2+\frac{1}{2}e^{it}$, where $0 \le t \le 2\pi$.
+
+The second line can be $-\frac{7}{2}+7t$, where $0 \le t \le 1$.
+
+The final circle starts in the negative real axis,
+so we make it $2-\frac{1}{2}e^{it}$, where $0 \le t \le 2\pi$ again.
+
+Just put all these together and do some rescaling to get the true parameterization.
+
+\subsection{Exercise 11}
+
+This is just a circle of radius $5$ with another semicircle laid on top of it.
+
+Using the high school formula for circumference gets us a length of \boxed{15\pi}.
+
+\section{Chapter 4.2}
+
+\subsection{Exercise 5}
+
+We can break this down by the addition signs to get the following integrals:
+\begin{itemize}
+      \item $\int_C 6(z-i)^{-2}\,dz=0$
+      \item $\int_C 2(z-i)^{-1}\,dz=2 \cdot 2\pi i = 4\pi i$
+      \item $\int_C (z-i)^{0}\,dz=0$
+      \item $\int_C -3(z-i)^2\,dz=0$
+\end{itemize}
+So the overall sum is just \boxed{4\pi i}.
+
+\subsection{Exercise 8}
+
+I'm pretty sure we can make $t \in [0, 1]$ for all components
+since they're integrated separately.
+
+But yeah, here's the parameterization and integrations for each part.
+\begin{enumerate}
+      \item $z(t)=t$, $z'(t)=1$
+            \[\int_{0}^{1} \exp(z(t))z'(t)\,dt=\int_{0}^{1} e^t\,dt = e-1\]
+      \item $z(t)=1+ti$, $z'(t)=i$
+            \begin{align*}
+                  \int_{0}^{1} \exp(1+ti) \cdot i\,dt
+                   & = ei\int_{0}^{1} \exp(ti)\,dt                 \\
+                   & = ei\intval{\frac{1}{i}\exp(ti)}^1_0          \\
+                   & = ei\left(\frac{1}{i}e^i - \frac{1}{i}\right) \\
+                   & = e^{1+i}-e
+            \end{align*}
+      \item $z(t)=1-t+i$, $z'(t)=-1$
+            \begin{align*}
+                  \int_{0}^{1} \exp(1-t+i) \cdot -1\,dt
+                   & = -e^{1+i}\int_{0}^{1} e^{-t}\,dt  \\
+                   & = -e^{1+i}\intval{-e^{-t}}^1_0     \\
+                   & = -e^{1+i}\left(-e^{-1} + 1\right) \\
+                   & = e^{i}-e^{1+i}
+            \end{align*}
+      \item $z(t)=i(1-t)$, $z'(t)=-i$
+            \begin{align*}
+                  \int_{0}^{1} \exp(i-it) \cdot -i\,dt
+                   & = -ie^{i} \int_{0}^{1} e^{-it}\,dt                   \\
+                   & = -ie^{i} \intval{-\frac{1}{i}e^{-it}}^1_0           \\
+                   & = -ie^{i}\left(-\frac{1}{i}e^{-i}+\frac{1}{i}\right) \\
+                   & = 1 - e^i
+            \end{align*}
+\end{enumerate}
+Adding all these together and cancelling terms indeed gives a value of $0$. $\square$
+
+\subsection{Exercise 10}
+
+oh my god bruh
+
+Well, same contours as in the previous problem, let's do this:
+\begin{enumerate}
+      \item $z(t)=t$
+            \begin{align*}
+                  \int_{0}^{1} \overline{t}^2 \cdot 1\,dt
+                   & = \int_{0}^{1} t^2\,dt \\
+                   & = \frac{1}{3}
+            \end{align*}
+      \item $z(t)=1+ti$
+            \begin{align*}
+                  \int_{0}^{1} (1-ti)^2 \cdot i\,dt
+                   & = i\intval{-\frac{1}{3i}(1-ti)^3}^1_0 \\
+                   & = \intval{-\frac{1}{3}(1-ti)^3}^1_0   \\
+                   & =-\frac{1}{3}(1-i)^3+\frac{1}{3}      \\
+                   & = 1+\frac{2i}{3}
+            \end{align*}
+      \item $z(t)=1-t+i$
+            \begin{align*}
+                  \int_{0}^{1} (1-t-i)^2 \cdot -1\,dt
+                   & = -\int_{0}^{1} (1-t-i)^2\,dt         \\
+                   & = -\intval{-\frac{1}{3}(1-t-i)^3}^1_0 \\
+                   & = \intval{\frac{1}{3}(1-t-i)^3}^1_0   \\
+                   & = \frac{2}{3}+i
+            \end{align*}
+      \item $z(t)=i(1-t)$
+            \begin{align*}
+                  \int_{0}^{1} (-i(1-t))^2 \cdot -i\,dt
+                   & = i\int_{0}^{1} (1-t)^2\,dt \\
+                   & = \frac{i}{3}
+            \end{align*}
+\end{enumerate}
+Adding these together gives \boxed{2(1+i)}.
+
+\subsection{Exercise 14}
+
+\begin{enumerate}[label=(\alph*)]
+      \item The curve length is $2\pi \cdot 3 = 6\pi$, so it STP the following:
+            \[|z|=3 \implies |z^2-i| \ge 8 \implies \left|\frac{1}{z^2-i}\right| \le \frac{1}{8}\]
+            The first implication is true since $|z^2|=9$ and $|i|=1$,
+            and the second is self-evident. $\square$
+
+      \item The length is $2\pi$, so it STP that along the line
+            $\left|\frac{e^{3z}}{1+e^z}\right| \le \frac{e^{3R}}{e^R-1}$.
+
+            If we express $z=R+ti$ where $t \in [0, 2\pi]$, then
+            \begin{align*}
+                  \left|\frac{e^{3z}}{1+e^z}\right|
+                   & = \left|\frac{e^{3R}e^{3ti}}{1+e^R e^{ti}}\right| \\
+                   & = e^{3R}\left|\frac{e^{3ti}}{1+e^Re^{ti}}\right|  \\
+                   & \le e^{3R}\left|\frac{1}{1+e^Re^{ti}}\right|      \\
+                   & = \frac{e^{3R}}{\left|1+e^Re^{ti}\right|}         \\
+                   & \le \frac{e^{3R}}{\left|1-e^R\right|}             \\
+                   & = \frac{e^{3R}}{e^R - 1}\quad\square
+            \end{align*}
+            where the final couple of equalities come from that $R > 0$.
+
+      \item The length is $\frac{\pi}{2}$, so we NTS that when $z$ is
+            in the first quadrant and $|z|=1$, $|\Log z| \le \frac{\pi}{2}$.
+
+            Thankfully,
+            \begin{align*}
+                  |\Log z|
+                   & = |\log |z| + i\arg z|      \\
+                   & = |i\arg z|                 \\
+                   & = \arg z                    \\
+                   & < \frac{\pi}{2}\quad\square
+            \end{align*}
+
+            \pagebreak
+
+      \item The length is $1$, so we need $|\exp(\sin z)| \le 1$ too.
+
+            Since $z=ai$ where $a \in [0, 1]$,
+            \begin{align*}
+                  |\exp(\sin z)|
+                   & = \left|\exp\left(\frac{e^{iz}-e^{-iz}}{2i}\right)\right|                        \\
+                   & = \left|\exp\left(\frac{e^{-a}-e^{a}}{2i}\right)\right|                          \\
+                   & = \left|\frac{\exp(e^{-a}/2i)}{\exp(e^a/2i)}\right|                              \\
+                   & = \left|\frac{\exp(-i \cdot e^{-a}/2)}{\exp(-i \cdot e^a/2)}\right|              \\
+                   & = \frac{\left|\exp(-i \cdot e^{-a}/2)\right|}{\left|\exp(-i \cdot e^a/2)\right|} \\
+                   & = \frac{\exp(e^{-a}/2) \cdot \exp(-i)}{\exp(e^a/2) \cdot \exp(-i)}               \\
+                   & = \frac{\exp(e^{-a}/2)}{\exp(e^a/2)}                                             \\
+                   & \le 1\quad\square
+            \end{align*}
+\end{enumerate}
+
+\pagebreak
+
+\section{Chapter 4.3}
+
+\subsection{Exercise 2}
+
+All polynomials are continuous and have an antiderivative by basic calculus,
+so they fulfill the conditions of this chapter's theorem.
+
+\subsection{Exercise 3}
+
+\subsubsection{Part A}
+
+It STP that $\left|\int_{\Gamma} f(z)\,dz\right| \le \epsilon\ \forall \epsilon > 0$.
+
+First, fix an $\epsilon > 0$.
+By our premise, $\exists P(z): |f(z)-P(z)| < \epsilon\ \forall z \in \Gamma$.
+
+Then, if we let $L$ be the length of $\Gamma$,
+\begin{align*}
+      L\epsilon
+      &\ge \left|\int_\Gamma f(z)-P(z)\,dz\right| \\
+      &= \left|\int_\Gamma f(z)\,dz - \int_\Gamma P(z)\,dz\right| \\
+      &= \left|\int_\Gamma f(z)\,dz\right|
+\end{align*}
+so we're off by a constant factor, so we're basically done. $\square$
+
+\subsubsection{Part B}
+
+Well, given part A, we know that $f$ has an antiderivative in $D$.
+
+This then necessarily implies that $D$ is entire...yeah? what?
+
+\subsection{Exercise 4}
+
+ok i had to look at the solution for this icl
+
+but turns out the answer's false with $\int_{|z|=1} \frac{1}{z}\,dz=2\pi i$ as a counterexample
+
+\pagebreak
+
+\section{Riemann Zeta Function}
+
+\subsection{Part A}
+
+I'm not sure if these are sufficient conditions, but uh,
+\begin{align*}
+      \left|\frac{1}{n^s}\right|
+      &= \frac{1}{|\exp(s \log n)|} \\
+      &= \frac{1}{\left|\exp(s)^{\log n}\right|} \\
+      &= \frac{1}{\left|\left(e^{|s|} \cdot e^{i \arg s}\right)^{\log n}\right|} \\
+      &= \frac{1}{\left|\exp(|s| \log n) \cdot \exp(i \arg s)\right|} \\
+      &= \frac{1}{\left|\exp(|s| \log n)\right|} \\
+      &= \frac{1}{n^{|s|}}
+\end{align*}
+As long as $|s| > 1$, it should be fine, right...?
+
+\subsection{Part B}
+
+We can still use all the standard differentation rules, right?
+\begin{align*}
+      \frac{d}{ds} \frac{1}{n^s}
+      &= \frac{0-\frac{d}{ds} n^s \cdot 1}{n^{2s}} \\
+      &= \frac{-\log n n^s}{n^{2s}} \\
+      &= -\frac{\log n}{n^s}
+\end{align*}
+So we see that $\zeta'(s)$ takes the form $\sum_{s=1}^{n} \frac{a_n}{n^s}$ with $a_n=-\log n$.
+
+\pagebreak
+
+\subsection{Part C}
+
+$\zeta(2)=\sum_{n=1}^{\infty} \frac{1}{n^2}$, oh wow...
+
+But yeah, multiplying the terms out on the RHS of the given formula
+gives $z^3$'s coefficient as
+\[\pi\left(-\frac{1}{1^2}-\frac{1}{2^2}-\frac{1}{3^2}\cdots\right) = -\pi \cdot \zeta(2)\]
+since we can take at most one $z^2$ term from the coefficients.
+
+However, in the Maclaurin series of $\sin(\pi x)$, the coefficient of $z^3$ is
+\begin{align*}
+      \frac{f^{(3)}(0)}{3!}
+      &= \frac{-\pi^3 \cos(\pi \cdot 0)}{3!} \\
+      &= -\frac{\pi^3}{6}
+\end{align*}
+Since both these polynomial approximations are equivalent, I guess they have
+to have the same coefficient for $z^3$, so
+\[-\pi \cdot \zeta(2) = -\frac{\pi^3}{6} \implies \zeta(2)=\frac{\pi^2}{6}\quad\square\]
+I'm not even sure if I can say this.
+I didn't take algebra so I wouldn't know.
+
+\end{document}
