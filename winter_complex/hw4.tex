@@ -1,0 +1,99 @@
+\documentclass[12pt]{article}
+
+\input{../kz}
+
+\rhead{winter complex pain}
+
+\DeclareMathOperator{\cis}{cis}
+\DeclareMathOperator{\Log}{Log}
+\newcommand{\lra}{\xLeftrightarrow}
+\newcommand{\ra}{\xRightarrow}
+
+\begin{document}
+
+\section{Chapter 4.4}
+
+\subsection{Exercise 1}
+
+\begin{enumerate}[label=(\alph*)]
+      \item Yeah, this is just pinching $\Gamma$ really tight around three points.
+      \item No, the point at $z=4$ blocks the deformation.
+      \item Yeah, it encircles the three banned points just like $\Gamma$.
+      \item No, since $z=2i$ is outside of the contour \& blocks the deformation.
+\end{enumerate}
+
+\subsection{Exercise 13}
+
+We first do PFD on the term inside the integral:
+\begin{align*}
+      \frac{1}{1+z^2}
+       & = \frac{1}{(z+i)(z-i)}             \\
+       & = \frac{A_1}{z+i}+\frac{A_2}{z-i}  \\
+       & = \frac{i/2}{z+i}+\frac{-i/2}{z-i}
+\end{align*}
+so
+\[\int_\Gamma \frac{1}{1+z^2}\,dz
+      =\frac{i}{2}\int_\Gamma \frac{1}{z+i}\,dz-\frac{i}{2}\int_\Gamma \frac{i}{z-i}\,dz\]
+
+\subsubsection{Part A}
+
+We can deform this into a circle around $i$.
+
+The first addend is $0$ since it's analytic at $i$ and we can deform it into a point there.
+
+The second is $-\frac{i}{2} \cdot 2\pi i = \pi$ by that formula in the textbook.
+
+Thus the total value is \boxed{\pi}.
+
+\subsubsection{Part B}
+
+This big loop can be turned into a combination of $\Gamma_1$ and $\Gamma_3$,
+and from the answers in those two parts we see that the integral here is \boxed{0}.
+
+\subsubsection{Part C}
+
+This one is a circle around $-i$.
+
+By similar logic as in part A, the total value here is \boxed{-\pi}.
+
+\subsection{Exercise 15}
+
+Doing PFD again gets us
+\[\frac{z}{(z+2)(z-1)}=\frac{2/3}{z+2}+\frac{1/3}{z-1}\]
+so
+\[\int_\Gamma \frac{z}{(z+1)(z-1)}\,dz=
+      \frac{2}{3}\int_\Gamma \frac{1}{z+2}\,dz+\frac{1}{3}\int_\Gamma \frac{1}{z-1}\,dz\]
+
+In both cases, by that stupid textbook formula the integrals come out to $-4\pi i$
+(since it's traversed twice clockwise), so our final answer is
+\[\frac{2}{3}(-4\pi i) + \frac{1}{3}(-4 \pi i) = \boxed{-4\pi i}\]
+
+\subsection{Exercise 16}
+
+i mean this is lowk self-evident icl
+
+like $\int_\Gamma \frac{A_k}{z^k}\,dz=0$ for all $k > 1$ and $A_1 \cdot 2\pi i$ for $k=1$,
+and $g$ is analytic on \& inside the unit circle so $\int_\Gamma g(z)\,dz=0$ as well
+
+not even gonna put a square this is just a corollary
+
+\subsection{Exercise 18}
+
+\begin{enumerate}[label=(\alph*)]
+      \item The only banned points are $z=0$ and $z=1$.
+            The circle $|z|=2$ lies outside of that, so we can deform it into any larger circle.
+
+      \item Notice that
+            \[\left|z^2(z-1)^3\right| \ge R^2(R-1)^3\]
+            because $|z|=R$ and $|z-1| \ge R-1$ by the Reverse Triangle Inequality.
+
+            This UB times the circumference of $2\pi R$ gives the UB in the problem.
+
+      \item The numerator stays constant and the denominator $R(R-1)^3$ grows arbitrarily large,
+            so the fraction as a whole goes to $0$.
+
+      \item If $I \ne 0$, then the limit would break.
+            Simple as that. $\square$
+\end{enumerate}
+
+\end{document}

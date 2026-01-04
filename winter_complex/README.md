@@ -5,3 +5,5 @@ so here's my solutions to the homework problems on
 
 i don't really wanna check them against the solution manual,
 so these could be horribly wrong for all i know
+
+stopped in the middle of hw 4 because school started lol
