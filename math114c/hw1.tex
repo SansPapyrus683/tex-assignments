@@ -1,0 +1,239 @@
+\documentclass[12pt]{article}
+
+\input{../kz}
+
+\rhead{Math 114C}
+
+\makeatletter
+\def\@seccntformat#1{%
+  \expandafter\ifx\csname c@#1\endcsname\c@section\else
+  \csname the#1\endcsname\quad
+  \fi}
+\makeatother
+
+\DeclareMathOperator{\ch}{Char}
+
+\begin{document}
+
+\section{Problem 1}
+
+\subsection{Part A}
+
+This is just casework, no?
+\begin{enumerate}
+  \item If $R(\vec{x}) \land Q(\vec{x})$,
+        $\ch_R(\vec{x})=\ch_Q(\vec{x})=1$ and $\ch_{R\&Q}(\vec{x})=1$ as well.
+  \item If $\lnot R(\vec{x}) \land \lnot Q(\vec{x})$,
+        $\ch_R(\vec{x})=\ch_Q(\vec{x})=0$ and $\ch_{R\&Q}(\vec{x})=0$.
+  \item If $\lnot R(\vec{x}) \land Q(\vec{x})$,
+  $\ch_R(\vec{x})=0$ and $\ch_Q(\vec{x})=1$, while $\ch_{R\&Q}(\vec{x})=0$.
+   \item If $R(\vec{x}) \land \lnot Q(\vec{x})$,
+  $\ch_R(\vec{x})=1$ and $\ch_Q(\vec{x})=0$, while $\ch_{R\&Q}(\vec{x})=0$.
+\end{enumerate}
+In all four cases, $\ch_{R\&Q}(\vec{x})=\ch_R(\vec{x}) \cdot \ch_Q(\vec{x})$.
+
+\subsection{Part B}
+
+Same gist.
+I'll omit the values of $\ch_R$ and $\ch_Q$ since they were already stated in part A.
+\begin{enumerate}
+  \item $R(\vec{x}) \land Q(\vec{x}) \implies \ch_{R\&Q}(\vec{x})=1$.
+  \item $\lnot R(\vec{x}) \land \lnot Q(\vec{x}) \implies \ch_{R\&Q}(\vec{x})=0$.
+  \item $\lnot R(\vec{x}) \land Q(\vec{x}) \implies \ch_{R\&Q}(\vec{x})=1$.
+  \item $R(\vec{x}) \land \lnot Q(\vec{x}) \implies \ch_{R\&Q}(\vec{x})=1$.
+\end{enumerate}
+Again, by basic arithmetic we can verify that
+$\ch_{R\&Q}(\vec{x})=\min(1, \ch_R(\vec{x}) + \ch_Q(\vec{x}))$.
+
+\section{Problem 2}
+
+\subsection{Part A}
+
+For the forward direction, notice that since $A=B$, $A(\vec{x}) \iff B(\vec{x})$.
+
+Then, for all $\vec{x} \in \N^n$, $\ch_A(\vec{x})=0 \iff A(\vec{x}) \iff B(\vec{x}) \iff \ch_B(\vec{x})=0$.
+A similar chain of reasoning holds true for when $\ch_A(\vec{x})=1$.
+
+To prove the converse, consider the case where $A \ne B$,
+so WLOG assume $\exists \vec{x}: A(\vec{x}) \land \lnot B(\vec{x})$.
+(If $A \subseteq B$ then we can just swap the two sets and play the same game.)
+
+Here, $\ch_A(\vec{x})=1$ while $\ch_B(\vec{x})=0$, which clearly isn't the same.
+
+\subsection{Part B}
+
+To prove existence, consider the set $A=\{n \in \N: f(n)=1\}$.
+
+Then we have two cases for $\ch_A$:
+\begin{enumerate}
+  \item $\ch_A(x)=1 \iff A(x) \iff f(x)=1$
+  \item $\ch_A(x)=0 \iff \lnot A(x) \iff f(x) \ne 0 \iff f(x)=0$
+\end{enumerate}
+so we see that this $A$ indeed works.
+
+As for uniqueness, consider two $A, B \subseteq \N$ s.t. $f=\ch_A$ and $f=\ch_B$.
+
+Since $\ch_A=f=\ch_B$, by part A $A=B$ and so there must be at most one.
+
+\section{Problem 3}
+
+\subsection{Part A}
+
+$g(x)$ diverges for all $x$, so $f \circ g$ must too.
+I guess we'd write $(f \circ g)(x)=\uparrow$?
+
+\subsection{Part B}
+
+The formula is
+\[(f \circ g)(x)=\begin{cases}
+  1 & \text{$x$ is even and $x \ge 10$} \\
+  \uparrow & \text{otherwise}
+\end{cases}\]
+If both conditions are met, then $g(x)=2x \ge 20$ and $f(x)$ would then output $1$.
+
+If $x$ is odd, then $g$ would diverge, while if $x < 10$, then $2x < 20$ and $f$ would diverge.
+
+\subsection{Part C}
+
+The formula is
+\[(f \circ g)(x)=\begin{cases}
+  x & \text{$x$ is a multiple of $15$} \\
+  \uparrow & \text{otherwise}
+\end{cases}\]
+Both $f$ and $g$ just act as filters that spit back the input only if they meet a certain condition.
+
+To meet both conditions, $x$ has to be both a multiple of $3$ and $5$,
+which is equivalent to it being a multiple of $15$.
+
+\section{Problem 4}\label{sec:p4}
+
+I'm 90\% sure what the question meant by the conditions was that
+\begin{gather*}
+  M(x, 0) = g(x) \\
+  M(x, y + 1) = h(x, M(x, y), y)
+\end{gather*}
+since there's no way for $M(x, y)=g(x)$ in general.
+
+Consider the following formulas:
+\begin{gather*}
+  g(x)=0 \\
+  h(x, t, y) = t + x
+\end{gather*}
+
+I'll prove that these with the above conditions make things work through induction on $y$.
+
+Our base case is trivial, as $x \cdot 0 = 0\ \forall x$.
+
+Now, assuming that our $g$ and $h$ work for all $x \in \N$ and $y \le N$,
+it suffices to show that it works for all $x \in \N$ and $y=N+1$.
+
+This is true because
+\begin{align*}
+  M(x, N+1)
+  &= h(x, M(x, N), N) \\
+  &= M(x, N) + N \\
+  &= xN + N \\
+  &= x(N+1)
+\end{align*}
+which is exactly what we want. $\square$
+
+\section{Problem 5}
+
+If we let $g(x)=x$ and $h(x, t, y)=f(t)$, then $F$ defined by primitive
+recursion on $g$ and $h$ should give us what we want.
+
+The proof is again by induction on $y$.
+
+If $y=0$, $F(x, 0)=g(x)=x$.
+
+Now, assuming this works for all $x \in \N$ and $y \le N$,
+\begin{align*}
+  F(x, N+1)
+  &= h(x, F(x, N), N) \\
+  &= f(F(x, N)) \\
+  &= f(f^N(x)) \\
+  &= f^{N+1}(x)
+\end{align*}
+As for convergence conditions, we just $f^{k}(x) \in \mathbb{D}\ \forall k < N$.
+
+\section{Problem 6}
+
+\begin{enumerate}
+  \item $f(1) \uparrow$, since $1$ is the only number that divides $1$ but it isn't greater than itself.
+  \item $f(4)=2$, as $2$ is the smallest number that goes into $4$ besides $1$.
+  \item $f(7)=7$, since $7$ is prime and only has $1$ and itself as divisors.
+  \item $f(15)=3$, as $3 \mid 15$ and $2 \nmid 15$.
+\end{enumerate}
+
+\section{Problem 7}
+
+\subsection{Construction}
+
+Consider the following functions:
+\begin{gather*}
+  s(x)=x^2 \\
+  c(x, y)=1-(s(y) + 1 - x) \\
+  g(x)=\mu y[c(x, y)=0]
+\end{gather*}
+We proved that multiplication was recursive in \ref{sec:p4}, so $s$ is recursive.
+
+$c$ is a composition of substitutions, addition, and truncated subtraction, so
+it's also recursive.
+
+Finally, $g$ is just minimization on $c$, so we're fine there.
+
+\subsection{Proof of Behavior}
+
+If $\exists a \in \N: a^2=x$, then $s(a)+1-x=1$ and $c(x, a)=0$.
+
+OTOH, for all $a' < a$, $a'^2 < x$, so $s(a') < x$, $s(a')+1 \le x$, and $c(x, a')=1$.
+Notice that the second inequality relies on that all our variables are in $\N$.
+
+As for numbers which aren't perfect squares, they return the lowest natural number
+whose square is at least $x$, so we get $\ceil{\sqrt{x}}$.
+
+\pagebreak
+
+\section{Problem 8}
+
+Consider this construction by primitive recursion:
+\begin{gather*}
+  a(\vec{x})=1 \\
+  b(x, t, y)=f(\vec{x}, y) \cdot t \\
+  h(\vec{x}, 0)=a(\vec{x}) \\
+  h(\vec{x}, y+1)=b(\vec{x}, h(\vec{x}, y), y)
+\end{gather*}
+$a$ only uses substitution, while $b$ uses it plus multiplication,
+which we proved was also recursive.
+
+The proof is by induction on $y$.
+
+For our base case, $h(\vec{x}, 0)=1$, which lines up with the formula given.
+
+Assuming that it holds for all $y \le N$, then
+\begin{align*}
+  h(\vec{x}, N+1)
+  &= b(\vec{x}, h(\vec{x}, N), N) \\
+  &= f(\vec{x}, N) \cdot h(\vec{x}, N) \\
+  &= f(\vec{x}, N) \cdot \prod_{i=0}^{N-1} f(\vec{x}, i) \\
+  &= \prod_{i=0}^{N} f(\vec{x}, i)
+\end{align*}
+which again lines up with the formula given.
+
+As for the convergence implications, the forward direction should be obvious,
+as evaluating $h(\vec{x}, y+1)$ necessitates evaluation of $f(\vec{x}, 0)$ all the way to $f(\vec{x}, y)$.
+
+For the backward direction, we need induction on $y$ again.
+The base case where $y=0$ is true since $h(\vec{x}, 1)$ only depends on $h(\vec{x}, 0)=0$ and $f(\vec{x}, 0)$.
+Thus, $f(\vec{x}, 0) \downarrow \implies h(\vec{x}, 1) \downarrow$.
+
+Now, we assume that
+$f(\vec{x}, 0) \downarrow \land \cdots \land f(\vec{x}, N-1) \implies h(\vec{x}, N) \downarrow$.
+
+Since $h(\vec{x}, N+1)=f(\vec{x}, N) \cdot h(\vec{x}, N)$,
+we have the implication that $f(\vec{x}, N) \downarrow \land h(\vec{x}, N) \downarrow \implies h(\vec{x}, N+1) \downarrow$.
+However, by our hypothesis, this implication can also be written as 
+$f(\vec{x}, 0) \downarrow \land \cdots \land f(\vec{x}, N) \implies h(\vec{x}, N+1) \downarrow$,
+thus completing the inductive step and proving the backwards direction.
+
+\end{document}
