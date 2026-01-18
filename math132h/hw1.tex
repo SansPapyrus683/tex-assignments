@@ -1,0 +1,169 @@
+\documentclass[12pt]{article}
+
+\input{../kz}
+
+\rhead{Math 132H}
+
+\DeclareMathOperator{\cis}{cis}
+\newcommand{\lra}{\xLeftrightarrow}
+\newcommand{\ra}{\xRightarrow}
+
+\begin{document}
+
+All exercises here are in Chapter 1.
+
+\section{Exercise 1}
+
+\begin{enumerate}[label=(\alph*)]
+  \item The line perpendicular the to line segment formed by $z_1$ and $z_2$.
+  \item Unit circle.
+  \item In the xy-plane, this would be the same as the equation $x=3$. \label{item:vert_line}
+  \item Everything strictly to the right of the vertical line at $c$.
+  \item some kinda zone to the left or right of an arbitrary line idk man
+  \item A horizontal parabola represented by the equation $x=\frac{y^2-1}{2}$.
+  \item Same as \ref{item:vert_line}, only with $y=c$ (a horizontal line) instead.
+\end{enumerate}
+
+\section{Exercise 2}
+
+I think it's easier if I let $z=a+bi$ and $w=c+di$, where all the components are real.
+
+With this,
+\begin{align*}
+  \frac{1}{2}[(z, w) + (w, z)]
+   & = \frac{1}{2}((ac+bd+i(bc-ad))+(ac+bd+i(ad-bc))) \\
+   & = \frac{1}{2}(2ac+2bd)                           \\
+   & = ac+bd                                          \\
+   & = \braket{z, w}                                  \\
+   & = \Re(ac+bd)                                     \\
+   & = \Re((z, w))\quad\square
+\end{align*}
+
+\pagebreak
+
+\section{Exercise 4}
+
+First let's see if $i \succ 0$ works.
+
+\begin{align*}
+             & i \succ 0                 \\
+  \implies{} & i \cdot i \cdot i \succ 0 \\
+  \implies{} & -i \succ 0                \\
+  \implies{} & i + (-i) \succ 0          \\
+  \implies{} & 0 \succ 0
+\end{align*}
+which violates the first property specified.
+
+By a similar chain of reasoning, $i \prec 0$ doesn't work either.
+Thus, no ordering can exist in $\C$ that satisfies all the properties specified. $\square$
+
+\section{Exercise 7}
+
+\subsection{Part A}\label{sec:7a}
+
+First lemme prove the case where $z \in \R$.
+
+First, notice that for all $z \in \R$ and $w \in \C$ with magnitudes at most $1$,
+\[(z^2-1)(|w|^2-1) \ge 0\]
+where equality holds iff $|z|=1$ or $|w|=1$.
+
+We can then manipulate this like so:
+\begin{align*}
+             & (z^2-1)(|w|^2-1) \ge 0                          \\
+  \implies{} & 1-z^2-|w|^2+z^2|w|^2 \ge 0                      \\
+  \implies{} & 1+z^2|w|^2 \ge z^2+|w|^2                        \\
+  \implies{} & 1-zw-z\bar{w}+w|w| \ge z^2-zw-z\bar{w}+w\bar{w} \\
+  \implies{} & (1-zw)(1-\bar{w}) \ge (z-w)(z-\bar{w})
+\end{align*}
+where equality again only holds with that previous condition.
+
+Then, going back to our original inequality,
+\begin{align*}
+  \left|\frac{w-z}{1-\bar{w}z}\right|
+   & = \left|\frac{(w-z)(1-wz)}{(1-\bar{w}z)(1-wz)}\right| \\
+   & \le \left|\frac{(w-z)(1-wz)}{(z-w)(z-\bar{w})}\right| \\
+   & = \left|\frac{1-wz}{z-\bar{w}}\right|                 \\
+   & = \left|\frac{1-\bar{w}z}{w-z}\right|
+\end{align*}
+where the last line is because taking conjugates and flipping signs
+doesn't do anything to the magnitude.
+
+Lemme now just write the term as $a$ for convenience.
+
+If equality doesn't hold ($|z|, |w| < 1$), then
+\[|a| < \left|\frac{1}{a}\right| \implies |a|^2 < 1 \implies |a| < 1\]
+and if it does hold (either $|z|$ or $|w|$ are $1$), by similar reasoning we have $|a|=1$.
+
+Now if we let $z=re^{i\theta}$, then our case with real $z$ still proves this since
+\begin{align*}
+  \left|\frac{w-z}{1-\bar{w}z}\right|
+   & = \left|\frac{w-re^{i\theta}}{1-\bar{w}re^{i\theta}}\right|                           \\
+   & = \left|e^{i\theta} \cdot \frac{we^{-i\theta}-r}{1-r \cdot \bar{w}e^{i\theta}}\right| \\
+   & = \left|\frac{we^{-i\theta}-r}{1-r \cdot \bar{w}e^{i\theta}}\right|                   \\
+   & = \left|\frac{w'-r}{1-r \cdot \bar{w}'}\right|
+\end{align*}
+where $w'=we^{-i\theta}$ and $r$ is still just our real number.
+
+\pagebreak
+
+\subsection{Part B}
+
+The disk part of (i) was already proven by \ref{sec:7a}.
+It's also holomorphic since it's a composition of sums, multiplications, and divisions,
+and the denominator isn't $0$ anywhere as $|\bar{w}z| < 1$.
+
+We also have
+\begin{align*}
+  F(0) & = \frac{w-0}{1-\bar{w} \cdot 0} & F(w) & = \frac{w-w}{1-\bar{w}w} \\
+       & = w                             &      & = 0
+\end{align*}
+proving (ii).
+
+(iii) is also already proven by \ref{sec:7a}.
+
+Finally, for (iv), notice that
+\begin{align*}
+  F(F(z))
+  &= \frac{w-\frac{w-z}{1-\bar{w}z}}{1-\bar{w}\frac{w-z}{1-\bar{w}z}} \\
+  &= \frac{w(1-\bar{w}z)-w+z}{1-\bar{w}z} \\
+  &= \frac{w-w\bar{w}z-w+z}{1-\bar{w}z-\bar{w}w+z\bar{w}} \\
+  &= \frac{z-w\bar{w}z}{1-w\bar{w}} \\
+  &= z
+\end{align*}
+so the existence of an inverse of $F$ ($F$ itself) implies that it's a bijection.
+
+\section{Exercise 13}
+
+\subsection{Part A}
+
+$\Re(f)$ is constant, so $\frac{\partial u}{\partial x} = \frac{\partial u}{\partial y} = 0$.
+
+Since $f$ is holomorphic, it satisfies the CR equations, thus forcing
+$\frac{\partial v}{\partial x} = \frac{\partial v}{\partial y} = 0$ as well.
+
+The derivative is $0$ everywhere, so $f$ must be constant.
+
+\subsection{Part B}
+
+Basically the same as part A.
+
+\subsection{Part C}
+
+If $|f|$ is constant, then $u(z)^2+v(z)^2$ has to have zero derivative.
+
+In other words,
+\begin{gather*}
+  2\frac{\partial u}{\partial x}+2\frac{\partial v}{\partial x}=0 \\
+  2\frac{\partial u}{\partial y}+2\frac{\partial v}{\partial y}=0 
+\end{gather*}
+We can then chain equalities to get
+\begin{align*}
+  \frac{\partial u}{\partial x}
+  &= \frac{\partial v}{\partial y} \\
+  &= -\frac{\partial u}{\partial y} \\
+  &= \frac{\partial v}{\partial x} \\
+  &= -\frac{\partial u}{\partial x}
+\end{align*}
+which forces $\frac{\partial u}{\partial x}$ (and the rest of the partials) to be $0$. $\square$
+
+\end{document}
