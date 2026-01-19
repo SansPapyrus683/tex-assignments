@@ -1,0 +1,304 @@
+\documentclass[12pt]{article}
+
+\input{../kz}
+
+\rhead{Math 114C}
+
+\makeatletter
+\def\@seccntformat#1{%
+  \expandafter\ifx\csname c@#1\endcsname\c@section\else
+  \csname the#1\endcsname\quad
+  \fi}
+\makeatother
+
+\DeclareMathOperator{\ch}{Char}
+\DeclareMathOperator{\proj}{proj}
+\DeclareMathOperator{\len}{len}
+
+\begin{document}
+
+\section{Problem 1}
+
+Notice that
+\[\text{$x$ is prime} \iff \forall 2 \le y \le x - 1\ \lnot \text{Divides}(y + 1, x)\]
+Or in other words, $x$ is prime iff none of the numbers between $2$ and $x-1$ go into it.
+
+As was shown in class, the boundedness of $y$ and the recursiveness of the
+divisibility relation indicate that $\text{Prime}(x)$ itself is also recursive. $\square$
+
+\section{Problem 2}
+
+Consider the following function defined recursively:
+\begin{gather*}
+  f(0)=\mu y[1 - \ch_A(y) = 0] \\
+  f(n+1)=f(n) + 1 + \mu y[1 - \ch_A(f(n)+1+y) = 0]
+\end{gather*}
+It should be evident that $f(0)$ returns the lowest element in $A$.
+
+As for the inductive step, notice that the minimizer returns the lowest $y$ s.t. $\ch_A(f(n)+1+y)=1$.
+The argument is guaranteed to be greater than $f(n)$, and by the properties of the minimizer
+we know it's also the lowest one that's in $A$ as well.
+
+This, combined with the fact that we add $f(n)+1$ back to $y$ in it makes
+this $f$ satisfy all the specified properties. $\square$
+
+\section{Problem 3}
+
+Given that we have the projection function,
+\[R(u) \iff \forall 0 \le i \le n-2\ (\proj(u, i) < \text{proj}(u, i + 1))\]
+which is basically the chained inequality given in the problem broken
+down into a bunch of simpler inequalities.
+
+The individual inequalities are recursive, and we're only checking a bounded
+number of them, so $R$ overall should still be recursive. $\square$
+
+\pagebreak
+
+\section{Problem 4}
+
+If $R$ is recursive, then
+\[R'(u) \iff \text{Seq}(u) \land R(\proj(u, 0), \proj(u, 1), \cdots, \proj(u, n-1))\]
+where all of the functions on the RHS are recursive, so yeah.
+
+OTOH, if $R'$ is recursive, then
+\[R(\vec{x}) \iff R'(\braket{x_0, x_1, \cdots, x_{n-1}})\]
+since the angle brackets always give us a valid sequence code.
+
+Again, everything on the RHS is recursive. $\square$
+
+\section{Problem 5}
+
+It STP that the function $F(\vec{x}, y)=\Braket{f_0(\vec{x}, y), f_1(\vec{x}, y)}$ is recursive.
+If that's recursive, then we can just index into the results and call it a day.
+
+Notice that it can be defined using primitive recursion like so:
+\begin{gather*}
+  F(\vec{x}, 0)=\Braket{g_0(\vec{x}), g_1(\vec{x})} \\
+  F(\vec{x}, y+1)=\Braket{h_0(\vec{x}, y, \proj(F(\vec{x}, y), 0), \proj(F(\vec{x}, y), 1)), h_1(\cdots)}
+\end{gather*}
+where the ellipsis in $h_1$ mean that it's just a repeat of the arguments in $h_0$.
+
+But yeah, we have this definition, so all's good! $\square$
+
+\pagebreak
+
+\section{Problem 6}
+
+\subsection{Part A}
+
+We have
+\begin{align*}
+  A(0+1, 0+1)
+   & = A(0, A(0+1, 0)) \\
+   & = A(0+1, 0)+1     \\
+   & = A(0, 1)+1       \\
+   & = (1+1)+1         \\
+   & = \boxed{3}
+\end{align*}
+
+\subsection{Part B}
+
+First I'll show that for $m=1$, $A(m, n) \downarrow\forall n$ by induction on $n$.
+
+The base case was already shown.
+As for the inductive step, we have
+\begin{align*}
+  A(0+1, n+1)
+   & = A(0, A(0+1, n)) \\
+   & = A(0+1, n)+1     \\
+   & = A(1, n)+1
+\end{align*}
+so as long as $A(1, n)\downarrow$, then $A(1, n+1)\downarrow$ as well.
+
+Now it suffices to show that if $A(m, n)\downarrow\forall n$, then $A(m+1, n)\downarrow\forall n$ as well.
+
+For this we need to induct on $n$ once again.
+The base case here is trivial, since $A(m+1, 0)=A(m, 1)$ which we know converges
+by our inductive hypothesis.
+
+Now, assuming $A(m+1, n)\downarrow$,
+\[A(m+1,n+1)=A(m, A(m+1, n))\]
+The inner argument converges, giving us $A(m, N)$ where $N \in \N$.
+Thankfully, this also converges by our other hypothesis.
+
+Thus, for all $m, n \in \N$, $A(m, n)\downarrow$. $\square$
+
+\pagebreak
+
+\section{Problem 7}
+
+\subsection{Part A}
+
+\subsubsection{Forward Direction}
+
+Lemme first show that the forward direction holds for all $n$ when $m=0$.
+
+In this case, $A(0, n)=n+1$, and the one-element sequence $(0, n+1, n)$ proves existence.
+
+Now, assuming the hypothesis for a certain $m$, we induct on $n$.
+
+The base case is showing the direction for $A(m+1, 0)=A(m,1)$.
+We know $\exists \vec{x}_0, \cdots \vec{x}_{k-1}$ with $\vec{x}_{k-1}=(m, 1, A(m, 1))$.
+Given this, we can append $x_k=(m+1, 0, A(m,1))$, which fulfills condition $2$
+in the definition and shows the base case.
+
+For the final inductive step, we now have sequences for $A(m+1, n)$ and $A(m, A(m+1, n))$.
+Concatenating these sequences still gives us another valid one.
+
+Now we have the following tuples:
+\begin{itemize}[nolistsep]
+  \item $(m+1, n, A(m+1, n))$
+  \item $(m, A(m+1, n), A(m, A(m+1, n)))$
+\end{itemize}
+Notice that we can add another tuple $(m+1, n+1, A(m, A(m+1, n)))$ to the end now,
+as it satisfies condition 3 in the definition with tuple $j$ being the first
+and tuple $l$ being the second.
+
+But yeah, following these steps should give us a sequence for all $m$ and $n$!
+
+\subsubsection{Backwards Direction}
+
+Following the hint, we induct on the length of the sequence.
+
+If $n=1$, then the sequence can only be of the form $(0, n, n+1)$, and indeed, $A(0, n)=n+1$.
+
+Now we assume this is true for all sequences with length at \textit{or below} $n$.
+
+For any sequence of length $n+1$, the last element must satisfy any one of the three conditions.
+\begin{enumerate}
+  \item If it's of the form $(0, n, n+1)$, then it's trivial.
+  \item If $\exists m: \exists i: x_i=(m, 1, y) \land x_k=(m+1, 0, y)$,
+        then by our hypothesis we know $A(m, 1)=y$.
+        Also, $A(m+1, 0)=y=A(m, 1)$, so this new element is still valid.
+  \item The final case goes similarly- it's just more pattern matching.
+\end{enumerate}
+And that's the inductive step! $\square$
+
+\pagebreak
+
+\subsection{Part B}
+
+Notice that the decision problem of checking whether
+$\Braket{\Braket{m_0, n_0, y_0}, \cdots, \Braket{m_{k-1}, n_{k-1}, y_{k-1}}}$
+encodes a valid Ackermann computation is recursive.
+
+First let us define $\texttt{ValidInd}(\Braket{\Braket{m_0, n_0, y_0}, \cdots, \Braket{m_{k-1}, n_{k-1}, y_{k-1}}}, i)$
+as met iff $\vec{x}_{i}$ exists and meets the definition's conditions.
+
+This can be coded with the following characteristic function:
+\begin{align*}
+  \ch_{\texttt{ValidInd}}(\cdots)
+   & = (m_i=0 \land y_i=n_i+1) \\
+   & \ \lor (n_i=0 \land \exists j < i: m_i=m_j+1 \land n_j=1 \land y_i=y_j) \\
+   & \ \lor (\exists j, l < i: m_j=m_i \land n_j+1=n_i \land m_l+1=m_i \land n_l=y_j \land y_l=y_i)
+\end{align*}
+
+With this function, we can define
+\[\ch_{\texttt{ValidAck}}(u)=\forall 0 \le i < \len(u)\ (\texttt{ValidInd}(u, i))\]
+
+And now we can finally define $A$ as follows:
+\begin{align*}
+  A(m, n)=\mu y[ & \ch_{\texttt{ValidAck}}(y)       \\
+  \land          & \proj(\proj(y, \len(y)-1), 0)=m  \\
+  \land          & \proj(\proj(y, \len(y)-1), 1)=n]
+\end{align*}
+Or in other words, it tries to find the least $y$ s.t. $(m, n, y)$ appears
+at the end of some valid Ackermann computation sequence. $\square$
+
+\pagebreak
+
+\section{Problem 8}
+
+\subsection{Part A}
+
+I've translated the instructions into a sort of pseudocode:
+\begin{algorithmic}[1]
+  \State $R_1 \gets R_0$
+  \State $R_0 \gets R_0 + 1$
+  \State $R_2 \gets R_2 + 1$
+  \If{$R_1 = R_2$}
+    \State Exit
+  \EndIf
+  \State Go to line 2
+\end{algorithmic}
+When $R_0$ starts at $2$, the machine sets $R_1$ to $2$ as well.
+It then simultaneously increments $R_2$ and $R_0$ until the former hits $2$,
+at which point $\boxed{R_0=4}$.
+
+\subsection{Part B}
+
+I believe $\boxed{f_P^{(1)}(x)=2x}$.
+
+The machine increments $R_0$ and $R_2$ for as many times as it takes $R_2$
+to reach $R_1$'s value, which is precisely the initial value of $R_0$.
+Since $R_0$ is incremented this many times as well, it doubles
+by the time the program terminates.
+
+\section{Problem 9}
+
+Here's the pseudocode:
+\begin{algorithmic}[1]
+  \State $R_1 \gets R_1 + 1$
+  \State $R_1 \gets R_1 + 1$
+  \If{$R_0 = R_1$}
+    \State Exit
+  \EndIf
+  \State Go to line 1
+\end{algorithmic}
+
+As can be seen, the program adds $2$ to $R_1$ (which starts at $0$) until it equals that of $R_0$.
+
+For $f_P^{(1)}(x)\downarrow$, we need $x$ to be even.
+If $R_0$ is odd, the two registers will never be equal and the program will not halt.
+
+\pagebreak
+
+\section{Problem 10}
+
+\subsection{Part A}
+
+True.
+
+Notice that assuming a fixed program, the state of a URM can be completely
+identified by the instruction number it's at, $x$, along with $R_i$, it's registers.
+
+The program starts with $x=0$ and $R_i$ being whatever input we gave it.
+However, after $J(0, 0, 0)$, $x$ is still $0$ and no changes have been made to $R_i$ whatsoever.
+Given that the machine is still in the exact same state after one transition,
+we can say that it won't ever be able to leave it.
+
+\subsection{Part B}
+
+True.
+
+The starting state of $f_P^{n+k}(x_0, \cdots, x_{n-1}, 0, \cdots, 0)$ is the following:
+\[R_i=\begin{cases}
+  x_i & i < n \\
+  0 & n \le i < n+k \\
+  0 & \text{otherwise}
+\end{cases}\]
+OTOH, the start of $f_P^{n+k}(x_0, \cdots, x_{n-1})$ is this:
+\[R_i=\begin{cases}
+  x_i & i < n \\
+  0 & \text{otherwise}
+\end{cases}\]
+It should be obvious that these two starting registers sets are exactly the same.
+Thus, the convergence of one implies the convergence of the other and vice versa.
+
+\subsection{Part C}
+
+True.
+
+For any program $P$, we can always add some nonsense instruction that won't
+affect the execution of the program, like $J(n, n, -1)$.
+
+Any time the program jumps to that instruction, the original $P$ would've halted.
+This program would first take an extra step (comparing $R_n$ to $R_n$) and then
+jumping to $I_{-1}$, a nonexistent instruction.
+This doesn't modify any data and won't be referred to in the original program
+except to exit, so the overall functionality remains the same.
+
+However, we can choose any $n$ for this instruction,
+so technically there's infinitely many $P'$s that function the same as $P$.
+
+\end{document}
