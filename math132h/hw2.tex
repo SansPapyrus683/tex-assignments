@@ -1,0 +1,206 @@
+\documentclass[12pt]{article}
+
+\input{../kz}
+
+\rhead{Math 132H}
+
+\DeclareMathOperator{\cis}{cis}
+\newcommand{\lra}{\xLeftrightarrow}
+\newcommand{\ra}{\xRightarrow}
+
+\begin{document}
+
+\section{Chapter 1}
+
+\subsection{Exercise 14}
+
+Let's just try evaluating the RHS:
+\begin{align*}
+      & a_NB_N-a_MB_{M-1}-\sum_{n=M}^{N-1}(a_{n+1}-a_n)B_n                                   \\
+  ={} & a_NB_N-a_MB_{M-1}-\left(\sum_{n=M+1}^{N} a_nB_{n-1} - \sum_{n=M}^{N-1}a_nB_n\right)  \\
+  ={} & a_NB_N-a_MB_{M-1}-\left(\sum_{n=M+1}^{N-1} a_n(B_{n-1}-B_n)+a_NB_{N-1}-a_MB_M\right) \\
+  ={} & \sum_{n=M+1}^{N-1} a_n(B_n-B_{n-1})+a_N(B_N-B_{N-1})+a_M(B_M-B_{M-1})                \\
+  ={} & \sum_{n=M}^{N} a_n(B_n-B_{n-1})                                                      \\
+  ={} & \sum_{n=M}^{N} a_nb_n\quad\square
+\end{align*}
+
+\pagebreak
+
+\subsection{Exercise 20}
+
+If $f$ has a power series expansion at the origin, then
+\[a_n=\frac{f^{(n)}(0)}{n!}\]
+By basic calculus it can be shown that when $f(z)=(1-z)^{-m}$
+\[f^{(n)}(z)=\frac{(m-1+n)!}{(m-1)!}(1-z)^{-m-n}\]
+and thus
+\[a_n=\frac{\frac{(m-1+n)!}{(m-1)!}}{n!}=\frac{1}{(m-1)!} \cdot \frac{(m-1+n)!}{n!}\]
+Now we just have to show that
+\[\lim_{n \to \infty} \frac{(m-1+n)!}{n!}=n^{m-1}\]
+Notice that this is true because
+\begin{align*}
+  \lim_{n \to \infty} \frac{\frac{(m-1+n)!}{n!}}{n^{m-1}}
+   & = \lim_{n \to \infty} \frac{\prod_{i=1}^{m-1} (n+i)}{n^{m-1}} \\
+   & = \lim_{n \to \infty} \prod_{i=1}^{m-1} \frac{n+i}{n}         \\
+   & = \prod_{i=1}^{m-1} \lim_{n \to \infty} \frac{n+i}{n}         \\
+   & = 1\quad\square
+\end{align*}
+
+\pagebreak
+
+\subsection{Exercise 21}
+
+Since $|z| < 1$, $\frac{z}{1-z}=\sum_{i=0}^{\infty} z^i$.
+
+\subsubsection{First Equality}
+
+Since $|z^n| < 1$ for any $n > 1$, $\frac{z^{2^n}}{1-z^{2^{n+1}}}=\sum_{i=0}^{\infty} z^{2^n(1+2i)}$.
+
+This makes the LHS
+\[\sum_{n=0}^{\infty} \sum_{i=0}^{\infty} z^{2^n(1+2i)}\]
+so now it STP that $f(n, i)=2^n(1+2i)$ is a bijection from $\N^2$ to $\N$,
+as that will allow us to rewrite the summation as $\sum_{i=0}^{\infty} z^i=\frac{z}{1-z}$.
+
+To prove injectivity, consider two inputs $(n, i)$ and $(n', i')$.
+If $i \ne i'$ but $n=n'$, then that $f(n, i) \ne f(n', i')$ is fairly straightforward.
+
+OTOH, if $n \ne n'$ (making no assumptions about $i$ and $i'$), we can WLOG let $n < n'$.
+Since $f(n', i')=2^{n'}(1+2i')$, $2^{n'} \mid f(n', i')$.
+However, notice that
+\[\frac{f(n, i)}{2^{n'}}=2^{n-n'}(1+2i) \notin \Z\]
+since the first coefficient has at least one power of $2$ in the denominator
+and the second coefficient is guaranteed to be odd.
+Thus, injectivity is proven.
+
+As for surjectivity, notice that for all $n \in \N\ \exists!\ S \subseteq \N$ s.t. $n=\sum_{i \in S} 2^i$.
+
+If we take $x=\min S$, then $n=2^x\sum_{i \in S}2^{i-x}$.
+
+In that summation, there is exactly one $i$ where $i-x=0$.
+This is because we took $x$ as the minimum of a finite set, and all others must be strictly larger.
+
+That then implies that $\sum_{i \in S} 2^{i-x}$ is odd, since there's a $1$ in the summation
+and all others are powers of $2$ with powers at least $1$.
+In other words, $\exists i: 2i+1=\sum_{i \in S} 2^{i-x} \implies f(x, i)=n$.
+
+With injectivity and surjectivity proven, we have our bijection! $\square$
+
+\pagebreak
+
+\subsubsection{Second Equality}
+
+Here on the LHS the summation can be rewritten using similar logic:
+\[\sum_{n=0}^{\infty} 2^n \sum_{i=0}^{\infty} (-1)^i z^{2^n(i+1)}\]
+Fix an $n$ and let $x$ be the largest number s.t. $2^x \mid n$.
+
+Then, for all $0 \le k < x$, $\frac{n}{2^k}$ is even, but as soon as $k=x$ then $\frac{n}{2^k}$ is odd.
+
+Thus,
+\begin{align*}
+  \sum_{k=0}^{x} 2^k \cdot (-1)^{n/2^k} z^n
+   & = -\sum_{k=0}^{x-1} 2^k z^n + 2^x z^n      \\
+   & = z^n\left(2^x-\sum_{k=0}^{x-1} z^k\right) \\
+   & = z^n
+\end{align*}
+so within the double summation all the terms that include a $z^n$ for any $n$ add up to just one.
+
+Thus, this LHS also becomes $\sum_{i=0}^{\infty} z^i=\frac{z}{1-z}$. $\square$
+
+\pagebreak
+
+\subsection{Exercise 23}
+
+It should be clear by elementary calculus that $f$ is smooth for $x < 0$ and $x > 0$.
+
+When $x=0$, on the negative side we always have $\lim_{h \to 0^-} \frac{f^{(n)}(0+h)-f^{(n)}(0)}{h}=0$.
+
+The positive side is a bit more tricky.
+Notice that we can always write $f^{(n)}(x)=p_n\left(\frac{1}{x}\right)e^{-\frac{1}{x^2}}$, where $p_n(x)$ is some polynomial.
+
+The proof is by induction, where the base case $f^{(0)}(x)=f(x)$ is already given to us.
+
+For the inductive step, we have
+\begin{align*}
+  f^{(n+1)}(x)
+   & = \left(-\frac{1}{x^2}p'_n\left(\frac{1}{x}\right)\right)e^{-\frac{1}{x^2}} + p_n\left(\frac{1}{x}\right)\left(\frac{d}{dx} e^{-\frac{1}{x^2}}\right)        \\
+   & = \left(-\frac{1}{x^2}p'_n\left(\frac{1}{x}\right)\right)e^{-\frac{1}{x^2}} + \left(p_n\left(\frac{1}{x}\right) \cdot \frac{2}{x^3}\right)e^{-\frac{1}{x^2}} \\
+   & = \left(-\frac{1}{x^2}p'_n\left(\frac{1}{x}\right) + \frac{2}{x^3}p_n\left(\frac{1}{x}\right)\right)e^{-\frac{1}{x^2}}
+\end{align*}
+And since polynomials are closed under derivatives, multiplication, and
+all that stuff we just did, we see that $f^{n+1}(x)$ can also be written
+as a polynomial of $\frac{1}{x}$ times $e^{-\frac{1}{x^2}}$.
+
+We then show that $f^{(n)}(0)=0$, also with the base case already handed to us.
+
+Taking the right hand limit,
+\begin{align*}
+  \lim_{h \to 0^+} \frac{f^{(n)}(0+h)-f^{(n)}(0)}{h}
+   & = \lim_{h \to 0^+} \frac{p_n\left(\frac{1}{h}\right)e^{-\frac{1}{h^2}}}{h} \\
+   & = \lim_{x \to \infty} xp_n(x)e^{-x^2}                                      \\
+   & = 0
+\end{align*}
+since exponentials dominate polynomials.
+
+But yeah, the left hand and right hand limits for the difference quotient of
+$f^{(n)}(x)$ both go to $0$, so $f^{(n+1)}(x)=0$ no matter what.
+
+This forces all the Taylor coefficients to be $0$, but
+then the power series expansion at the origin would be invalid for any $x > 0$.
+
+\pagebreak
+
+\section{Chapter 2}
+
+\subsection{Exercise 1}
+
+Following the hint, let's integrate $\exp(-z^2)$ over the following curves:
+\begin{enumerate}
+  \item $z(t)=t$: $\int_{0}^{R} \exp(-t^2)\,dt$
+  \item $z(\theta)=R\exp(i\theta)$: $\int_{0}^{\pi/4} \exp(-(R\exp(i\theta))^2) \cdot Rie^{i\theta}\,d\theta$
+  \item $z(t)=t\exp\left(i\frac{\pi}{4}\right)$ in reverse:
+        $-\int_{0}^{R} \exp\left(-\left(t\exp\left(i\frac{\pi}{4}\right)\right)^2\right) \cdot \exp\left(i\frac{\pi}{4}\right)\,dt$
+\end{enumerate}
+For each, we take $R$ to infinity and see what happens.
+
+Since $\exp(-x^2)$ is an even function, the first integral is $\frac{\int_{-\infty}^{\infty} \exp(-x^2)\,dx}{2}=\frac{\sqrt{\pi}}{2}$.
+
+I'm gonna show that the second integral goes to $0$.
+To do that, let's take its magnitude:
+\begin{align*}
+      & \left|\int_{0}^{\pi/4} \exp(-(R\exp(i\theta))^2) \cdot Rie^{i\theta}\,d\theta\right|              \\
+  ={} & \left|Ri \int_{0}^{\pi/4} \exp(-R^2\exp(2i\theta)) e^{i\theta}\,d\theta\right|                    \\
+  ={} & |R| \int_{0}^{\pi/4} \left|\exp(-R^2\exp(2i\theta)) e^{i\theta}\right|\,d\theta                   \\
+  ={} & |R| \int_{0}^{\pi/4} \left|\exp(\Re(-R^2\exp(2i\theta)))\right| \left|e^{i\theta}\right|\,d\theta \\
+  ={} & |R| \int_{0}^{\pi/4} \left|\exp(-R^2\cos(2\theta))\right|\,d\theta                                \\
+  ={} & \frac{R}{2} \int_{0}^{\pi/2} \exp(-R^2\cos(\theta))\,d\theta
+\end{align*}
+
+When $R$ is large enough, $R^{-3/2} < \frac{\pi}{2}$, so we can then write the above as
+\begin{align*}
+        & \frac{R}{2} \int_{0}^{\pi/2-R^{-3/2}} \exp(-R^2\cos(\theta))\,d\theta
+  + \frac{R}{2} \int_{\pi/2-R^{-3/2}}^{\pi/2} \exp(-R^2\cos(\theta))\,d\theta                              \\
+  \le{} & \frac{R}{2} \int_{0}^{\pi/2-R^{-3/2}} \exp(-R^2\cos(\theta))\,d\theta + \frac{R}{2} \cdot R^{-2} \\
+  \le{} & \frac{R}{2} \cdot \frac{\pi}{2} \cdot \exp(-R^2\cos(\pi/2-R^{-3/2})) + \frac{1}{2R} \\
+  ={} & \frac{R}{2} \cdot \frac{\pi}{2} \cdot \exp(-R^2\sin(R^{-3/2})) + \frac{1}{2R}
+\end{align*}
+Notice that since $\lim_{x \to 0} \frac{\sin x}{x}=1$,
+as $R \to \infty$, $\exp(-R^2\sin(R^{-3/2}))$ tends toward $\exp(-R^{1/2})$.
+
+Thus, the limit of that expression is equal to
+\[\lim_{R \to \infty} \frac{R}{2}\exp(R^{-1/2}) + \frac{1}{2R}=0\]
+
+For the final integral we have:
+\begin{align*}
+      & -\int_{0}^{R} \exp\left(-\left(t\exp\left(i\frac{\pi}{4}\right)\right)^2\right) \cdot \exp\left(i\frac{\pi}{4}\right)\,dt \\
+  ={} & -\left(\frac{1}{\sqrt{2}}+\frac{i}{\sqrt{2}}\right) \int_{0}^{R} \exp(-it^2)\,dt                                          \\
+  ={} & -\left(\frac{1}{\sqrt{2}}+\frac{i}{\sqrt{2}}\right) \int_{0}^{R} \cos(-t^2)+i\sin(-t^2)\,dt                               \\
+  ={} & -\left(\frac{1}{\sqrt{2}}+\frac{i}{\sqrt{2}}\right) \int_{0}^{R} \cos(t^2)-i\sin(t^2)\,dt                                 \\
+  ={} & -\left(\left(\frac{C_R+S_R}{\sqrt{2}}\right)+i\left(\frac{C_R-S_R}{\sqrt{2}}\right)\right)
+\end{align*}  
+where I've let $C_R=\int_{0}^{R} \cos(t^2)\,dt$ and $S_R=\int_{0}^{R} \sin(t^2)\,dt$ for convenience.
+
+So at the limit,
+\[\frac{\sqrt{\pi}}{2}=\left(\left(\frac{C_\infty+S_\infty}{\sqrt{2}}\right)+i\left(\frac{C_\infty-S_\infty}{\sqrt{2}}\right)\right)\]
+solving this for $C_\infty$ and $S_\infty$ gives
+\[\int_{0}^{\infty} \cos(t^2)\,dt=\int_{0}^{\infty} \sin(t^2)\,dt=\frac{\sqrt{2\pi}}{4}\quad\square\]
+
+\end{document}
