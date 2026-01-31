@@ -1,0 +1,107 @@
+\documentclass[12pt]{article}
+
+\input{../kz}
+
+\rhead{Math 114C}
+
+\makeatletter
+\def\@seccntformat#1{%
+  \expandafter\ifx\csname c@#1\endcsname\c@section\else
+  \csname the#1\endcsname\quad
+  \fi}
+\makeatother
+
+\DeclareMathOperator{\ch}{Char}
+\DeclareMathOperator{\proj}{proj}
+\DeclareMathOperator{\len}{len}
+\newcommand{\pto}{\rightharpoonup}
+
+\begin{document}
+
+\section{Problem 1}
+
+I mean, we only proved the version stated in class for $n=m=1$,
+but since there's a bijection between $\N$ and $\N*$ anyways, I think
+it should be valid to prove this using the theorem for arbitrary $n$ and $m$.
+:clueless:
+
+If $e$ is any code, we can let $f_e: \N^{m+n} \pto \N$ be the function corresponding to it.
+
+By the version of the s-m-n theorem shown in class,
+$\exists S_e: \N^m \to \N: \varphi^{(n)}_{S_e(\vec{x})}(\vec{y})=f_e(\vec{x}, \vec{y})$.
+
+Let $s_n^m: \N \times \N^m \to \N$ be defined by $s_n^m(e, \vec{x})=S_e(\vec{x})$.
+As we've just proved that such an $S_e$ is guaranteed to exist for all $e$,
+this function is well-defined and is total.
+
+Finally,
+\begin{align*}
+  \varphi_{s_n^m(e, \vec{x})}^{(n)}(\vec{y})
+   & = \varphi_{S_e(\vec{x})}^{(n)}(\vec{y})          \\
+   & = f_e(\vec{x}, \vec{y})                          \\
+   & = \varphi_e{(m+n)}(\vec{x}, \vec{y})\quad\square
+\end{align*}
+so this $s_n^m$ we've constructed indeed satisfies the conditions laid out. $\square$
+
+\section{Problem 2}
+
+Define $g: \N \times \N^n \to \N$ by $g(e, \vec{x})=\varphi_{f(e)}^{(n)}(\vec{x})$.
+
+By the Second Recursion Theorem,
+$\exists e^* \in \N: \varphi_{e^*}^{(n)}(\vec{x})=g(e^*, \vec{x})=\varphi_{f(e^*)}^{(n)}(\vec{x})$.
+
+(did i miss something???)
+
+\section{Problem 3}
+
+Fix an $f: \N \times \N^n \to \N$.
+
+By the s-m-n theorem, $\exists s: \N \to \N: \varphi_{s(e)}^{(n)}(\vec{x})=f(e, \vec{x})$.
+
+Finally, by Roger's, $\exists e^* \in \N: \varphi_{e^*}{(n)}=\varphi_{s(e^*)}^{(n)}=f(e^*, \vec{x})$.
+
+\pagebreak
+
+\section{Problem 4}
+
+\subsection{Part A}
+
+Let $f: \N \times \N \pto \N$ be defined by
+\[f(x, y)=\begin{cases}
+    0        & y \mid x         \\
+    \uparrow & \text{otherwise}
+  \end{cases}\]
+By the s-m-n theorem, $\exists u: \N \to \N: \varphi_{u(x)}(y)=f(x, y)$.
+
+For any $y$ that aren't divisible by $x$, $f(x, y)\uparrow$ and so does $\varphi_{u(x)}(y)$.
+
+OTOH, if $x \mid y$, then $\varphi_{u(x)}(y)\downarrow=0$.
+
+\subsection{Part B}
+
+Let $f$ be as it was in the previous part.
+
+By the Recursion Theorem, $\exists e^* \in \N: \varphi_{e^*}(x)=f(e^*, x)$.
+
+It should be obvious that this function converges only when $e^* \mid x$. 
+
+\section{Problem 5}
+
+\subsection{Part A}
+
+Let $f: \N \times \N$ be defined by $f(x, y)=x^y$.
+
+By the s-m-n theorem, $\exists S: \N \to \N: \varphi_{S(x)}(y)=x^y$.
+
+By construction, this function outputs all the powers of $x$ (just set $y$ to the power)
+and \textit{only} the powers of $x$.
+
+\subsection{Part B}
+
+Let $f$ stay unchanged.
+
+By the Recursion Theorem, $\exists x^* \in \N: \varphi_{x^*}(y)=f(x^*, y)=(x^*)^y$.
+
+Using the same logic as in the previous part, $R_{x^*}$ has all of powers of $x^*$ and nothing more.
+
+\end{document}
