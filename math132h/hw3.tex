@@ -1,0 +1,294 @@
+\documentclass[12pt]{article}
+
+\input{../kz}
+
+\rhead{Math 132H}
+
+\makeatletter
+\def\@seccntformat#1{%
+  \expandafter\ifx\csname c@#1\endcsname\c@section\else
+  \csname the#1\endcsname\quad
+  \fi}
+\makeatother
+
+\DeclareMathOperator{\cis}{cis}
+\newcommand{\lra}{\xLeftrightarrow}
+\newcommand{\ra}{\xRightarrow}
+
+\begin{document}
+
+All exercises here are in Chapter 2.
+
+\section{Exercise 3}
+
+Following the hint, let's integrate over the following three curves:
+\begin{enumerate}
+  \item $0$ to $R$ on $\R$: $\int_{0}^{R} e^{-Ax}\,dx=\frac{1}{A}$ as $R \to \infty$
+  \item $0$ to $\omega$ on the arc of radius $R$: $\int_{0}^{\omega} e^{-ARe^{i\theta}} \cdot Rie^{i\theta}\,d\theta$
+  \item $R$ to $0$ on $\theta=\omega$: $-\int_{0}^{R} e^{-Axe^{i\omega}}e^{i\omega}\,dx$
+\end{enumerate}
+Here, $A=\sqrt{a^2+b^2}$, and $\omega$ is the unique angle between
+$-\frac{\pi}{2}$ and $\frac{\pi}{2}$ s.t. $\cos \omega = \frac{a}{A}$ and $\sin \omega = \frac{b}{A}$.
+$e^{-Ax}$ is entire, so these three integrals always sum to $0$.
+
+The second integral tends to zero.
+To see this, note that
+\begin{align*}
+  \left|\int_{\partial C} e^{-Az}\,dz\right|
+   & \le R|\omega| \cdot \sup_{\theta \in [0, \omega]} \left|e^{-ARe^{i\theta}}\right|               \\
+   & = R|\omega| \cdot \exp\left(\sup_{\theta \in [0, \omega]} \Re\left(-ARe^{i\theta}\right)\right) \\
+   & = R|\omega| \cdot \exp\left(\sup_{\theta \in [0, \omega]} -AR\cos(\theta)\right)                \\
+   & = R|\omega| \cdot \exp\left(-AR\cos(\theta)\right)
+\end{align*}
+and since exponentials dominate polynomials, this term goes to $0$ as $R \to \infty$.
+
+As for the third integral,
+\begin{align*}
+  -\int_{0}^{R} e^{-Axe^{i\omega}}e^{i\omega}\,dx
+   & = -e^{i\omega} \int_{0}^{R} e^{-Axe^{i\omega}}\,dx                                                                    \\
+   & = -e^{i\omega} \int_{0}^{R} e^{-Ax\cos(\omega)}e^{-iAx\sin(\omega)}\,dx                                               \\
+   & = -\left(\frac{a}{A}+\frac{bi}{A}\right) \cdot \int_{0}^{R} e^{-ax}(\cos(-Ax\sin(\omega))+i\sin(-Ax\sin(\omega)))\,dx \\
+   & = -\left(\frac{a}{A}+\frac{bi}{A}\right) \cdot \int_{0}^{R} e^{-ax}(\cos(bx)-i\sin(bx))\,dx                           \\
+   & = -\frac{a+bi}{A}\left(\int_{0}^{R} e^{-ax}\cos(bx)\,dx-i\int_{0}^{R} e^{-ax}\sin(bx)\,dx\right)
+\end{align*}
+Taking $R$ to $\infty$ makes the two integrals inside the parenthesis are exactly what we want.
+
+Putting it all together gives
+\[\frac{1}{A}+0-\frac{a+bi}{A}\left(\int_{0}^{R} e^{-ax}\cos(bx)\,dx-i\int_{0}^{R} e^{-ax}\sin(bx)\,dx\right)=0\]
+which when solved gets us
+\begin{gather*}
+  \int_{0}^{R} e^{-ax}\cos(bx)\,dx = \frac{a}{\sqrt{a^2+b^2}} \\
+  \int_{0}^{R} e^{-ax}\sin(bx)\,dx = \frac{b}{\sqrt{a^2+b^2}}
+\end{gather*}
+
+\pagebreak
+
+\section{Exercise 4}
+
+Consider the integral of $\exp(-\pi z^2)$ around the following lines:
+\begin{itemize}
+  \item $-R$ to $R$: $\int_{-R}^{R} \exp(-\pi x^2)\,dx=1$ as $R \to \infty$.
+        We were told we can use this fact on the test, so surely we can use it here.
+  \item $R$ to $R+i\xi$: $i\xi \int_{0}^{1} \exp(-\pi(R+ix\xi)^2)\,dx$
+  \item $R+i\xi$ to $-R+i\xi$: $-\int_{-R}^{R} \exp(-\pi(x+\xi i)^2)\,dx$
+  \item $-R+i\xi$ to $-R$: $-\int_{0}^{\xi} \exp(-\pi(-R+ix)^2)\,dx$
+\end{itemize}
+Since $\exp(-\pi z^2)$ is entire, these four integrals sum to $0$.
+
+Now consider the second integral:
+\[\int_{0}^{\xi} \exp(-\pi(R+ix)^2)\,dx
+  =\int_{0}^{\xi} \exp(-\pi R^2 - \pi 2Rix + \pi x^2)\,dx\]
+Notice that for all $\epsilon > 0$ we can find an $R$ s.t. past it the magnitude of the
+integrand is always less than $\epsilon$.
+In other words, $\lim_{R \to \infty} \int_{0}^{\xi} \exp(-\pi(R+ix)^2)\,dx = 0$.
+
+This is because the argument of the exponential is a polynomial in terms of $R$.
+As $R$ grows large, the $-\pi R^2$ term dominates, and that term goes to $-\infty$,
+making $\exp(\cdots) \to 0$.
+
+By a virtually identical process, the fourth integral also converges to $0$ as $R \to \infty$.
+
+Now, given that the second and fourth integrals tend to $0$, we finally have
+\begin{align*}
+             & 1 -\int_{-\infty}^{\infty} \exp(-\pi(x+\xi i)^2)\,dx=0                                                          \\
+  \implies{} & 1 - e^{\pi \xi^2} \int_{-\infty}^{\infty} \exp(-\pi x^2 + 2\pi x\xi i)\,dx=0                                    \\
+  \implies{} & \int_{-\infty}^{\infty} e^{-\pi x^2}e^{2\pi i x \xi}\,dx = \frac{1}{e^{\pi \xi^2}} = e^{-\pi \xi^2}\quad\square
+\end{align*}
+
+\pagebreak
+
+\section{Exercise 8}
+
+Given that we only consider $z \in \R$, $\overline{\{z': |z'-z| < 0.5\}} \subseteq \Omega$.
+
+Also, node that on the boundary of this circle, the largest achievable magnitude is $|z|+0.5$.
+
+Thus, by the inequality given in the premise,
+\[\norm{f}_C \le A(1+(|z|+0.5))^\eta\]
+
+Since $f$ is holomorphic, by Cauchy's Inequalities
+\begin{align*}
+  f^{(n)}(z)
+   & \le \frac{n!}{0.5^n}\norm{f}_C                          \\
+   & \le \frac{n!}{0.5^n}A(1+(|z|+0.5))^\eta                 \\
+   & \le \frac{n!}{0.5^n}A(1.5+1.5|z|)^\eta                  \\
+   & \le \frac{n!}{0.5^n}A \cdot 1.5^\eta \cdot (1+|z|)^\eta \\
+   & = A_n(1+|z|)^\eta\quad\square
+\end{align*}
+Since we've succesfully defined $A_n$ in terms of $n$ and other constants alone.
+
+\pagebreak
+
+\section{Exercise 13}
+
+I'll just use that $c_n n! = f^{(n)}(z_0)$ without proof,
+since it follows basically straight from the power series derivation.
+It was also given directly in the hint, so...
+
+For all $z \in [0, 1]\ \exists n \in \N: c_n=0$, so by the above formula $f^{(n)}(z)=0$.
+
+$[0, 1]$ isn't countable, so $\exists n: \in \N$ s.t. $f^{(n)}(z)=0$ for uncountably many $z$ in the interval.
+Call the set of these $z$ $S$ for convenience.
+
+Now lemme prove that for any uncountable subset $S$ of $[0, 1]$,
+\[\exists x \in [0, 1]:\ \forall r > 0\ B_r(x) \cap (S \setminus \{x\}) \ne \varnothing\]
+where $B_r(x)$ is just the ball of $x$ but limited to $[0, 1]$.
+
+To show this, BWOC say $\forall x \in [0, 1]\ \exists r > 0: B_r(x) \cap (S \setminus \{x\}) = \varnothing$.
+
+The interval's compact, so cover $x$ with finitely many of these balls.
+This gives us $x_i$ and $r_i$ s.t.
+\begin{align*}
+  \varnothing
+   & = \bigcup_{i=1}^n B_{r_i}(x_i) \cap (S \setminus \{x_i\})              \\
+   & = \bigcup_{i=1}^n B_{r_i}(x_i) \cap (S \setminus \{x_1, \cdots, x_n\}) \\
+   & = (S \setminus \{x_1, \cdots, x_n\}) \cap \bigcup_{i=1}^n B_{r_i}(x_i) \\
+   & = (S \setminus \{x_1, \cdots, x_n\}) \cap [0, 1]
+\end{align*}
+which is a contradiction.
+
+With this subpart proven, we can now find a sequence $a_n \subseteq S$ that converges to something
+that isn't in the sequence itself.
+
+As proven in class, if $f(a_i)=0$ for all $a_i$ in the sequence, then it must
+be $0$ throughout the entire domain.
+Applying this to our current situation yields that $f^{(n)}(z)=0\ \forall z$,
+which forces $f(z)$ to be some kind of polynomial. $\square$
+
+\pagebreak
+
+\section{Exercise 15}
+
+Consider the extension outside of $\overline{\mathbb{D}}$ defined by
+$f(z)=\frac{1}{\overline{f(1/\bar{z})}}$.
+
+Since $f$ is non-vanishing inside and on the disc, this extension is indeed well-defined.
+
+Now let's examine $f$'s behavior on the circle $|z|=1$.
+If we use the alternate formula,
+\[\frac{1}{\overline{f(1/\bar{z})}}=\frac{1}{\overline{f(z)}}=f(z)\]
+where the second equality is because $|f(z)|=1$.
+This shows that the two versions of $f$ agree on the circle.
+
+To prove that this new definition is holomorphic outside the circle, notice that
+\begin{align*}
+  \frac{1}{\overline{f(1/\bar{z})}}
+   & = \frac{1}{\overline{\sum_{n=0}^{\infty} a_n \frac{1}{\bar{z}^n}}} \\
+   & = \frac{1}{\sum_{n=0}^{\infty} \overline{a_n} \frac{1}{z^n}}       \\
+   & = \frac{1}{g\left(\frac{1}{z}\right)}
+\end{align*}
+where $g$ is some analytic function.
+Analytic functions are closed under chaining and division, so this new function
+is still analytic and therefore $f$ is holomorphic outside $\mathbb{D}$.
+
+Then, by a corollary of the symmetry principle we proved in class, this
+shows that the "union" of $f$'s inside and outside is holomorphic.
+
+Given it's entire and bounded (since it's nonvanishing in $\mathbb{D}$),
+which means it must be constant everywhere, including in $\mathbb{D}$. $\square$
+
+\pagebreak
+
+\section{Problem 3a}
+
+Any triangle in the complex plane can be decomposed into isosceles right triangles
+whose sides are parallel to the coordinate axes.
+Given this, it STP that the integral around this subclass of triangles is always going to be $0$.
+
+The idea is to continuously fill up the interior of a triangle with smaller
+and smaller squares until it's completely filled up, like so:
+\begin{center}
+  \includegraphics[width=6cm]{img/hw1/construction}
+\end{center}
+Please excuse the god-awful quality.
+
+The sum of the integral along all these squares is $0$ and is equivalent to the
+integral around their outer border.
+As can be seen, the integral of the sides adjacent to the right angle
+are obviously the same, but the same cannot be said for the hypotenuse.
+
+To see this, first note that since the right triangle is closed and bounded in $\C$,
+it's compact, making $f$ uniformly continous on it.
+
+Then, note that at each step of breaking it down, the difference in integrals
+can always be encapsulated by counterclockwise integrals around these tiny triangles:
+\begin{center}
+  \includegraphics[width=4cm]{img/hw1/err}
+\end{center}
+
+The bases correspond to a clockwise version of the square contour, while
+the hypotenuse maps to the standard counterclockwise contour of the triangle.
+
+WLOG let the coordinate of the lower left coordinate be $0$.
+Since $f$ is UC, we an choose $a$ small enough s.t. $|f(z)-f(0)| < \epsilon$
+for any $z$ in the triangle.
+
+If we let the side length of these triangles be $a$, then the error
+of a single one of these triangles is
+\begin{align*}
+        & \left|\left(\int_{0}^{a} f(t)\,dt - \int_{0}^{a} f(it)i\,dt\right) - \int_{0}^{a} f(t-i(a-t))(1-i)\,dt\right| \\
+  ={}   & \left|\int_{0}^{a} f(t)-f(t-i(a-t))\,dt-i\int_{0}^{a} f(it)-f(t-i(a-t))\,dt\right|                            \\
+  \le{} & \int_{0}^{a} \epsilon\,dt + \int_{0}^{a} \epsilon\,dt                                                         \\
+        & = 2a\epsilon
+\end{align*}
+When $a$ becomes small, the difference of function values does too,
+and so the overall error specified by this tiny triangle becomes small.
+
+The sum of $a$ over all the triangles is finite as it's just the length of the square,
+and so we can indeed make the integral of the square approximation equivalent too that of the triangle.
+
+Since this approximation by squares is both equivalent to the integral
+of the right triangle and $0$ by the premise, the integral around the right triangle
+must also be $0$. $\square$
+
+\pagebreak
+
+\section{Problem 4}
+
+\subsection{A Bounded Component Must Exist}
+
+First let me show that $\C \setminus K$ has to have a bounded component.
+
+BWOC let's say we could split $\C \setminus K$ into two unbounded components, $A$ and $B$.
+
+Then, consider $z \in K$ and $r > 0$ s.t. $K \subseteq B_r(z)$.
+$A$ and $B$ are both unbounded, so $A \setminus B_r(z)$ and $B \setminus B_r(z)$ are both nonempty.
+Taking away elements from a set never connects any two sets, so notice that
+\begin{align*}
+  (A \setminus B_r(z)) \cup (B \setminus B_r(z))
+   & = (A \cup B) \setminus B_r(z)     \\
+   & = \C \setminus K \setminus B_r(z) \\
+   & = \C \setminus B_r(z)
+\end{align*}
+indicating that we've split $\C \setminus B_r(z)$, a connected subset of $\C$,
+into two disconnected components.
+Contradiction.
+
+\subsection{Actual Proof}
+
+Take the domain $\Omega$ that's surrounded on all sides by $K$, which we just proved exists.
+
+Consider the function $f(z)=\frac{1}{z-z_0}$, where $z_0 \in \Omega$,
+and BWOC let us be able to approximate it uniformly on $K$ with polynomials.
+
+In other words, $\forall \epsilon > 0\ \exists p(z): |p(z)-f(z)| < \epsilon\ \forall z \in K$.
+
+$K$ is bounded, so $\sup_{z \in K} |z-z_0| < \infty$ and
+\begin{align*}
+             & |p(z)-f(z)| < \epsilon                       \\
+  \implies{} & \left|p(z)-\frac{1}{z-z_0}\right| < \epsilon \\
+  \implies{} & |p(z)(z-z_0)-1| < \epsilon|z-z_0|
+\end{align*}
+If we take $\epsilon$ small enough, then the RHS becomes less than $1$.
+
+Now, we have that $\exists p(z)$ s.t. for all $z \in K$, $|p(z)(z-z_0)-1| < 1$.
+
+Consider the function $g(z)=p(z)(z-z_0)-1$, which is entire.
+By the maximum modulus principle, it cannot have a maximum on $\Omega$,
+However, $\overline{\Omega}$ is compact, so there must be a maximum there.
+
+In other words, $\exists k \in \partial \Omega \subseteq K: |g(z)| < |g(k)| < 1\ \forall z \in \Omega$.
+
+This holds true even for $z_0$, developing into that $|g(z_0)|=|p(z_0)(z_0-z_0)-1|=1 < 1$, a contradiction. $\square$
+
+\end{document}
