@@ -178,15 +178,15 @@ When $R$ is large enough, $R^{-3/2} < \frac{\pi}{2}$, so we can then write the a
 \begin{align*}
         & \frac{R}{2} \int_{0}^{\pi/2-R^{-3/2}} \exp(-R^2\cos(\theta))\,d\theta
   + \frac{R}{2} \int_{\pi/2-R^{-3/2}}^{\pi/2} \exp(-R^2\cos(\theta))\,d\theta                              \\
-  \le{} & \frac{R}{2} \int_{0}^{\pi/2-R^{-3/2}} \exp(-R^2\cos(\theta))\,d\theta + \frac{R}{2} \cdot R^{-2} \\
-  \le{} & \frac{R}{2} \cdot \frac{\pi}{2} \cdot \exp(-R^2\cos(\pi/2-R^{-3/2})) + \frac{1}{2R} \\
-  ={} & \frac{R}{2} \cdot \frac{\pi}{2} \cdot \exp(-R^2\sin(R^{-3/2})) + \frac{1}{2R}
+  \le{} & \frac{R}{2} \int_{0}^{\pi/2-R^{-3/2}} \exp(-R^2\cos(\theta))\,d\theta + \frac{R}{2} \cdot R^{-3/2} \\
+  \le{} & \frac{R}{2} \cdot \frac{\pi}{2} \cdot \exp(-R^2\cos(\pi/2-R^{-3/2})) + \frac{1}{2\sqrt{R}} \\
+  ={} & \frac{R}{2} \cdot \frac{\pi}{2} \cdot \exp(-R^2\sin(R^{-3/2})) + \frac{1}{2\sqrt{R}}
 \end{align*}
 Notice that since $\lim_{x \to 0} \frac{\sin x}{x}=1$,
 as $R \to \infty$, $\exp(-R^2\sin(R^{-3/2}))$ tends toward $\exp(-R^{1/2})$.
 
 Thus, the limit of that expression is equal to
-\[\lim_{R \to \infty} \frac{R}{2}\exp(R^{-1/2}) + \frac{1}{2R}=0\]
+\[\lim_{R \to \infty} \frac{R}{2}\exp(R^{-1/2}) + \frac{1}{2\sqrt{R}}=0\]
 
 For the final integral we have:
 \begin{align*}
