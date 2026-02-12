@@ -1,0 +1,220 @@
+\documentclass[12pt]{article}
+
+\input{../kz}
+
+\rhead{Math 132H}
+
+\makeatletter
+\def\@seccntformat#1{%
+  \expandafter\ifx\csname c@#1\endcsname\c@section\else
+  \csname the#1\endcsname\quad
+  \fi}
+\makeatother
+
+\DeclareMathOperator{\cis}{cis}
+\DeclareMathOperator{\res}{res}
+\newcommand{\lra}{\xLeftrightarrow}
+\newcommand{\ra}{\xRightarrow}
+
+\begin{document}
+
+All exercises here are in Chapter 3.
+
+\section{Exercise 1}
+
+We have
+\begin{align*}
+             & \sin \pi z=0                         \\
+  \implies{} & \frac{e^{i\pi z}-e^{-i\pi z}}{2i}=0  \\
+  \implies{} & e^{i\pi z}=e^{-i \pi z}              \\
+  \implies{} & i\pi z = -i\pi z + 2i\pi n, n \in \Z \\
+  \implies{} & z=n
+\end{align*}
+so the only zeroes are at the integers.
+
+As for their order, it suffices to show that $f^{(1)}(z) \ne 0$.
+This is true by prerequisite calculus, since $\frac{d}{dz} \sin \pi z = \pi \sin \pi z$
+which when evaluated at $n \in Z$ turns into $\pi(-1)^n \ne 0$.
+
+Then the residue at $n \in \Z$ is
+\begin{align*}
+  \res_n \sin \pi n
+   & = \lim_{z \to n} \frac{z-n}{\sin \pi z}   \\
+   & = \lim_{z \to n} \frac{1}{\pi \cos \pi z} \\
+   & = \frac{(-1)^n}{\pi}
+\end{align*}
+
+\pagebreak
+
+\section{Exercise 3}\label{sec:ex3}
+
+$z^2+a^2=(z-ai)(z+ai)$, so there's a simple pole at $ai$ and $-ai$.
+
+Let's integrate $\frac{e^{iz}}{z^2+a^2}$ over some massive curve to get our thing.
+
+The residue at $ai$ is
+\begin{align*}
+  \lim_{z \to ai} (z-ai)\frac{e^{iz}}{z^2+a^2}
+   & = \lim_{z \to ai} \frac{e^{iz}}{z+ai} \\
+   & = \frac{e^{-a}}{2ai}
+\end{align*}
+
+Now consider the upper half of a circle centered at $0$ with large radius $R$.
+$z=ai$ is its only pole, so
+\[\int_{-R}^{R} \frac{e^{ix}}{x^2+a^2}\,dx
+  + \int_{0}^{\pi} \frac{\exp\left(Rie^{i\theta}\right)}{R^2e^{2i\theta}+a^2} \cdot iRe^{i\theta}\,d\theta
+  =\frac{\pi e^{-a}}{a}\]
+
+Also, notice that we can bound the magnitude of the second integrand like so:
+\begin{align*}
+  \left|\frac{\exp\left(Rie^{i\theta}\right)}{R^2e^{2i\theta}+a^2} \cdot iRe^{i\theta}\right|
+   & = \frac{\left|\exp\left(Rie^{i\theta}\right)\right|}{\left|R^2e^{2i\theta}+a^2\right|} \cdot \left|iRe^{i\theta}\right| \\
+   & = R\frac{\left|\exp\left(-R \sin \theta + Ri\cos \theta\right)\right|}{\left|R^2e^{2i\theta}+a^2\right|}                \\
+   & \le R\frac{1}{\left|R^2e^{2i\theta}+a^2\right|}                                                                         \\
+   & \le \frac{R}{\left|R^2e^{2i\theta}+a^2\right|}                                                                          \\
+   & \le \frac{R}{R^2 - a^2}
+\end{align*}
+where I've used that $0 \le \theta \le \pi \implies \sin \theta \ge 0$.
+This bound shows that as $R$ grows large the second integral goes to $0$.
+
+That leaves only the first integral, which when taking the real component gives
+\[\Re\left(\int_{-R}^{R} \frac{e^{ix}}{x^2+a^2}\,d\right)
+  =\int_{-R}^{R} \frac{\cos x}{x^2+a^2}\,d\]
+which is exactly what we want to equal $\frac{\pi e^{-a}}{a}$. $\square$
+
+\pagebreak
+
+\section{Exercise 4}
+
+\subsection{Basic Construction}
+
+We do basically the same thing as in \hyperref[sec:ex3]{the other exercise}.
+The idea is to integrate $\frac{ze^{iz}}{z^2+a^2}$ over a massive semicircle
+that contains a pole at $z=ai$.
+
+The residual is
+\begin{align*}
+  \lim_{z \to ai} (z-ai)\frac{ze^{iz}}{z^2+a^2}
+   & = \lim_{z \to ai} \frac{ze^{iz}}{z+ai} \\
+   & = i \pi e^{-a}
+\end{align*}
+so
+\[\int_{-R}^{R} \frac{xe^{ix}}{x^2+a^2}\,dx
+  + \int_{0}^{\pi} \frac{Rie^{i\theta}\exp\left(Rie^{i\theta}\right)}{R^2e^{2i\theta}+a^2} \cdot iRe^{i\theta}\,d\theta
+  =i \pi e^{-a}\]
+
+\subsection{The Integral From Hell}
+
+The magnitude of the second integral can be initially bounded as follows:
+\begin{align*}
+  \left|\int_{0}^{\pi} \frac{Rie^{i\theta}\exp\left(Rie^{i\theta}\right)}{R^2e^{2i\theta}+a^2} \cdot iRe^{i\theta}\,d\theta\right|
+   & \le \int_{0}^{\pi} \left|\frac{Rie^{i\theta}\exp\left(Rie^{i\theta}\right)}{R^2e^{2i\theta}+a^2} \cdot iRe^{i\theta}\right|\,d\theta \\
+   & \le R\int_{0}^{\pi} \left|\frac{Rie^{i\theta}\exp\left(Rie^{i\theta}\right)}{R^2e^{2i\theta}+a^2}\right|\,d\theta                    \\
+   & \le R\int_{0}^{\pi} \frac{\left|Rie^{i\theta}\exp\left(Rie^{i\theta}\right)\right|}{R^2-a^2}\,d\theta                                \\
+   & \le R\int_{0}^{\pi} \frac{R\exp(-R\sin \theta)}{R^2-a^2}\,d\theta
+\end{align*}
+We can break this into integrals from
+$0$ to $R^{-1/2}$, $R^{-1/2}$ to $\pi-R^{-1/2}$, and $\pi-R^{1/2}$ to $\pi$.
+
+The first one tends to $0$, since
+\begin{align*}
+  R\int_{0}^{R^{-1/2}} \frac{R\exp(-R\sin \theta)}{R^2-a^2}\,d\theta
+   & \le R \cdot R^{-1/2} \cdot \frac{R}{R^2-a^2} \\
+   & = \frac{R^{3/2}}{R^2-a^2}
+\end{align*}
+where the numerator's degree is smaller than that of the denominator.
+
+A similar process can be done to show the same for the third integral.
+
+As for the second, since $\sin(\pi - \theta)=\sin \theta$
+\begin{align*}
+  R\int_{R^{-1/2}}^{\pi - R^{-1/2}} \frac{R\exp(-R\sin \theta)}{R^2-a^2}\,d\theta
+   & \le R\pi \cdot \frac{R\exp(-R \sin R^{-1/2})}{R^2-a^2} \\
+   & = \frac{\pi R^2}{R^2-a^2} \cdot \exp(-R \sin R^{-1/2})
+\end{align*}
+The first coefficient tends to $\pi$.
+To simplify the second, notice that $\lim_{x \to 0} \frac{\sin x}{x}=1$, so
+\begin{align*}
+  \lim_{R \to \infty} \exp(-R \sin R^{-1/2})
+   & = \lim_{R \to \infty} \exp(-R \cdot R^{-1/2}) \\
+   & = \lim_{R \to \infty} \exp(-R^{1/2})          \\
+   & = 0
+\end{align*}
+so the whole second part goes to $0$ as well.
+
+\subsection{Oh My God It's Finally Over}
+
+Given that the second integral tends to $0$ as $R \to \infty$,
+\[\int_{-\infty}^{\infty} \frac{xe^{ix}}{x^2+a^2}\,dx =i \pi e^{-a}\]
+We can finally take the imaginary parts of both sides to get
+\[\int_{-\infty}^{\infty} \frac{x\sin(x)}{x^2+a^2}\,dx =\pi e^{-a}\quad\square\]
+
+\pagebreak
+
+\section{Exercise 7}\label{sec:ex7}
+
+\textbf{DISCLAIMER}: I used \hyperlink{https://math.stackexchange.com/a/1314187/713952}{this answer on SE} for help.
+
+First let's change the formula into something a bit more conventional:
+\begin{align*}
+  \frac{1}{(a+\cos x)^2}
+   & = \frac{1}{\left(a+\frac{e^{ix}+e^{-ix}}{2}\right)^2}                                       \\
+   & = \frac{4e^{2ix}}{\left(ae^{ix}+e^{2ix}+1\right)^2}                                         \\
+   & = \frac{4e^{2ix}}{\left(e^{ix}+a-\sqrt{a^2-1}\right)^2\left(e^{ix}+a+\sqrt{a^2-1}\right)^2}
+\end{align*}
+
+Then using the substitution $z=e^{iz}$ and $dz=dx \cdot ie^{ix}$,
+\[\int_{0}^{2\pi} \frac{d\theta}{(a+\cos \theta)^2}
+=-i\int_{|z|=1} \frac{4z}{\left(z+a-\sqrt{a^2-1}\right)^2\left(z+a+\sqrt{a^2-1}\right)^2}\,dz\]
+The only pole here that's inside the circle we're integrating is $z_0=-a+\sqrt{a^2-1}$.
+
+As can be seen, it's of order $2$, and
+\begin{align*}
+      & \res_{z_0} \frac{4z}{(z-z_0)^2\left(z+a+\sqrt{a^2-1}\right)^2} \\
+  ={} & \lim_{z \to z_0} \frac{d}{dz} (z-z_0)^2\frac{4z}{(z-z_0)^2\left(z+a+\sqrt{a^2-1}\right)^2} \\
+  ={} & \lim_{z \to z_0} \frac{d}{dz} \frac{4z}{\left(z+a+\sqrt{a^2-1}\right)^2} \\
+  ={} & \lim_{z \to z_0} \frac{4\left(z+a+\sqrt{a^2-1}\right)^2-2\left(z+a+\sqrt{a^2-1}\right) \cdot 4z}{\left(z+a+\sqrt{a^2-1}\right)^4} \\
+  ={} & \frac{4\left(z_0+a+\sqrt{a^2-1}\right)^2-2\left(z_0+a+\sqrt{a^2-1}\right) \cdot 4z_0}{\left(z_0+a+\sqrt{a^2-1}\right)^4} \\
+  ={} & \frac{a}{(a^2-1)^{3/2}}\quad\text{\footnotesize just trust me on this please}
+\end{align*}
+
+So by the Residue Theorem,
+\[\int_{0}^{2\pi} \frac{d\theta}{(a+\cos \theta)^2}
+=-i \cdot 2\pi i \cdot \frac{a}{(a^2-1)^{3/2}}
+=\frac{2\pi a}{(a^2-1)^{3/2}}\quad\square\]
+
+\pagebreak
+
+\section{Exercise 8}
+
+First off the edge case where $b=0$ is just calculus, I'm not doing that.
+
+We do something similar to what we did in \hyperref[sec:ex7]{exercise 7}:
+\begin{align*}
+  \frac{1}{a+b\cos x}
+  &= \frac{1}{a+\frac{b}{2}\left(e^{ix}+e^{-ix}\right)} \\
+  &= \frac{e^{ix}}{\frac{b}{2}e^{2ix}+ae^{ix}+\frac{b}{2}} \\
+  &= \frac{e^{ix}}{\frac{b}{2}\left(e^{ix}-r_1\right)\left(e^{ix}-r_2\right)}
+\end{align*}
+where $r_1$ and $r_2$ are $\frac{-a \pm \sqrt{a^2-b^2}}{b}$.
+Since $a > |b|$, $r_1, r_2 \in \R$.
+
+Once again, we substitude with $z=e^{iz}$ to get
+\[\int_{0}^{2\pi} \frac{d\theta}{a+b\cos\theta}
+=-i \cdot \int_{|z|=1} \frac{dz}{\frac{b}{2}(z-r_1)(z-r_2)}\]
+
+Here, only $r_1=\frac{-a+\sqrt{a^2-b^2}}{b}$ is in the unit circle since $a > 0$.
+
+We take its residual:
+\begin{align*}
+  \res_{z_0} \frac{1}{\frac{b}{2}(z-r_1)(z-r_2)}
+  &= \lim_{z \to r_1} (z-r_1) \frac{1}{\frac{b}{2}(z-r_1)(z-r_2)} \\
+  &= \frac{1}{\frac{b}{2}(r_1-r_2)} \\
+  &= \frac{1}{\sqrt{a^2-b^2}}
+\end{align*}
+and see that
+\[\int_{0}^{2\pi} \frac{d\theta}{a+b\cos\theta}
+=-i \cdot 2\pi i \cdot \frac{1}{\sqrt{a^2-b^2}}
+=\frac{2\pi}{\sqrt{a^2-b^2}}\quad\square\]
+
+\end{document}
