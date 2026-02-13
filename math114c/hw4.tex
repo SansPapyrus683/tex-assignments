@@ -1,0 +1,261 @@
+\documentclass[12pt]{article}
+
+\input{../kz}
+
+\rhead{Math 114C}
+
+\makeatletter
+\def\@seccntformat#1{%
+  \expandafter\ifx\csname c@#1\endcsname\c@section\else
+  \csname the#1\endcsname\quad
+  \fi}
+\makeatother
+
+\DeclareMathOperator{\ch}{Char}
+\DeclareMathOperator{\proj}{proj}
+\DeclareMathOperator{\len}{len}
+\newcommand{\pto}{\rightharpoonup}
+
+\begin{document}
+
+\section{Problem 1}
+
+Is this just Cantor's Diagonalization in a beard and wig?
+
+BWOC say there existed a surjection $\theta$ from $\N$ to all unary functions $f: \N \to \N$.
+
+Then consider the function $f': \N \to \N$ defined by $f'(x)=\theta_x(x)+1$.
+
+Notice that this function is not included in the enumeration, since for all
+$x \in \N$ $f'$ differs from $\theta_x$ when you plug in $x$.
+Contradiction. $\square$
+
+\section{Problem 2}
+
+Consider the following function:
+\[f(e, x)=\begin{cases}
+    \uparrow & x=e              \\
+    0        & \text{otherwise}
+  \end{cases}\]
+By the Second Recursion Theorem $\exists e^*: \varphi_e(x)=f(e, x)$,
+so $\varphi_e(e)\uparrow$ and $\varphi_e(x)\downarrow=0$ for everything else.
+This means $e \in A$.
+
+However, we've shown that every program has infinitely many variations that do the same thing.
+
+Thus, $\exists e' \ne e: \varphi_e'=\varphi_e \implies \varphi_e'(e')\downarrow \implies e' \notin A$. $\square$
+
+\section{Problem 3}
+
+\begin{enumerate}[label=(\alph*)]
+  \item True. $\exists e: \varphi_e=\ch_{\lnot R}$, then we can define $\ch_R(x)=1-\ch_{\lnot R}(x)$,
+        so $\lnot R$ must be undecidable by this reduction.
+
+  \item False. If we let $Q(\vec{x})=\lnot R(\vec{x})$, then $\ch_{R \land Q}(\vec{x})=0$.
+
+  \item False. Let $Q(\vec{x})=\lnot R(\vec{x})$ again to see that $\ch_{R \lor Q}(\vec{x})=1$.
+
+  \item False. Let $R(x, y)$ hold iff $\varphi_{x+y}(0)\downarrow$.
+        While this relation is undecidable, $\ch_P(x)=1$ since we can always choose a $y$ s.t. $x+y$ is some trivial machine.
+\end{enumerate}
+
+\pagebreak
+
+\section{Problem 4}
+
+I just realized that semirecursiveness is what CS 181 calls recognizability.
+
+\subsection{Part A}
+
+$R$ isn't decidable since we can reduce the halting problem to it.
+
+However, it is semirecursive.
+Let $S_e(\Braket{x, s})$ hold iff $\varphi_e$ halts on input $x$ in $s$ steps.
+This relation is decidable, since we can just run $\varphi_e$ for $s$ steps and see what happens.
+
+Then, $R(e) \iff \exists n: S_e(n)$, since $W_e \neq \varnothing$ implies
+the existence of an $x$ that makes $\varphi_e$ run for a finite amount of steps ($s$).
+
+\subsection{Part B}
+
+$Q$ isn't decidable since we can define $\phi_{e'}(x)=0 \cdot \phi_e(x) + x$.
+$\phi_{e'}(x)\downarrow \iff \phi_{e'}(x)=x$,
+so $Q(e')$ is equivalent to $W_e \ne \varnothing$, which again is undecidable.
+
+This one is also semirecursive, though.
+
+Let $M_e(\Braket{x, s})$ hold iff $\varphi_e$ halts on input $x$ with output $x$ in $s$ steps.
+We can play much the same game as we did with $R$ to see that $Q(e) \iff \exists x: M_e(x)$.
+
+\subsection{Part C}
+
+$P$ isn't decidable since we can also reduce the halting problem to it.
+It also isn't semirecursive.
+
+Let $H(\braket{e, x, s})$ hold iff $\phi_e$ halts on input $x$ in $s$ steps.
+The existence of a universal machine for URMs by the Kleene predicate
+allows this relation to be recursive.
+
+Then we can define $\lnot P(e, x) \iff \exists s: H(\braket{e, x, s})$, proving the semirecursiveness of $\lnot P$.
+
+\subsection{Part D}
+
+$W_f$ is recursive, so we can define $\ch_{G_f}(x, y)$ like so:
+\[\ch_{G_f}(x, y)=\begin{cases}
+    1 & x \in W_f \land f(x)\downarrow = y \\
+    0 & \text{otherwise}
+  \end{cases}\]
+The idea is to not even try to evaluate $f(x)$ if $x \notin W_f$ so we don't diverge.
+
+But yeah, this function is recursive, so $G_f$ is too.
+
+\pagebreak
+
+\section{Problem 5}
+
+\subsection{Part A}
+
+\subsubsection{Forward Direction}
+
+$R$'s semirecursive, so $\exists R_0: R(\vec{x}) \iff \exists y: R_0(\vec{x}, y)$, where $R_0$ is recursive.
+
+Then I'm pretty sure we can just define
+\[\ch_R^p(\vec{x})=\min(\max(\mu y[R_0(\vec{x}, y)], 1), 1)\]
+If $R(\vec{x})$, then the minimizer will give a $y$ and the min and max will force the output to be $1$.
+
+OTOH, if $\lnot R_0(\vec{x}, y)\ \forall y$, $\ch_R^p(\vec{x})\uparrow$ since the minimizer will never stop.
+
+\subsubsection{Backward Direction}
+
+Let $e$ be the code for $\ch_R^p$.
+
+We can define the relation $R_0(\vec{x}, y)$ to hold iff
+$\ch_R^p(\vec{x})=\varphi_e$ halts in $y$ steps (and has output $1$, but that's guaranteed).
+
+If $\exists y: R_0(\vec{x}, y)$, then $\ch_R^p(\vec{x})\downarrow = 1$ in $y$ steps and $R(\vec{x})$ holds.
+
+OTOH, if $R(\vec{x})$ holds, then $\ch_R^p(\vec{x})\downarrow = 1$, and $\varphi_e$
+must halt in some finite number of steps, forcing a $y$ where $R_0(\vec{x}, y)$ holds. $\square$
+
+\subsection{Part B}
+
+By the previous part, we know there exists an $\ch_R^p$ with the specified behavior.
+
+Now consider the construction
+\[g(\vec{x})=\ch_R^p(\vec{x}) \cdot f(\vec{x})\]
+If $R(\vec{x})$, $\ch_R^p(\vec{x})=1$ and $g(\vec{x})=f(\vec{x})$.
+
+Otherwise, $\ch_R^p(\vec{x})\uparrow$ and by extension $g(\vec{x})\uparrow$ too. $\square$
+
+\pagebreak
+
+\section{Problem 6}
+
+$A \subseteq \N$ and it's infinite, so we can enumerate them like $a_0, a_1, a_2, \cdots$, where $a_i < a_{i+1}$.
+
+I forgot if there was anything between finite-ness and countably infinite.
+That whether there's anything between $\N$ and $\R$ is unsolvable, but IDK about this one.
+
+Regardless, by the premise $f(x)=a_x$ is computable.
+
+Lemme first prove that $f(x) \ge x$.
+The base case, $f(0) \ge 0$, is trivial.
+As for the inductive step, notice that $f(n+1) > f(n) \ge n$.
+Since we're in $\N$, this forces $f(n+1) \ge n+1$ as well.
+
+Now we can define the relation
+\[A(x) \iff \exists y \le x: f(y)=x\]
+where the RHS is recursive since it only uses a bounded existence statement.
+
+To show that this equivalence is true, note that $A(x) \iff \exists y: f(y)=x$ is \textit{definitely} true.
+
+If $A(x)$, $\exists y: f(y)=x$.
+Note that if $y > x$, then $f(y) \ge y > x \implies f(y) \ne x$, so $y \ge x$.
+
+OTOH, $\exists y \le x: f(y)=x \implies A(x)$ since $f: \N \to A$. $\square$
+
+\pagebreak
+
+\section{Problem 7}
+
+\subsection{First Part}
+
+$A$ is r.e., so $\exists g: \N \to A$ that's surjective.
+
+It STP that $f^{-1}[A]$ is semirecursive.
+Let $R(x, \braket{a, b})$ hold iff $f(x)\downarrow$ in $a$ steps and $g(b)=f(x)$.
+This relation is recurisve since $g$ is total and we can use the Kleene predicate
+to check if $f(x)$ terminates in $a$ steps.
+
+  {\footnotesize (ig we should also reject if the second argument isn't a valid sequence code but that's just implementation)}
+
+Then,
+\[x \in f^{-1}[A] \iff \exists y: R(x, y)\]
+If $x \in f^{-1}[A]$, then $f(x) \in A$.
+This means that $\exists a$ s.t. $f(x)$ halts in $a$ steps \textit{and} $\exists b: g(b)=f(x)$.
+Set $y=\braket{a, b}$ to see that $R(x, y)$ holds by construction.
+
+The reverse direction goes basically the same way as the forward but in reverse.
+
+\subsection{Second Part}
+
+Let $s(e)$ be the program coded by $\phi_e \circ f$.
+Recursive functions are closed under substitution, so this should be fine.
+
+Then,
+\begin{align*}
+  x \in W_{s(e)}
+   & \iff \varphi_{s(e)}(x)\downarrow                  \\
+   & \iff \phi_e(f(x))\downarrow                       \\
+   & \iff f(x)\downarrow \land\ \phi_e(f(x))\downarrow \\
+   & \iff f(x)\downarrow \in W_e                       \\
+   & \iff x \in f^{-1}[W_e]\quad\square
+\end{align*}
+
+\pagebreak
+
+\section{Problem 8}
+
+\subsection{Part A}
+
+I'm assuming $A \ne \varnothing$ here.
+
+But yeah, if $A$ is r.e. then there exists an $f: \N \to A$ which is total and surjective.
+
+This is the $f$ we want, because
+\begin{align*}
+  x \in X
+   & \iff \exists e: x \in W_e          \\
+   & \iff \exists n: x \in W_{f(n)}     \\
+   & \iff x \in \bigcup_{n=0}^\infty W_{f(n)}
+\end{align*}
+
+\subsection{Part B}
+
+It STP that $X$ is semirecursive.
+
+Let $f$ be the same $f$ from the previous part.
+
+Consider the relation $R(x, \braket{n, s})$ which holds iff $\varphi_{f(n)}(x)$ terminates after $s$ steps.
+$f$ is total and recursive, so this relation is recursive.
+
+Then,
+\begin{align*}
+  x \in X
+  &\iff x \in \bigcup_{n=0}^\infty W_{f(n)} \\
+  &\iff \exists n: \varphi_{f(n)}(x)\downarrow \\
+  &\iff \exists n, s: R(x, \braket{n, s}) \\
+  &\iff \exists y: R(x, y)\quad\square
+\end{align*}
+
+\subsection{Part C}
+
+Well we can write $\lnot K$ (or any subset of $\N$, really) as
+\[\lnot K = \bigcup_{x \in \lnot K} \{x\}\]
+{\scriptsize honestly idk what the question was asking here...}
+
+To show that $\lnot K$ can't be written as an effective union, it STP that it isn't r.e.
+
+This follows from the fact that $K$ \textit{is} r.e. and Kleene's Theorem.
+
+\end{document}
