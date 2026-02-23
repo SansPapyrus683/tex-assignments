@@ -1,0 +1,276 @@
+\documentclass[12pt]{article}
+
+\input{../kz}
+
+\rhead{Math 132H}
+
+\makeatletter
+\def\@seccntformat#1{%
+  \expandafter\ifx\csname c@#1\endcsname\c@section\else
+  \csname the#1\endcsname\quad
+  \fi}
+\makeatother
+
+\DeclareMathOperator{\cis}{cis}
+\DeclareMathOperator{\res}{res}
+\newcommand{\lra}{\xLeftrightarrow}
+\newcommand{\ra}{\xRightarrow}
+
+\begin{document}
+
+All exercises here are in Chapter 3.
+
+\section{Exercise 13}
+
+\subsection{Dogwater Edge Case}
+
+If $\epsilon \ge 1$, then for some radius $r$
+\[f(z) \le A|z-z_0|^{-1+\epsilon} \le Ar^{-1+\epsilon}\]
+which bounds $f$ in a disc and forces a removable singularity.
+
+\subsection{Actual Proof}
+
+Now we assume $0 < \epsilon < 1$.
+
+BWOC let $f$ not have a removable singularity.
+
+In other words, $f(z)=\sum_{j=1}^{\infty} a_{-j}(z-z_0)^{-j}+h(z)$, where $h$ is some holomorphic function
+and there's at least one $a_{-j}$ that's nonzero.
+
+Then, limiting ourselves to some small radius $r$, $h(z)$ is bounded.
+If we let $H$ be the upper bound for $h$'s magnitude, then
+\begin{align*}
+             & |f(z)| \le A|z-z_0|^{-1+\epsilon}                                                  \\
+  \implies{} & \left|\sum_{j=1}^{\infty} a_{-j}(z-z_0)^{-j}\right| \le A|z-z_0|^{-1+\epsilon} + H \\
+  \implies{} & \begin{aligned}[t]
+                 \left|\sum_{j=1}^{\infty} a_{-j}(z-z_0)^{-j+1}\right|
+                  & \le (A|z-z_0|^{-1+\epsilon} + H) \cdot |z-z_0| \\
+                  & \le A|z-z_0|^\epsilon + H|z-z_0|               \\
+                  & \le Ar^\epsilon + Hr
+               \end{aligned}
+\end{align*}
+The RHS is fixed, but the LHS is clearly unbounded, which is a contradiction. $\square$
+
+\pagebreak
+
+\section{Exercise 14}
+
+$f$ is entire, so we can write $f(z)=\sum_{j=0}^{\infty} a_jz^j$ for all $z \in \C$.
+
+\subsection{Finite Powers Case}
+
+Suppose there were a finite amount of coefficients in the power series, forcing $f$ to be a polynomial.
+
+We'll prove the contrapositive by assuming that $\deg(f) \ge 2$.
+
+By the FTA, $f$ has at least $2$ roots.
+They can't be different (or else $f$ wouldn't be injective), so $f(z)=(z-c)^n$ where $n \ge 2$.
+However, even this function isn't injective since we can let
+$(x-c)^n=1$ and get $n$ values of $x$ by roots of unity.
+
+Thus, $\deg(f) \ge 2$ bans $f$ from being injective.
+
+\subsection{Infinite Powers Case}
+
+Now let the power series have an infinite amount of nonzero coefficients.
+
+Consider the function $g(z)=f\left(\frac{1}{z}\right)$, which is holomorphic everywhere except $z=0$.
+
+Since $g(z)=\sum_{j=0}^{\infty} a_jz^{-j}$, it has an essential singularity at $0$ too.
+
+Then just use Big Picard to see that $g$ (and $f$ by extension) can't be injective. $\square$
+
+\pagebreak
+
+\section{Exercise 15}
+
+WHY ARE THERE FOUR PROOFS IN THIS PROBLEM BRO OH MY GOD
+
+\subsection{Part A}
+
+What the bound is essentially saying is that $|f(z)| \le A|z|^k+B$.
+
+By the Cauchy inequalities,
+\begin{align*}
+  \left|f^{(j)}(z_0)\right|
+   & \le \frac{j!}{R^j} \sup_{|z-z_0|=R} |f(z)|       \\
+   & \le \frac{j!}{R^j} \sup_{|z-z_0|=R} A|z-z_0|^k+B \\
+   & \le \frac{j!}{R^j}\left(A(R+|z_0|)^k+B\right)
+\end{align*}
+When $j > k$, letting $R \to \infty$ forces $f^{j}(z_0)=0\ \forall 0$,
+so the power series of $f$ cannot have any terms past $a_k(z-z_0)^k$. $\square$
+
+\subsection{Part B}
+
+\subsubsection{Stacked Products}
+
+Let $\phi - \theta = \delta$.
+With this, let $n \in \N$ be s.t. $\frac{2\pi}{n} < \frac{\delta}{2}$.
+Assign $\alpha=\frac{2\pi}{n}$ for convenience.
+
+Notice that $\forall z \in \mathbb{D}\ \exists 0 \le x \le n: \arg\left(ze^{ix\alpha}\right) \in (\theta, \varphi)$.
+In more natural words, this is a bound on how many rotations of degree $\alpha$ we
+have to do in order to bring any point in the disc into the given sector.
+
+Now consider the function
+\[g(z)=\prod_{j=0}^{n-1} f\left(ze^{ij\alpha}\right)\]
+I propose that this function converges uniformly to $0$ as $|z| \to 1$ on the entire unit disc.
+To prove this, fix an $\epsilon$ as always.
+
+Since $f$ converges uniformly in the sector given by the problem, we can choose an $r < 1$ s.t.
+$r < |z| < 1 \land \arg z \in [\theta, \varphi] \implies |f(z)| < \epsilon$.
+
+Now $f(z)$ is bounded (say by some constant $M$),
+so we can bound $g$ in the region \\ $\{z: r < |z| < 1\}$ like so:
+\[|g(z)| = \prod_{j=0}^{n-1} \left|f\left(ze^{ij\alpha}\right)\right| \le \epsilon M^{n-1}\]
+The $\epsilon$ is because of how we chose $n$ above.
+At least one of the $ze^{ij\alpha}$s has to fall into the good sector,
+and their magnitude is still greater than $r$.
+
+$n$ and $M$ were both fixed before $\epsilon$, so this shows what we wanted.
+
+\subsubsection{That Go to Zero}
+
+Consider the function $h: \overline{\mathbb{D}} \to \C$ defined by the following formula:
+\[h(z)=\begin{cases}
+  g(z) & |z| < 1 \\
+  0 & \text{otherwise}
+\end{cases}\]
+By what we just proved in the previous section, $h$ is a continous function.
+
+$\mathbb{D}$ is compact, and this combined with the maximum modulus principle
+gives us that it must attain a maximum on the boundary.
+
+However, $h$ is $0$ everywhere on $\partial \mathbb{D}$, so $g(z)=0$.
+
+\subsubsection{Going back to \texorpdfstring{$f$}{f}}
+
+Take any ring in $\mathbb{D}$ $\{z: |z|=r\}$.
+
+For every angle $\beta$ in $\left[0, \alpha\right]$,
+we can find an $x$ s.t. $f\left(re^{i(x\alpha + \beta)}\right)=0$ since $g\left(e^{ix\alpha}\right)=0$.
+All these are distinct since we're adding on to the angle in increments of $\alpha$.
+
+All this means is that there's an uncountable amount of points on the ring that give $0$.
+
+As proven in a previous homework, a compact subset with an uncountably infinite
+subset must have a limit point.
+Thus, we can obtain a sequence of convergent points
+that all evaluate to $0$ and force $f(z)=0$ in its entirety. $\square$
+
+\pagebreak
+
+\subsection{Part C}
+
+Consider the function defined on the unit \textit{disc}
+\[f(z)=\prod_{j=1}^{n} z-w_j\]
+Notice that $|f(z)|$ is exactly the product of distances that we want.
+
+Also, since $|w_j|=1$, $|f(0)|=1$.
+
+By the maximum modulus principle and the compactness of the unit circle
+unioned with the unit disc, the maximum of $f$ must lie on the circle.
+
+In other words, $\exists z: |z|=1 \land |f(z)| \ge |f(0)|=1$, so the must be a point
+on the circle whose distance product with all the points has to be at least $1$.
+
+Now, $|f|$ is continuous along the unit circle, and $|f(w_j)|=0$.
+Thus, by the IVT, we can say that $\exists z: |z|=|f(z)|=1$. $\square$
+
+\subsection{Part D}
+
+By a stupid deus ex machina, consider the function $e^f$.
+$\left|e^f\right|=e^{\Re(f)}$, and since $\Re(f)$ is bounded, $e^f$ is bounded too.
+It's also entire, which means it must be constant.
+
+The set of values in $\C$ that satisfy $e^x=c$ for some constant $c$
+are all separate, so by continuity of $f$, $f$ must be constant. $\square$
+
+\pagebreak
+
+\section{Exercise 16}
+
+\subsection{Part A}
+
+The TA proved Rouche's Theorem (or at least a version of it), so I'm just gonna use
+the textbook's version of it without proof here.
+
+$f$ is nonvanishing on $\partial \mathbb{D}$, and the boundary is compact, so
+we can find a positive lower bound for its magnitude on the circle $m$.
+In the same vein, we can find an upper bound $G$ on the circle for $g$ as well.
+
+Now notice that for all $0 < \epsilon < \frac{m}{G}$,
+\begin{align*}
+  |\epsilon g(z)| 
+  &< \epsilon G \\
+  &< \frac{m}{G} \cdot G \\
+  &= m \\
+  &< f(z)
+\end{align*}
+so as long as $\epsilon$ is small enough $\epsilon g(z)$ satisfies the conditions
+of Rouche's Theorem.
+
+$f$ has exactly one zero on $\mathbb{D}$, so $f_\epsilon=f+\epsilon g$ must have exactly one zero too.
+
+\subsection{Part B}
+
+Fix an $\epsilon$ small enough as well as an error tolerance $E$.
+
+It suffices to find a $\delta$ s.t. $|\epsilon'-\epsilon| < \delta \implies |z_\epsilon - z_{\epsilon'}| < E$.
+
+Notice that
+\[f_{\epsilon'}(z) = (f(z) + \epsilon g(z)) + ((\epsilon' - \epsilon)g(z))\]
+
+$f(z)+\epsilon g(z)$ has a zero at $z_\epsilon$, and we can take a radius $E$ (as long as $E$'s small enough)
+s.t. $B_r(z_\epsilon) \subseteq \mathbb{D}$ to make it the only zero inside the ball.
+
+On the compact border of this circle, we can once again upper bound $g$ with $G$
+and lower bound $f(z)+\epsilon g(z)$ with $m$.
+Forcing $\delta=\frac{m}{G}>0$, if $|\epsilon'-\epsilon| < \delta$ then
+\begin{align*}
+  |(\epsilon' - \epsilon)g(z)|
+  &= |\epsilon' - \epsilon| |g(z)| \\
+  &< |\epsilon' - \epsilon| G \\
+  &< \frac{m}{G} \cdot G \\
+  &< f(z)+\epsilon g(z)
+\end{align*}
+so we can apply Rouche's Theorem like in the previous part to see that
+$f_{\epsilon'}(z)$ must have exactly one zero inside $B_E(z_\epsilon)$.
+This zero is actually our $z_{\epsilon'}$, so $|z_{\epsilon'} - z_\epsilon| < E$. $\square$
+
+\pagebreak
+
+\section{Exercise 17}
+
+\subsection{Part A}
+
+I guess we'll first show that $f(z)=0$ has a solution inside $\mathbb{D}$.
+
+BWOC say $f$ was nonvanishing in the entirety of $\mathbb{D}$.
+This would make $1/f$ well-defined and holomorphic in $\mathbb{D}$ as well.
+Notice that $|1/f|$ on $\partial \mathbb{D}$ is also $1$.
+
+By the maximum modulus principle $|z| < 1 \implies |f(z)| < 1 \implies |1/f(z)| > 1$,
+which is a contradiction since $1/f$ must also satisfy the principle.
+Thus, $f(z)=0$ must have at least one solution in $\mathbb{D}$.
+
+Now consider the constant function $g(z)=-w$ for any $|w| < 1$.
+On $\partial \mathbb{D}$, $|g|=|w| < 1 = |f|$, so the conditions for Rouche's Theorem
+are satisfied and $f(z)-w$ must have the same amount of zeros as $f$ in $\mathbb{D}$,
+which as we've just shown is nonnegative.
+
+In other words, $f(z)-w=0$ must have at least one solution in $\mathbb{D}$. $\square$
+
+\subsection{Part B}
+
+The argument goes basically the same as in part A.
+
+BWOC say $f$ was nonvanishing in $\mathbb{D}$, once again making $1/f$ well-defined.
+
+Here, on the border $|1/f| \le 1$.
+However, $\exists z_0: |f(z_0)| < 1 \implies |1/f(z_0)| > 1$, violating
+the maximum modulus principle and creating a contradiction.
+
+After this, we can apply Rouche's Theorem again with $g(z)=-w$ to get the same result. $\square$
+
+\end{document}
