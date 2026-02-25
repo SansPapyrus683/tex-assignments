@@ -1,0 +1,329 @@
+\documentclass[12pt]{article}
+
+\input{../kz}
+
+\rhead{Math 114C}
+
+\makeatletter
+\def\@seccntformat#1{%
+  \expandafter\ifx\csname c@#1\endcsname\c@section\else
+  \csname the#1\endcsname\quad
+  \fi}
+\makeatother
+
+\DeclareMathOperator{\ch}{Char}
+\DeclareMathOperator{\proj}{proj}
+\DeclareMathOperator{\len}{len}
+\newcommand{\pto}{\rightharpoonup}
+
+\setcounter{section}{-1}  % since bro decided to add a problem 0 LMAO
+
+\begin{document}
+
+\section{Problem 0}
+
+I believe my solution to problem 2 in the previous homework also works for this,
+but I'll just paste it here again:
+
+{
+\color{blue}
+Consider the following function:
+\[f(e, x)=\begin{cases}
+    \uparrow & x=e              \\
+    0        & \text{otherwise}
+  \end{cases}\]
+By the Second Recursion Theorem $\exists e^*: \varphi_e(x)=f(e, x)$,
+so $\varphi_e(e)\uparrow$ and $\varphi_e(x)\downarrow=0$ for everything else.
+This means $e \in A$.
+
+However, we've shown that every program has infinitely many variations that do the same thing.
+
+Thus, $\exists e' \ne e: \varphi_e'=\varphi_e \implies \varphi_e'(e')\downarrow \implies e' \notin A$. $\square$
+}
+
+\section{Problem 1}\label{sec:prob1}
+
+I'll just prove part B, since it implies part A.
+
+Consider the relation $R \subseteq \N^3$ defined by
+\[R(z, e, x) \iff \exists y: y \in W_e \land \varphi_z(y)\downarrow=x\]
+By the closure properties of semirecursive relations shown in class, $R$ should also be semirecursive.
+
+Using the s-m-n theorem for these relations gives a total $v: \N^2 \to \N$ s.t.
+\begin{align*}
+  W_{v(z, e)}(x)
+  &\iff R(z, e, x) \\
+  &\iff \exists y: y \in W_e \land \varphi_z(y)\downarrow=x \\
+  &\iff x \in \varphi_z[W_e]\quad\square
+\end{align*}
+
+\pagebreak
+
+\section{Problem 2}
+
+\subsection{Part A}
+
+For containment, fix an r.e. subset $A \subseteq \N$ and let $B \subseteq \N^2$ be its recursive witness.
+
+To show that this is the range of some recursive function, consider the function
+\[f(x)=x + 0 \cdot \mu y[(x, y) \in B]\]
+that returns its input if the minimizer succeeds and diverges in all other cases.
+
+If we let $e_f$ be the code for $f$, we have
+\begin{align*}
+  x \in R_{e_f}
+  &\iff f(x)=x \\
+  &\iff \exists y: (x, y) \in B \\
+  &\iff x \in A
+\end{align*}
+
+Also, the relation $Q(e, x)$ is uniformly semirecursive since
+\[x \in R_e \iff \exists y: \varphi_e(y)\downarrow = x \iff \exists t, y: T(e, x, t) \land U(t)=x\]
+where $T$ is recursive and $U$ is total and recursive.
+
+\subsection{Part B}
+
+To get $u$, notice that $R_e=\varphi_e[W_e]$, so we can use the function we
+proved exists in \ref{sec:prob1} and plug in $e$ for both of the inputs.
+
+We can make $v$ a function that takes in $e$ and generates a code s.t.
+\[\varphi_{v(e)}(x)=\mu y[T(e, x, y) \land U(y)=x] \cdot 0 + x\]
+Once again, this is basically just a restricted identity function that
+returns its input iff the minimizer within finds an input.
+
+Then,
+\begin{align*}
+  x \in R_{v(e)}
+  &\iff \exists y: T(e, x, y) \land U(y)=x \\
+  &\iff \varphi_e(x)\downarrow = U(y) \\
+  &\iff x \in W_e\quad\square
+\end{align*}
+
+% As for $v$, consider the relation $G$ defined by
+% \[G(e, x) \iff x \in R_e \iff \exists y: \varphi_e(y)=x\]
+% By the Second Recursion Theorem for r.e. sets, $\exists  e^*$
+
+\pagebreak
+
+\section{Problem 3}
+
+$A$ and $B$ are co-r.e., which means $A^C$ and $B^C$ are themselves r.e.
+
+Since r.e. sets have the reduction property, we can separate $A^C \cup B^C$
+into a pair of disjoint r.e. sets $A^*$ and $B^*$, where $A^C \subseteq A^*$ and $B^C \subseteq B^*$.
+
+However, note that since $A \cap B=\varnothing$, $A^C \cup B^C=\N$ and so $B^*=(A^*)^C$.
+
+$A^*$ and $B^*$ are both semirecursive, so this means they're both \textit{recursive} too,
+as they're complements of each other.
+I propose that $B^*$ (or $A^*$, it doesn't matter) is the separation set that we want.
+
+Indeed,
+\begin{align*}
+  x \in A
+  &\implies x \notin B \\
+  &\implies x \in B^C \subseteq B^* \\
+  &\implies A \subseteq B^*
+\end{align*}
+and
+\begin{align*}
+  x \in B
+  &\implies x \notin A \\
+  &\implies x \in A^* \\
+  &\implies x \notin B^* \\
+  &\implies B \cap B^* = \varnothing\quad\square
+\end{align*}
+
+\pagebreak
+
+\section{Problem 4}
+
+\subsection{Reflexivity}
+
+If $f(x)=x$, then
+\[n \in A \implies f(n)=n \in A\]
+Yeah.
+
+\subsection{Symmetric-ness}
+
+Indeed,
+\[A \equiv_m B \implies A \le_m B \land B \le_m A \implies B \equiv_m A\]
+{\footnotesize (lol)}
+
+\subsection{Transitivity}
+
+Suppose $A \equiv_m B$ and $B \equiv_m C$.
+
+I'll prove that $A \le_m C$.
+Since $A \le_m B$ and $B \le_m C$, we have
+\begin{gather*}
+  \exists f: \N \to \N: x \in A \implies f(x) \in B \\
+  \exists g: \N \to \N: x \in B \implies g(x) \in C
+\end{gather*}
+If we let $h=g \circ f$, then
+\[x \in A \implies f(x) \in B \implies f(g(x))=h(x) \in C\]
+The proof that $C \le_m A$ goes much the same way.
+
+\pagebreak
+
+\section{Problem 5}
+
+\subsection{Part A}
+
+Consider the function $g(x, y)=\varphi_x(x)$ (the second argument is unused).
+
+By the s-m-n theorem, $\exists s: \N \to \N$ s.t. $\varphi_{s(x)}(y)=g(x,y)=\varphi_x(x)$.
+
+This $s$ is the reduction we want, since
+\begin{align*}
+  K(e)
+  &\iff \varphi_e(e)\downarrow \\
+  &\iff \varphi_{s(e)}(x)\downarrow = \varphi_{e}(e) \\
+  &\iff R(s(e))
+\end{align*}
+
+\subsection{Part B}
+
+Perform the same construction as in the previous part, except now $g(x, y)=0 \cdot \varphi_x(x) + y$.
+
+If $K(e)$, then $\varphi_e(e)\downarrow$ and $\varphi_{s(x)}(y)\downarrow=y$ for all $y \in \N$.
+This makes its range all of $\N$ to, since it's the identity function.
+
+OTOH, if $\lnot K(e)$, then $\varphi_e(e)\uparrow$ and
+$\varphi_{s(x)}(y)\uparrow$ for all $y \in \N$, making its range the null set.
+
+\pagebreak
+
+\section{Problem 6}
+
+\subsection{Part A}
+
+Consider the function
+\[g(e, x)=\ch_T(e, e, x)\]
+and the s-m-n function $s: \N \to \N$ s.t. $\varphi_{s(e)}(x)=g(e, x)$.
+
+If $\varphi_e(e)\uparrow$, then $\varphi_{s(e)}(x)=\ch_T(e, e, x)=0$ for all $x \in \N$,
+which makes $x \in A$.
+
+OTOH, if not, then $\exists x: \ch_T(e, e, x)=1$, which forces $s(e) \notin A$.
+
+Thus, $\lnot K \le_m A$, which then means $A$ isn't r.e.
+
+\subsection{Part B}
+
+(am i using s-m-n too much? seems a bit overkill, but better safe than sorry, ig)
+
+Consider the function
+\[g(e, x)=\begin{cases}
+  \phi_e(x) & x \ne e \\
+  \uparrow & \text{otherwise}
+\end{cases}\]
+and (again) the s-m-n function $s: \N \to \N$ s.t. $\varphi_{s(e)}(x)=g(e, x)$.
+Note that by construction $W_{s(e)}=W_e \setminus \{e\}$.
+
+Now consider $f: \N \to \N$ defined by $f(e)=\braket{e, s(e)}$.
+
+If $\varphi_e(e)\uparrow$, $e \notin W_e \implies W_e \subseteq W_{s(e)}$, and so $e \in B$.
+
+If not, then $e \in W_e$ but $e \notin W_{s(e)}$, so $e \notin B$ as well.
+
+And the conclusion is the same.
+$\lnot K \le_m B$, and $B$ isn't r.e.
+
+\pagebreak
+
+\section{Problem 7}
+
+$A \cup C$ is r.e. since $A$ and $C$ are both r.e.
+
+$A$ is r.e., so $\exists a \in \N: A=W_a$.
+
+To show that $(A \cup C)^C$ is productive, consider the following function:
+\[g(e, x)=\mu y[T(e, x, y) \lor T(a, x, y)]\]
+Using s-m-n, $\exists h: \N \to \N$ s.t. $\varphi_{h(e)}(x)=g(x)$.
+
+Notice that $W_{h(e)}=W_e \cup W_a$, since if at least one of
+$\varphi_e(x)$ or $\varphi_a(x)$ halts $g(e, x)$ will too.
+
+By creativity of $C$, we've a recursive total $f: \N \to \N$ s.t. $W_e \subseteq C^C \implies f(e) \in C^C \setminus W_e$.
+
+I propose that $f \circ h$ is our productive function.
+
+Indeed,
+\begin{align*}
+  W_e \subseteq (A \cup C)^C
+  &\implies W_{h(e)} = W_e \cup W_a \subseteq C^C \\
+  &\implies f(h(e)) \in C^C \setminus W_{h(e)} \\
+  &\implies f(h(e)) \in C^C \setminus (A \cup W_e) \\
+  &\implies f(h(e)) \in (A \cup C)^C \setminus W_e\quad\square
+\end{align*}
+
+\section{Problem 8}
+
+Again, we've a recursive total $f: \N \to \N$ s.t. $W_e \subseteq B \implies f(e) \in B \setminus W_e$.
+
+
+Since $B$ is recursive, we can define the following function:
+\[g(e, x)=\begin{cases}
+  \uparrow & x \in B \\
+  \varphi_e(x) & \text{otherwise}
+\end{cases}\]
+and make an $s: \N \to \N$ s.t. $\varphi_{h(e)}(x)=g(e, x)$.
+
+Notice how $W_{h(e)}=W_e \setminus B$.
+
+From here, $f \circ h$ is once again our productive function since
+\begin{align*}
+  W_e \subseteq A \cup B
+  &\implies W_{h(e)} \subseteq A \\
+  &\implies f(h(e)) \in A \setminus W_{h(e)} \\
+  &\implies f(h(e)) \in (A \cup B) \setminus W_{h(e)}\quad\square
+\end{align*}
+
+\pagebreak
+
+\section{Problem 9}
+
+That $A \otimes B$ is r.e. is true under closure properties of r.e. sets.
+
+I'll focus on the two interesting properties we have to prove first.
+
+\subsection{Infinite Negation}
+
+For convenience, let $A'=\{2x \mid x \in A\}$ and $B'=\{2x+1 \mid x \in B\}$.
+
+Notice that $A' \cap B'=\varnothing$, since
+one set only has odds and the other only has evens.
+
+We'll prove the contrapositive.
+If $(A' \cup B')^C$ is finite, it would be recursive.
+This means $R(x) \iff x \in A' \cup B'$ is decidable, and since
+the parity of a number is also decidable,
+this would imply that $A$ and $B$ are themselves decidable.
+
+\subsection{No Infinite R.E. Subset}
+
+Let's prove the contrapositive again.
+
+Assume we have an infinite r.e. subset $C \subseteq (A' \cup B')^C$.
+
+$C$ must either have an infinite amount of even numbers or an infinite amount of odds.
+We'll assume it has infinite evens first.
+
+I propose that $D=\left\{\frac{c}{2} \mid 2 \mid c \land c \in C\right\}$ is
+an infinite r.e. subset of $A^C$.
+
+That $D$ is infinite and r.e. comes from our construction of $C$ and closure properties.
+
+As for the actual subset-ness, note that
+\begin{align*}
+  x \in D
+  &\implies 2x \in C \\
+  &\implies 2x \notin A' \\
+  &\implies x \notin A
+\end{align*}
+
+If $C$ has infinite odds, the proof goes much the same way.
+We conclude by symmetry. $\square$
+
+\end{document}
