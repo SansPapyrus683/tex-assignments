@@ -87,7 +87,7 @@ By the Cauchy inequalities,
 \begin{align*}
   \left|f^{(j)}(z_0)\right|
    & \le \frac{j!}{R^j} \sup_{|z-z_0|=R} |f(z)|       \\
-   & \le \frac{j!}{R^j} \sup_{|z-z_0|=R} A|z-z_0|^k+B \\
+   & \le \frac{j!}{R^j} \sup_{|z-z_0|=R} A|z|^k+B \\
    & \le \frac{j!}{R^j}\left(A(R+|z_0|)^k+B\right)
 \end{align*}
 When $j > k$, letting $R \to \infty$ forces $f^{j}(z_0)=0\ \forall 0$,
@@ -97,7 +97,7 @@ so the power series of $f$ cannot have any terms past $a_k(z-z_0)^k$. $\square$
 
 \subsubsection{Stacked Products}
 
-Let $\phi - \theta = \delta$.
+Let $\varphi - \theta = \delta$.
 With this, let $n \in \N$ be s.t. $\frac{2\pi}{n} < \frac{\delta}{2}$.
 Assign $\alpha=\frac{2\pi}{n}$ for convenience.
 
@@ -215,7 +215,7 @@ Notice that
 \[f_{\epsilon'}(z) = (f(z) + \epsilon g(z)) + ((\epsilon' - \epsilon)g(z))\]
 
 $f(z)+\epsilon g(z)$ has a zero at $z_\epsilon$, and we can take a radius $E$ (as long as $E$'s small enough)
-s.t. $B_r(z_\epsilon) \subseteq \mathbb{D}$ to make it the only zero inside the ball.
+s.t. $B_E(z_\epsilon) \subseteq \mathbb{D}$ to make it the only zero inside the ball.
 
 On the compact border of this circle, we can once again upper bound $g$ with $G$
 and lower bound $f(z)+\epsilon g(z)$ with $m$.
