@@ -1,0 +1,155 @@
+\documentclass[12pt]{article}
+
+\input{../kz}
+
+\rhead{Math 132H}
+
+\DeclareMathOperator{\cis}{cis}
+\DeclareMathOperator{\res}{res}
+\newcommand{\lra}{\xLeftrightarrow}
+\newcommand{\ra}{\xRightarrow}
+
+\begin{document}
+
+\section{Chapter 3}
+
+\subsection{Exercise 21}
+
+\subsubsection{Part A}
+
+We'll prove the contrapositive.
+
+Using a part of the proof from the five equivalences in the notes,
+we know that $\Omega$ not being simply connected implies that
+we can separate it into $\Omega = K \cup L$, where $\infty \in L$ and
+$K$ and $L$ are both open in $K \cup L$.
+
+Take any $k \in K$ and consider the vertical line $x=\Re(k)$.
+
+Notice that this line must cross $\Omega$ both below and above $k$.
+If any of them didn't intersect, then that line would go off to $\infty$
+and connect $k$ with $L$, violating the separation of the two.
+
+Thus, $\exists a, b \in \Omega: \Re(a)=\Re(b)=\Re(k) \land \Im(a) < \Im(k) < \Im(k)$.
+
+By high school algebra, $k$ lies on the line segment directly connecting $a$ and $b$,
+banning $\Omega$ from being convex.
+
+\subsubsection{Part B}
+
+Once again, take our $K$, $L$, and $k$ like in the previous part.
+
+Now consider any point $z_0 \in \Omega$ and the line from $z_0$ to $k$.
+If we extend this line, it must intersect $\Omega$ at some other point $z$,
+as otherwise $K$ would be connected to $L$.
+
+Since $k$ lies on the line segment from $z_0$ to $z$, $z_0$ cannot serve as the
+center for our star-shaped domain.
+The choice of $z_0$ was arbitrary, so $\Omega$ in its entirety is not star-shaped.
+
+\subsection{Exercise 22}
+
+Consider the function $g(z)=z \cdot f(z)$.
+
+We can write $g(0)=0$ in the form of a Cauchy integral
+(at least I \textit{think} that's what this is):
+\begin{align*}
+  g(0)
+  &=\frac{1}{2\pi i} \oint_{|z|=r} \frac{g(z)}{z}\,dz \\
+  &= \frac{1}{2\pi i} \oint_{|z|=r} f(z)\,dz
+\end{align*}
+The integral is continuous for $r \le 1$, but when $r=1$ $\oint_{\partial \mathbb{D}} f(z)\,dz=2\pi i$,
+which is nonzero and contradicts our earlier statement that $g(0)=0$.
+
+\pagebreak
+
+\section{Chapter 8}
+
+\subsection{Exercise 1}
+
+\subsubsection{Forwards}
+
+I'll show the contrapositive: assume a $z_0 \in U: f'(z_0)=0$.
+WLOG assume $f(z_0)=0$ as well.
+
+We can shrink a disc around $z_0$ to a point where $f$ and $f'$ only have zeros at $z_0$.
+Let the a radius at which this happens be denoted as $R$.
+
+I'll show that for any $0 < r < R$, $f$ is not injective in $\{z: |z-z_0| < r\}$.
+For convenience, I'll let $B$ define the border of this disc.
+
+We have by our premise that $f$ has two zeros in the disc.
+Also, $\inf_{z \in B} f(z)=\epsilon > 0$, since circles are compact.
+Thus, if we consider any $w: 0 < |w| < \epsilon$, $|f(z)| > |w|$ on $B$
+and we can apply Rouche's Theorem to see that $f(z)-w$ has two zeros.
+
+Notice that these two zeros (call them $z_1$ and $z_2$) can't be dupes.
+If it were, then $\frac{d}{dz} (f(z_1)-w)=0$ and we know $f'$ is only zero at $z_0$.
+
+Thus, no matter how small we shrink our radius, we can always find two distinct
+points that get sent by $f$ to the same destination.
+
+\subsubsection{Backwards}
+
+Fix a $z_0 \in U$ and WLOG let $f(z_0)=0$.
+
+Consider a disc of radius $r$ around $z_0$ small enough that $z_0$ is the only zero in it.
+We can do this since otherwise it would imply a limit point and $f$ being constant.
+
+In this disc, we can write $f(z)=f'(z_0)(z-z_0)+o(|z-z_0|)$.
+
+Now, I lied, since the disc we're actually going to use the disc of radius $\frac{r}{2}$ as our candidate.
+
+Fix any $x$ in this smaller disc.
+On the border of the \textit{larger} disc,
+\begin{align*}
+  |f'(z_0)(z-z_0)-f(x)|
+  &= |f'(z_0)(z-z_0)-f'(z_0)(x-z_0)+o(|x-z_0|)| \\
+  &= |f'(z_0)(z-x)+o(|x-z_0|)| \\
+  &> \frac{r}{2}f'(z_0) - |o(|x-z_0|)| \\
+  &> |o(|z-z_0|)|
+\end{align*}
+where the last bound becomes true if we retroactively shrink $r$ enough.
+
+But yeah, $f'(z_0)(z-z_0)-f(x)$ has only one zero in either disc.
+
+Using Rouche's Theorem, we get that $(f'(z_0)(z-z_0)-f(x))+(o(|z-z_0|))=f(z)-f(x)$ must have only one as well.
+
+\pagebreak
+
+\subsection{Exercise 3}
+
+$U$ is simply connected iff every piecewise smooth closed integral on it integrates to $0$
+for any holomorphic function $g$.
+
+Let's assume a holomorphic bijection $f: U \to V$, and show that all closed integrals go to zero
+for any holomorphic function $g$ on $V$ as well.
+
+To do so, fix a curve $\gamma \subseteq V$ and consider its preimage $\varphi \subseteq U$.
+$f$ is a bijection, so its inverse exists and we can do this.
+
+Notice that
+\[\int_\gamma g(z)\,dz = \int_\varphi g(f(z))\,dz\]
+and since $g$ and $f$ are both holomorphic, their composition is too.
+Now by simply connectedness of $U$, the RHS (and LHS by extension) evaluate to $0$. $\square$
+
+\subsection{Exercise 9}
+
+The function $f(z)=\frac{i+z}{i-z}$ is holomorphic everywhere except $0$.
+
+$u$ is the real part of $f$, so it must be harmonic where $f$ is holomorphic,
+and that includes $\mathbb{D}$.
+
+To show that $u$ vanishes everywhere on $\partial \mathbb{D}$ is just calculations:
+\begin{align*}
+  \frac{i+e^{i\theta}}{i-e^{i\theta}}
+  &= \frac{i+\cos\theta+i\sin\theta}{i-\cos\theta-i\sin\theta} \\
+  &= \frac{(i+\cos\theta+i\sin\theta)(-\cos\theta-i+i\sin\theta)}{(i-\cos\theta-i\sin\theta)(-\cos\theta-i+i\sin\theta)} \\
+  &= \frac{1-\cos^2\theta-\sin^2\theta+i(\cos\theta(1-\sin\theta)-\cos\theta(1+\sin\theta))}{c} \\
+  &= \frac{-2i\sin\theta\cos\theta}{c}
+\end{align*}
+I've turned the denominator into some $c \in \R$ since it doesn't really matter what it is.
+
+Regardless, the real part of this $u(z)$ is $0$. $\square$
+
+\end{document}
