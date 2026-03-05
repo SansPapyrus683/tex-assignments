@@ -119,23 +119,27 @@ Using Rouche's Theorem, we get that $(f'(z_0)(z-z_0)-f(x))+(o(|z-z_0|))=f(z)-f(x
 
 \subsection{Exercise 3}
 
-$U$ is simply connected iff every piecewise smooth closed integral on it integrates to $0$
-for any holomorphic function $g$.
+I'll use the textbook definition of simply connected, which means
+that every curve can be continuously deformed to another curve.
 
-Let's assume a holomorphic bijection $f: U \to V$, and show that all closed integrals go to zero
-for any holomorphic function $g$ on $V$ as well.
+We have a continous bijection $f$ between $U$ and $V$.
 
-To do so, fix a curve $\gamma \subseteq V$ and consider its preimage $\varphi \subseteq U$.
-$f$ is a bijection, so its inverse exists and we can do this.
+Now consider any two curves $\gamma_1$ and $\gamma_2$ in $V$.
+Through $f$, we can obtain their preimages in $U$, $\varphi_1$ and $\varphi_2$.
+Since $f$ is continuous, these are also curves.
 
-Notice that
-\[\int_\gamma g(z)\,dz = \int_\varphi g(f(z))\,dz\]
-and since $g$ and $f$ are both holomorphic, their composition is too.
-Now by simply connectedness of $U$, the RHS (and LHS by extension) evaluate to $0$. $\square$
+$U$ is simply connected, so $\exists d: [0, 1] \times [0, 1] \to U$
+where $\varphi_1(t)=d(0, t)$ and $\varphi_2(t)=d(1, t)$.
+
+Since $f$ and $d$ are both continous, their composition $f \circ d$ is too.
+Notice that this is exactly the deformation we want, since the first argument
+being $0$ corresponds to $\gamma_1$ and it being $1$ corresponds to $\gamma_2$.
+
+Thus, $V$ must also be simply connected. $\square$
 
 \subsection{Exercise 9}
 
-The function $f(z)=\frac{i+z}{i-z}$ is holomorphic everywhere except $0$.
+The function $f(z)=\frac{i+z}{i-z}$ is holomorphic everywhere except $i$.
 
 $u$ is the real part of $f$, so it must be harmonic where $f$ is holomorphic,
 and that includes $\mathbb{D}$.
@@ -150,6 +154,9 @@ To show that $u$ vanishes everywhere on $\partial \mathbb{D}$ is just calculatio
 \end{align*}
 I've turned the denominator into some $c \in \R$ since it doesn't really matter what it is.
 
-Regardless, the real part of this $u(z)$ is $0$. $\square$
+These equations break when $\theta=\frac{\pi}{2}$, but it's fine
+since the problem manually defines $u(i)=0$.
+
+Regardless, $u(z)$ is indeed $0$ on the border. $\square$
 
 \end{document}
