@@ -1,0 +1,273 @@
+\documentclass[12pt]{article}
+
+\input{../kz}
+\usepackage[normalem]{ulem}
+
+\rhead{Math 114C}
+
+\makeatletter
+\def\@seccntformat#1{%
+  \expandafter\ifx\csname c@#1\endcsname\c@section\else
+  \csname the#1\endcsname\quad
+  \fi}
+\makeatother
+
+\DeclareMathOperator{\ch}{Char}
+\DeclareMathOperator{\proj}{proj}
+\DeclareMathOperator{\len}{len}
+\newcommand{\pto}{\rightharpoonup}
+
+\begin{document}
+
+\section{Problem 1}
+
+\subsection{Part A}
+
+Fix an $\alpha$-semirecursive relation $P(\vec{x}, n)$ and consider its $\alpha$-recursive witness $R$.
+
+Consider the function
+\[f(\vec{x})=(\mu u[R(\vec{x}, (u)_0, (u)_1)])_0\]
+which is $\alpha$-recursive, since it only uses $R$ and actual recursive things.
+
+If $f(x)\downarrow$, then by construction $\exists a, b: R(\vec{x}, a, b) \implies \exists y: P(\vec{x}, y)$.
+
+The reverse is also true by the same line of logic but in reverse.
+
+More specifically, if our minimizer terminates and returns its first element $f(x)$ then
+by construction again $\exists b: R(\vec{x}, f(\vec{x}), b) \implies P(\vec{x}, f(\vec{x}))$.
+
+\subsection{Part B}
+
+I think the same relation presented in class should still work.
+Define a relation
+\[R(e, x) \iff x > 2e \land x \in W^\alpha_e\]
+and consider $f$ as in the previous part.
+Our $\alpha$-simple set will be $B=\text{range}(f)$
+
+Since it's the range of an $\alpha$-recursive function, $B$ is r.e.
+
+To show that $B^C$ doesn't have any infinite r.e. subsets,
+it STP $|W_e|=|\N| \implies B \cap W^\alpha_e \ne \varnothing$.
+
+Since $W_e$ is infinite, $f(e)\downarrow$ and $R(e, f(e))$.
+By definition, $f(e) \in W^\alpha_e \land f(e) \in B$, so their intersection is nonempty.
+
+It remains to show that $B^C$ itself is infinite.
+Notice that by construction, $f(e)\downarrow \implies f(e) > 2e$.
+This means that $f^{-1}(\{0, 1, \cdots, 2e\}) \subseteq \{0, 1, \cdots, e-1\}$,
+and if we let $e \to \infty$ we can make the set of elements that aren't hit by $f$
+infinitely large.
+
+\pagebreak
+
+\section{Problem 2}
+
+\subsection{Part A}
+
+$A$ is $B$-r.e., so we can recursively enumerate it with a $B$-recursive total function $f$.
+
+$B$ is $C$-recursive, though, so $f_B \in \mathcal{R}(C)$ and $f$ is also $C$-recursive.
+
+Thus, we're able to recursively enumerate $A$ with a $C$-recursive function, making $A$ $C$-r.e.
+
+\subsection{Part B}
+
+Let $A=B^C$, $B=K$, and $C=\varnothing$.
+
+Here, something being $C$-r.e. is equivalent to it is r.e. in the normal sense.
+
+$B$ is r.e., as was proven in class.
+Also, given an oracle for $B$ we can negate it to decide $A$.
+
+However, as was also shown in class, $A$ is not r.e., so the statement is false.
+
+\section{Problem 3}
+
+We can consider the graph relation of $\alpha$, so $A=\{\braket{x, y}: \alpha(x)=y\}$.
+
+That $A$ is $\alpha$-recursive comes from that
+\[\ch_A(x)=\min(\max(\alpha((x)_0)-(x)_1, (x)_1 - \alpha((x)_0)), 1)\]
+We can also recursively construct $\alpha$ from $A$ since
+\[\alpha(x)=\mu y[A(\braket{x, y})]\]
+
+\pagebreak
+
+\section{Problem 4}
+
+\subsection{Part A}\label{sec:4a}
+
+If we have an oracle for $A \oplus B$, then
+\[x \in A \iff 2x \in A \oplus B\]
+and we can decide $B$ similarly by using $2x+1$ instead of $2x$.
+
+\subsection{Part B}\label{sec:4b}
+
+If $A$ and $B$ are both $C$-recursive, then the relation decided by
+$A \oplus B$ should also be $C$-recursive under closure properties.
+It only uses some arithmetic and set union.
+
+\subsection{Part C}
+
+I guess we've already done most of the work, haha.
+
+Take any $A \in \mathbf{a}$ and $B \in \mathbf{b}$.
+I propose that $A \oplus B$ is the least upper bound.
+
+We first have to prove that it's an upper bound.
+To show this, consider any $C \in \mathbf{a}$ and $D \in \mathbf{b}$.
+
+By \ref{sec:4a}, $C \equiv_T A \le_T A \oplus B$ and $D \equiv_T B \le_T A \oplus_B$.
+Since Turing ordering is transitive $A \oplus B$ is indeed a UB.
+
+It's also the \textit{least} UB, by \ref{sec:4b}.
+For any $E \subseteq \N$ that also serves as a UB, $A \oplus B \le_T E$.
+
+\section{Problem 5}
+
+False. $K$ is r.e, but $K \equiv_m K^C$, which is not r.e.
+
+\pagebreak
+
+\section{Problem 6}
+
+\subsection{Part A}
+
+$A$ is pretty clearly r.e.
+Its witness is $P(x, y) \iff y > x \land f(x) > f(y)$.
+
+\subsubsection{Infinite Complement}
+
+To show $A^C$ is infinite, BWOC say it wasn't.
+Take $x_0 \in A$ to be larger than any element in $A^C$.
+This makes it so that $x > x_0 \implies x \in A$.
+
+Now we define $x_{i+1}$ to be an element greater than $x_i$ s.t. $f(x_{i+1}) < f(x_i)$.
+Since $x_i \in A$, such an $x_{i+1}$ is guaranteed to exist,
+and by how we defined $x_0$ $x_{i+1}$ is also definitely in $A$.
+
+Chaining inequalities gets us $f(x_0) > f(x_1) > f(x_2) > \cdots$.
+$f(x_0)$ is finite, so if we let this sequence go to infinity it will violate
+injectivity of $f$.
+
+\subsubsection{No Infinite R.E. Subsets}\label{sec:6a}
+
+BWOC let there exist an infinite r.e. set $C \subseteq A^C$, and let $g$ be its recursive enumeration.
+
+I now show that $\text{range}(f)$ is recursive, which will lead to a contradiction.
+
+To check if any $z \in \text{range}(f)$, we first find $n \in B: f(n) > z$.
+Existence is guaranteed since $B$ and $C$ are both infinite, and
+computable-ness can be shown with $g(\mu x[f(g(x)) > z])$.
+
+$n \in B \implies n \notin A$, so for all $y > n$ we also have $f(y) > f(n)$.
+This means we can recursively decide whether $z \in \text{range}(f)$,
+since it is equivalent to $\exists y < n: f(y)=z$.
+We can bound our search because $y \ge n \implies f(y) \ge f(n) > z$.
+
+\subsection{Part B}
+
+Starting with $B$, we can use its recursive \textit{increasing} enuemration to define
+\[x \in A \iff \exists n \le f(x): \mu y[f(y)=g(n)] > x \land g(n) < f(x)\]
+The minimizer is guaranteed to terminate since $g(n) \in \text{range}(f)$ and $f$ is total.
+
+OTOH, if we start with $A$, $A^C$ is recursive.
+We can then decide $B$ in the same way as was laid out in \ref{sec:6a}.
+
+\subsection{Part C}
+
+For any r.e. degree $\mathbf{a}$ that isn't the degree of the recursive sets,
+we can find an r.e. set $B$ that isn't recursive.
+
+By the previous constructions, we can always find a simple set $A$ s.t. $A \equiv_m B$,
+so $\mathbf{a}$ must have a simple set as well.
+
+\section{Problem 7}
+
+We'll still try to construct $\sigma_n$ and $\tau_n$
+as approximations for $\ch_A$ and $\ch_B$ respectively.
+The base cases are the same- both $\sigma_0$ and $\tau_0$ are the empty sequence.
+
+We'll also have $\alpha$ and $\beta$ as stand-ins for $\ch_{A'}$ and $\ch_{B'}$ too.
+
+At stage $s+1$, we'll try to satisfy the following requirements:
+\[R_s=\begin{cases}
+    \ch_A \ne \varphi_e^B & s=4e   \\
+    \ch_B \ne \varphi_e^A & s=4e+1 \\
+    \alpha(e)=\ch_{A'}(e) & s=4e+2 \\
+    \beta(e)=\ch_{B'}(e)  & s=4e+3
+  \end{cases}\]
+
+\subsection{First Two Requirements}
+
+If $s=4e$, we satisfy it the same way we did in class.
+
+We do this by asking the universe if there exists a
+$\tau \sqsupset \tau_s$ s.t. $\varphi_e^\tau(|\sigma_s|)\downarrow$.
+Notice that this relation is $K$-recursive.
+
+If there is, then we set $\tau_{s+1}=\tau$ and
+$\sigma_{s+1}=\sigma_s \smallfrown \braket{1 - \varphi_e^\tau(|\sigma_s|)}$.
+
+If not, then $\varphi_e^\tau(|\sigma_s|)\uparrow$ for all $\tau \sqsupset \tau_s$,
+so we set $\tau_{s+1}=\tau_s \smallfrown \braket{0}$ and $\sigma_{s+1}=\sigma_s \smallfrown \braket{0}$ as well.
+
+If $s=4e+1$, the argument proceeds symmetrically with $\sigma$ and $\tau$ swapping roles.
+
+\subsection{Other Two}
+
+If $s=4e+2$, we ask the universe if $\exists \sigma \sqsupset \sigma_s$ s.t. $\varphi_e^\sigma(e)\downarrow$.
+This relation is also $K$-recursive.
+
+If there is, then $\alpha(e)=1$ and $\sigma_{s+1}=\sigma$.
+Otherwise, $\alpha(e)=0$ and we extend $\sigma_s$ arbitrarily.
+
+We proceed similarly if $s=4e+3$, only with $\tau$ and $\beta$ instead of $\sigma$ and $\alpha$.
+
+Since we have constructed $\ch_{A'}$ and $\ch_{B'}$ using $K$,
+$A', B' \le_T K$ and thus $A$ and $B$ are both incomparable low sets. $\square$
+
+\pagebreak
+
+\section{Problem 8}
+
+\sout{I genuinely have no clue what to do.}
+
+\sout{The only proof I found online was from the guy who this theorem
+  (the Friedberg Inversion Theorem???) was named after
+  \href{https://www.cambridge.org/core/services/aop-cambridge-core/content/view/BFECDB6FB6FB2AAA39F125E4F5251413/S0022481200060011a.pdf/a-criterion-for-completeness-of-degrees-of-unsolvability.pdf}{here},
+  and his notation is nigh-incomprehensible.
+}
+
+Nevermind, office hours to the rescue!
+
+First, note that if we have an oracle for $A$, we can do two things:
+\begin{enumerate}[nolistsep]
+  \item Compute $\ch_K$ since $A \ge_T K$
+  \item Enumerate the elements of $A$ in increasing order: $a_0 < a_1 < a_2 < \cdots$
+\end{enumerate}
+
+I'll construct $\sigma_n$ as an approximation of $B$ and $\beta$ as an approximation of $\ch_{B'}$.
+
+(Oh yeah, once again $\sigma_0$ is the empty sequence.)
+
+If we're at stage $s+1$ where $s=2e$,
+we ask if $\exists \sigma \sqsupset \sigma_s$ s.t. $\varphi_e^\sigma(e)\downarrow$.
+If there is, then $\sigma_{s+1}=\sigma$ and $\beta(e)=1$.
+Otherwise, we extend $\sigma$ arbitrarily (let's just say with a $0$) and let $\beta(e)=0$.
+\textbf{Note that this step only involves $K$-recursive relations.}
+
+The other case is if we're at stage $s+1$ where $s=2e+1$.
+At this stage, we extend $\sigma_s$ like so:
+\[\sigma_{s+1}=\sigma_s \smallfrown \braket{0, \underbrace{1, 1, \cdots, 1}_{a_e\text{ ones}}, 0}\]
+
+By construction, $B' \le_T A$ since using $A$ we've constructed $\beta$ which aligns with $\ch_{B'}$.
+
+OTOH, $A \le_T B'$ since $B'$ also gives us $K$.
+With that, we can simulate the odd stages where we extend based on $\varphi_e^\sigma$.
+
+We also have $\ch_B$, and by a computable procedure we can pattern match
+on the number of ones jammed betweeen zeros after each stage of our previous simulation.
+
+This allows us to enumerate $a_i$ in increasing order, which means we can decide $A$. $\square$
+
+\end{document}
