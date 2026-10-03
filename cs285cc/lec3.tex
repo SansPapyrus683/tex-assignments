@@ -1,0 +1,394 @@
+\documentclass[letterpaper]{article}
+
+\usepackage{graphicx}
+\usepackage{amsfonts}
+\usepackage{amsthm}
+\usepackage{amsmath}
+\usepackage{amssymb}
+\usepackage{scribe}
+\usepackage[margin=1.5in]{geometry}
+
+\usepackage{braket}
+\usepackage{xcolor}
+
+\begin{document}
+
+\makeheader{Kevin Sheng}{October 1, 2026}{3}{Using Fooling Sets}
+
+\noindent
+In the previous lecture, fooling sets were introduced.
+Here we will prove some of their properties and see
+that they can be a useful tool for proving lower bounds for some functions.
+
+Recall the definition of a fooling set:
+\begin{definition}
+    A set $S \subseteq X \times Y$ is a \underline{\textbf{fooling set}}
+    for $f: X \times Y \to \{0, 1\}$ if:
+    \begin{enumerate}
+        \item $f$ is constant on $S$.
+        \item For all distinct pairs $(x, y), (x', y') \in S$, $f$ is \textbf{non-constant} on \\
+              $\{(x, y), (x', y'), (x, y'), (x', y)\}$.
+    \end{enumerate}
+\end{definition}
+
+\section{Challenge problem solution}
+
+We first prove a challenge theorem from lecture 2:
+\begin{problem}
+Prove that for fooling set $\{(x_1, y_1), \cdots, (x_n, y_n)\}$,
+$x_i \ne x_j$ and $y_i \ne y_j$ for any two distinct $1 \le i, j \le n$.
+\end{problem}
+
+\noindent
+Since characteristic matrices in communication complexity are defined only up to
+a permutation of the rows and columns, this formulation is equivalent to saying
+that all fooling sets are subsets of generalized diagonals.
+
+\begin{proof}
+    We'll prove the contrapositive.
+    Consider any $S=\{(x_1, y_1), \cdots, (x_n, y_n)\}$.
+    Let there exist $1 \le i, j \le n$ s.t. $i \ne j$ and $x_i = x_j$.
+    We can let $x$ take on the identical elements without loss of generality.
+
+    By definition, $f$ must be constant on $\{(x_i, y_i), (x_j, y_j)\}$
+    and at the same time be non-constant on $\{(x_i, y_i), (x_j, y_j), (x_i, y_j), (x_j, y_i)\}$.
+    However, since $x_i=x_j$, this set is identical to $\{(x_i, y_i), (x_j, y_j)\}$
+    after removing duplicate elements.
+    Thus, $S$ can't be a fooling set.
+\end{proof}
+
+\section{Fooling sets as a lower bound}
+
+A notable application of fooling sets is their use in proving
+lower bounds on various functions' communication complexities.
+
+To see this, we first need to establish the concept of a fooling set number.
+
+\begin{definition}
+    Given an $f: X \times Y \to \{0, 1\}$, its \underline{\textbf{zero fooling set number}}, $fs_0(f)$,
+    is the largest fooling set that evaluates to all zeros.
+    Its \underline{\textbf{one fooling set number}}, $fs_1(f)$, is defined analogously.
+    The overall \underline{\textbf{fooling set number}} is $fs(f)=\max(fs_0(f), fs_1(f))$.
+\end{definition}
+
+With this definition in place, we can now prove the following theorem:
+
+\begin{theorem}
+    Given a function $f: X \times Y \to \{0, 1\}$, $\mathcal{D}(f) \ge \lceil\log fs(f)\rceil$.
+\end{theorem}
+
+\begin{proof}
+    For convenience, let $c=\mathcal{D}(f)$.
+    By Theorem 2.6, we can partition $M_f$ into $2^c$ disjoint $f$-monochromatic rectangles.
+
+    Let $S$ be any fooling set of $f$.
+    Notice that the definition of the fooling set combined with the locality property
+    of rectangles makes it such that no two elements of $S$ can reside within the same rectangle.
+
+    Thus, $2^c \ge |S|$ and by extension $c \ge \log |S|$.
+    Since $c$'s a natural number, we can apply the ceiling operator to the RHS
+    without any consequence, giving us $c \ge \lceil\log |S|\rceil$.
+    Replacing $c$ with $\mathcal{D}(f)$ and using $f$'s largest fooling set
+    for $S$ with size $fs(f)$ indeed gives the desired inequality.
+\end{proof}
+
+However, note that we made no distinction between the color of the fooling sets
+and the color of the partitioned rectangles.
+If we observe that a rectangle with only $0$s can contain elements from a zero
+fooling set and similarly with a rectangle that has only $1$s,
+we can actually prove a slightly stronger version:
+\begin{theorem}
+    Given a function $f: X \times Y \to \{0, 1\}$, $\mathcal{D}(f) \ge \lceil\log (fs_0(f)+fs_1(f))\rceil$.
+\end{theorem}
+
+\begin{proof}
+    Let the variables be defined as they are in the previous proof.
+
+    This time, let's have $S_0$ be a zero fooling set of $f$, and $S_1$ be a one fooling set of $f$.
+    We need enough rectangles with zeros to contain every element of $S_0$,
+    and we also need enough with ones for the elements of $S_1$.
+    These two sets of rectangles are disjoint, so overall $2^c \ge |S_0|+|S_1|$.
+
+    Once again, replacing $c$ with $\mathcal{D}(f)$ and using $f$'s largest
+    one fooling set and zero fooling set yields the inequality we want.
+\end{proof}
+
+\begin{problem}
+If $fs_0(f)=1$, can we bound or say anything about $fs_1(f)$?
+\end{problem}
+
+\section{Usage}
+
+With this fooling set method, we can prove lower bounds on communication
+complexity for a good number of problems for which we were previously unable to.
+
+\begin{example}
+    Consider the same $M_f$ near the end of Lecture 2:
+    \[M_f=\begin{bmatrix}
+            \color{red}{1} & 1 & 0              \\
+            0              & 0 & \color{red}{1} \\
+            1              & 1 & 0
+        \end{bmatrix}\]
+    It was established before that this has communication complexity of $2$ bits.
+
+    We can construct a one fooling set of size $2$ if we take the highlighted red elements.
+    It is possible to construct a fooling set of size $0$, but in reality
+    all we need for the lower bound is the observation is that the matrix is
+    non-constant, and therefore $fs_0(f) \ge 1$.
+
+    We can then lower bound $\mathcal{D}(f)$ like so:
+    \begin{align*}
+        \mathcal{D}(f)
+         & \ge \lceil\log (fs_0(f)+fs_1(f))\rceil \\
+         & \ge \lceil\log (1 + 2)\rceil           \\
+         & = 2
+    \end{align*}
+    which shows that our $2$-bit protocol was the best we could've done.
+\end{example}
+
+\begin{example}
+    In the first lecture, $EQ_n: \{0, 1\}^n \times \{0, 1\}^n \to \{0, 1\}$ is defined as
+    \[EQ_n(x, y)=\begin{cases}
+            1 & x = y            \\
+            0 & \text{otherwise}
+        \end{cases}\]
+    We initially came up with a protocol that needed $n+1$ bits, which seemed inefficient.
+    As we will see, this protocol is actually the best we can do deterministically.
+
+    As long as we give the same order to the rows and columns in the characteristic matrix,
+    $M_{EQ_n}$ looks like this $2^n \times 2^n$ matrix:
+    \[
+        \left[
+            \begin{array}{ccccc}
+                1                                             \\
+                 & 1             &        & \text{\huge0}     \\
+                 &               & \ddots                     \\
+                 & \text{\huge0} &        & 1                 \\
+                 &               &        &               & 1
+            \end{array}
+            \right]
+    \]
+    Here we can actually construct a one fooling set of maximum size
+    by taking the diagonal. Any crosspair gives us $0$s on both ends
+    of the formed rectangle, so we can include all the terms.
+    Once again noticing that $fs_0(EQ_n) \ge 1$, we have
+    \[\mathcal{D}(EQ_n) \ge \lceil\log\left(2^n+1\right)\rceil = n+1\]
+    which indeed proves that the naive protocol was as good as we could do.
+\end{example}
+
+\begin{problem}
+What's the exact value of $fs_0(EQ_n)$?
+\end{problem}
+
+\begin{example}
+    If we map $\{0, 1\}^n$ to the natural numbers using some $g: \{0, 1\}^n \to \mathbb{N}$,
+    we can define $GT_n: \{0, 1\}^n \times \{0, 1\}^n \to \{0, 1\}$ like so:
+    \[GT_n(x, y)=\begin{cases}
+            1 & g(x) \ge g(y)    \\
+            0 & \text{otherwise}
+        \end{cases}\]
+    Despite the name being the abbreviation of "greater than", this function
+    actually just checks for whether one number is greater than \textit{or equal to} the other.
+
+    Here, the characteristic matrix takes the following form:
+    \[
+        \left[
+            \begin{array}{ccccc}
+                1                                             \\
+                 & 1             &        & \text{\huge0}     \\
+                 &               & \ddots                     \\
+                 & \text{\huge1} &        & 1                 \\
+                 &               &        &               & 1
+            \end{array}
+            \right]
+    \]
+    (Inputs to $x$ are down along the rows, while inputs to $y$ are across the columns.)
+
+    Like with $EQ_n$, we can create a one fooling set of maximum size by taking the diagonal.
+    While the lower triangle is now all $1$s, the upper triangle provides all the $0$s
+    we need to make any crosspair non-constant.
+    With that, we have our lower bound on $GT_n$:
+    \[\mathcal{D}(GT_n) \ge \lceil\log\left(2^n+1\right)\rceil = n+1\]
+\end{example}
+
+\begin{example}
+    Another canonical problem in communication complexity is the disjointness problem
+    $DISJ_n: \mathcal{P}(\{1, 2, \cdots, n\}) \times \mathcal{P}(\{1, 2, \cdots, n\}) \to \{0, 1\}$:
+    \[DISJ_n(x, y)=\begin{cases}
+            1 & x \cap y = \varnothing \\
+            0 & \text{otherwise}
+        \end{cases}\]
+    A real-life example of this could come up in meeting scheduling, where
+    Alice and Bob each have their own sets of days on which they're free
+    and the two need to find out whether a meeting is even possible in the first place.
+
+    Simply creating the outline of the characteristic matrix and pattern matching
+    won't get us very far now.
+    Instead, let's try and think about how we might analytically construct
+    a maximal one fooling set.
+
+    Any pair in this set should have two general properties:
+    \begin{enumerate}
+        \item Consist of two disjoint sets (obviously).
+        \item Cover as much of the universe as possible, so that
+        when we swap out one of the pairs for some other arbitrary set
+        the likelihood of a common element with the preserved set is maximized.
+    \end{enumerate}
+
+    This leads to the following candidate for a fooling set:
+    \[S=\left\{\left(A, \overline{A}\right) \mid A \subseteq \{1, 2, \cdots, n\}\right\}\]
+    Notice that order matters here.
+    The set $\{1\}$ occurs as both the first element and second element in a pair.
+    \begin{claim}
+        $S$ is a fooling set.
+    \end{claim}
+    \begin{proof}
+        Since a set and its complement cannot share any elements, every pair in $S$ is disjoint.
+
+        To show that crosspairs aren't monochromatic, take any two distinct sets $A \ne B$.
+        It STP either $DISJ_n(A, \overline{B})=0$ or $DISJ_n(B, \overline{A})=0$.
+
+        WLOG assume $\exists x \in A: x \notin B$.
+        This implies $x \in \overline{B} \implies x \in A \cap \overline{B}$,
+        which means that $DISJ_n(A, \overline{B})=0$.
+    \end{proof}
+\end{example}
+
+\begin{problem}
+Show that one can rearrange the rows and columns in $M_{DISJ_n}$ to
+make it take the below form:
+\[
+    \left[
+        \begin{array}{ccccc}
+            1                                             \\
+             & 1             &        & \text{\huge*}     \\
+             &               & \ddots                     \\
+             & \text{\huge0} &        & 1                 \\
+             &               &        &               & 1
+        \end{array}
+        \right]
+\]
+where the $*$ on the top right means we don't care what happens in the top right triangle.
+This leads to another proof of the communication complexity lower bound,
+as one can take the diagonal to get a maximal one fooling set.
+\end{problem}
+
+Many problems are like the ones just discussed in that they have
+very high lower bounds on the deterministic complexity.
+However, they can still fall with the application of more advanced techniques,
+such as probabilistic or multi-party communication.
+This is with the sole exception of one $IP_n$, of course, which we discuss below:
+
+\begin{example}
+    $IP_n: \{0, 1\}^n \times \{0, 1\}^n \to \{0, 1\}$ is defined as follows:
+    \[IP_n(x, y)=\bigoplus_{i=1}^n x_i \land y_i\]
+    where $\land$, despite being the XOR operator in Python and many other
+    languages, indicates the bitwise AND operator here.
+
+    This function can be thought of as taking the inner product of two vectors
+    that are in $\mathbb{F}_2$, the simplest field with only two elements ($0$ and $1$).
+    Expanding more on this line of thought, let's try and use it to create
+    a fooling set.
+    
+    The idea is to construct vectors have a dot product of $1$ with themselves
+    but a $0$ dot product with others.
+    In other words, we want $v_1, \cdots, v_k \in \mathbb{F}_2^n$ s.t.:
+    \begin{enumerate}
+        \item $\braket{v_i, v_i}=1$
+        \item $\braket{v_i, v_j}=0\ \forall i \ne j$
+    \end{enumerate}
+    These conditions allow us to declare
+    $\{(v_1, v_1), (v_2, v_2), \cdots, (v_k, v_k)\}$ a fooling set.
+
+    However, these constraints, which seem eerily similar to the conditions
+    for an orthonormal basis, severely limit how big $k$ can get:
+    \begin{claim}
+        Vectors $v_1$ through $v_k$ are linearly independent.
+    \end{claim}
+    \begin{proof}
+        Suppose there existed coefficients $\lambda_1, \cdots, \lambda_k$
+        s.t. $\sum_{i=1}^{k} \lambda_i v_i = \mathbf{0}$.
+        Then for any $1 \le j \le k$ that we choose, we have
+        \[\Braket{\mathbf{0}, v_j}=0 \implies \Braket{\sum_{i=1}^{k} \lambda_i v_i, v_j}=0\]
+        By the properties of the inner product, we can take the summation
+        outside to obtain $\sum_{i=1}^{k} \lambda_i\Braket{v_i, v_j}=0$.
+        For all terms in the summation where $i \ne j$, $\Braket{v_i, v_j}=0$.
+        This leaves $\Braket{v_j, v_j}$ as the only nonzero dot product,
+        which forces $\lambda_j=0$.
+        However, the choice of $j$ at the beginning was arbitrary,
+        which means that $\lambda_i=0$ for all $i$ from $1$ through $k$.
+    \end{proof}
+    This linear independence constraint bounds our fooling set construction
+    by $n$, which gives us a pitiful lower bound of
+    \[\mathcal{D}(f) \ge \lceil\log(n+1)\rceil\]
+\end{example}
+
+This could have been because we forced the two elements of a fooling pair to be the same.
+Could we have done better by removing this constraint?
+
+\begin{problem}
+Show that the fooling set number of $IP_n$ is bounded by
+some expression that is polynomial in $n$.
+That is,
+\[fs(IP_n) \le \text{poly}(n)\]
+\end{problem}
+
+\section{A typical fooling set}
+
+Now we shift our attention to what a "typical" maximal fooling set would look like.
+
+Unfortunately, we have the following theorem:
+\begin{theorem}
+    For a random $f: \{0, 1\}^n \times \{0, 1\}^n \to \{0, 1\}$,
+    \[\mathbb{P}[fs(f) \ge 10n] \le \left(\frac{2}{3}\right)^{n^2}\]
+\end{theorem}
+In other words, the chance we can obtain a fooling set that
+gives us a logarithmic lower bound plus some constant factor
+vanishes at a rate faster than standard exponential decay.
+
+\begin{proof}
+    Instead of thinking about all these functions as random maps,
+    let's instead think about them as random bit matrices.
+    The idea is to consider all fooling set candidates of size $10n$,
+    estimate their probability of being a valid fooling set,
+    and then loosely bound $\mathbb{P}[fs(f) \ge 10n]$ from there.
+
+    First fix some arbitrary fooling set candidate of size $10n$.
+    Two things have to be true:
+    \begin{enumerate}
+        \item $f$ evaluates to the same element on every argument pair in this set.
+        \item Every crosspair gives at least one element that's different from the diagonal.
+    \end{enumerate}
+    The chance of the first occurring is $\frac{1}{2^{10n-1}}$,
+    since there's $2$ possible values and the chance that all elements
+    along the diagonal evaluate to that one value is $\frac{1}{2^{10n}}$.
+
+    Evaluating the chance of the second is a little trickier,
+    but a key observation is that crosspairs are both independent of the main
+    diagonal and each other.
+    If we need $f$ to be nonconstant across the crosspair of $(a, b)$ and $(c, d)$,
+    we need at least one different element in either $(a, d)$ or $(c, b)$.
+    Neither of these pairs are in the actual fooling set candidate,
+    and they also aren't looked at by any other crosspair in the fooling set candidate.
+    Thus, the total chance of the second condition being met is
+    $\left(\frac{3}{4}\right)^{\tbinom{10n}{2}}$.
+
+    Combining these probabilities, we see that the chance of any random
+    fooling set candidate actually being a fooling set is
+    $\frac{1}{2^{10n-1}} \cdot \left(\frac{3}{4}\right)^{\tbinom{10n}{2}}$.
+
+    In total, there's $\binom{2^n}{10}$ ways to select the first elements
+    of the fooling pairs and the same number of ways to select the second elements.
+    Thus, we can use the union bound to see that as long as $n$ is large enough,
+    \begin{align*}
+        \mathbb{P}[fs(f) \ge 10n]
+        &\le \binom{2^n}{10}^2\left(\frac{1}{2^{10n-1}} \cdot \left(\frac{3}{4}\right)^{\tbinom{10n}{2}}\right) \\
+        &\le \left(\left(2^n\right)^{10}\right)^2\left(\frac{1}{2^{10n-1}} \cdot \left(\frac{3}{4}\right)^{\tbinom{10n}{2}}\right) \\
+        &\le 2^{20n} \cdot \frac{1}{2^{10n-1}} \cdot \left(\frac{3}{4}\right)^{50n^2-5n} \\
+        &\le 2^{10n+1} \cdot \left(\frac{3}{4}\right)^{50n^2} \\
+        &\le 2^{10n+1} \cdot \left(\frac{2}{3}\right)^{25n^2} \\
+        &\le \left(\frac{2}{3}\right)^{n^2}
+    \end{align*}
+\end{proof}
+
+\end{document}
