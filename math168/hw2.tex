@@ -1,0 +1,267 @@
+\documentclass[12pt]{article}
+
+\input{../kz}
+
+\rhead{Math 168}
+
+\DeclareMathOperator{\Fr}{Fr}
+\DeclareMathOperator{\Tr}{Tr}
+\newcommand{\lra}{\xLeftrightarrow}
+\newcommand{\ra}{\xRightarrow}
+
+\setlist[enumerate,1]{label=(\alph*)}
+
+\begin{document}
+
+\section{Bipartite Networks}
+
+\subsection{Part A}
+
+If a bipartite network has an incidence matrix $B \in \Z^{n \times m}$,
+we have nodes $a_1, \cdots, a_n$ and $b_1, \cdots, b_m$, and
+there's an edge between $a_i$ and $b_j$ iff $B_{ij}=1$.
+
+I propose that if we number the nodes with $a_1, \cdots, a_n$ coming first
+then $b_1, \cdots, b_m$, the adjacency matrix will take the desired form.
+Let's formalize this with a map of sorts:
+\[v_i=\begin{cases}
+            a_i     & i \le n          \\
+            b_{i-n} & \text{otherwise}
+      \end{cases}\]
+
+Recall that $A_{ij}=1$ iff there's an edge between $v_i$ and $v_j$.
+Now we do casework:
+\begin{enumerate}[label=\arabic*.]
+      \item $i, j \le n$: By the definition of a bipartite graph,
+            no two nodes in $a_i, \cdots, a_n$ have edges between them.
+            Thus, in this block $A_{ij}=0$ always.
+      \item $i \le n, j > n$: This marks the edge $a_i$ to $b_{j-n}$, which is $1$ iff $B_{i(j-n)}=1$.
+      \item $i > n, j \le n$: This one is the edge from $b_{i-n}$ to $a_j$, which is set iff $B_{j(i-n)}=1$.
+      \item $i, j > n$: Using similar reasoning as in the first case, we get that this block is all $0$s.
+\end{enumerate}
+
+\subsection{Part B}
+
+\subsubsection{Forwards Direction}
+
+If a graph is bipartite, we can partition the nodes into sets $A$ and $B$
+s.t. all edges are only between these two sets.
+
+I propose that any walk of length $n$ starting in $A$
+must end in $A$ if it's of even length and $B$ otherwise.
+The proof is by induction, where the base case on a walk of length $0$ is trivial.
+
+For the inductive step on a walk of length $n$ to a walk of length $n+1$, there's two cases:
+\begin{itemize}[nolistsep]
+      \item If $n$'s even, all walks must end in $A$ and $n+1$ is odd.
+            Any additional edge that we take must start in $A$ and end in $B$ by bipartiteness.
+            Thus, the hypothesis holds.
+      \item If $n$'s odd, all walks must end in $B$ and $n+1$ is even.
+            By symmetrical reasoning here, they hypothesis also holds.
+\end{itemize}
+
+A cycle is also a walk that starts and ends in the same set.
+WLOG let the cycle start in $A$.
+If we are to complete the cycle and return to $A$, the cycle must be even-length.
+Thus, any bipartite graph must have only even-length cycles.
+
+\subsubsection{Backwards Direction}
+
+I'll assume the graph is connected, since disconnected graph components
+can be put into bipartite sets independently.
+
+If any cycle in a graph is even-length, I propose the following partition scheme:
+\begin{enumerate}[nolistsep,label=\arabic*.]
+      \item Select an arbitrary node $v$ to assign to $A$ first.
+      \item All nodes whose shortest path to $v$ is even-length will also be assigned to $A$.
+      \item Any remaining nodes (whose shortest path is odd-length) are assigned to $B$.
+\end{enumerate}
+
+Now it STP there are no edges between any two nodes in $A$ or $B$.
+
+Assume FSOC there existed an edge between $v_1$ and $v_2$, where $v_1, v_2 \in A$.
+Let their shortest path lengths to $v$ be $d_1$ and $d_2$ respectively.
+There are two cases.
+\begin{enumerate}[nolistsep,label=\arabic*.]
+      \item $d_1 < d_2$ or vice versa (WLOG assume the first).
+            Since both are even, this means $v_1$'s shortest path is at least $2$
+            edges shorter than $v_2$'s.
+            This then means that we could've found a smaller $d_2$
+            by going to $v_1$ and then taking the $d_1$-length path back to $v$.
+      \item $d_1=d_2$, in which case we can construct an odd-length cycle
+            by going from $v$ to $v_1$, $v_2$ and back to $v$.
+\end{enumerate}
+In either case, a contradiction is present.
+
+By analogous reasoning, there are no edges between any two nodes in $B$ as well.
+
+\subsection{Part C}
+
+\section{Linalg With Adjacency Matrices}
+
+\begin{enumerate}
+      \item \begin{enumerate}[label=\roman*.]
+                  \item $\boxed{A\mathbf{1}}$ gives us $d$, since here $d_i=\sum_{i=1}^{n} A_{ij}$,
+                        which indeed adds $1$ to the total for every node connected to node $i$.
+                  \item $\boxed{\frac{A\mathbf{1} \cdot \mathbf{1}}{2}}$, since the numerator
+                        is the sum of all the degrees and $m$ is half the sum of all the nodes' degrees.
+                  \item $\boxed{A^2}$, since for any two nodes one can form a bijection between
+                        length-$2$ walks between them and their common neighbors.
+            \end{enumerate}
+      \item \begin{enumerate}[label=\roman*.]
+                  \item $\boxed{A\mathbf{1}}$ in this case gives us the in-degrees,
+                        since the $i$th row marks all the other nodes that have edges going \textit{into} $i$.
+                  \item $\boxed{A^T\mathbf{1}}$ suffices to give the out-degrees,
+                        since transposing the matrix now makes the $i$th row mark all nodes
+                        that have edges going into them \textit{from} $i$.
+            \end{enumerate}
+      \item None of my answers in part a hold for a weighted graph, since all of them rely
+            on $A_{ij}=1$ iff there's an edge between $i$ and $j$.
+\end{enumerate}
+
+\section{Connectivity}
+
+\subsection{Part A - First Statement}
+
+\subsubsection{Forwards}
+
+If $G$'s connected, any node can be reached from any other node by traversing
+some sequence of edges.
+Since $G$ itself has $n$ nodes, the maximum length of a path is $n$.
+
+Thus, for any two nodes $i$ and $j$, by the theorem in class $\exists 1 \le k \le n: A^k_{ij} > 0$.
+$A$ consists only of nonnegative entries, so this means $\sum_{k=1}^{n} A^k_{ij} > 0$ as well.
+
+\subsubsection{Backwards}
+
+Fix any distinct $i$ and $j$.
+
+$\sum_{k=1}^{n} A^k_{ij} > 0$, and $A$ doesn't have any negative entries.
+This means that $\exists 1 \le k \le n: A^k_{ij} > 0$
+and there exists a walk of length $k$ between $i$ and $j$.
+This is true for all node pairs, so $G$ must be connected. $\square$
+
+\subsection{Part B}
+
+While the statement in part A holds for strong connectivity,
+the forward direction breaks down for weak connectivity.
+For weakly connected directed graphs, we're only guaranteed that $S+S^T$
+has only positive entries.
+
+\section{Newman 6.5}
+
+I solved these in HW 1 already, but I'll put the proofs again here.
+
+\subsection{Part A}
+
+BWOC let there be a 3-regular graph with $2k+1$ nodes.
+
+The number of edges must be both an integer and equal to $\frac{3(2k+1)}{2}$
+since every node is connected to three others.
+
+However, these two conditions contradict each other, as $3(2k+1)$ is always odd. $\square$
+
+\subsection{Part B}
+
+A tree with $n$ nodes must have $n-1$ edges.
+
+Since there's $n-1$ edges, the sum of the node degrees is $2(n-1)$.
+This makes the average degree $\frac{2(n-1)}{2} < 2$. $\square$
+
+\section{Newman 6.7}
+
+six sevennnnnnnn
+
+\begin{enumerate}
+      \item Incoming edges: $\sum_{i=1}^{r} k_i^{in}$
+
+            Outgoing edges: $\sum_{i=1}^{r} k_i^{out}$
+
+      \item If we just use $\sum_{i=1}^{r} k_i^{in}$, we're also counting
+            the number of incoming edges that come from nodes $1, 2, \cdots, r$ themselves.
+
+            Thus, we subtract the second expression we got to get
+            $\boxed{\sum_{i=1}^{r} k_i^{in}-k_i^{out}}$.
+
+      \item The second inequality is a bit simpler given what we have,
+            so I'll prove that first.
+
+            A counting argument should work.
+            $\sum_{i=1}^{r} k_i^{in}-k_i^{out}$ accounts for all edges going into nodes $1$ through $r$.
+
+            Any edge coming out from $r+1$ must go into one of $1, 2, \cdots, r$,
+            so all edges counted by $k_{r+1}^{out}$ must be also in $\sum_{i=1}^{r} k_i^{in}-k_i^{out}$.
+            Thus, $k_{r+1}^{out} \le \sum_{i=1}^{r} k_i^{in}-k_i^{out}$.
+
+            For the first inequality, notice that $\sum_{i=r+1}^{n} k_i^{out}-k_i^{in}$ counts
+            the number of edges going out of nodes $r+1, r+2, \cdots, n$.
+            It first sums up all edges going out of those nodes unconditionally
+            and then subtracts the edges that just go back into $r+1, r+2, \cdots, n$.
+
+            We can use a similar counting argument for this one.
+            Any edge that came into node $r$ must have come from nodes $r+1$ through $n$,
+            and the RHS counts \textit{all} outgoing edges from that set.
+            Thus, $k_r^{in} \le \sum_{i=r+1}^{n} k_i^{out}-k_i^{in}$. $\square$
+\end{enumerate}
+
+\section{Triangle Counting}
+
+\begin{enumerate}
+      \item There's a 1-6 mapping between triangles in a graph and length-$3$ walks
+            that wind up back where the walk started.
+
+            The mapping is as follows.
+            If nodes $u$, $v$, and $w$ all share edges, they correspond with these length-$3$ walks:
+            \[(u, v, w, u), (u, w, v, u), (v, u, w, v), (v, w, u, v), (w, u, v, w), (w, v, u, w)\]
+
+            Since $A^3_{ij}$ contains the number of length-$3$ walks from $i$ to $j$,
+            its trace sums up all length-$3$ walks that start and end at the same position,
+            which was exactly the set that had a 1-6 correspondence with the number of triangles.
+            Thus, dividing the trace by $6$ gives us the number of triangles.
+
+      \item The formula doesn't work for triangles in a directed graph because
+            the mapping between triangles and cycles is reduced to 1-3.
+            You can walk through a cycle one way but not necessarily in the other in directed graphs.
+
+      \item $\frac{1}{3}\Tr\left(A^3\right)$ is all we need to make things work.
+            The 1-3 mapping turns the triangle $u \to v \to w$ into the following walks:
+            \[(u, v, w, u), (v, u, w, v), (w, u, v, w)\]
+
+      \item Each triangle has three nodes, so each triangle adds $1$ to three nodes' $NT_i$.
+            To account for this, after we sum up all the $NT_i$s, we need to divide by $3$.
+
+      \item I ran this code:
+            \begin{python}
+import networkx as nx
+import numpy as np
+
+adj = [
+    [1],
+    [0, 2, 3],
+    [1, 4, 5],
+    [1, 6],
+    [2, 5],
+    [2, 4, 6, 7],
+    [3, 5, 7],
+    [5, 6, 8],
+    [7]
+]
+
+g = nx.Graph()
+a = np.zeros((len(adj), len(adj)), dtype=int)
+for i, next_ in enumerate(adj):
+    for j in next_:
+        if i < j:
+            g.add_edge(i, j)
+        a[i, j] = 1
+
+tri1 = np.trace(a @ a @ a) // 6
+print(f"# of triangles (trace formula): {tri1}")
+tri2 = sum(nx.triangles(g).values()) // 3
+print(f"# of triangles (nx sum): {tri2}")
+            \end{python}
+            and got $2$ triangles from both functions, which matches the two triangles
+            I found by looking at the graph myself.
+\end{enumerate}
+
+\end{document}
