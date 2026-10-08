@@ -231,8 +231,8 @@ What's the exact value of $fs_0(EQ_n)$?
     \begin{enumerate}
         \item Consist of two disjoint sets (obviously).
         \item Cover as much of the universe as possible, so that
-        when we swap out one of the pairs for some other arbitrary set
-        the likelihood of a common element with the preserved set is maximized.
+              when we swap out one of the pairs for some other arbitrary set
+              the likelihood of a common element with the preserved set is maximized.
     \end{enumerate}
 
     This leads to the following candidate for a fooling set:
@@ -289,7 +289,7 @@ This is with the sole exception of one $IP_n$, of course, which we discuss below
     that are in $\mathbb{F}_2$, the simplest field with only two elements ($0$ and $1$).
     Expanding more on this line of thought, let's try and use it to create
     a fooling set.
-    
+
     The idea is to construct vectors have a dot product of $1$ with themselves
     but a $0$ dot product with others.
     In other words, we want $v_1, \cdots, v_k \in \mathbb{F}_2^n$ s.t.:
@@ -377,17 +377,32 @@ vanishes at a rate faster than standard exponential decay.
     fooling set candidate actually being a fooling set is
     $\frac{1}{2^{10n-1}} \cdot \left(\frac{3}{4}\right)^{\tbinom{10n}{2}}$.
 
-    In total, there's $\binom{2^n}{10}$ ways to select the first elements
+    In total, there's $\binom{2^n}{10n}$ ways to select the first elements
     of the fooling pairs and the same number of ways to select the second elements.
+    After we select which elements we want to use for the first and second positions,
+    there's another $10n!$ distinct ways to pair them up.
+    In total, we have $\binom{2^n}{10n} \cdot (10n)!$ fooling set candidates.
+    However, the factorial actually makes it a little tough to bound the expression.
+    To get a looser bound that still works, we can choose our elements with
+    replacement and take order into account.
+    This results in $\left(2^n\right)^{20n}$, since for each of the $20n$ elements
+    across the pairs we have $2^n$ inputs to choose from.
+
     Thus, we can use the union bound to see that as long as $n$ is large enough,
     \begin{align*}
         \mathbb{P}[fs(f) \ge 10n]
-        &\le \binom{2^n}{10}^2\left(\frac{1}{2^{10n-1}} \cdot \left(\frac{3}{4}\right)^{\tbinom{10n}{2}}\right) \\
-        &\le \left(\left(2^n\right)^{10}\right)^2\left(\frac{1}{2^{10n-1}} \cdot \left(\frac{3}{4}\right)^{\tbinom{10n}{2}}\right) \\
-        &\le 2^{20n} \cdot \frac{1}{2^{10n-1}} \cdot \left(\frac{3}{4}\right)^{50n^2-5n} \\
-        &\le 2^{10n+1} \cdot \left(\frac{3}{4}\right)^{50n^2} \\
-        &\le 2^{10n+1} \cdot \left(\frac{2}{3}\right)^{25n^2} \\
-        &\le \left(\frac{2}{3}\right)^{n^2}
+         & \le \left(2^n\right)^{20n} \cdot \left(\frac{1}{2^{10n-1}} \cdot \left(\frac{3}{4}\right)^{\tbinom{10n}{2}}\right)        \\
+         & \le 2^{20n^2} \cdot \frac{1}{2^{10n-1}} \cdot \left(\frac{3}{4}\right)^{50n^2-5n}                                           \\
+         & \le 2^{20n^2-10n+1} \cdot \left(\frac{3}{4}\right)^{50n^2}                                                                      \\
+         & \le 2^{20n^2} \cdot \left(\frac{3}{4}\right)^{50n^2}                                                                      \\
+         & \le \left(\frac{2}{3}\right)^{n^2}
+    \end{align*}
+    To see the last bound, we can perform the following manipulations:
+    \begin{align*}
+        3^{51} \le 2^{81}
+        &\implies 3^{51n^2} \le 2^{81n^2} \\
+        &\implies 3^{51n^2} \le 2^{n^2} \cdot 4^{50n^2} \cdot 2^{-20n^2} \\
+        &\implies 2^{20n^2}\left(\frac{3}{4}\right)^{50n^2} \le \left(\frac{2}{3}\right)^{n^2}
     \end{align*}
 \end{proof}
 
