@@ -1,0 +1,384 @@
+\documentclass[12pt]{article}
+
+\input{../kz}
+
+\rhead{Math 110A}
+
+\makeatletter
+\def\@seccntformat#1{%
+  \expandafter\ifx\csname c@#1\endcsname\c@section\else
+  \csname the#1\endcsname\quad
+  \fi}
+\makeatother
+
+\newcommand{\lra}{\xLeftrightarrow}
+\newcommand{\ra}{\xRightarrow}
+
+\begin{document}
+
+\section{Problem 1}
+
+\subsection{Zero Commutes}
+
+For $r \cdot 0$, the proof proceeds like so:
+\begin{align*}
+  0 + 0 = 0
+   & \implies r \cdot (0 + 0) = r \cdot 0       \\
+   & \implies r \cdot 0 + r \cdot 0 = r \cdot 0
+\end{align*}
+Since $f(x)=x+r \cdot 0$ is a bijection from $R$ to $R$,
+$0$ can be the only element that leaves $r \cdot 0$ unchanged when
+added to it.
+Thus, $r \cdot 0 = 0$.
+
+For the other multiplication, the proof proceeds the same except for us
+having to place the $r$ to the right of $0+0$ instead of the left. $\square$
+
+\subsection{Negation Too}
+
+For $r \cdot (-1) = -r$, notice that
+\begin{align*}
+  1+(-1)=0
+   & \implies r \cdot (1+(-1))=r \cdot 0=0 \\
+   & \implies r \cdot 1 + r \cdot (-1) = 0 \\
+   & \implies r + r \cdot (-1) = 0
+\end{align*}
+Since $-r$ is defined as the unique element that makes $0$ when added to $r$, $r \cdot (-1) = -r$.
+
+
+If we wanted to do this for $(-1) \cdot r$, it's the same except we have to
+multiply by putting $r$ to the right of $1+(-1)$. $\square$
+
+\section{Problem 2}
+
+$\Z^{\ge 0}$ does not form a ring.
+
+Consider the function $f(x)=x+1$.
+This does not make a bijection from $\Z^{\ge 0}$ onto itself, because
+no number gives $0$ when plugged into it.
+
+\pagebreak
+
+\section{Problem 3 and 4}
+
+I'll show a more general version, which is that $R\braket{x_i, i \in I}$ is a ring
+and that all of its units have to be constants.
+$R[x]$ and $R\braket{x, y}$ are just the above set with $I=\{x\}$ and $I=\{x, y\}$
+respectively, so this solves both problems at once.
+
+I'm not sure if this was defined accurately in class,
+so I'll express an element $r$ of this ring in the form $\sum_{\phi} r_\phi x^\phi$.
+The idea is that $r$ is a mapping from $\hom_{set}([n], I)$ to $R$
+that only gives nonzero coefficients on finitely many inputs.
+In other words, I'm both using $r$ as notation for the polynomial function itself
+as well as identification for its coefficients.
+Also, here the summation is over all $\phi \in \hom_{\text{set}}([n], I)$.
+
+\subsection{Addition Commutes}
+
+I'll be using $RI$ as an abbreviation for $R\braket{x_i, i \in I}$.
+
+Consider any two $r, s \in RI$:
+\begin{align*}
+  r+s
+  &= \sum_{\phi} \left(r_\phi+s_\phi\right)x^\phi \\
+  &= \sum_{\phi} \left(s_\phi+r_\phi\right)x^\phi \\
+  &= s+r
+\end{align*}
+
+\subsection{Addition Associates}
+
+oh my god bruh
+\begin{align*}
+  r+(s+t)
+  &= \sum_{\phi} r_\phi x^\phi+\sum_{\phi} \left(s_\phi+t_\phi\right)x^\phi \\
+  &= \sum_{\phi} \left(r_\phi+(s_\phi+t_\phi)\right)x^\phi \\
+  &= \sum_{\phi} \left((r_\phi+s_\phi)+t_\phi\right)x^\phi \\
+  &= \sum_{\phi} (r_\phi+s_\phi) x^\phi+\sum_{\phi} t_\phi x^\phi \\
+  &=(r+s)+t
+\end{align*}
+
+\subsection{Addition is a Bijection}
+
+Fix an $r$ and consider $a_r(s): r+s$.
+
+For \textbf{injectivity}, consider $s, t \in RI$ with $s \ne t$.
+This means $\exists \psi \in \hom_{\text{set}}([n], I): s_\psi \ne t_\psi$.
+
+We then consider $a_r(s)$ and $a_r(t)$:
+\begin{align*}
+  a_r(s)=\sum_{\phi} (r_\phi+s_\phi)x^\phi &&
+  a_r(t)=\sum_{\phi} (r_\phi+t_\phi)x^\phi
+\end{align*}
+Since the summation is only one level deep, $a_r(s)_\psi=r_\psi+s_\psi$ and $a_r(t)_\psi=r_\psi+t_\psi$.
+By the inequality established earlier, this implies that $a_r(s) \ne a_r(t)$.
+
+For \textbf{surjectivity}, fix any $t \in RI$.
+It remains to find an $s \in RI$ s.t. $a_r(s)=t$.
+
+I propose that $s=\sum_{\phi} (t_\phi-r_\phi)x^\phi$ is our answer.
+$r_\phi \in R$, so we can negate elements without any issues:
+\begin{align*}
+  a_r(s)
+  &= \sum_{\phi} r_\phi x^\phi + \sum_{\phi} (t_\phi-r_\phi)x^\phi \\
+  &= \sum_{\phi} (r_\phi+t_\phi-r_\phi)x^\phi \\
+  &= \sum_{\phi} t_\phi x^\phi \\
+  &= t
+\end{align*}
+
+\subsection{Multiplication Associates}
+
+I have no idea what the third letter associated with $\phi$ and $\psi$ is.
+I'm just gonna use $\rho$, please don't kill me.
+\begin{align*}
+  r \cdot (s \cdot t)
+  &= \sum_{\rho} r_\rho x^\rho \cdot \sum_{\phi} \sum_{\psi} s_\phi t_\psi x^{\phi \sqcup \psi} \\
+  &= \sum_{\rho} \sum_{\phi} \sum_{\psi} r_\rho (s_\phi t_\psi) x^{\rho \sqcup \phi \sqcup \psi} \\
+  &= \sum_{\rho} \sum_{\phi} \sum_{\psi} (r_\rho s_\phi) t_\psi x^{\rho \sqcup \phi \sqcup \psi} \\
+  &= \sum_{\rho} \sum_{\phi} r_\rho s_\phi x^{\rho \sqcup \phi} \cdot \sum_{\psi} t_\psi x^\psi \\
+  &= (r \cdot s) \cdot t
+\end{align*}
+
+\subsection{Distributivity}
+
+For left distributivity, we have
+\begin{align*}
+  r \cdot (s + t)
+  &= \sum_{\phi} r_\phi x^\phi \cdot \sum_{\phi} (s_\phi+t_\phi)x^\phi \\
+  &= \sum_{\phi} \sum_{\psi} r_\phi(s_\psi+t_\psi) x^{\phi \sqcup \psi} \\
+  &= \sum_{\phi} \sum_{\psi} (r_\phi s_\psi + r_\phi t_\psi) x^{\phi \sqcup \psi} \\
+  &= \sum_{\phi} \sum_{\psi} r_\phi s_\psi x^{\phi \sqcup \psi} + \sum_{\phi} \sum_{\psi} r_\phi t_\psi x^{\phi \sqcup \psi} \\
+  &= r \cdot s + r \cdot t
+\end{align*}
+since the coefficients are in $R$ and we can apply distributivity to them.
+
+The proof for right distributivity is basically the same:
+\begin{align*}
+  (s + t) \cdot r
+  &= \sum_{\phi} (s_\phi+t_\phi)x^\phi \cdot \sum_{\phi} r_\phi x^\phi \\
+  &= \sum_{\phi} \sum_{\psi} (s_\psi+t_\psi)r_\phi x^{\phi \sqcup \psi} \\
+  &= \sum_{\phi} \sum_{\psi} (s_\psi r_\phi + t_\psi r_\phi) x^{\phi \sqcup \psi} \\
+  &= \sum_{\phi} \sum_{\psi} s_\phi r_\psi x^{\phi \sqcup \psi} + \sum_{\phi} \sum_{\psi} t_\phi r_\psi x^{\phi \sqcup \psi} \\
+  &= s \cdot r + t \cdot r
+\end{align*}
+
+\subsection{Zero}
+
+I propose that $0$ in the ring, or an $r_\phi$ that gives $0$ on every $\phi$, is our additive identity:
+\begin{align*}
+  r+0
+  &= \sum_{\phi} r_\phi x^\phi + \sum_{\phi} 0 \cdot x^\phi \\
+  &= \sum_{\phi} (r_\phi+0) x^\phi \\
+  &= r
+\end{align*}
+
+\subsection{One}
+
+Our multiplicative identity should be an $r_\phi$ that gives $0$ on every $\phi$
+except on the single $\psi: [0] \to I$, for which it gives $1$.
+Since $\phi \sqcup \psi = \phi$ for any $\phi \in \hom_{\text{set}}([n], I)$:
+\begin{align*}
+  r \cdot 1
+  &= \sum_{\phi} r_\phi x^\phi \cdot (1 \cdot x^\psi) \\
+  &= \sum_{\phi} (r_\phi \cdot 1)x^{\phi \sqcup \psi} \\
+  &= \sum_{\phi} r_\phi x^\phi \\
+  &= r
+\end{align*}
+
+Because I'm paranoid, I'll also prove the same thing for
+$1 \cdot r$ even though it's basically the same thing:
+\begin{align*}
+  1 \cdot r
+  &= (1 \cdot x^\psi) \cdot \sum_{\phi} r_\phi x^\phi \\
+  &= \sum_{\phi} (1 \cdot r_\phi)x^{\psi \sqcup \phi} \\
+  &= \sum_{\phi} r_\phi x^\phi \\
+  &= r
+\end{align*}
+
+\pagebreak
+
+\section{Problem 5}
+
+\subsection{\texorpdfstring{$\mathrm{End}(V)$}{End(V)} is a Ring}
+
+It was proven in 115A that addition and composition of linear transformations
+still results in another linear transformation, so I will not be proving
+that these operations are well-defined.
+
+\subsubsection{Addition Commutes}
+
+Since we know vector space elements commute,
+\begin{align*}
+  (\phi+\psi)(v)
+   & = \phi(v)+\psi(v) \\
+   & = \psi(v)+\phi(v) \\
+   & = (\psi+\phi)(v)
+\end{align*}
+
+\subsubsection{Addition Associates}
+
+I'll just use the alphabet here.
+Using $\rho$ as a counterpart for $\phi$ and $\psi$ felt a little weird:
+\begin{align*}
+  (a+(b+c))(v)
+   & = a(v)+(b+c)(v)    \\
+   & = a(v)+(b(v)+c(v)) \\
+   & = (a(v)+b(v))+c(v) \\
+   & = (a+b)(v)+c(v)    \\
+   & = ((a+b)+c)(v)
+\end{align*}
+
+\subsubsection{Addition is a Bijection}
+
+Fix an $a \in \mathrm{End}(v)$ and consider $f_a(\phi)=(a+\phi)$.
+
+To show \textbf{injectivity}, consider $b, c \in \mathrm{End}(V)$.
+If $b \ne c$, $\exists v \in V: b(v) \ne c(v)$.
+
+We also have $(f_a(b))(v)=a(v)+b(v)$ and $(f_a(c))(v)=a(v)+c(v)$.
+Since $b(v) \ne c(v)$, then $a(v)+b(v) \ne a(v)+c(v)$
+and therefore $f_a(b) \ne f_a(c)$.
+
+For \textbf{surjectivity}, take any $b \in \mathrm{End}(v)$.
+
+I propose that when we add $a$ to $c(v)=b(v)-a(v)$, where subtraction
+means the addition of the vector space's additive inverse, we will obtain $b$.
+
+The proof of this is straightforward:
+\begin{align*}
+  (c+a)(v)
+   & = c(v)+a(v)      \\
+   & = b(v)-a(v)+a(v) \\
+   & = b(v)
+\end{align*}
+
+\subsubsection{Multiplication Associates}
+
+In general, function composition is associative:
+\begin{align*}
+  (f \circ (g \circ h))(v)
+   & = f((g \circ h)(v))        \\
+   & = f(g(h(v)))               \\
+   & = (f \circ g)(h(v))        \\
+   & = ((f \circ g) \circ h)(v)
+\end{align*}
+so "multiplication" in this ring associates.
+
+\subsubsection{Distributivity}
+
+Using the properties of linear transformations, we have for left distributivity:
+\begin{align*}
+  (a \cdot (b+c))(v)
+   & = a((b+c)(v))                     \\
+   & = a(b(v)+c(v))                    \\
+   & = a(b(v))+a(c(v))                 \\
+   & = (a \cdot b)(v) + (a \cdot c)(v) \\
+   & = ((a \cdot b) + (a \cdot c))(v)
+\end{align*}
+and for right distributivity:
+\begin{align*}
+  ((a+b) \cdot c)(v)
+   & = (a+b)(c(v))                     \\
+   & = a(c(v))+b(c(v))                 \\
+   & = (a \cdot c)(v) + (b \cdot c)(v) \\
+   & = ((a \cdot c) + (b \cdot c))(v)
+\end{align*}
+
+\subsubsection{Zero}
+
+Our zero element should be $\phi(v)=0$, where $0$ is the zero element of the vector space.
+
+This gives us
+\begin{align*}
+  (\phi + \psi)(v) & = \phi(v)+\psi(v) & (\psi + \phi)(v) & = \psi(v)+\phi(v) \\
+                   & = 0+\psi(v)       &                  & = \psi(v)+0       \\
+                   & = \psi(v)         &                  & = \psi(v)
+\end{align*}
+
+\subsubsection{One}
+
+Our identity element should be the identity transformation $\phi(v)=v$.
+
+This way, we have both
+\begin{align*}
+  (\phi \cdot \psi)(v) & = \phi(\psi(v)) & (\psi \cdot \phi)(v) & = \psi(\phi(v)) \\
+                       & = \psi(v)       &                      & = \psi(v)
+\end{align*}
+
+\subsection{A Vector Space Too}
+
+Since addition forms a bijection, this implies the existence of an
+additive inverse for $\mathrm{End}(V)$.
+There's just some more axioms.
+
+\subsubsection{Field Multiplication Commutes}
+
+We have
+\begin{align*}
+  ((\lambda_1 \lambda_2) \cdot \phi)(v)
+   & = \phi(\lambda_1\lambda_2 \cdot v)            \\
+   & = \phi(\lambda_1(\lambda_2 \cdot v))          \\
+   & = (\lambda_1 \cdot (\lambda_2 \cdot \phi))(v)
+\end{align*}
+
+\subsubsection{Distributivity}
+
+We have
+\begin{align*}
+  (\lambda \cdot (\phi + \psi))(v)
+   & = (\phi+\psi)(\lambda \cdot v)                      \\
+   & = \phi(\lambda \cdot v) + \psi(\lambda \cdot v)     \\
+   & = (\lambda \cdot \phi)(v) + (\lambda \cdot \psi)(v)
+\end{align*}
+and
+\begin{align*}
+  ((\lambda_1+\lambda_2) \cdot \phi)(v)
+   & = \phi((\lambda_1+\lambda_2)v)                          \\
+   & = \phi(\lambda_1 \cdot v + \lambda_2 \cdot v)           \\
+   & = \phi(\lambda_1 \cdot v) + \phi(\lambda_2 \cdot v)     \\
+   & = (\lambda_1 \cdot \phi)(v) + (\lambda_2 \cdot \phi)(v)
+\end{align*}
+
+\pagebreak
+
+\section{Problem 6}
+
+\subsection{Part A}
+
+For $x$, we have
+\begin{align*}
+  x(\lambda f + g)
+   & = x \cdot (\lambda f + g)        \\
+   & = x \cdot \lambda f + x \cdot g        \\
+   & = \lambda(x \cdot f) + x \cdot g \\
+   & = \lambda \cdot x(f) + x(g)
+\end{align*}
+and for $\partial_x$, we have
+\begin{align*}
+  \partial_x(\lambda f + g)
+   & = \frac{d}{dx} (\lambda f + g)                                          \\
+   & = \frac{d}{dx} \lambda f + \frac{d}{dx} g     & \text{By Addition Rule} \\
+   & = \lambda \frac{df}{dx} + \frac{dg}{dx}       & \text{By Product Rule}  \\
+   & = \lambda \cdot \partial_x(f) + \partial_x(g)
+\end{align*}
+
+\subsection{Part B}
+
+When we multiply then differentiate, we get
+\begin{align*}
+  \frac{d}{dx} x\sum_{i=0}^{n} r_i x^i
+  &= \frac{d}{dx} \sum_{i=0}^{n} r_i x^{i+1} \\
+  &= \sum_{i=0}^{n} r_i(i+1) x^i
+\end{align*}
+OTOH, when we switch the order, we get
+\begin{align*}
+  x\frac{d}{dx} \sum_{i=0}^{n} r_i x^i
+  &= x\sum_{i=0}^{n} r_i \cdot i \cdot x^{i-1} \\
+  &= \sum_{i=0}^{n} r_i \cdot i \cdot x^i
+\end{align*}
+
+Subtracting the second from the first gives
+\[\sum_{i=0}^{n} r_i(i+1)x^i - \sum_{i=0}^{n} r_i \cdot i \cdot x^i
+=\boxed{\sum_{i=0}^{n} r_i x^i}\]
+
+\end{document}
