@@ -1,0 +1,577 @@
+\documentclass[12pt]{article}
+
+\input{../kz}
+
+\rhead{Math 110A}
+
+\makeatletter
+\def\@seccntformat#1{%
+  \expandafter\ifx\csname c@#1\endcsname\c@section\else
+  \csname the#1\endcsname\quad
+  \fi}
+\makeatother
+
+\newcommand{\lra}{\xLeftrightarrow}
+\newcommand{\ra}{\xRightarrow}
+\DeclareMathOperator{\Fun}{Fun}
+
+\begin{document}
+
+\section{Problem 1}
+
+Let's call $g = h' \circ h$ for convenience:
+\begin{align*}
+  g(a+b)
+   & = h'(h(a+b))        \\
+   & = h'(h(a)+h(b))     \\
+   & = h'(h(a))+h'(h(a)) \\
+   & = g(a)+g(b)
+\end{align*}
+The proof for multiplication is the exact same as the addition one,
+only that the addition signs are replaced with multiplication signs.
+
+$0$ and $1$ also still map to themselves:
+\begin{align*}
+  g(0) & = h'(h(0)) & g(1) & = h'(h(1)) \\
+       & = h'(0)    &      & = h'(1)    \\
+       & = 0        &      & = 1
+\end{align*}
+so $g$ is again a homomorphism from $R$ to $T$. $\square$
+
+\pagebreak
+
+\section{Problem 2}
+
+First let's map $h(0)=0$, $h(1)=1$, and $h(-1)=-1$.
+Then, $h(n)=\sum_{i=1}^{n} h(1)$ for positive $n$
+and $h(n)=\sum_{i=1}^{|n|} h(-1)$ for negative $n$.
+It was already proven in class that this is the only way to construct
+a homomorphism from $\Z$ to $R$.
+All we need to show now is that this actually is a homomorphism.
+
+\subsection{Addition}
+
+I think some casework is in order:
+\begin{enumerate}
+  \item \textbf{Positive and Positive:}
+        \begin{align*}
+          h(a+b)
+           & = \sum_{i=1}^{a+b} h(1)                     \\
+           & = \sum_{i=1}^{a} h(1) + \sum_{i=1}^{b} h(1) \\
+           & = h(a)+h(b)
+        \end{align*}
+  \item \textbf{Positive and Negative:}
+        Since addition commutes, WLOG let the positive be $a$ and the negative be $b$.
+        If $|a| > |b|$,
+        \begin{align*}
+          h(a+b)
+           & = \sum_{i=1}^{a+b} h(1)                        \\
+           & = \sum_{i=1}^{a} h(1) + \sum_{i=1}^{|b|} h(-1) \\
+           & = h(a) + h(b)
+        \end{align*}
+        OTOH, if $|a| < |b|$,
+        \begin{align*}
+          h(a+b)
+           & = \sum_{i=1}^{|a+b|} h(-1)                     \\
+           & = \sum_{i=1}^{a} h(1) + \sum_{i=1}^{|b|} h(-1) \\
+           & = h(a) + h(b)
+        \end{align*}
+        Either way, the homomorphism still holds.
+  \item \textbf{Negative and Negative:} Basically the same as the first case.
+\end{enumerate}
+
+\subsection{Multiplication}
+
+Since $0$ still maps to $0$ and $r \cdot 0 = 0 \cdot r = 0\ \forall r \in R$,
+we can just consider cases where both factors are nonzero.
+Regardless, more casework!
+\begin{enumerate}
+  \item \textbf{Positive and Positive:}
+        \begin{align*}
+          h(a \cdot b)
+           & = \sum_{i=1}^{a \cdot b} h(1)                                \\
+           & = \sum_{i=1}^{a} \sum_{i=1}^{b} h(1)                         \\
+           & = \sum_{i=1}^{a} \left(h(1) \cdot \sum_{i=1}^{b} h(1)\right) \\
+           & = \sum_{i=1}^{a} h(1) \cdot \sum_{i=1}^{b} h(1)              \\
+           & = h(a) \cdot h(b)
+        \end{align*}
+  \item \textbf{Positive and Negative:}
+        \begin{align*}
+          h(a \cdot b)
+           & = \sum_{i=1}^{|a \cdot b|} h(-1)                                \\
+           & = \sum_{i=1}^{a} \sum_{i=1}^{|b|} h(-1)                         \\
+           & = \sum_{i=1}^{a} \left(h(1) \cdot \sum_{i=1}^{|b|} h(-1)\right) \\
+           & = \sum_{i=1}^{a} h(1) \cdot \sum_{i=1}^{|b|} h(-1)              \\
+           & = h(a) \cdot h(b)
+        \end{align*}
+  \item \textbf{Negative and Positive:} Analogous to the second case.
+  \item \textbf{Negative and Negative:} Analogous to the first case.
+\end{enumerate}
+The homomorphism we defined indeed satisfies all the necessary properties. $\square$
+
+\pagebreak
+
+\section{Problem 3}
+
+\subsection{Forwards}
+
+FSOC assume $\exists n \in \Z \setminus \{0\}$ s.t. the unique homomorphism
+$h_\Z$ from $\Z$ to $R$ sent it to something that wasn't in $R^X$,
+so $h_\Z(n) \cdot r \ne 1\ \forall r \in R$.
+
+The homomorphism from $\Q$ to $R$ $h_\Q$ must have the same behavior as $h_\Z$
+does on the integers, so $h_\Q(n)=h_\Z(n)$.
+This can be seen by repeatedly adding $h(1)$s to achieve any integer
+similar to the approach used for $\Z \to R$ seen in class.
+
+However, we have simultaneously
+\[h_\Q\left(n \cdot \frac{1}{n}\right) = h_\Q(n) \cdot h\left(\frac{1}{n}\right)\]
+and
+\[h_\Q\left(n \cdot \frac{1}{n}\right) = h_\Q(1) = 1\]
+which contradicts our assumption that $h_\Z(n) \cdot r$ was never $1$.
+
+\subsection{Backwards}
+
+For whole numbers, $h_\Q$ does the same thing as $h_\Z$.
+Things get a little more interesting when we account for fractions.
+From now on, I'll just use $h$ since the integers aren't that relevant anymore.
+
+For all unit fractions $\frac{1}{d}$, $h\left(\frac{1}{d}\right)$
+must be the unique multiplicative inverse of $h(d)$.
+Since we're guaranteed that $h(d) \in R^X$, this inverse must exist.
+
+Before we can move on, we actually have to prove some properties about this submapping.
+First, note that $h\left(\frac{1}{ab}\right)$ is the inverse of $h(ab)$.
+Then, since $h\left(\frac{1}{a}\right)$ and $h\left(\frac{1}{b}\right)$
+are the inverses of $h(a)$ and $h(b)$ respectively, we have
+\begin{align*}
+  h(ab) \cdot h\left(\frac{1}{a}\right) \cdot h\left(\frac{1}{b}\right)
+   & = h(ba) \cdot h\left(\frac{1}{a}\right) \cdot h\left(\frac{1}{b}\right)           \\
+   & = h(b) \cdot h(a) \cdot h\left(\frac{1}{a}\right) \cdot h\left(\frac{1}{b}\right) \\
+   & = h(b) \cdot 1 \cdot h\left(\frac{1}{b}\right)                                    \\
+   & = 1
+\end{align*}
+And indeed, $h\left(\frac{1}{ab}\right)=h\left(\frac{1}{a}\right)h\left(\frac{1}{b}\right)$.
+
+Now consider a rational number $\frac{a}{b}$.
+We can define it as
+\[h\left(\frac{a}{b}\right) = h(a) \cdot h\left(b^{-1}\right)\]
+This behavior is well-defined, since if we multiply both the numerator
+and the denominator by some common divisor $d$, we have
+\begin{align*}
+  h\left(\frac{ad}{bd}\right)
+   & = h(ad) \cdot h\left((db)^{-1}\right)                                   \\
+   & = h(a) \cdot h(d) \cdot h\left(d^{-1}\right) \cdot h\left(b^{-1}\right) \\
+   & = h(a) \cdot h\left(b^{-1}\right)
+\end{align*}
+which is the same thing.
+
+This multiplication also commutes.
+If we assume WLOG that the numerator's positive,
+\begin{align*}
+  h(a)h\left(\frac{1}{b}\right)
+   & = \left(\sum_{i=1}^{a} h(1)\right) \cdot h\left(\frac{1}{b}\right) \\
+   & = \sum_{i=1}^{a} h(1)h\left(\frac{1}{b}\right)                     \\
+   & = \sum_{i=1}^{a} h\left(\frac{1}{b}\right)h(1)                     \\
+   & = h\left(\frac{1}{b}\right) \cdot \sum_{i=1}^{a} h(1)              \\
+   & = h\left(\frac{1}{b}\right) \cdot h(1)
+\end{align*}
+
+Now that this homomorphism is actually defined, we need to prove the actual properties of homomorphisms.
+We already hardcoded $h(1)=1$, so only the addition and multiplication properties warrant attention.
+
+For addition, we have
+\begin{align*}
+  h\left(\frac{a}{b}+\frac{c}{d}\right)
+   & = h\left(\frac{ad+bc}{bd}\right)                                    \\
+   & = h(ad+bc) \cdot h\left(\frac{1}{bd}\right)                         \\
+   & = h(ad)h\left(\frac{1}{bd}\right) + h(bc)h\left(\frac{1}{bd}\right) \\
+   & = h\left(\frac{a}{b}\right) + h\left(\frac{c}{d}\right)
+\end{align*}
+and for multiplication, we have
+\begin{align*}
+  h\left(\frac{a}{b} \cdot \frac{b}{d}\right)
+   & = h(ac) \cdot h\left(\frac{1}{cd}\right)                     \\
+   & = h(a)h(c)h\left(\frac{1}{d}\right)h\left(\frac{1}{b}\right) \\
+   & = h\left(\frac{a}{b}\right) \cdot h\left(\frac{c}{d}\right)
+\end{align*}
+
+\section{Problem 4}
+
+\subsection{Matrix Centers}
+
+I'm pretty sure the set of diagonal matrices
+$\left\{\alpha I^{n \times n} \mid \alpha \in \R\right\}$ is our center.
+
+These matrices certainly commute:
+\begin{align*}
+  (A \cdot \alpha I)_{ij}
+   & = \alpha \sum_{k=1}^{n} A_{ik} I_{kj} \\
+   & = \alpha A_{ij}                       \\
+   & = \alpha \sum_{k=1}^{n} I_{ik} A_{kj} \\
+   & = (\alpha I \cdot A)_{ij}
+\end{align*}
+but it's a little more work to prove that no other matrices commute.
+
+Given that a matrix $X \in Z\left(\R^{n \times n}\right)$, we need to prove
+these two conditions for all $i$ and $j$:
+\begin{enumerate}[nolistsep]
+  \item $X_{ii}=X_{jj}$.
+  \item No other element besides $X_{ii}$ or $X_{jj}$ can be nonzero.
+\end{enumerate}
+We'll do both by proving the contrapositive.
+
+If $\exists i, j: X_{ii} \ne X_{jj}$, consider the matrix $E$
+that's all $0$s except for a $1$ at position $ij$:
+\begin{align*}
+  (X \cdot E)_{ij} & = \sum_{k=1}^{n} X_{ik} E_{kj} & (E \cdot X)_{ij} & = \sum_{k=1}^{n} E_{ik} X_{kj} \\
+                        & = X_{ii} E_{ij}                &                       & = E_{ij} X_{jj}                \\
+                        & = X_{ii}                            &                       & = X_{jj}
+\end{align*}
+$X$ clearly doesn't commute with this matrix.
+
+Moving on the second condition, take any $X$ with $i \ne j: X_{ij} \ne 0$.
+Let us again consider the matrix $E$, only now it's position $jj$ that's $1$.
+
+On one hand, we have
+\begin{align*}
+  (X \cdot E)_{ij}
+  &= \sum_{k=1}^{n} X_{ik} E_{kj} \\
+  &= X_{ij} E_{jj} \\
+  &= X_{ij}
+\end{align*}
+However, if we swap the multiplication order, then
+\begin{align*}
+  (E \cdot X)_{ij}
+  &= \sum_{k=1}^{n} E_{ik} X_{jk} \\
+  &= 0
+\end{align*}
+since the $i$th row of $E$ is by definition all zeros.
+
+\subsection{Polynomial Centers}
+
+The notation is actually just easier if I derive the
+center of $R\braket{x, i \in I}$, where $|I| \ge 2$.
+
+For a polynomial $\sum_{\phi \in \hom_{\text{set}}([n], I)} r_\phi x^\phi$
+to be in the center, two conditions have to be met:
+\begin{enumerate}[nolistsep]
+  \item The only monomial for which $r_\phi \ne 0$ is the one $\phi: [0] \to I$.
+  \item $r_\phi$ must also be in $R^X$.
+\end{enumerate}
+
+Elements that meet these two conditions do commute:
+\begin{align*}
+  \left(r_\phi \cdot x^\phi\right) \cdot \sum_{\psi} s_\psi x^\psi
+   & = \sum_{\psi} r_\phi \cdot s_\psi x^{\phi \sqcup \psi}             \\
+   & = \sum_{\psi} s_\psi \cdot r_\phi x^{\psi \sqcup \phi}             \\
+   & = \sum_{\psi} s_\psi x^\psi \cdot \left(r_\phi \cdot x^\phi\right)
+\end{align*}
+
+Now we have to show that any polynomial that doesn't meet either can't.
+
+\subsubsection{No Nonzero Degrees}
+
+If a polynomial $r$ has a monomial with positive degree, let's choose
+a monomial $\psi$ out of it that has maximal degree $n$.
+
+Now with any two distinct $x, y \in I$,
+we construct a monomial of degree $n+1$ $\psi'$
+where $\psi'(1)=x$ and $y$ for all other inputs.
+Notice that this construction makes it so that $\phi \sqcup \psi' \ne \psi' \sqcup \phi$
+for any monomial $\phi$ of degree $n$, since the middle element at $n+1$ is always different.
+
+$x^{\psi'}$ shouldn't commute with $r$, since $r x^{\psi'}$
+has $x^{\psi \sqcup \psi'}$ as monomial with nonzero coefficient,
+while $x^{\psi' \sqcup \psi}$ as a monomial with nonzero coefficient.
+Since we chose $\psi$ to be a monomial of maximal degree, neither
+of these products have the other's monomial.
+
+\subsubsection{Constants Have to Commute}
+
+We've already shown the first condition has to hold, so for the second
+we can just assume it already does.
+
+If $r_\phi \notin R^X$, $\exists s \in R: sr_\phi \ne r_\phi s$.
+In that case, even if all other degrees don't have any nonzero coefficients,
+\[\left(r_\phi \cdot x^\phi\right) \cdot \left(s \cdot x^\phi\right)
+  \ne \left(s \cdot x^\phi\right) \cdot \left(r_\phi \cdot x^\phi\right)\]
+
+\pagebreak
+
+\section{Problem 5}
+
+\subsection{Forwards}
+
+Assuming the existence of a ring structure on $S$,
+most of this stuff proves itself:
+\begin{enumerate}
+  \item If $s_1, s_2 \in I$, $i(s_1+s_2)=i(s_1)+i(s_2) \implies i(s_1)+i(s_2) \in i(S)$.
+  \item Similarly, if $s_1, s_2 \in I$, $i(s_1 \cdot s_2)=i(s_1) \cdot i(s_2) \implies i(s_1) \cdot i(s_2) \in i(S)$.
+  \item $i(0)=0$, $i(1)=1$, and $i(-1)=-1$, meaning that all three elements must be in $i(S)$.
+\end{enumerate}
+
+\subsection{Backwards}
+
+Assume the three things given are true.
+We just need to define some valid $+$ and $\cdot$ that make things work.
+
+However, the values for both of these functions are pinned down by
+that $i$ is injective and has to be a homomorphism:
+\begin{gather*}
+  i(a+b)=i(a)+i(b) \implies a+b = i^{-1}(i(a)+i(b)) \\
+  i(a \cdot b) = i(a) \cdot i(b) \implies a \cdot b = i^{-1}(i(a) \cdot i(b))
+\end{gather*}
+Calling $i^{-1}$ is well-defined since addition and multiplication under the image
+of $i$ is closed by our assumptions, so $i$ is a bijection onto its range.
+
+NOW IT'S TIME FOR MORE RING AXIOMS YAAAAAAAAAYYYYYY
+
+\subsubsection{Addition Commutes}
+
+by all known laws of aviation
+\begin{align*}
+  a+b
+   & = i^{-1}(i(a)+i(b)) \\
+   & = i^{-1}(i(b)+i(a)) \\
+   & = b+a
+\end{align*}
+
+\subsubsection{Addition Associates}
+
+it is physically impossible for a bee to fly
+\begin{align*}
+  a + (b + c)
+   & = i^{-1}(i(a)+i(i^{-1}(i(b)+i(c)))) \\
+   & = i^{-1}(i(a)+(i(b)+i(c)))          \\
+   & = i^{-1}((i(a)+i(b))+i(c))          \\
+   & = i^{-1}(i(i^{-1}(i(a)+i(b)))+i(c)) \\
+   & = (a+b)+c
+\end{align*}
+
+\subsubsection{Addition Bijects (is that even a word?)}
+
+We'll make $a$ our fixed element.
+
+To show injectivity, let $a+b=a+c$, so $i^{-1}(i(a)+i(b))=i^{-1}(i(b)+i(c))$.
+Since $i$ and $i^{-1}$ are bijections on the areas we care about,
+\[i(a)+i(b)=i(a)+i(c) \implies i(b)=i(c) \implies b=c\]
+
+To show surjectivity, let $c$ be the element we want to hit.
+I believe $i^{-1}(i(c)-i(a))$ should meet this requirement:
+\begin{align*}
+  a+i^{-1}(i(c)-i(a))
+   & = i^{-1}(i(a)+i(i^{-1}(i(c)-i(a)))) \\
+   & = i^{-1}(i(a)+i(c)-i(a))            \\
+   & = i^{-1}(i(c))                      \\
+   & = c
+\end{align*}
+
+\subsubsection{Multiplication Associates}
+
+its wings are too small to get its fat little body off the ground
+\begin{align*}
+  a \cdot (b \cdot c)
+   & = i^{-1}(i(a) \cdot i(i^{-1}(i(b) \cdot i(c)))) \\
+   & = i^{-1}(i(a) \cdot (i(b) \cdot i(c)))          \\
+   & = i^{-1}((i(a) \cdot i(b)) \cdot i(c))          \\
+   & = i^{-1}(i(i^{-1}(i(a) \cdot i(b))) \cdot i(c)) \\
+   & = (a \cdot b) \cdot c
+\end{align*}
+
+\subsubsection{Distributivity}
+
+to the left!
+\begin{align*}
+  a \cdot (b + c)
+   & = i^{-1}(i(a) \cdot (i(b) + i(c)))                                \\
+   & = i^{-1}(i(a) \cdot i(b) + i(b) \cdot i(c))                       \\
+   & = i^{-1}(i(i^{-1}(i(a) \cdot i(b))) + i(i^{-1}(i(b) \cdot i(c)))) \\
+   & = i^{-1}(i(a \cdot b) + i(b \cdot c))                             \\
+   & = a \cdot b + b \cdot c
+\end{align*}
+to the right!
+\begin{align*}
+  (a + b) \cdot c
+   & = i^{-1}((i(a) + i(b)) \cdot i(c))                                \\
+   & = i^{-1}(i(a) \cdot i(c) + i(b) \cdot i(c))                       \\
+   & = i^{-1}(i(i^{-1}(i(a) \cdot i(c))) + i(i^{-1}(i(b) \cdot i(c)))) \\
+   & = i^{-1}(i(a \cdot c) + i(b \cdot c))                             \\
+   & = a \cdot c + b \cdot c
+\end{align*}
+
+\subsubsection{Identities}
+
+Our additive identity is $i^{-1}(0)$:
+\begin{align*}
+  a + i^{-1}(0)
+   & = i^{-1}(i(a) + i(i^{-1}(0))) \\
+   & = i^{-1}(i(a) + 0)            \\
+   & = a
+\end{align*}
+and our multiplicative identity is $i^{-1}(1)$ no matter which way you multiply it:
+\begin{align*}
+  a \cdot i^{-1}(1) & = i^{-1}(i(a) \cdot i(i^{-1}(1))) & i^{-1}(1) \cdot a & = i^{-1}(i(i^{-1}(1)) \cdot i(a)) \\
+                    & = i^{-1}(i(a) \cdot 1)            &                   & = i^{-1}(1 \cdot i(a))            \\
+                    & = i^{-1}(i(a))                    &                   & = i^{-1}(i(a))                    \\
+                    & = a                               &                   & = a
+\end{align*}
+
+\pagebreak
+
+\section{Problem 6}
+
+\subsection{Functions Form a Ring}
+
+\subsubsection{Addition Commutes}
+
+the bee of course flies anyway
+\begin{align*}
+  (f_1+f_2)(x)
+   & = f_1(x)+f_2(x) \\
+   & = f_2(x)+f_1(x) \\
+   & = (f_2+f_1)(x)
+\end{align*}
+
+\subsubsection{Addition Associates}
+
+because it doesn't care what scientists think
+\begin{align*}
+  ((f_1+f_2)+f_3)(x)
+   & = (f_1+f_2)(x)+f_3(x)    \\
+   & = (f_1(x)+f_2(x))+f_3(x) \\
+   & = f_1(x)+(f_2(x)+f_3(x)) \\
+   & = f_1(x)+(f_2+f_3)(x)    \\
+   & = (f_1+(f_2+f_3))(x)
+\end{align*}
+
+\subsubsection{Addition is a Bijection}
+
+Fix an $f: X \to R$ and consider the addition operation with it.
+
+For injectivity, we have $f_1, f_2: X \to R$ with $f_1(x) \ne f_2(x)$ for some $x \in X$.
+
+Then,
+\[(f+f_1)(x) = f(x)+f_1(x) \ne f(x)+f_2(x)=(f+f_2)(x)\]
+so $f+f_1 \ne f+f_2$
+
+For surjectivity, fix another $g: X \to R$.
+If we add $f'(x)=g(x)-f(x)$ to $f(x)$, we'll get our $g$ like so:
+\begin{align*}
+  (f+f')(x)
+   & = f(x)+f'(x)     \\
+   & = f(x)+g(x)-f(x) \\
+   & = g(x)
+\end{align*}
+
+\subsubsection{Multiplication Associates}
+
+basically the same as the addition proof like what are we even doing
+\begin{align*}
+  ((f_1 \cdot f_2) \cdot f_3)(x)
+   & = (f_1 \cdot f_2)(x) \cdot f_3(x)    \\
+   & = (f_1(x) \cdot f_2(x)) \cdot f_3(x) \\
+   & = f_1(x) \cdot (f_2(x) \cdot f_3(x)) \\
+   & = f_1(x) \cdot (f_2 \cdot f_3)(x)    \\
+   & = (f_1 \cdot (f_2 \cdot f_3))(x)
+\end{align*}
+
+\subsubsection{Distributivity}
+
+left:
+\begin{align*}
+  (f_1 \cdot (f_2 + f_3))(x)
+   & = f_1(x) \cdot (f_2+f_3)(x)               \\
+   & = f_1(x) \cdot (f_2(x)+f_3(x))            \\
+   & = f_1(x)f_2(x) + f_1(x)f_3(x)             \\
+   & = (f_1 \cdot f_2)(x) + (f_1 \cdot f_3)(x)
+\end{align*}
+
+right:
+\begin{align*}
+  ((f_1 + f_2) \cdot f_3)(x)
+   & = (f_1 + f_2)(x) \cdot f_3(x)             \\
+   & = (f_1(x) + f_2(x)) \cdot f_3(x)          \\
+   & = f_1(x)f_3(x) + f_2(x)f_3(x)             \\
+   & = (f_1 \cdot f_3)(x) + (f_2 \cdot f_3)(x)
+\end{align*}
+
+\subsubsection{Identities}
+
+Our zero element is the constant function $\mathbf{0}(x)=0$,
+where $0$ is the additive identity of $R$:
+\begin{align*}
+  (f+\mathbf{0})(x)
+   & = f(x)+\mathbf{0}(x) \\
+   & = f(x)+0             \\
+   & = f(x)
+\end{align*}
+
+Analogously, our one element is the constant function $\mathbf{1}(x)=1$.
+\begin{align*}
+  (f \cdot \mathbf{1})(x) & = f(x)\cdot \mathbf{1}(x) & (\mathbf{1} \cdot f)(x) & = \mathbf{1}(x) \cdot f(x) \\
+                          & = f(x)\cdot 1             &                         & = 1 \cdot f(x)             \\
+                          & = f(x)                    &                         & = f(x)
+\end{align*}
+
+\subsection{Function Pullback}
+
+\subsubsection{Is a Homomorphism}
+
+This pullback map indeed respects addition:
+\begin{align*}
+  g^*(f_1+f_2)(y)
+   & = (f_1+f_2)(g(y))       \\
+   & = f_1(g(y)) + f_2(g(y)) \\
+   & = g^*(f)(y) + g^*(f)(y)
+\end{align*}
+and multiplication:
+\begin{align*}
+  g^*(f_1 \cdot f_2)(y)
+   & = (f_1 \cdot f_2)(g(y))     \\
+   & = f_1(g(y)) \cdot f_2(g(y)) \\
+   & = g^*(f)(y) \cdot g^*(f)(y)
+\end{align*}
+
+Now it's just the $h(1)=1$ thing, which is the easiest:
+\[g^*(\mathbf{1})(y)=\mathbf{1}(g(y))=1\]
+
+\subsubsection{Composition Equality}
+
+No smart tricks here, just blood, sweat, and aligns:
+\begin{align*}
+  (h \circ g)^*(f)
+   & = f \circ h \circ g   \\
+   & = (f \circ h) \circ g \\
+   & = h^*(f) \circ g      \\
+   & = g^*(h^*(f))
+\end{align*}
+
+\subsection{Random stuff about \texorpdfstring{$\Fun_R(X)$}{Fun\_R(X)}}
+
+If $R$ is commutative, then
+\begin{align*}
+  (f_1 \cdot f_2)(x)
+   & = f_1(x) \cdot f_2(x) \\
+   & = f_2(x) \cdot f_1(x) \\
+   & = (f_2 \cdot f_1)(x)
+\end{align*}
+and since we've shown $Z(\Fun_R(X))=\Fun_R(X)$, to show that the inclusion
+operation makes it an $R$-algebra we just need that the inclusion is a homomorphism:
+\begin{gather*}
+  i(r_1+r_2)(x) = r_1 + r_2 = r_1(x) + r_2(x) \\
+  i(r_1 \cdot r_2)(x) = r_1 \cdot r_2 = r_1(x) \cdot r_2(x)
+\end{gather*}
+
+Finally, to see that $g^*$ is a homomorphism of $R$-algebras
+from $\Fun_R(Y)$ to $\Fun_R(X)$, we just need to show that $g^* \circ i_y = i_x$,
+where, $i_y$ and $i_x$ are the inclusion homomorphisms:
+\begin{align*}
+  g^*(i_y(r))(x)
+   & = (i_y(r) \circ g)(x) \\
+   & = i_y(r)(y)           \\
+   & = r                   \\
+   & = i_x(r)(x)
+\end{align*}
+
+\end{document}
