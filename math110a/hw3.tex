@@ -1,0 +1,315 @@
+\documentclass[12pt]{article}
+
+\input{../kz}
+
+\rhead{Math 110A}
+
+\makeatletter
+\def\@seccntformat#1{%
+  \expandafter\ifx\csname c@#1\endcsname\c@section\else
+  \csname the#1\endcsname\quad
+  \fi}
+\makeatother
+
+\newcommand{\lra}{\xLeftrightarrow}
+\newcommand{\ra}{\xRightarrow}
+\DeclareMathOperator{\Fun}{Fun}
+\DeclareMathOperator{\id}{id}
+\DeclareMathOperator{\pr}{pr}
+
+\begin{document}
+
+\section{Problem 1}
+
+From class, we've shown that a homomorphism of $R$-algebras $h$
+that starts from $R\braket{x_i, i \in I}$ is defined by its behavior on individual $x_i$.
+If we fix $h(x_i)=x_i$, then the values of $h$ on all
+other noncommutative polynomials must be pinned down.
+
+In class, we also saw that this behavior can be written as
+\[h\left(\sum_{\phi} r_\phi x^\phi\right)=\sum_{\phi} r_\phi \prod_{i=0}^{|\phi|} x_{\phi(i)}\]
+where the only difference is that the order of the $x_i$s on the RHS doesn't matter.
+
+To show that this homomorphism is surjective, fix a polynomial in $R[x_i, i \in I]$.
+Even though it's commutative, we can still write it as $\sum_{\phi} r_\phi x^\phi$.
+We can then just take this as our preimage, since $h$ doesn't touch coefficient
+nor the behavior of any monomials.
+It really just makes order not matter anymore.
+
+If $|I| > 2$, though, this homomorphism isn't injective.
+Consider $x_1x_2$ and $x_2x_1$, different elements under $R\braket{x_i, i \in I}$.
+If we put them through $h$, both come out to the same polynomial $x_1x_2$ under
+$R[x_i, i \in I]$.
+
+\pagebreak
+
+\section{Problem 2}
+
+I think for this problem it's easier to define our polynomials by thinking
+about the equivalence classes on $\phi$.
+Call monomials $\phi_1$ and $\phi_2$ equivalent if $c: ([n] \to I) \to \N^I$, defined by
+\[c(\phi)_i=\sum_{j=1}^{n} \mathbf{1}[\phi(j)=i]\]
+gives the same output on both of them.
+In other words, our monomials should now commute.
+I'll use $\sum_{[\psi]} r_i x^\psi$ when discussing these commutative polynomials.
+
+\subsection{Injective}
+
+Consider two homomorphisms of $R$-algebras $h_1$ and $h_2$ s.t. $h_1(x_i)=h_2(x_i)$ for all $x_i \in I$.
+
+Now consider $h_1$ evaluated on an arbitrary polynomial $\sum_{[\psi]} r_i x^\psi$:
+\begin{align*}
+  h_1\left(\sum_{[\psi]} r_i x^\psi\right)
+   & = \sum_{[\psi]} \phi(r_i) \prod_{i=1}^{|\psi|} h_1(\psi(i)) \\
+   & = \sum_{[\psi]} \phi(r_i) \prod_{i=1}^{|\psi|} h_2(\psi(i)) \\
+   & = h_2\left(\sum_{[\psi]} r_i x^\psi\right)
+\end{align*}
+Since we're mapping to $S^I_{\text{comm}}$, the exact representatives
+of the equivalence classes don't matter and this chain of logic is still well-defined.
+
+\pagebreak
+
+\subsection{Surjective}
+
+Fix an $(s_i)_{i \in I} \in S^I_{\text{comm}}$.
+
+I propose the following homomorphism of $R$-algebras:
+\[h\left(\sum_{[\psi]} r_i x^\psi\right)
+  =\sum_{[\psi]} \phi(r_i) \prod_{i=1}^{|\psi|} h(\psi(i))\]
+defined off of $h(\psi(i))=(s_i)_{\psi(i)}$.
+It should be clear that on individual $x_i \in I$ this mapping satisfies
+$h(x_i)=\phi(1) \cdot (s_i)_{x_i} = (s_i)_{x_i}$.
+
+Now we NTS this is actually, well, a homomorphism of $R$-algebras.
+\begin{enumerate}
+  \item \textbf{Addition:}
+        \begin{align*}
+          h\left(\sum_{[\psi]} r_i x^\psi+\sum_{[\psi]} s_i x^\psi\right)
+           & = h\left(\sum_{[\psi]} (r_i+s_i) x^\psi\right)                       \\
+           & =\sum_{[\psi]} \phi(r_i+s_i) \prod_{i=1}^{|\psi|} h(\psi(i))         \\
+           & =\sum_{[\psi]} (\phi(r_i)+\phi(s_i)) \prod_{i=1}^{|\psi|} h(\psi(i)) \\
+           & = \sum_{[\psi]} \phi(r_i) \prod_{i=1}^{|\psi|} h(\psi(i))
+          + \sum_{[\psi]} \phi(s_i) \prod_{i=1}^{|\psi|} h(\psi(i))               \\
+           & = h\left(\sum_{[\psi]} r_i x^\psi\right)
+          +h\left(\sum_{[\psi]} s_i x^\psi\right)
+        \end{align*}
+
+  \item \textbf{Multiplication:}
+        \begin{align*}
+          h\left(\sum_{[\psi]} r_i x^\psi \cdot \sum_{[\psi]} s_i x^\psi\right)
+           & = h\left(\sum_{[\psi_1]} \sum_{[\psi_2]} r_i s_i x^{\psi_1 \sqcup \psi_2}\right)                                                    \\
+           & = \sum_{[\psi_1]} \sum_{[\psi_2]} \phi(r_i s_i) h\left(x^{\psi_1 \sqcup \psi_2}\right)                                              \\
+           & = \sum_{[\psi_1]} \sum_{[\psi_2]} \phi(r_i)\phi(s_i) \prod_{i=1}^{|\psi_1|+|\psi_2|} h((\psi_1 \sqcup \psi_2)(i))                   \\
+           & = \sum_{[\psi_1]} \sum_{[\psi_2]} \phi(r_i)\phi(s_i) \prod_{i=1}^{|\psi_1|} h(\psi_1(i)) \prod_{i=1}^{|\psi_2|} h(\psi_2(i))        \\
+           & = \sum_{[\psi_1]} \phi(r_i) \prod_{i=1}^{|\psi_1|} h(\psi_1(i)) \cdot \sum_{[\psi_2]} \phi(r_i) \prod_{i=1}^{|\psi_2|} h(\psi_2(i)) \\
+           & = h\left(\sum_{[\psi]} r_i x^\psi\right) \cdot h\left(\sum_{[\psi]} s_i x^\psi\right)
+        \end{align*}
+
+  \item \textbf{One:} \\
+        Since $\phi$ itself is a homomorphism, $h(1)=\phi(1)=1$.
+
+  \item \textbf{Preservation:} \\
+        If we take any $r \in R$, we indeed have $h(r)=\phi(r)$
+        since $r$ doesn't have any coefficients.
+\end{enumerate}
+
+\section{Problem 3}
+
+Let $s_1, s_2 \in S$.
+Since $f$ is surjective, $\exists t_1, t_2 \in T: f(t_1)=s_1, f(t_2)=s_2$.
+
+Then,
+\begin{align*}
+  s_1s_2
+   & = h(t_1)h(t_2)        \\
+   & = h(t_1 \cdot t_2)    \\
+   & = h(t_2 \cdot t_1)    \\
+   & = h(t_2) \cdot h(t_1) \\
+   & = s_2s_1\quad\square
+\end{align*}
+
+\section{Problem 4}
+
+We at least need $2$ matrices to generate a sort of spanning set with multiplication.
+
+Let's have our matrices be
+\begin{align*}
+  A=\begin{bmatrix}
+      0 & 1 \\
+      1 & 0
+    \end{bmatrix} &  &
+  B=\begin{bmatrix}
+      1 & 0 \\
+      0 & 0
+    \end{bmatrix}
+\end{align*}
+Then, we can multiply them to get these two matrices:
+\begin{align*}
+  AB=\begin{bmatrix}
+       0 & 0 \\
+       1 & 0
+     \end{bmatrix} &  &
+  ABA=\begin{bmatrix}
+        0 & 0 \\
+        0 & 1
+      \end{bmatrix}
+\end{align*}
+and all four of these combined can form a basis for all 2 by 2 matrices.
+
+To show that this is the minimum, BWOC say we could generate all 2 by 2 matrices
+by just raising a single matrix $A$ to various powers.
+In that case, we could express any matrix as $\sum_{i=0}^{n} \lambda_i A^i$.
+
+Taking two matrices $M_1$ and $M_2$ written in this manner, we have
+\begin{align*}
+  M_1M_2
+   & = \sum_{i=0}^{n} \lambda_i A^i \cdot \sum_{i=0}^{n} \lambda'_i A^i \\
+   & = \sum_{i=0}^{2n} \sum_{j=0}^{i} \lambda_j \lambda'_{i-j} A^i      \\
+   & = \sum_{i=0}^{2n} \sum_{j=0}^{i} \lambda'_j \lambda_{i-j} A^i      \\
+   & = \sum_{i=0}^{n} \lambda'_i A^i \cdot \sum_{i=0}^{n} \lambda_i A^i \\
+   & = M_2M_1
+\end{align*}
+which would then mean that all matrices commute with each other, a contradiction.
+
+\section{Problem 5}
+
+one must imagine sisyphus happpy
+
+\subsection{Addition Commutes}
+
+We have this by commutativity in each of the $R_i$s:
+\[(r_i)_{i \in I}+(r'_i)_{i \in I}=(r_i+r'_i)_{i \in I}=(r'_i+r_i)_{i \in I}=(r'_i)_{i \in I}+(r_i)_{i \in I}\]
+
+\subsection{Addition Associates}
+
+By associativity on the individual rings,
+\begin{align*}
+  (r_i)_{i \in I}+((s_i)_{i \in I}+(t_i)_{i \in I})
+   & = (r_i+(s_i+t_i))_{i \in I}                         \\
+   & = ((r_i+s_i)+t_i)_{i \in I}                         \\
+   & = ((r_i)_{i \in I}+(s_i)_{i \in I})+(t_i)_{i \in I}
+\end{align*}
+The proof that multiplication is associative goes basically the exact same way,
+save for using $\cdot$ instead of $+$.
+
+\subsection{Addition is a Bijection}
+
+Fix an $(r_i)_{i \in I}$ and consider addition with it as a function.
+
+To prove injectivity, take $(s_i)_{i \in I}$ and $(t_i)_{i \in I}$ s.t. $(r_i)_{i \in I}+(s_i)_{i \in I}=(r_i)_{i \in I}+(t_i)_{i \in I}$.
+Then, since addition within each individual ring makes a bijection,
+\[(r_i+s_i)_{i \in I}=(r_i+t_i)_{i \in I}
+  \implies (s_i)_{i \in I}=(t_i)_{i \in I}\]
+
+For surjectivity, fix a $(s_i)_{i \in I}$ that we want to hit.
+Then,
+\begin{align*}
+  (r_i)_{i \in I}+(s_i-r_i)_{i \in I}
+   & = (r_i+s_i-r_i)_{i \in I} \\
+   & = (s_i)_{i \in I}
+\end{align*}
+
+\subsection{Distributivity}
+
+By distributivity in each of the $R_i$s, left distributivity follows:
+\begin{align*}
+  (r_i)_{i \in I} \cdot ((s_i)_{i \in I}+(t_i)_{i \in I})
+   & = (r_i \cdot (s_i+t_i))_{i \in I}                                         \\
+   & = (r_i \cdot s_i+r_i \cdot t_i)_{i \in I}                                 \\
+   & = (r_i \cdot s_i)_{i \in I}+(r_i \cdot t_i)_{i \in I}                     \\
+   & = (r_i)_{i \in I}\cdot(s_i)_{i \in I}+(r_i)_{i \in I}\cdot(t_i)_{i \in I}
+\end{align*}
+and so does right distributivity:
+\begin{align*}
+  ((r_i)_{i \in I}+(s_i)_{i \in I})\cdot(t_i)_{i \in I}
+   & = ((r_i+s_i)\cdot t_i)_{i \in I}                                          \\
+   & = (r_i\cdot t_i+s_i\cdot t_i)_{i \in I}                                   \\
+   & = (r_i\cdot t_i)_{i \in I}+(s_i\cdot t_i)_{i \in I}                       \\
+   & = (r_i)_{i \in I}\cdot(t_i)_{i \in I}+(s_i)_{i \in I}\cdot(t_i)_{i \in I}
+\end{align*}
+
+\subsection{Identities}
+
+Our zero is $(0_i)_{i \in I}$, where $0_i$ is the additive identity in $R_i$:
+\begin{align*}
+  (r_i)_{i \in I}+(0_i)_{i \in I}
+   & = (r_i+0_i)_{i \in I} \\
+   & = (r_i)_{i \in I}
+\end{align*}
+Similarly, our $1$ is $(1_i)_{i \in I}$, where $1_i$ is the additive identity in $R_i$:
+\begin{align*}
+  (r_i)_{i \in I} \cdot (1_i)_{i \in I}
+   & = (r_i \cdot 1_i)_{i \in I} \\
+   & = (r_i)_{i \in I}
+\end{align*}
+
+\subsection{Projection is a Homomorphism}
+
+Fix a $j \in I$.
+
+First off, $\pr_j((1_i)_{i \in I})=1_j$, so one still maps to one.
+
+For addition,
+\begin{align*}
+  \pr_j((r_i)_{i \in I}+(s_i)_{i \in I})
+   & =\pr_j((r_i+s_i)_{i \in I})                     \\
+   & = r_j+s_j                                       \\
+   & = \pr_j((r_i)_{i \in I})+\pr_j((s_i)_{i \in I})
+\end{align*}
+and for multiplication,
+\begin{align*}
+  \pr_j((r_i)_{i \in I} \cdot (s_i)_{i \in I})
+   & = \pr_j((r_i \cdot s_i)_{i \in I})                    \\
+   & = r_j \cdot s_j                                       \\
+   & = \pr_j((r_i)_{i \in I}) \cdot \pr_j((s_i)_{i \in I})
+\end{align*}
+
+\subsection{Commutativity Conditions}
+
+If all $R_i$s are commutative,
+\begin{align*}
+  (r_i)_{i \in I} \cdot (s_i)_{i \in I}
+   & = (r_i \cdot s_i)_{i \in I}             \\
+   & = (s_i \cdot r_i)_{i \in I}             \\
+   & = (s_i)_{i \in I} \cdot (r_i)_{i \in I}
+\end{align*}
+
+OTOH, if they weren't, $\exists j \in I$ and $r, s \in R_j$ s.t. $r \cdot s \ne s \cdot r$.
+
+Then we can let $(r_i)_{i \in I}$ be any $I$-tuple s.t. $r_j=r$ and $(s_i)_{i \in I}$ be defined similarly.
+At index $j$, $(r_i)_{i \in I} \cdot (s_i)_{i \in I}$ is $rs$, while
+$(s_i)_{i \in I} \cdot (r_i)_{i \in I}$ is $sr$.
+This makes the two products different and $\prod_{i \in I} R_i$ not commutative.
+
+\section{Problem 6}
+
+Our isomorphism $h$ should be defined by $(r_x)_{x \in X} \to f(x)=r_x$.
+
+First let me show that this is a homomorphism though:
+\begin{enumerate}
+  \item For $(1)_{x \in X}$, $f(x)=1$ for all $x$, which makes it the one of $\Fun_R(X)$.
+
+  \item $(r_x)_{x \in X}+(r'_x)_{x \in X}$ maps to $f(x)=r_x+r'_x$.
+        The two elements individually map to $f(x)=r_x$ and $f(x)=r'_x$,
+        two functions which add up pointwise to our original $f(x)$.
+
+  \item $(r_x)_{x \in X} \cdot (r'_x)_{x \in X}$ maps to $f(x)=r_x \cdot r'_x$.
+        The two elements individually map to $f(x)=r_x$ and $f(x)=r'_x$,
+        two functions which when multiplied pointwise become our original $f(x)$.
+
+  \item The homomorphism from $R$ to $\Fun_X(R)$ takes $r$ to $f(x)=r$ for all $x$.
+        When taken to $\prod_{x \in X} R$ first, it becomes $(r)_{x \in X}$.
+        After applying our homomorphism, it once again becomes $f(x)=r$.
+\end{enumerate}
+
+To upgrade it to an isomorphism, we NTS that it's a bijection.
+
+For injectivity, notice that if $(r_x)_{x \in X} \ne (r'_x)_{x \in X}$,
+$\exists i \in X: r_i \ne r'_i$.
+Then $h((r_x)_{x \in X})(i)=r_i$ and $h((r'_x)_{x \in X})(i)=r'_i$,
+so $h((r_x)_{x \in X}) \ne h((r'_x)_{x \in X})$.
+
+For surjectivity, fix an $f: X \to R$.
+If we define $r_x=f(x)$ for each $x$, then $h((r_x)_{x \in X})(x)=f(x)$ and $h((r_x)_{x \in X})=f$.
+
+\end{document}
