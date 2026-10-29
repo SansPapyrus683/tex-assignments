@@ -1,0 +1,333 @@
+\documentclass[12pt]{article}
+
+\input{../kz}
+\usepackage{nicematrix}
+
+\rhead{Math 110A}
+
+\makeatletter
+\def\@seccntformat#1{%
+  \expandafter\ifx\csname c@#1\endcsname\c@section\else
+  \csname the#1\endcsname\quad
+  \fi}
+\makeatother
+
+\newcommand{\lra}{\xLeftrightarrow}
+\newcommand{\ra}{\xRightarrow}
+\DeclareMathOperator{\pr}{pr}
+\DeclareMathOperator{\Mat}{Mat}
+
+\begin{document}
+
+\section{Problem 1}
+
+Fix any basis on $S$.
+I propose that our $h$ should map any $s$ to the matrix associated with
+the linear transformation $T_s(t)=s \cdot t$.
+We can multiply two elements in $S$ since it's also a $\C$-algebra.
+
+(that i can do this is just 115a stuff,
+like take each of the basis vectors and see how they change to get the matrix)
+
+Let's use $v: S \to \C^n$ to represent the unique linear combination
+on $S$'s basis that adds up to its input.
+By construction, $h(s)v(s')=v(s \cdot s')$.
+
+
+Now we prove this is a homomorphism of algebras:
+\begin{enumerate}
+  \item \textbf{Addition:}
+        \begin{align*}
+          h(s_1+s_2)v(s)
+           & = v((s_1+s_2)s)         \\
+           & = v(s_1s+s_2s)          \\
+           & = v(s_1s)+v(s_2s)       \\
+           & = h(s_1)v(s)+h(s_2)v(s)
+        \end{align*}
+        Since this is true for all $s$, we could set it equal to each of the basis
+        vectors to see that, say, the first column should be equal to the sum of
+        the other two first columns, which is indeed the case.
+
+  \item \textbf{Multiplication:}
+        \begin{align*}
+          h(s_1 \cdot s_2)v(s)
+           & = v(s_1s_2s)    \\
+           & = h(s_1)v(s_2s) \\
+           & = h(s_1)h(s_2)s
+        \end{align*}
+
+  \item \textbf{One:}
+        \[h(1)v(s)=v(s) \implies h(1)=I\]
+
+  \item \textbf{Preservation:}
+        \[h(c)v(s)=v(cs) \implies h(c)=cI\]
+\end{enumerate}
+
+With that shown, now we need that it's injective.
+Let $s_1, s_2 \in S$ be s.t. $h(s_1)=h(s_2)$ and by extension $T_{s_1}=T_{s_2}$.
+Given this $T_{s_1}(1)=T_{s_2}(1) \implies s_1=s_2$. $\square$
+
+\pagebreak
+
+\section{Problem 2}
+
+Consider the following $\C$-subalgebras:
+\begin{enumerate}
+  \item \[
+          \left(
+          \left\{
+          \begin{bmatrix}
+            c & 0 \\
+            0 & c
+          \end{bmatrix}
+          \mathrel{\Big|} c \in \mathbb{C}
+          \right\},
+          \quad
+          c \mapsto
+          \begin{bmatrix}
+            c & 0 \\
+            0 & c
+          \end{bmatrix}
+          \right)
+        \]
+
+  \item \[
+          \left(
+          \left\{
+          \begin{bmatrix}
+            a & b \\
+            c & d
+          \end{bmatrix}
+          \mathrel{\Big|} a,b,c,d \in \mathbb{C}
+          \right\},
+          \quad
+          c \mapsto
+          \begin{bmatrix}
+            c & 0 \\
+            0 & c
+          \end{bmatrix}
+          \right)
+        \]
+
+  \item \[
+          \left(
+          \left\{
+          \begin{bmatrix}
+            a & 0 \\
+            0 & b
+          \end{bmatrix}
+          \mathrel{\Big|} a,b \in \mathbb{C}
+          \right\},
+          \quad
+          c \mapsto
+          \begin{bmatrix}
+            c & 0 \\
+            0 & c
+          \end{bmatrix}
+          \right)
+        \]
+
+  \item \[
+          \left(
+          \left\{
+          \begin{bmatrix}
+            a & b \\
+            0 & a
+          \end{bmatrix}
+          \mathrel{\Big|} a,b \in \mathbb{C}
+          \right\},
+          \quad
+          c \mapsto
+          \begin{bmatrix}
+            c & 0 \\
+            0 & c
+          \end{bmatrix}
+          \right)
+        \]
+        Multiplication in this set is closed:
+        \[\begin{bmatrix}
+            a & b \\
+            0 & a
+          \end{bmatrix}\begin{bmatrix}
+            a' & b' \\
+            0  & a'
+          \end{bmatrix}
+          = \begin{bmatrix}
+            aa' & ab'+a'b \\
+            0   & aa'
+          \end{bmatrix}\]
+
+  \item \[
+          \left(
+          \left\{
+          \begin{bmatrix}
+            a & b \\
+            0 & c
+          \end{bmatrix}
+          \mathrel{\Big|} a,b,c \in \mathbb{C}
+          \right\},
+          \quad
+          c \mapsto
+          \begin{bmatrix}
+            c & 0 \\
+            0 & c
+          \end{bmatrix}
+          \right)
+        \]
+\end{enumerate}
+I only verified closedness for the fourth one because it implies the closedness
+of the fifth subalgebra and all the others are fairly obvious.
+
+All pairs of subalgebras besides 3 and 4 have different dimensions as vector spaces.
+Thus, it is impossible to create a bijection between the elements of these pairs
+that is still a linear transformation.
+
+The only case that remains is 3 and 4, since they both have dimension $2$.
+Take any homomorphism $h$.
+Let its images on the two spanning matrices be like so:
+\begin{align*}
+  h\left(\begin{bmatrix}1 & 0 \\ 0 & 0\end{bmatrix}\right)=\begin{bmatrix}x & y \\0 & x\end{bmatrix}
+   &  & h\left(\begin{bmatrix}0 & 0 \\ 0 & 1\end{bmatrix}\right)=\begin{bmatrix}x' & y' \\0 & x'\end{bmatrix}
+\end{align*}
+Since $h$ is a homomorphism,
+\[h\left(\begin{bmatrix}1 & 0 \\ 0 & 0\end{bmatrix}\right)
+  +h\left(\begin{bmatrix}0 & 0 \\ 0 & 1\end{bmatrix}\right)
+  =h(I_2)=I_2 \implies
+  x+x'=1,y+y'=0\]
+and we can write
+\[h\left(\begin{bmatrix}0 & 0 \\ 0 & 1\end{bmatrix}\right)=\begin{bmatrix}1-x & -y \\0 & 1-x\end{bmatrix}\]
+
+Now consider the multiplication of these two matrices:
+\begin{align*}
+             & h\left(\begin{bmatrix}1 & 0 \\ 0 & 0\end{bmatrix}\right)
+  \cdot h\left(\begin{bmatrix}0 & 0 \\ 0 & 1\end{bmatrix}\right) = h(\mathbf{0}) = \mathbf{0}                     \\
+  \implies{} & \begin{bmatrix}x & y \\0 & x\end{bmatrix}\begin{bmatrix}1-x & -y \\0 & 1-x\end{bmatrix}=\mathbf{0} \\
+  \implies{} & \begin{bmatrix}x(1-x) & y-2xy \\ 0 & x(1-x)\end{bmatrix} = \mathbf{0}                              \\
+  \implies{} & x \in \{0, 1\}, y=0
+\end{align*}
+Thus, for any matrix in the third subalgebra,
+\begin{align*}
+  h\left(\begin{bmatrix}a & 0 \\ 0 & b\end{bmatrix}\right)
+   & = ah\left(\begin{bmatrix}1 & 0 \\ 0 & 0\end{bmatrix}\right)
+  +bh\left(\begin{bmatrix}0 & 0 \\ 0 & 1\end{bmatrix}\right)     \\
+   & = a\begin{bmatrix}x & 0 \\0 & x\end{bmatrix}+b\begin{bmatrix}1-x & -y \\0 & 1-x\end{bmatrix} \\
+   &= \begin{bmatrix}ax+b(1-x) & 0 \\ 0 & ax+b(1-x)\end{bmatrix}
+\end{align*}
+As you can see, no matrix is mapped to another one with a nonzero top right element.
+Thus, no homomorphism from the third to the fourth subalgebra can simultaneously
+be a bijection.
+
+\pagebreak
+
+\section{Problem 3}
+
+Let $\phi_1$ and $\phi_2$ be the associated homomorphisms for $S_1$ and $S_2$ respectively.
+
+It suffices to show that for all $r \in R$ and $s \in S_1$ we have $f(s) \cdot \phi_2(r) \in f(S_1)$.
+
+Note that since $f$ is a homomorphism of algebras, $\phi_2(r)=f(\phi_1(r))$ and
+\[f(s) \cdot \phi_2(r)=f(s) \cdot f(\phi_1(r))=f(s \cdot \phi_1(r)) \in f(S_1)\quad\square\]
+
+\section{Problem 4}
+
+I'll first show that $T=\left\{\sum_{i \ge 0} r_i s^i\right\}$ is an $R$-subalgebra.
+
+To do this, we show that it's closed under addition:
+\[\sum_{i \ge 0} r_i s^i + \sum_{i \ge 0} r'_i s^i
+  = \sum_{i \ge 0} (r_i+r'_i) s^i\]
+multiplication:
+\[\sum_{i \ge 0} r_i s^i \cdot \sum_{i \ge 0} r'_i s^i
+  = \sum_{i \ge 0} \left(\sum_{j=0}^{i} r_i r'_{i-j}\right) \cdot s^i\]
+and scaling:
+\[r \cdot \sum_{i \ge 0} r_i s^i = \sum_{i \ge 0} (r \cdot r_i) \cdot s^i\]
+
+Now consider any other $R$-algebra $T'$ that contains $s$.
+It certainly must have at least $3$ elements: $0$, $1$, and $s$ itself.
+Since it's closed under scaling, $\phi(r) \cdot 1=\phi(r)$ must be in $T$
+for all $r$ as well.
+
+$T'$ is a subring, so we should be able to add and multiply these elements in any
+way and still stay in $T'$.
+"Any way" here includes the linear combination-style things that we were doing,
+so $\sum_{i \ge 0} r_i s^i \in T'$ and by extension $T \subseteq T'$. $\square$
+
+\pagebreak
+
+\section{Problem 5}
+
+Let $D_m$ for $m \ge 0$ be defined like so:
+\[(D_m)_{ij}=\begin{cases}
+    1 & j=i+m            \\
+    0 & \text{otherwise}
+  \end{cases}\]
+As one can see, $D_1=X$.
+
+To get the subspace generated by $X$, I'll first prove that $(D_1)^m=D_m$.
+We proceed by induction, and the base case for $k=1$ is near tautological.
+
+If we assume the truth of the statement for $m-1$, then for $m < n$
+\begin{align*}
+  \left((D_1)^m\right)_{ij}
+   & = \sum_{k=1}^{n} (D_1)^{m-1}_{ik} (D_1)_{kj}          \\
+   & = \sum_{k=1}^{n} (D_{m-1})_{ik} (D_1)_{kj}            \\
+   & = \sum_{k=1}^{n} \mathbf{1}[k=i+m-1]\mathbf{1}[j=k+1] \\
+   & = \mathbf{1}[j=i+m]
+\end{align*}
+which is exactly what we wanted.
+
+Notice that for $m \ge n$, $D_m=\mathbf{0}^{n \times n}$,
+so we don't need to consider any powers at or above $n$.
+Thus, the generated subspace can be expressed like so:
+\[S=\left\{\sum_{i=0}^{n-1} r_i D_{i+1}\right\}\]
+and any matrix in $S$ can be written like
+\[M = \begin{bNiceMatrix}[columns-width=auto]
+    r_0 & r_1 & r_2    & \cdots & r_{n-2} & r_{n-1} \\
+        & r_0 & r_1    & r_2    & \ddots  & r_{n-2} \\
+        &     & \ddots & \ddots & \ddots  & \vdots  \\
+        &     &        & r_0    & r_1     & r_2     \\
+        &     &        &        & r_0     & r_1     \\
+        &     &        &        &         & r_0
+  \end{bNiceMatrix}\]
+Since we have $n$ linearly independent vectors, the dimension of $S$ is $n$.
+
+\section{Problem 6}
+
+I'll just show that the only homomorphisms that go from $\Q^I \to \Q$ are
+the projection functions
+\[\pr_j((q_i)_{i \in I})=q_j\]
+To prove part A, we can set $I=\{1, 2\}$.
+
+For the sake of convenience, I'll let $e_i$ denote the $I$-tuple
+that has all of its entries set to $0$ except for the $i$th entry,
+which is set to $1$.
+
+Now consider any homomorphism $h: \Q^I \to \Q$.
+We must have $h((0)_{i \in I})=0$ and $h((1)_{i \in I})=1$.
+
+Notice that for any $e_i$
+\begin{align*}
+  e_i=e_i \cdot e_i
+   & \implies h(e_i)=h(e_i \cdot e_i) \\
+   & \implies h(e_i)=h(e_i)^2         \\
+   & \implies h(e_i) \in \{0, 1\}
+\end{align*}
+We also have
+\[h((1)_{i \in I})=\sum_{i \in I} h(e_i)=1\]
+These two conditions force there to be a unique $\hat{i} \in I$ s.t.
+\[h(e_i)=\begin{cases}
+    1 & i=\hat{i}        \\
+    0 & \text{otherwise}
+  \end{cases}\]
+If there weren't exactly one, then the summation equality above would break.
+
+Now we can break down any mapping like so:
+\begin{align*}
+  h((q_i)_{i \in I})
+   & = h\left(\sum_{i \in I} q_i \cdot e_i\right) \\
+   & = \sum_{i \in I} q_i h(e_i)                  \\
+   & = q_{\hat{i}} h(e_{\hat{i}})                 \\
+   & = q_{\hat{i}}
+\end{align*}
+so any homomorphism $h: \Q^I \to \Q$ must be equal to some $\pr_i$. $\square$
+
+\end{document}
