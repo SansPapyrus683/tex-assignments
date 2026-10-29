@@ -1,0 +1,142 @@
+\documentclass[12pt]{article}
+
+\input{../kz}
+\usepackage{fancyvrb}
+
+\rhead{Math 168}
+
+\DeclareMathOperator{\Fr}{Fr}
+\DeclareMathOperator{\Tr}{Tr}
+\newcommand{\lra}{\xLeftrightarrow}
+\newcommand{\ra}{\xRightarrow}
+
+\setlist[enumerate,1]{label=(\alph*)}
+
+\begin{document}
+
+\section{Newman 7.9}
+
+I ran this code:
+\begin{python}
+import networkx as nx
+
+edges = [
+    (0, 1), (1, 2), (0, 2), (3, 4), (4, 5),
+    (5, 6), (3, 6), (3, 5), (1, 3), (2, 6)
+]
+groups = [1, 1, 1, 2, 2, 2, 2]
+
+g = nx.from_edgelist(edges)
+
+n, m = len(g.nodes), len(g.edges)
+q = 0
+for i in range(n):
+    for j in range(n):
+        expected = g.degree[i] * g.degree[j] / (2 * m)
+        q += (groups[i] == groups[j]) * (g.has_edge(i, j) - expected)
+q /= 2 * m
+
+print(f"modularity: {q}")
+\end{python}
+and found that the modularity was \boxed{0.28}.
+
+\pagebreak
+
+\section{Newman 7.16}
+
+\subsection{Part 1}
+
+The $e_r$ values are just one half of the fraction of edges that are within group $r$:
+\begin{center}
+      \begin{tabular}{|cccc|}
+            \hline
+            Black & Hispanic & White & Other \\
+            \hline
+            0.129 & 0.0785   & 0.153 & 0.008 \\
+            \hline
+      \end{tabular}
+\end{center}
+Assuming that this survey assumes no polygamy, all nodes have degree $1$ and $m=2n$.
+Therefore, $a_r$ is a quarter of the fraction of nodes that are within group $r$.
+Their values are as follows:
+\begin{center}
+      \begin{tabular}{|cccc|}
+            \hline
+            Black  & Hispanic & White & Other  \\
+            \hline
+            0.0765 & 0.0564   & 0.1   & 0.0171 \\
+            \hline
+      \end{tabular}
+\end{center}
+Combining these two values gives us a modularity of about \boxed{0.35}.
+
+\subsection{Part 2}
+
+We use a similar method to get these values for $e_r$:
+\begin{center}
+      \begin{tabular}{|ccc|}
+            \hline
+            Democrat & Independent & Republican \\
+            \hline
+            0.125    & 0.075       & 0.15       \\
+            \hline
+      \end{tabular}
+\end{center}
+and these values for $a_r$:
+\begin{center}
+      \begin{tabular}{|ccc|}
+            \hline
+            Democrat & Independent & Republican \\
+            \hline
+            0.08625  & 0.0625      & 0.09875    \\
+            \hline
+      \end{tabular}
+\end{center}
+which result in a modularity of \boxed{0.329}.
+
+\subsection{Part 3}
+
+Given that the modularity of both these approximate networks is positive,
+people are certainly more likely to marry those of similar race and political
+alignment.
+
+\section{Newman 10.1++}
+
+\begin{enumerate}
+      \item The diameter of a clique is $1$.
+            Every node is directly connected to every other node,
+            so the longest path between any two nodes is still just one edge long.
+
+      \item The longest path would be \boxed{2L} edges long, from the bottom left
+            to the top right corner.
+            If we extend this to $d$ dimensions, the longest path length becomes \boxed{dL}.
+            Now, a lattice in $d$ dimensions with side length $L$ has $(L+1)^d$ nodes,
+            so setting $n$ equal to that gives \boxed{dL=d\left(\sqrt[d]{n}-1\right)}.
+
+      \item Only the first kind of network displays the small world effect,
+            since the overall growth of the second one dominates logarithmic growth.
+\end{enumerate}
+
+\section{Stanford Networks}
+
+I chose two random networks out of the first category.
+\begin{enumerate}[label=\arabic*.]
+      \item \textbf{LiveJournal social network}
+            \begin{enumerate}
+                  \item The largest WCC has $4843953$ nodes, which is around 99.9\% of all nodes in the network.
+                        If that isn't a giant component, IDK what is.
+                  \item The diameter is just $16$, which is actually approximately
+                        equal to $\log n \approx 15.39$ in this network.
+                        Yeah, I'd say it exhibits a small-world effect.
+            \end{enumerate}
+      \item \textbf{High-energy physics citation network}
+            \begin{enumerate}
+                  \item The largest WCC is $34401$ nodes, which is around 99.6\% of $n$ in this case.
+                        Still giant, though.
+                  \item The diameter of this network is $12$.
+                        I'd say that still qualifies for the small-world effect,
+                        though it may depend on one's constant factor.
+            \end{enumerate}
+\end{enumerate}
+
+\end{document}
