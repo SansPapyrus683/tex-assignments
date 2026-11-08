@@ -1,0 +1,296 @@
+\documentclass[12pt]{article}
+
+\input{../kz}
+\usepackage{nicematrix}
+
+\rhead{Math 110A}
+
+\makeatletter
+\def\@seccntformat#1{%
+  \expandafter\ifx\csname c@#1\endcsname\c@section\else
+  \csname the#1\endcsname\quad
+  \fi}
+\makeatother
+
+\newcommand{\lra}{\xLeftrightarrow}
+\newcommand{\ra}{\xRightarrow}
+\DeclareMathOperator{\pr}{pr}
+\DeclareMathOperator{\Mat}{Mat}
+
+\begin{document}
+
+\section{Problem 1}\label{sec:p1}
+
+\subsection{Part A}\label{sec:p1a}
+
+If we have an $\underline{f}$, then $\underline{f}(\pi(x))=f(x)$ for all $x \in X$.
+
+Consider two functions $f_1$ and $f_2$ that both satisfy this property.
+For any $x \in X$, we have that $f_1(\pi(x))=f(x)=f_2(\pi(x))$.
+Since $\pi$ is surjective, $f_1(s)=f_2(s)$ for all $s \in X/R$.
+
+\subsection{Part B}\label{sec:p1b}
+
+I'll prove the backward direction and its converse.
+
+Let $f$ be constant on $R$-equivalence classes.
+Then, we can let $\underline{f}(\pi(x))=f(x)$ for all $x$.
+This map is well-defined due to that $\pi$ is surjective and the following chain of logic:
+\[\pi(x)=\pi(y) \implies f(x)=f(y) \implies \underline{f}(\pi(x))=\underline{f}(\pi(y))\]
+Also by construction, $\underline{f}$ computes through the diagram given in the problem.
+
+For the converse, suppose there existed $x_1, x_2 \in X: \pi(x_1)=\pi(x_2) \land f(x_1) \ne f(x_2)$.
+Let $p=\pi(x_1)=\pi(x_2)$ for convenience.
+
+Then a hypothetical $\underline{f}$ would need to satisfy
+$\underline{f}(p)=f(x_1)$ and $\underline{f}(p)=f(x_2)$ at the same time,
+which is an impossibility since $f(x_1) \ne f(x_2)$. $\square$
+
+\pagebreak
+
+\section{Problem 2}\label{sec:p2}
+
+\subsection{Part A}
+
+Following the hint, we take $Y=Q$ and $\phi: Q \to Q$ defined by $\phi(q)=q$.
+With this configuration, we have $q^*(\phi)=\phi \circ q=q$.
+
+By the premise, $q^*(\phi)$ must be constant on $R$-equivalence classes,
+so $q$ must be as well.
+
+\subsection{Part B}
+
+The existence and uniqueness of $\beta$ is implied by \ref{sec:p1}.
+It is $\beta(\pi(x))=q(x)$.
+
+For $\chi$ to exist, we need $q$ to be a surjection.
+
+We prove that it is by showing the contrapositive.
+If $\exists w \in Q: q(x) \ne w\ \forall x \in X$, then we can let $Y=Q$
+and consider the image of the following two maps:
+\begin{gather*}
+  \phi_1(\tilde{q})=\tilde{q} \\
+  \phi_2(\tilde{q})=\begin{cases}
+    q(x) & \tilde{q}=w\text{ ($x$ is any $x \in X$)} \\
+    q    & \text{otherwise}
+  \end{cases}
+\end{gather*}
+$\phi_1 \ne \phi_2$ since their behavior differs on $w$.
+
+Then, $\phi_1 \circ q=q$, and $\phi_2 \circ q=q$ as well since no $x$
+will ever hit the first case in $\phi_2$.
+Thus, $q$ not being a surjection violates the preconditions of its existence.
+
+We also need that $\pi(x_1) \ne \pi(x_2) \implies q(x_1) \ne q(x_2)$.
+
+BWOC let $\pi(x_1) \ne \pi(x_2)$ and $q(x_1)=q(x_2)$.
+Let $q(x_1)=w$ for convenience.
+Now let $Y=W \cup \{w'\}$, where $w'$ is just some dummy element that I made up.
+
+By the premise, $\exists \phi: Q \to Y$ s.t.
+\[(\phi \circ q)(x)=\begin{cases}
+    w    & \pi(x)=\pi(x_1)  \\
+    w'   & \pi(x)=\pi(x_2)  \\
+    q(x) & \text{otherwise}
+  \end{cases}\]
+By construction, this target function is constant on equivalence classes.
+However, since $q(x_1)=q(x_2)$, we have $(\phi \circ q)(x_1)=(\phi \circ q)(x_2)$
+no matter which $\phi$ we take.
+Thus, no such $\phi$ that satisfies our target can exist and we have a contradiction.
+
+With these two preconditions proven, we can finally define $\chi(q(x))=\pi(x)$.
+As $q$ is a surjection, this indeed defines a value for all elements of $Q$.
+There's also no conflicts in any definitions, as $q(x_1)=q(x_2) \implies \pi(x_1)=\pi(x_2)$.
+
+For uniqueness, note that for any $\chi_1$ and $\chi_2$ satisfying the given properties,
+$\chi_1(q(x))$ and $\chi_2(q(x))$ both have the equal $\pi(x)$.
+As $q$ is surjective, this equality must hold for all $w \in Q$ and therefore $\chi_1=\chi_2$.
+
+\subsection{Part C}
+
+It STP that $\text{id}=\chi \circ \beta=\beta \circ \chi$.
+
+We have
+\begin{align*}
+  (\chi \circ \beta)(\pi(x))
+   & = \chi(\beta(\pi(x))) \\
+   & = \chi(q(x))          \\
+   & = \pi(x)
+\end{align*}
+and
+\begin{align*}
+  (\beta \circ \chi)(q(x))
+   & = \beta(\chi(q(x))) \\
+   & = \beta(\pi(x))     \\
+   & = q(x)\quad\square
+\end{align*}
+
+\pagebreak
+
+\section{Problem 3}
+
+\subsection{Part A}
+
+The proof of this is the same as that in \ref{sec:p1a}.
+
+\subsection{Part B}
+
+The proof is almost the same as \ref{sec:p1b}, but it's different enough to warrant a writeup.
+
+I'll prove the backward direction and its converse again.
+
+If $f$ annihilates $S$, then $s \in S \implies f(s)=0$.
+
+Let us define $\underline{f}(\pi(v))=f(v)$.
+This map is well-defined since $\pi$ is a surjection onto $V/S$ and
+\begin{align*}
+  \pi(v_1)=\pi(v_2)
+   & \implies v_1-v_2 \in S   \\
+   & \implies f(v_1-v_2)=0    \\
+   & \implies f(v_1)-f(v_2)=0 \\
+   & \implies f(v_1)=f(v_2)
+\end{align*}
+By construction, this satisfies the commutativity diagram as well.
+
+For the backwards direction, BWOC say $\exists s \in S: f(s) \ne 0$.
+
+There's two cases after this.
+If $S=V$, then $V/S$ would only have one element, the zero vector.
+Since $\underline{f}$ is a linear map, $\underline{f}(\pi(v))=0$ for all $v$.
+However, we also need $\underline{f}(\pi(s))=f(s)$, which isn't equal to $0$.
+
+OTOH, if $S \subsetneq V$, then $\exists v \in V \setminus S$.
+By definition, $\pi(v)=\pi(v + s)$, so $\underline{f}(\pi(v))=\underline{f}(\pi(v+s))$.
+However, at the same time, $f(v+s)=f(v)+f(s) \ne f(v)$, since the two
+being equal would imply $f(s)=0$.
+This forces $\underline{f}(\pi(v)) \ne \underline{f}(\pi(v+s))$,
+which still results in the desired contradiction. $\square$
+
+\pagebreak
+
+\section{Problem 4}
+
+DEAR GOD WHY IS IT ALL FUNCTIONS
+
+But yeah, we know there's a unique linear $\beta: V/S \to Q$ that commutes with the diagram
+defined by $\beta(\pi(v))=f(v)$.
+
+I'll prove the existence of an inverse $\chi: Q \to V/S$.
+
+\subsection{\texorpdfstring{$q$}{q} is Surjective}
+
+First we show that like in \ref{sec:p2}, $q$ must be surjective.
+BWOC say $\exists w \notin q(V)$.
+This then means that $w$ is linearly independent of any basis of $q(V)$.
+
+Let $(v_i)_{i \in I}$ be a basis for $q(V)$, and $(w_j)_{j \in J}$
+be whatever elements are needed to extend the basis to $Q$.
+By 115 probably, we can force $w_1=w$.
+
+Now consider these linear transformations from $Q$ to itself:
+\begin{gather*}
+  \phi_1(w_i)=\begin{cases}
+    0   & i=1              \\
+    w_i & \text{otherwise}
+  \end{cases} \\
+  \phi_1(v_i)=v_i \\
+  \phi_2(w)=w
+\end{gather*}
+$\phi_1$ is a well-defined linear transformation since I've defined its actions on a basis of $Q$,
+and $\phi_2$ is just the identity map.
+These two linear maps are clearly distinct,
+as they behave differently on $w_1=w$.
+
+Now let us consider what happens when we compose them with $q$:
+\begin{align*}
+  (\phi_1 \circ q)(v)
+  &= \phi_1\left(\sum_{j \in J} \lambda_j v_j\right) \\
+  &= \sum_{j \in J} \lambda_j v_j \\
+  &= \phi_2\left(\sum_{j \in J} \lambda_j v_j\right) \\
+  &= (\phi_2 \circ q)(v)
+\end{align*}
+This means that $q^*(\phi_1)=q^*(\phi_2)$, a contradiction.
+
+\pagebreak
+
+\subsection{Injective Over \texorpdfstring{$V/S$}{V/S}}
+
+We also need that $\pi(v_1) \ne \pi(v_2) \implies q(v_1) \ne q(v_2)$.
+
+Again, BWOC say $\exists v_1, v_2: v_1 - v_2 \notin S \land q(v_1)=q(v_2)$.
+This means that $v_1 - v_2 \in \ker(q)$ while at the same time
+being linearly independent of any basis of $S$.
+Let's call this rogue vector $v$.
+
+Now let us construct a basis for $V$ defined by the union of $(s_i)_{i \in I}$,
+a basis for $S$, and $(v_j)_{j \in J}$ with $v_1=v$, which contains
+whatever vectors are left to extend $(s_i)_{i \in I}$ to a basis for $V$.
+
+By our premise, if we let $W=\text{span}((v_j)_{j \in J})$,
+there must be some linear map $\phi: Q \to W$ s.t.
+\begin{gather*}
+  (\phi \circ q)(s_i)=0 \\
+  (\phi \circ q)(v_i)=v_i
+\end{gather*}
+By definition, this linear map annihilates $S$ since we send all of its
+basis vectors to $0$.
+
+However, no matter what we set $\phi$ to, we'll always have $\phi(q(v_1))=\phi(0)=0$,
+thus making it impossible for $\phi(q(v_1))=v_1$.
+Thus, $\pi(v_1) \ne \pi(v_2) \implies q(v_1) \ne q(v_2)$.
+
+\subsection{Putting it Together}
+
+Now we can finally define $\chi(q(v))=\pi(v)$.
+By similar reasoning as in \ref{sec:p2}, this mapping indeed defines
+a value for every $q \in Q$ and ensures that no input gets forced
+to two different outputs.
+
+We can also use basically the same chain of equalities previously
+used to show that $\chi \circ \beta=\beta \circ \chi$, thus making
+$V/S$ isomorphic to $Q$. $\square$
+
+\pagebreak
+
+\section{Problem 5}
+
+BWOC let there be a countable basis for $\C^\infty$.
+
+Since only finite linear combinations are allowed, let us consider
+all finite subsets of this countable basis along with their spans.
+Since we force subsets to be finite, there's only a countable amount of them:
+$S_1, S_2, S_3, \cdots$.
+
+Consider any subspace $S_i$ with dimension $k < \infty$
+along with the following linear transformation $T_{s,l}(x_1, x_2, \cdots)$ with $s,l \in \N$:
+\[T_{s,l}(x_1, x_2, x_3, \cdots) = \sum_{i=s}^{s+l} x_i\]
+In actual English, $T_{s,l}$ is the projection from $\C^\infty$ onto the $s$th through $s+l$th coordinates.
+
+The codomain of $T_{s,k}$ has dimension $k+1$, so there must exist some element
+in there that isn't hit by the image of $S_i$ under $T_{s,k}$:
+$\exists b \in T_{s,k}\left(C^\infty\right) \setminus T_{s,k}(S_i)$.
+
+Then, by construction, for any $v \in C^\infty$ s.t. $v_{s-1+i}=b_i$, $v \notin S_i$.
+
+Now we can diagonalize by using the $b$ for every subspace $S_i$ under some partitioned coordinates.
+To do this, define the following things:
+\begin{gather*}
+  k_i=\dim S_i \\
+  s_i=1+\sum_{j=1}^{i-1} (k_j+1) \\
+  T'_i=T_{s_i,k_i}
+\end{gather*}
+These linear projections never use the same coordinate twice, and each subspace's
+associated $T'_i$ has a codomain of dimension $k+1$.
+As we proved earlier, each $T'_i$ must have some associated $b_i$ s.t.
+for any $v \in C^\infty$ s.t. $v_{s_i-1+j}=(b_j)_i$, $v \notin S_i$.
+
+Thus, the vector
+\[\begin{bmatrix}
+  b_1 \\
+  b_2 \\
+  b_3 \\
+  \vdots
+\end{bmatrix}\]
+is not in any $S_i$, which contradicts that our basis was a spanning set. $\square$
+
+\end{document}
