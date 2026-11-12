@@ -1,0 +1,103 @@
+\documentclass[12pt]{article}
+
+\input{../kz}
+\usepackage{fancyvrb}
+
+\rhead{Math 168}
+
+\DeclareMathOperator{\Fr}{Fr}
+\DeclareMathOperator{\Tr}{Tr}
+\newcommand{\lra}{\xLeftrightarrow}
+\newcommand{\ra}{\xRightarrow}
+
+\setlist[enumerate,1]{label=(\alph*)}
+
+\begin{document}
+
+\section{Newman 12.3}
+
+\begin{enumerate}
+      \item $\braket{x}_{edge}$ just seems to be the average value at all edge ends.
+            Since we know the degree of each node, the total value of all edge
+            ends combined is $\sum_{i} k_i x_i$, and since there's $\frac{1}{2m}$ edge ends,
+            $\braket{x}_{edge}=\frac{1}{2m} \sum_{i} k_i x_i$.
+
+      \item Consider any edge emerging out of node $i$.
+            As derived in class, the chance this edge hits a specific node that has degree $k$ is around $\frac{k}{2m}$.
+            If we sum over all possible nodes and average their values, we have
+            the average value of a node's neighbor as
+            \[\sum_{i=1}^{n} x_i \cdot \frac{k_i}{2m} = \braket{x}_{edge}\]
+            If we subtract $\braket{x}=\frac{1}{n} \sum_{i} x_i$, we have
+            \begin{align*}
+                  \braket{x}_{edge} - \braket{x}
+                   & = \frac{1}{2m} \sum_{i=1}^{n} x_i k_i - \frac{1}{n} \sum_{i=1}^{n} x_i                       \\
+                   & = \frac{1}{n\braket{k}} \sum_{i=1}^{n} x_i k_i - \frac{1}{n} \sum_{i=1}^{n} x_i              \\
+                   & = \frac{\frac{1}{n}\sum_{i=1}^{n} x_i k_i - \sum_{i=1}^{n} x_i \cdot \braket{k}}{\braket{k}} \\
+                   & = \frac{\braket{kx} - \braket{x}\braket{k}}{\braket{k}}                                      \\
+                   & = \frac{\text{cov}(k, x)}{k}\quad\square
+            \end{align*}
+
+      \item Since all edges are constructed independently, just because
+            I'm friends with a neighbor doesn't make them any more likely to
+            have more friends than I do.
+\end{enumerate}
+
+\pagebreak
+
+\section{ER Graphs' Local Trees}
+
+Assume that $\braket{k}=p(n-1)$ is constant as $n \to \infty$.
+
+I guess we should consider all nodes that are at most $d$ away from a fixed node $v$.
+There's approximately $\braket{k}^i$ nodes that are distance exactly $i$ from $v$,
+so in total our local connected component should have around
+\[s=\sum_{i=0}^{d} \braket{k}^i = \frac{\braket{k}^{d+1}-1}{\braket{k}-1}\]
+nodes in total.
+
+We're looking for a local tree, so it should have exactly $s-1$ edges.
+Since there's $\binom{s}{2}$ edge candidates, the chance of no other
+edges appearing besides the ones that we took to get to all the nodes is $(1-p)^{\binom{s}{2}-s+1}$.
+
+Though the exponent is large, it actually doesn't really matter.
+As $n \to \infty$, $p \to 0$.
+Since our derived expression for $s$ has no dependence on $n$, the exponent
+stays the same while the base slowly goes to $1$.
+Thus, holding $\braket{k}$ constant while taking $n \to \infty$ means
+that ER graphs are probably gonna be locally tree-like for some $d$.
+
+\pagebreak
+
+\section{Newman 12.7}
+
+\begin{enumerate}
+      \item It STP that $p_k=\frac{g^{(k)}(0)}{k!}$.
+
+            The proof is by induction on the expression for the RHS.
+            I propose
+            \[\frac{g^{(k)}(z)}{k!}=\binom{n}{k}p^k(pz+1-p)^{n-k}\]
+            For $k=0$, we have $\frac{g(z)}{0!}=(pz+1-p)^n$, which aligns with the proposed formula.
+
+            Assuming truth for $k$, we see have
+            \begin{align*}
+                  \frac{g^{(k+1)}(z)}{(k+1)!}
+                   & = \frac{1}{k+1} \cdot \frac{d}{dz} \frac{g^{(k)}(z)}{k!}                       \\
+                   & = \frac{1}{k+1} \cdot \frac{d}{dz} \left(\binom{n}{k}p^k(pz+1-p)^{n-k}\right)  \\
+                   & = \frac{1}{k+1} \cdot \binom{n}{k} \cdot p^k \cdot \frac{d}{dz} (pz+1-p)^{n-k} \\
+                   & = \frac{1}{k+1} \cdot \binom{n}{k} \cdot p^k \cdot (n-k)(pz+1-p)^{n-k-1}p      \\
+                   & = \frac{\binom{n}{k} (n-k)}{k+1} \cdot p^{k+1}(pz+1-p)^{n-k-1}                 \\
+                   & = \binom{n}{k+1}p^{k+1}(pz+1-p)^{n-k-1}
+            \end{align*}
+            Evaluating all of these formulas at $0$ indeed gives $p_k=\frac{g^{(k)}(0)}{k!}$. $\square$
+
+      \item The first moment is
+            \[g'(1)=\binom{n}{1}p^1(p \cdot 1+1-p)^{n-1}=np\]
+            and the second moment is
+
+      \item For a single $k$, assuming $0 \le k \le 2n$, we have
+\end{enumerate}
+
+\section{Sanity Simulations}
+
+See the attached Python notebook.
+
+\end{document}
