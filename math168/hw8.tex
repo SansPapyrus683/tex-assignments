@@ -1,0 +1,109 @@
+\documentclass[12pt]{article}
+
+\input{../kz}
+\usepackage{fancyvrb}
+
+\rhead{Math 168}
+
+\DeclareMathOperator{\Fr}{Fr}
+\DeclareMathOperator{\Tr}{Tr}
+\newcommand{\lra}{\xLeftrightarrow}
+\newcommand{\ra}{\xRightarrow}
+
+\setlist[enumerate,1]{label=(\alph*)}
+
+\begin{document}
+
+\section{Bipartite Distributions}
+
+For convenience, I'll represent the degree distributions as
+$a_0, a_1, \cdots$ and $b_0, b_1, \cdots$ instead, where $a_i$ is the chance
+of a node in $A$ having degree $i$ and similarly for $b_i$.
+
+\subsection{Part A}
+
+\boxed{g_0(z)=\sum_{i=0}^{\infty} a_iz^i} and
+\boxed{h_0(z)=\sum_{i=0}^{\infty} b_iz^i}.
+
+Getting $g_1$ and $h_1$ is a bit trickier, though.
+Since the graph is bipartite, to get to any $a \in A$, we have to follow it from some $b \in B$.
+
+If we fix a stub off of $b$, then the chance it links to a specific stub
+with degree $k$ is $\frac{k}{m}$.
+There's around $a_k|A|$ total nodes with degree $m$, so
+\[P(\text{our stub ends at a node with degree $k$})=\frac{k}{m} \cdot a_k|A| = \frac{ka_k}{\braket{a}}\]
+where $\braket{a}$ is the average degree of all nodes in $A$.
+
+Thus, \boxed{g_1(z)=\sum_{i=0}^{\infty} \frac{(i+1)a_{i+1}}{\braket{a}}z^i},
+and by symmetry \boxed{h_1(z)=\sum_{i=0}^{\infty} \frac{(i+1)b_{i+1}}{\braket{b}}z^i}.
+
+\subsection{Part B}
+
+In the 1-mode projection onto $A$, $a_1, a_2 \in A$ are connected iff $\exists b \in B$
+that's connected to both of them.
+This means that we can go to all neighbors in $b$ and tally all the other $a$s
+(minus ourselves) that they're connected to get $a$'s degree in the projection.
+Notice that what I just described is literally just the number of second neighbors
+that $a$ has.
+
+Thus, $G_k$, the chance $a$ has degree $k$ in the projection, is
+\[G_k = \sum_{i=0}^{\infty} a_i P[\text{$a$ has $k$ second neighbors} \mid \deg(a)=i]\]
+I'll abbreviate the probability as $P[k \mid i]$ from here on out.
+
+Now let's do some work on the PGF:
+\begin{align*}
+      G(z)
+       & = \sum_{i=0}^{\infty} G_i z^i                                \\
+       & = \sum_{i=0}^{\infty} \sum_{k=0}^{\infty} a_k P[i \mid k]    \\
+       & = \sum_{k=0}^{\infty} a_k \sum_{i=0}^{\infty} P[i \mid k]z^i
+\end{align*}
+By the identities and arguments proven in class,
+\[\sum_{i=0}^{\infty} P[i \mid k]z^i = h_1(z)^k\]
+and we can continue:
+\begin{align*}
+      G(z)
+       & = \sum_{k=0}^{\infty} a_k \sum_{i=0}^{\infty} P[i \mid k]z^i \\
+       & = \sum_{k=0}^{\infty} a_k h_1(z)^k                           \\
+       & = g_0(h_1(z))\quad\square
+\end{align*}
+
+\subsection{Part C}
+
+The expected value given the PGF $z$ can be found by evaluating $G'(1)$, which is
+\begin{align*}
+      G'(1)
+       & = g_0'(h_1(1)) \cdot h_1'(1)                                                \\
+       & = g_0'(1)h_1'(1)                                                            \\
+       & = \boxed{\frac{\braket{a}\left(\Braket{b^2}-\braket{b}\right)}{\braket{b}}}
+\end{align*}
+
+\pagebreak
+
+\section{Stochastic Probabilities}
+
+\begin{enumerate}
+      \item There's $\binom{n_1-1}{k}$ ways for a node in the first group
+            to connect to $k$ others of its own kind, so the chance is
+            \boxed{\binom{n_1-1}{k}p_1^k(1-p_1)^{n_1-1-k}}.
+
+      \item By similar reasoning, we have \boxed{\binom{n_2}{k}q^k(1-q)^{n_2-k}}.
+
+      \item We have the PMFs of the number of connections to the first and second block.
+            If we let these be represented by random variables $X$ and $Y$ respectively, we have
+            \begin{align*}
+                  P(\deg v = k)
+                   & = \sum_{i=0}^{k} P(X=i)P(Y=k-i)                                                                        \\
+                   & = \sum_{i=0}^{k} \binom{n_1-1}{i}p_1^i(1-p_1)^{n_1-1-i} \cdot \binom{n_2}{k-i}q^{k-i}(1-q)^{n_2-(k-i)}
+            \end{align*}
+            Yeah...I don't see any elegant way to reduce this.
+
+      \item There's $n_2$ chances to connect to a neighbor in the second group,
+            and chance works with probability $q$, so the expected
+            number of neighbors in the second group is \boxed{qn_2}.
+\end{enumerate}
+
+\section{Watts-Strogatz Graphs}
+
+See the attached Python notebook.
+
+\end{document}
