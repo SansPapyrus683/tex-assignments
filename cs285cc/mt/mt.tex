@@ -1,0 +1,401 @@
+\documentclass[12pt]{article}
+
+\usepackage{graphicx}
+\usepackage{amsfonts}
+\usepackage{amsthm}
+\usepackage{amsmath}
+\usepackage{amssymb}
+\usepackage{scribe}
+\usepackage{braket}
+\usepackage{xcolor}
+\usepackage{nicematrix}
+
+\usepackage[margin=2in]{geometry}
+\pagestyle{empty}
+
+\DeclareMathOperator{\rk}{rk}
+
+\begin{document}
+
+\makeheader{Kevin Sheng}{Midterm}
+
+have you ever communicated bits with your life on the line?
+
+\section*{Problem 1}
+
+thank god fooling set worked for this one
+
+I propose that sending the $O(n^2)$ adjacency matrix straight up is the best we can do.
+
+Consider the set of equivalence classes $I$ on all the graphs,
+where two graphs are equivalent if they're isomorphic.
+I'll use $[G]$ to denote the equivalence class of a graph $G$.
+
+Notice that $\{(G, G) \mid [G] \in I\}$ makes a fooling set
+simply by virtue of how we defined $I$ in the first place.
+Any graph is always isomorphic to itself, and if two graphs are in
+different classes then they can't be isomorphic to each other.
+
+Now let us lower bound the size of this set.
+In total, there's $2^{\binom{n}{2}}$ graphs, and each graph
+can be isomorphic to at most $n!$ other graphs.
+To see this, notice that an isomorphism is essentially a relabelling/permutation
+of the original nodes, of which there are $n!$ of.
+
+Thus, $|I| \ge \frac{2^{\binom{n}{2}}}{n!}$ and we have
+\begin{align*}
+    \mathcal{D}(\text{graph iso})
+     & \ge \log |I|                       \\
+     & = \log 2^{\binom{n}{2}} - \log n!  \\
+     & = \binom{n}{2} \log 2 - \log n!    \\
+     & \ge \binom{n}{2} \log 2 - n \log n \\
+     & = \mathcal{O}(n^2)\quad\square
+\end{align*}
+
+\newpage
+
+\section*{Problem 2}
+
+no shot fooling sets work here too
+
+WLOG let Alice and Bob's numbers be less than $2^n$ so we can
+consider $f: \{0, 1\}^n \times \{0, 1\}^n \to \{0, 1\}$.
+Any bits larger than that won't affect the result of the $n$th bit anyways.
+
+Notice that $x$ has a $0$ in the $n$th position if $0 \le x < 2^{n-1}$ and a $1$ otherwise.
+Thus, let's consider the following set:
+\[S=\left\{\left(x, \left\lfloor\frac{2^{n-1}-1}{x}\right\rfloor\right)
+\middle| 1 \le x(x+1) < 2^{n-1}\right\}\]
+For example, if $2^{n-1}=16$,
+\[S=\{(1, 15), (2, 7), (3, 4)\}\]
+I'm pretty sure this set has around $2^{\frac{n-1}{2}}$ elements.
+
+By construction, the product of every pair in this set evaluates to $0$.
+Now take $(a, b)$ and $(c, d)$, with $a < c$.
+We need $bc \ge 2^{n-1}$ for each crosspair to be nonconstant.
+Producing the following lower bound on the product:
+\begin{align*}
+    \left\lfloor\frac{2^{n-1}-1}{a}\right\rfloor \cdot (a+(c-a))
+    &\ge \left\lfloor\frac{2^{n-1}-1}{a}\right\rfloor \cdot (a+1) \\
+    &= \left\lfloor\frac{2^{n-1}-1}{a}\right\rfloor \cdot a + \left\lfloor\frac{2^{n-1}-1}{a}\right\rfloor \\
+    &\ge 2^{n-1}-1-a + \left\lfloor\frac{2^{n-1}-1}{a}\right\rfloor
+\end{align*}
+means we need $\left\lfloor\frac{2^{n-1}-1}{a}\right\rfloor \ge a+1$.
+However, this condition was already satisfied by our construction, as $a(a+1) < 2^{n-1}$.
+
+Since any pair gives a result of $0$ and any crosspair has a result of $1$,
+this is a $0$-fooling set and we have a lower bound of on
+the communication complexity of $\mathcal{O}(n)$.
+
+\newpage
+
+\section*{Problem 3}
+
+I believe that any $\phi$ can be converted into CNF where for each $z_i$,
+its appearance in the formula is either all $z_i$ or all $\lnot z_i$.
+So something like this:
+\[(z_1 \lor \lnot z_2) \land (\lnot z_2 \lor z_3)\]
+would be fine, but not
+\[(z_1 \lor \lnot z_2) \land (z_2 \lor z_3)\]
+since both $z_2$ and $\lnot z_2$ appear in the formula.
+
+The intuition for this can be seen by induction on the DNF forms.
+If there's only one leaf, then we only have $z_1$ and $\lnot z_1$.
+Now we assume that any formula involving $z_1$ through $z_n$
+can be written like
+\[\bigvee_{i=1}^{N} \bigwedge_{j \in S_i} e_j\]
+where $N$ is whatever number of summands, $S_i$ is all the coefficients
+of the $i$th summand, and $e_j$ is either always $z_j$ or $\lnot z_j$.
+
+Now consider a formula on $e_1, e_2, \cdots, e_{n+1}$.
+Since boolean operations are associative, we can turn any formula tree into
+a binary tree and thus WLOG assume that $e_{n+1}$ is immediately combined
+through AND or OR with some $e_x$.
+This gives us a formula on $e_1, e_2, \cdots, e_n, e_{n+1}e_x$ or a formula
+on $e_1, e_2, \cdots, e_n, (e_{n+1}+e_x)$.
+Either way, we can use distributivity laws on the formula given
+by our inductive hypothesis to get something in the form that we want.
+Nowhere in the process do we need both $e_{n+1}$ and $\lnot e_{n+1}$ at the same time.
+
+By laws of boolean algebra, I'm pretty sure we can then turn this into the CNF form of
+\[\bigwedge_{i=1}^{M} \bigvee_{j \in S_i} e_j\]
+
+Now consider the characteristic matrix $M$:
+\[M = \left[\prod_{i=1}^{M} \bigvee_{j \in S_i} e_j\right]_{(x_1, \cdots, x_n),(y_1, \cdots, y_n)}\]
+where I've converted AND to $\prod$ since in $\mathbb{F}_2$ the two are the same thing.
+
+Let's narrow down to one $M_i=\left[\bigvee_{j \in S_i} e_j\right]_{x_{S_i}, y_{S_i}}$.
+I propose that the structure of this matrix can be arranged into something like
+\[\begin{bmatrix}
+        0 & 1 & 1 & 1 \\
+        1 & 0 & 1 & 1 \\
+        1 & 1 & 0 & 1 \\
+        1 & 1 & 1 & 0
+    \end{bmatrix}\]
+that has rank $2^{|S_i|}-1$ if $|S_i| > 1$ and full rank otherwise.
+
+To see this, consider a fixed $x$.
+The only way for this matrix to have a $0$ at the associated $y$ is if $e_j=0\ \forall j \in S_j$.
+Whether $e_j=x_j \oplus y_j$ or $e_j=\lnot (x_j \oplus y_j)$, there is only
+one value of $y_j$ that satisfies all of these constraints.
+Continuing this train of thought, we see that if $x_1 \ne x_2$, then their
+associated $y_1$ and $y_2$ that give a zero entry must be different as well.
+To prove this, consider the bit $k \in S_i$ at which $x_1$ and $x_2$ differ.
+WLOG let $(x_1)_k = 1$ and $(x_2)_k=0$.
+If $e_k=x_k \oplus y_k$, then this forces $(y_1)_k=1$ and $(y_2)_k=0$, forcing $y_1 \ne y_2$.
+By symmetry, the same holds if $e_k=\lnot (x_k \oplus y_k)$.
+
+If all $S_i$s were disjoint, we're done.
+We could take the massive product out to get
+\[M = \bigotimes_{i=1}^{N} \left[\bigvee_{j \in S_i} e_j\right]_{x_{S_i}, y_{S_i}}\]
+and use $\rk A \otimes B = \rk A \cdot \rk B$.
+Since each increase in $n$ by $1$ multiplies the rank by at least $1.5$,
+$\rk M \ge 1.5^n$ and $\mathcal{D}(\phi) = \Omega(n)$ by extension.
+
+However, sometimes the $S_i$s aren't disjoint.
+In this case I'm lowkey at a loss for logic.
+The idea is to first insert "dummy indices", where for each $e_j$
+I split it into multiple $e_{ij}$s where $i$ is the specific $S_i$ that this $e_j$ belongs to.
+This temporarily makes all $S_i$s disjoint, so I can still do the matrix product reduction.
+
+Now consider an $e_k$ that's in both $S_i$ and $S_j$.
+(Hopefully my sudden new overload for $j$ isn't too confusing.)
+If we organize the matrix with respect to $(e_{ik}, e_{jk})$ as our
+central values, we get something like this:
+\[M'=\begin{bNiceArray}{cc|cc}[first-row,first-col, margin]
+        & (0, 0)         & (1, 1) & (0, 1)         & (1, 0) \\
+        (0, 0) & \Block{2-2}{A} &        & \Block{2-2}{B} &        \\
+        (1, 1) &                &        &                &        \\
+        \hline
+        (0, 1) & \Block{2-2}{B} &        & \Block{2-2}{A}          \\
+        (1, 0) &                &        &                &        \\
+    \end{bNiceArray}\]
+Since $(0, 0) \oplus (0, 0) = (0, 1) \oplus (0, 1)$ and so on and so forth,
+the second quadrant is actually equivalent to the fourth quadrant.
+Same can be said for the first and third quadrant.
+
+In our actual $M$, we only want to select $A$, but I'm not sure how this will affect the rank.
+I'm pretty sure it's just going to halve the rank in the worst case, but
+I have no clue how to prove that.
+
+If doing this does indeed only halve the rank, though, then we can reconstruct
+$M$ by continually parsing it from the remnants of wherever $M'$ was and then
+see that the log of the rank is still on the order of $\Omega(n)$.
+
+\newpage
+
+\section*{Problem 4}
+
+The upper bound is $\mathcal{O}(n)$ as always.
+It remains to prove a lower bound on $\mathcal{N}(f)$.
+
+The idea is to use the RS bound.
+Let's first try and get an estimate on the number of orthogonal pairs,
+or the number of $1$s in the characteristic matrix.
+
+I'm pretty sure we can do this by calculating the chance of this event:
+\[P\left(\sum_{i=1}^{n} x_iy_i \equiv 0 \pmod{18181}\right)\]
+Each $x_i$ and $y_i$ is chosen independently,
+so this is equivalent to $P(X \equiv 0 \pmod{18181})$,
+where $X \sim \text{Binom}\left(n, \frac{1}{4}\right)$.
+By symmetry, as $n \to \infty$ we get that $P(X \equiv 0 \pmod{18181})=\frac{1}{18181}$,
+since there's no reason to favor a specific value mod $18181$ as opposed
+to any other remainder.
+
+Thus, the number of ones is pretty close to $\frac{4^n}{18181}$.
+Let $\mu$ be the uniform distribution over these cells, with each cell
+carrying a probability of $\frac{18181}{4^n}$.
+
+Now we can carry over the reasoning we did for $\mathbb{F}_2$.
+Any maximal rectangle with only $1$s must consist of the product
+of two subspaces, as if $\braket{a, b}=0$ for all $a \in A$ then the same
+must hold for all $a \in \text{span}(A)$ as well.
+Similar reasoning holds for $B$ and $\text{span}(B)$.
+
+Since $\text{span}(A)$ and $\text{span}(B)$ are two orthogonal subspaces,
+the sum of their dimensions cannot exceed $n$ and so
+\[|A \times B| \le 2^{\dim \text{span}(A)}2^{\dim \text{span}(B)} \le 2^n\]
+This captures at most $2^n \cdot \frac{18181}{4^n}=\frac{18181}{2^n}$ of the probability,
+so $\text{RS}(f) \le \frac{18181}{2^n}$ and by extension
+$\mathcal{N}(f) \ge \log \frac{1}{\text{RS}(f)} = \Theta(n)$. $\square$
+
+\newpage
+
+\section*{Problem 5}
+
+There's some facts about prime number density that I'm going to use here.
+I got these while doing competitive programming:
+\begin{itemize}
+    \item Asymptotically, the number of prime numbers below $n$ approaches $\frac{n}{\ln n}$.
+    \item The maximum number of prime factors $n$ can have approaches $\frac{\log n}{\log \log n}$.
+\end{itemize}
+
+Notice that Alice and Bob can reduce their inputs to sets of prime factors that
+divide their numbers instead.
+This loses no information and actually slightly reduces the number of inputs
+under consideration, as their numbers are coprime iff their sets of prime
+factors are disjoint.
+
+There's around $n'=\frac{2^n}{\ln 2^n}$ primes below $2^n$, and the largest
+amount of prime factors either Alice of Bob can have is
+$k'=\frac{\log 2^n}{\log \log 2^n} \approx \frac{n}{\log n}$.
+Thus, we can use the same randomized cover construction method used for $DISJ_{n,k}$
+in class to see that $\log \mathcal{C}(f)$ is around the order of
+\[k'+\log \log n'=\frac{n}{\log n}+\log \log \frac{2^n}{\ln 2^n} = \Theta\left(\frac{n}{\log n}\right)\]
+This serves as both a tight upper and lower bound, as $\mathcal{N}(f)$ is bounded
+in both directions and below by $\log \mathcal{C}(f)$. $\square$
+
+\newpage
+
+\section*{Problem 6}
+
+That $\mathcal{O}(n^2)$ is an upper bound arises from that any subspace can be represented
+by a set of at most $n$ basis vectors, each with exactly $n$ bits.
+Even if the problem asked for deterministic CC, we'd still have this as an upper bound.
+
+For a lower bound, a central issue is how many subspaces over $\mathbb{F}_2^n$ there are.
+To do this, let's first fix a target dimension $k$ and try to see
+how many ordered sets of $k$ linearly independent vectors there are.
+The first element in this set can be any nonzero vector, so we have $2^n - 1$ choices there.
+The second element can be any nonzero vector that isn't the first one,
+so we would have $2^n-2$ choices.
+In general, when choosing the $i$th vector ($i$ starting from $0$) we'd have $2^n-2^i$ choices,
+since the previous $i-1$ vectors take away $2^i$ of our options.
+Thus, in total we have $\prod_{i=0}^{k-1} 2^n-2^i$ ordered bases.
+
+However, this overcounts, as a single subspace can have many different bases.
+To count how many different bases a subspace of dimension $k$ has,
+we use the same process on a subspace of $2^k$ vectors to see that
+a subspace of dimension $k$ has $\prod_{i=0}^{k-1} 2^k-2^i$ ordered bases.
+Dividing our previous result by this gives us that $\mathbb{F}_2^n$ has
+\[D_n(k)=\prod_{i=0}^{k-1} \frac{2^n-2^i}{2^k-2^i}\]
+bases of dimension $k$.
+Also let $P(n)=\sum_{i=0}^{n} D_n(i)$, or the total number of subspaces of $\mathbb{F}_2^n$.
+
+To lower bound $D_n(k)$, we see that the lowest numerator is $2^n-2^{k-1}$ and
+the highest denominator is $2^k-1$, which we'll treat as $2^k$ for convenience.
+This leads to that
+\[D_n(k) \ge \left(\frac{2^n-2^{k-1}}{2^k}\right)^k \ge \left(2^{n-k-1}\right)^k=2^{kn-k^2-k}\]
+and $P(n) \ge D_n\left(\frac{n}{2}\right) \ge 2^{\frac{n^2}{4}-\frac{n}{2}}$ by extension.
+
+OTOH, we can get an upper bound for $D_n(k)$ by seeing that the largest
+numerator is $2^n-2^0 \approx 2^n$, and the smallest denominator is $2^k-2^{k-1}=2^{k-1}$.
+This bounds $D_n(k)$ at the top by
+\[D_n(k) \le \left(\frac{2^n}{2^{k-1}}\right)^k = 2^{nk-k^2+k}\]
+Across all $k$, the exponent is maximized when $k=\frac{n}{2}$, so we get that
+$P(n) \le (n+1) \cdot 2^{\frac{n^2}{4}+\frac{n}{2}}$.
+
+Assuming a uniform distribution on $\mu$, we want to show that
+\[\frac{P(n-a)P(a)}{\sum_{k=0}^{n} D_n(k)P(n-k)} \approx \frac{1}{2^{n^2}}\]
+since a maximal rectangle consists of all subspaces of some subspace $S$ of dimension $a$
+crossed with all subspaces of $S^\perp$ (surely :clueless:).
+The denominator comes from iterating over all subspaces of dimension $k$
+and then taking all subspaces of the remaining $n-k$ dimensions.
+
+With our previous UB on $P(n)$, I'm pretty sure the numerator is maximized
+when $a=0$, since that's what maximizes the exponent which dominates.
+We can also LB our denominator by just taking $k=\frac{n}{2}$ to see that
+\[\sum_{k=0}^{n} D_n(k)P(n-k) \ge D_n\left(\frac{n}{2}\right)D_{n/2}\left(\frac{n}{4}\right) \ge 2^{\frac{5n^2}{16}-\frac{3n}{4}}\]
+Putting $P(n-0)P(n) = P(n)$ on top gives
+\[\text{RS}(f) \le \frac{(n+1) \cdot 2^{\frac{n^2}{4}+\frac{n}{2}}}{2^{\frac{5n^2}{16}-\frac{3n}{4}}} = (n+1)2^{-\frac{n^2}{16}+\frac{3n}{4}}\]
+and taking the log of $\frac{1}{\text{RS}(f)}$ gives $\mathcal{N}(f) \ge \Omega\left(n^2\right)$. $\square$
+
+(proof built on genuine hopes and dreams bro gg)
+
+\newpage
+
+\section*{Problem 7}
+
+We need to show that if we want a randomized protocol built out of
+deterministic protocols of cost $c$, we need at least $2^{\log n/c} = \frac{n}{c}$
+of them to get a correctness rate of $\frac{2}{3}$.
+
+Each protocol is a tree of depth $c$ with $2^c$ leaves.
+For each input, the randomized protocol basically assigns it a leaf in each of the protocols.
+The issue now is to determine what necessitates two pairs of inputs
+being assigned to different sets of leaves.
+For the statement to be proven, our randomized protocol needs
+at least $2^n$ distinct leaf assignments across all pairs of inputs.
+
+Assuming this is true, if we have $p$ protocols,
+there would be $(2^c)^p$ possible distinct leaf assignments.
+We need this number to be at least $2^n$, so setting $p=\frac{n}{c}$ necessitates
+at least $\log_2 \frac{n}{c}$ random bits.
+
+I genuinely have no idea how to rigorously prove the lower bound of $2^n$ leaf assignments, though.
+If we limit ourselves to hashing-based protocols, some kind of vision can be seen by
+fixing Bob's input and considering the full range of Alice's inputs.
+For any two inputs $a_1, a_2 \in \{0, 1\}^n$, there must exist at least
+one hash function defined by our random bits that send $a_1$ and $a_2$
+to different elements in the hashed domain, which then result in Alice
+transmitting different bits to Bob.
+This then results in at least one sub-deterministic protocol that assigns
+different leaves to $(a_1, b)$ and $(a_2, b)$.
+Alice has $2^n$ possible inputs, so the protocols need at least $2^n$
+distinct leaf assignments.
+
+\newpage
+
+\section*{Problem 8}
+
+Since the functions are chosen uniformly at random, maybe it'll help if we just fix some input
+for Alice and consider the full range of Bob's inputs.
+She knows 100\% where she is, so from Alice's POV the matrix
+at this point is just a single row.
+
+This might be a dead end, though.
+\begin{enumerate}
+    \item Say we split Bob's inputs into $\sqrt{2^n}$ blocks, each of size $\sqrt{2^n}$.
+          If we choose a random block and have Bob tell Alice whether that was it,
+          we have a $\frac{1}{\sqrt{2^n}}$ chance of being right at the cost of one bit.
+          However, after that it's just cooked since now we have no way of knowing
+          where Bob actually was in the block.
+
+    \item If Alice tried to directly guess where Bob was, the problem reduces
+          to trying to guess whatever number Bob has from $1$ through $x$ with
+          constant cost and around $\frac{1}{\sqrt{x}}$ accuracy.
+          Random guessing gets us constant cost, but only $\frac{1}{x}$ accuracy
+          which extends to a protocol that's only correct\
+          $\frac{1}{2}+\frac{1}{\Theta\left(2^n\right)}$ of the time.
+
+          I also tried seeing if the amount of guesses needed to get at least
+          one correct was bounded above, but unfortunately we need at least
+          \[t \ge \frac{\ln \left(1-\frac{1}{2^{n/2}}\right)}{-\frac{1}{2^n}}
+          = -2^n\ln\left(1-\frac{1}{2^{n/2}}\right)\]
+          trials for the target correctness probability, which diverges as $n \to \infty$.
+
+          Since each bit transmitted can remove at most half the possibilities,
+          this seems impossible.
+\end{enumerate}
+
+\newpage
+
+\section*{Problem 9}
+
+WLOG let $F=\mathbb{R}$.
+We proved in class that ranks are maximized when we consider them over $\mathbb{R}$,
+so this makes the constraint on $c$ as tight as possible.
+
+We earlier derived that $\rk_{\mathbb{F}_2} M_{IP_n}=n$, while $\rk_{\mathbb{R}} M_{IP_n}=2^n-1$.
+This means that $2^n-1 \le c^n$ and $c \ge 2$ by extension, since any base less than $2$
+would eventually get dominated as $n \to \infty$.
+
+\newpage
+
+\section*{Problem 10}
+
+I implemented the LP using \verb|cvxpy| and saw that optimal solutions for $n=3$ and $n=4$
+both had $\mu$ be the uniform distribution over all the inputs.
+By engineer's induction, let's just say that it's true for all $n$.
+
+Assuming that the uniform distribution is optimal, the rectangle that captures
+the largest amount of it would be any $A \times B$ where $|A|=|B|$ and $B=A^C$,
+since the size of a maximal rectangle is quadratic in terms of $|A|$.
+This captures exactly $\frac{2^n}{2} \cdot \frac{2^n}{2}=2^{2n-2}$ cells.
+
+Since each cell has the same probability of $\frac{1}{4^n-2^n}$, we have
+\[RS(\lnot EQ_n)=\frac{2^{2n-2}}{4^n-2^n}=\boxed{\frac{2^{n-2}}{2^n-1}}\]
+As $n \to \infty$, this expression approaches $\frac{1}{4}$, the lower
+bound we derived in class, so it seems to make sense.
+
+\end{document}
