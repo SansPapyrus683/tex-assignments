@@ -1,0 +1,205 @@
+\documentclass[12pt]{article}
+
+\input{../kz}
+\usepackage{nicematrix}
+
+\rhead{Math 110A}
+
+\makeatletter
+\def\@seccntformat#1{%
+  \expandafter\ifx\csname c@#1\endcsname\c@section\else
+  \csname the#1\endcsname\quad
+  \fi}
+\makeatother
+
+\newcommand{\lra}{\xLeftrightarrow}
+\newcommand{\ra}{\xRightarrow}
+\DeclareMathOperator{\pr}{pr}
+\DeclareMathOperator{\Mat}{Mat}
+
+\begin{document}
+
+\section{Problem 1}
+
+\subsection{Part A}\label{sec:p1a}
+
+Here's the pasted proof of the same thing from last homework:
+
+{
+\color{blue}
+If we have an $\underline{f}$, then $\underline{f}(\pi(x))=f(x)$ for all $x \in R$.
+
+Consider two functions $f_1$ and $f_2$ that both satisfy this property.
+For any $x \in R$, we have that $f_1(\pi(x))=f(x)=f_2(\pi(x))$.
+Since $\pi$ is surjective, $f_1(s)=f_2(s)$ for all $s \in R/J$.
+}
+
+\subsection{Part B}\label{sec:p1b}
+
+The proof is basically the same as the proof in 3b in the last homework,
+but I'll just put it here again for posterity.
+
+I'll prove the backward direction and its converse.
+
+If $f$ annihilates $J$, then $j \in J \implies f(j)=0$.
+
+Let us define $\underline{f}(\pi(v))=f(v)$.
+This map is well-defined since $\pi$ is a surjection onto $R/J$ and
+\begin{align*}
+    \pi(v_1)=\pi(v_2)
+        & \implies v_1-v_2 \in J   \\
+        & \implies f(v_1-v_2)=0    \\
+        & \implies f(v_1)-f(v_2)=0 \\
+        & \implies f(v_1)=f(v_2)
+\end{align*}
+By construction, this satisfies the commutativity diagram as well.
+
+For the backwards direction, BWOC say $\exists j \in J: f(j) \ne 0$.
+
+Since $J$ is a proper two-sided ideal, $R \setminus J$ must be nonempty.
+Take some $r \in R \setminus J$.
+By definition, $\pi(r)=\pi(r + j)$, so $\underline{f}(\pi(r))=\underline{f}(\pi(r+j))$.
+However, $f(r+j)=f(r)+f(j) \ne f(r)$, since the two
+being equal would imply $f(s)=0$.
+This forces $\underline{f}(\pi(r)) \ne \underline{f}(\pi(r+j))$,
+which contradicts the nature of $\underline{f}$. $\square$
+
+\subsection{Part C}
+
+Notice that $\pi^*$ simply takes a given $\underline{f}$ and returns the associated $f$.
+
+From \ref{sec:p1a}, we know that $\pi^*$ is injective.
+
+As for the second part, for any $f$ that annihilates $J$,
+we can take the associated $\underline{f}$ that we know must exist by \ref{sec:p1b}
+and plug it into $\pi^*$ to get back our $f$.
+\ref{sec:p1b} also tells us that if an $f$ is in the range of $\pi^*$, a ring homomorphism that
+when plugged into $\pi^*$ gives $f$ can only exist when $f$ annihilates $J$.
+Thus, the range of $\pi^*$ is exactly all $f: R \to S$ that annihilate $J$. $\square$
+
+\section{Problem 2}
+
+Let's first show $(r) \subseteq (u \cdot r)$.
+Fix any $a, b \in R$, and consider $arb \in (r)$.
+Since $u$ is a unit, $u^{-1}$ exists.
+If we take the left multiple as $au^{-1}$ and right multiple as $b$,
+we see that $arb=\left(au^{-1}\right)(u \cdot r)(b) \in (u \cdot r)$.
+
+The other direction is easier.
+Again, fix any $a, b \in R$ and consider $a(u \cdot r)b \in (u \cdot r)$.
+Notice that we can reexpress this as $(au)r(b)$ to see that the element is in $(r)$ as well.
+
+The proof for $(r)=(r \cdot u)$ is basically the same.
+I won't bore you with that. $\square$
+
+\section{Problem 3}\label{sec:p3}
+
+If $R$ is a field, then every nonzero element is a unit and has a multiplicative inverse.
+Consider any two-sided ideal $J$ with a nonzero element $r$.
+By closure properties, $r \cdot r^{-1} = 1 \in J$.
+Now, for any $x \in R$ we have $x \cdot 1 = x \in J \implies R \subseteq J$ and $R=J$.
+Given that any two-sided ideal with a nonzero element must be equivalent to $R$
+itself, we can deduce that the only two-sided ideals of $R$ are $\{0\}$ and $R$ itself.
+
+Now consider the case where $R$ wasn't a field.
+In other words, there's a nonzero $r \in R$ that doesn't give you $1$
+no matter what you multiply it with.
+
+Notice that $(r)=\{xr \mid x \in R\} \notin \{R, \{0\}\}$.
+$(r) \ne R$, since $r$ isn't a unit and thus $1 \notin R$.
+$(r) \ne \{0\}$ either, since $r \in (r)$.
+Thus, there are more two-sided ideals than just $R$ and $\{0\}$. $\square$
+
+\pagebreak
+
+\section{Problem 4}
+
+\subsection{Part A}
+
+Consider any two-sided ideal $J \subseteq R$ that contains a nonzero matrix $M$.
+
+Take $i, j$ s.t. $M_{ij} = x \ne 0$.
+Now consider the following matrices that must also be in $J$ by the closure properties:
+\begin{enumerate}
+    \item If we multiply $M$ by some permutation matrices, we see that
+            there must exist some $M' \in J$ s.t. $M'_{11}=x$.
+
+    \item Let $B=AM'A$, where
+            \[A_{ij}=\begin{cases}
+                    1 & i=j=1            \\
+                    0 & \text{otherwise}
+                \end{cases}\]
+            to get the following matrix:
+            \[B_{ij}=(AM'A)_{ij}=\begin{cases}
+                    x & i=j=1            \\
+                    0 & \text{otherwise}
+                \end{cases}\]
+    
+    \item Since $B \in J$, $O=B \cdot \left(x^{-1} \cdot I_{n \times n}\right) \in J$ as well,
+    where $I$ is the identity matrix.
+    Since the matrix we're multiplying $B$ by scales every element by $x^{-1}$,
+    this gives a matrix with a $1$ in the top right corner and nothing else.
+
+    \item Multiplying $O$ by some permutation matrices means that any $O'_p$ defined by
+    \[(O'_p)_{ij}=\begin{cases}
+        1 & i=j=p \\
+        0 & \text{otherwise}
+    \end{cases}\]
+    must be in $J$ as well.
+    
+    \item Adding up $O'_1$ through $O'_n$ gives that $I_{n \times n} \in J$.
+\end{enumerate}
+Since we've proven that the identity matrix is now in $J$, our two-sided
+ideal must be equal to $R$ by similar reasoning as in \ref{sec:p3}.
+
+\pagebreak
+
+\subsection{Part B}
+
+If $k$ isn't a field, take a nonzero element $c \in k$ that doesn't have an inverse.
+
+Consider $\left(c \cdot I_{n \times n}\right)$.
+It's not equal to $\{0\}$, since it has $cI$.
+To show that $(cI) \ne R$, I'll show that $I \notin (cI)$.
+
+BWOC say $I \in cI$.
+This means we can express it like so:
+\[I=\sum_{i=1}^{m} A_i(cI)B_i=c\left(\sum_{i=1}^{m} A_i \cdot I \cdot B_i\right)\]
+This is a contradiction, multiplying any matrix by $c$ can't result in $I$.
+This follows from that $c$ doesn't have a multiplicative inverse.
+
+\subsection{Part C}
+
+The two previous parts of this problem extended the results of part 3
+to a certain case of non-commutative rings.
+
+\section{Problem 5}
+
+\begin{enumerate}
+    \item $n=2$: Yes. $1 \cdot 1 \equiv 1\pmod 2$.
+
+    \item $n=3$: Yes. $2 \cdot 2\equiv 1\pmod 3$, and $1$ is still its own inverse.
+
+    \item $n=4$: No. $2 \cdot 1 \equiv 2$, $2 \cdot 2 \equiv 0$, and $2 \cdot 3\equiv 2\pmod 4$.
+            No element gives $1$ when you multiply it by $2$.
+
+    \item $n=5$: Yes. $2 \cdot 3\equiv 1$, $3 \cdot 2 \equiv 1$, and $4 \cdot 4 \equiv 1$.
+
+    \item $n=6$: No. $3 \cdot 2 \equiv 0$, $3 \cdot 3 \equiv 3$, $3 \cdot 4 \equiv 0$, and $3 \cdot 5 \equiv 5$.
+\end{enumerate}
+
+\section{Problem 6}
+
+As proven in class, the four elements of $\Z/4\Z$ are $0$, $1$, $2$, and $3$.
+
+The elements of $\Z/2\Z[x]$ are all polynomials with coefficients $0$ or $1$.
+If we make $x^2 \equiv 0$, we essentially limit ourselves to all polynomials
+of degree $1$ or lower, limiting ourselves to these four elements:
+\[x+1, x, 1, 0\]
+
+Any hypothetical isomorphism of these two rings would have $0$ and $1$ map to each other.
+
+However, if we let $\phi: \Z/4\Z \to (\Z/2\Z)[x]/(x^2)$, then $\phi(1+1)=\phi(1)+\phi(1)=0$,
+which immediately bans any sort of isomorphism as the forced homomorphism is not injective.
+
+\end{document}
